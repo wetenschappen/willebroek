@@ -235,7 +235,7 @@ const isTimelineComplete = computed(() => {
             <button type="button" class="lesson-nav-back" @click="router.push('/')">
                 <span class="lesson-nav-subject">{{ subject.label }}</span>
                 <span aria-hidden="true">/</span>
-                <span>{{ lesson.config.classId }}</span>
+                <span class="lesson-nav-class">{{ lesson.config.classId }}</span>
             </button>
             <TimerWidget :isOpen="showTimer" :start-duration="timerStartDuration" @close="showTimer = false" />
         </div>

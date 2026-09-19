@@ -9,7 +9,12 @@ const router = useRouter()
 const route = useRoute()
 const subject = computed(() => subjectBySlug(route.params.subject))
 const classId = computed(() => route.params.classId)
-const filteredModules = computed(() => subject.value ? modulesFor(subject.value.id, parseInt(route.params.id)) : [])
+const filteredModules = computed(() => {
+  if (!subject.value) return []
+  if (route.params.id) return modulesFor(subject.value.id, parseInt(route.params.id, 10))
+  const yearByClass = { '3D': 3, '4D': 4, '5D': 5, '6D': 6, '6D-A': 6 }
+  return modulesFor(subject.value.id, yearByClass[classId.value])
+})
 
 const groupedModules = computed(() => {
   const groups = {}
@@ -31,7 +36,7 @@ function openLesson(lessonId) {
 }
 
 function goBack() {
-  router.push('/' + route.params.subject + '/year/' + route.params.id + '/class')
+  router.push('/')
 }
 </script>
 

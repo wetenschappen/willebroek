@@ -348,11 +348,18 @@
     }
 
     .lesson-nav-subject {
-        color: #ffffff;
+        color: #f59e0b;
         font-size: 1.75rem;
         font-weight: 700;
         letter-spacing: -0.02em;
         line-height: 1;
+    }
+
+    .lesson-nav-class {
+        color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
     }
 
     .lesson-main {
@@ -731,8 +738,63 @@
 
     .subject-rows,
     .year-list,
-    .class-list {
+    .class-list,
+    .subject-classes {
         border-bottom: 2px solid var(--color-line);
+    }
+
+    .subject-choice + .subject-choice {
+        margin-top: 48px;
+    }
+
+    .subject-choice-heading {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .subject-choice-heading h2 {
+        margin: 0;
+        color: var(--color-ink);
+        font-size: 1.5rem;
+    }
+
+    .subject-classes {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .class-choice {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 80px;
+        padding: 16px 20px;
+        color: var(--color-ink);
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-align: left;
+        background: var(--color-panel);
+        border: 2px solid var(--color-line);
+        border-bottom: 0;
+        cursor: pointer;
+        transition: background-color 160ms ease, border-color 160ms ease;
+    }
+
+    .class-choice + .class-choice {
+        border-left: 0;
+    }
+
+    .class-choice:hover,
+    .class-choice:focus-visible {
+        background: var(--color-panel-muted);
+        border-color: var(--color-line-strong);
+    }
+
+    .class-choice svg {
+        width: 20px;
+        height: 20px;
     }
 
     .subject-row,
@@ -811,6 +873,17 @@
         margin-left: 24px;
         color: var(--color-ink);
         font-size: 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+        .subject-classes {
+            grid-template-columns: 1fr;
+        }
+
+        .class-choice + .class-choice {
+            border-top: 0;
+            border-left: 2px solid var(--color-line);
+        }
     }
 
     .subject-row:hover .subject-row-arrow,

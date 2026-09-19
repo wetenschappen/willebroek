@@ -17,8 +17,14 @@ const routes = [
   // Alle navigatie loopt via de vak-slug, bv. /fysica, /fysica/year/3/class ...
   {
     path: '/:subject',
-    name: 'YearSelection',
-    component: YearSelection,
+    name: 'ClassSelectionDirect',
+    component: ClassSelection,
+    props: true
+  },
+  {
+    path: '/:subject/class/:classId',
+    name: 'ModuleSelectionDirect',
+    component: ModuleSelection,
     props: true
   },
   {

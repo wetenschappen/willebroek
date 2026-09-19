@@ -1,55 +1,51 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { enabledSubjects, school } from '../data/subjects.js'
+import { enabledSubjects } from '../data/subjects.js'
+import { classesForSubject, classLabel } from '../data/students.js'
 import { PhArrowRight } from '@phosphor-icons/vue'
 
 const router = useRouter()
 const availableSubjects = enabledSubjects()
 
-function openSubject(subject) {
-  router.push('/' + subject.slug)
+function openClass(subject, classId) {
+  router.push('/' + subject.slug + '/class/' + classId)
 }
 </script>
 
 <template>
   <main class="selection-page">
-    <header class="selection-intro selection-intro-home">
-      <p class="eyebrow">{{ school.name }} / Leerpad</p>
-      <h1>Digitaal leerpad</h1>
-      <p class="intro-copy">{{ school.tagline }}</p>
-    </header>
-
     <section class="subject-list" aria-labelledby="subject-heading">
-      <div class="section-heading">
-        <h2 id="subject-heading">Vakken</h2>
-        <span class="section-meta">{{ availableSubjects.length }} beschikbaar</span>
-      </div>
+      <h1 id="subject-heading" class="sr-only">Kies je klas</h1>
 
-      <div class="subject-rows">
-        <button
-          v-for="subject in availableSubjects"
-          :key="subject.id"
-          type="button"
-          class="subject-row"
-          :class="subject.id === 'physics' ? 'subject-row-physics' : 'subject-row-biology'"
-          @click="openSubject(subject)"
-        >
+      <div
+        v-for="subject in availableSubjects"
+        :key="subject.id"
+        class="subject-choice"
+      >
+        <div class="subject-choice-heading">
           <span class="subject-row-icon" aria-hidden="true">
             <component :is="subject.icon" weight="regular" />
           </span>
-          <span class="subject-row-copy">
-            <strong>{{ subject.label }}</strong>
-            <span>{{ subject.description }}</span>
-          </span>
-          <PhArrowRight weight="regular" class="subject-row-arrow" aria-hidden="true" />
-        </button>
+          <h2>{{ subject.label }}</h2>
+        </div>
+
+        <div class="subject-classes">
+          <button
+            v-for="classId in classesForSubject(subject.id)"
+            :key="classId"
+            type="button"
+            class="class-choice"
+            @click="openClass(subject, classId)"
+          >
+            <span>{{ classLabel(classId) }}</span>
+            <PhArrowRight weight="regular" aria-hidden="true" />
+          </button>
+        </div>
       </div>
     </section>
 
     <p v-if="availableSubjects.length === 0" class="empty-state">
-      Nog geen vakken beschikbaar.
+      Nog geen klassen beschikbaar.
     </p>
-
-    <footer class="selection-footer">Secundair onderwijs · Fysica en biologie</footer>
   </main>
 </template>

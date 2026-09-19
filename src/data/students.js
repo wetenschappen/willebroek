@@ -49,6 +49,22 @@ export const studentLists = {
  * Welke klassen verschijnen per vak en leerjaar.
  * Pas dit aan per school — dit is het enige bestand dat je daarvoor hoeft te wijzigen.
  */
+export const classesBySubject = {
+    physics: ['3D', '4D', '6D-A'],
+    biology: ['5D', '6D']
+}
+
+/** Klassen die leerlingen voor een vak kunnen kiezen. */
+export function classesForSubject(subjectId) {
+    return classesBySubject[subjectId] || []
+}
+
+/** Toon de klascode zoals die op school gebruikt wordt. */
+export function classLabel(classId) {
+    return classId === '6D-A' ? '6D/A' : classId
+}
+
+// Oude leerjaarindeling blijft beschikbaar voor bestaande lesdata en helpers.
 export const classesBySubjectYear = {
     physics: {
         1: ['1A', '1B'],

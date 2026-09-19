@@ -616,7 +616,7 @@
         width: min(100% - 48px, 960px);
         min-height: 100vh;
         margin: 0 auto;
-        padding: 64px 0 48px;
+        padding: 32px 0 48px;
     }
 
     .selection-page {
@@ -631,18 +631,28 @@
         align-items: center;
         align-self: flex-start;
         gap: 8px;
-        min-height: 40px;
-        margin-bottom: 64px;
-        padding: 8px 0;
-        color: var(--color-ink);
-        font-size: 0.875rem;
-        font-weight: 500;
+        min-height: 44px;
+        margin-bottom: 24px;
+        padding: 10px 16px;
+        color: #ffffff;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        background: var(--color-ink);
+        border: 2px solid var(--color-ink);
+        border-radius: 6px;
         cursor: pointer;
-        transition: color 160ms ease;
+        transition: background-color 160ms ease, border-color 160ms ease;
     }
 
     .back-link:hover {
-        color: var(--color-ink);
+        color: #ffffff;
+        background: var(--color-line-strong);
+        border-color: var(--color-line-strong);
+    }
+
+    .back-link svg {
+        width: 18px;
+        height: 18px;
     }
 
     .selection-intro {
@@ -762,7 +772,9 @@
 
     .subject-classes {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        border-bottom: 0;
     }
 
     .class-choice {
@@ -777,13 +789,9 @@
         text-align: left;
         background: var(--color-panel);
         border: 2px solid var(--color-line);
-        border-bottom: 0;
+        border-radius: 6px;
         cursor: pointer;
         transition: background-color 160ms ease, border-color 160ms ease;
-    }
-
-    .class-choice + .class-choice {
-        border-left: 0;
     }
 
     .class-choice:hover,
@@ -878,11 +886,6 @@
     @media (max-width: 640px) {
         .subject-classes {
             grid-template-columns: 1fr;
-        }
-
-        .class-choice + .class-choice {
-            border-top: 0;
-            border-left: 2px solid var(--color-line);
         }
     }
 

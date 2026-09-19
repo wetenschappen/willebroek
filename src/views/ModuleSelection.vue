@@ -52,7 +52,7 @@ function goBack() {
         <component v-if="subject" :is="subject.icon" weight="regular" />
       </div>
       <div>
-        <p class="eyebrow" :class="subject?.accentColor">{{ subject?.label }} / Leerpad</p>
+        <p class="eyebrow" :class="subject?.accentColor">{{ subject?.label }} / Klas</p>
         <h1>{{ classId }}</h1>
         <p class="intro-copy">Kies een les om te starten.</p>
       </div>

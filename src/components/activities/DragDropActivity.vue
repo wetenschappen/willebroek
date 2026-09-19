@@ -87,18 +87,18 @@ function onDragOver(e) {
 function onDrop(defIndex, e) {
   e.preventDefault()
   let termIndex = draggedItem.value
-  
+
   // Fallback to dataTransfer if draggedItem.value is somehow lost or we're dropping from an external context (unlikely, but safe)
   if (termIndex === null) {
       const data = e.dataTransfer.getData('text/plain')
       if (data !== '') termIndex = Number(data)
   }
-  
+
   if (termIndex === null || termIndex === undefined) return
-  
+
   // Ensure it's a number, because draggedItem or event data might hold it as string
   termIndex = Number(termIndex)
-  
+
   // Remove from old position if exists
   Object.keys(matches.value).forEach(key => {
     if (matches.value[key] === termIndex) {
@@ -106,19 +106,19 @@ function onDrop(defIndex, e) {
       delete feedback.value[key]
     }
   })
-  
+
   // Place in new position
   matches.value[defIndex] = termIndex
-  
+
   // Check if correct
   const isCorrect = termIndex === defIndex
   feedback.value[defIndex] = isCorrect ? 'correct' : 'incorrect'
-  
+
   attempts.value++
-  
+
   // Check completion
   checkCompletion()
-  
+
   draggedItem.value = null
 }
 
@@ -131,7 +131,7 @@ function checkCompletion() {
   // Complete when all zones filled AND all correct
   const allFilled = Object.keys(matches.value).length === props.pairs.length
   const allCorrect = Object.values(feedback.value).every(f => f === 'correct')
-  
+
   if (allFilled && allCorrect) {
     isComplete.value = true
     emit('complete')
@@ -159,7 +159,7 @@ watch(() => props.isOpen, (val) => {
         shouldPulse.value = false
     } else {
         window.addEventListener('keydown', handleKeydown)
-        
+
         nextTick(() => {
             shouldPulse.value = true
             setTimeout(() => { shouldPulse.value = false }, 3000)
@@ -241,9 +241,9 @@ onMounted(() => {
             <PhTrophy weight="fill" class="text-4xl text-emerald-500"/>
           </div>
           <h4 class="text-2xl font-bold text-slate-900">Uitstekend!</h4>
-          <p class="text-slate-500">Alle {{ pairs.length }} begrippen correct gekoppeld in {{ attempts }} {{ attempts === 1 ? 'poging' : 'pogingen' }}</p>
+          <p class="text-slate-600">Alle {{ pairs.length }} begrippen correct gekoppeld in {{ attempts }} {{ attempts === 1 ? 'poging' : 'pogingen' }}</p>
           <div class="flex gap-3 mt-2">
-            <button @click="resetActivity" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold flex items-center gap-2 transition-colors">
+            <button @click="resetActivity" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl font-semibold flex items-center gap-2 transition-colors">
               <PhArrowClockwise weight="bold"/> Opnieuw
             </button>
             <button @click="close" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-colors">
@@ -255,8 +255,8 @@ onMounted(() => {
         <template v-else>
 
           <!-- ① CHIP BANK — draggable terms as compact pills -->
-          <div class="shrink-0 px-6 pt-5 pb-4 border-b border-slate-100">
-            <p class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 mb-3">Begrippen — sleep naar de juiste definitie</p>
+          <div class="shrink-0 px-6 pt-5 pb-4 border-b border-slate-200">
+            <p class="text-[0.6875rem] font-black uppercase tracking-widest text-slate-600 mb-3">Begrippen — sleep naar de juiste definitie</p>
             <div class="flex flex-wrap gap-2">
               <div
                 v-for="termIndex in shuffledTerms"
@@ -267,7 +267,7 @@ onMounted(() => {
                 class="px-3 py-1.5 rounded-lg border text-sm font-semibold select-none transition-all"
                 :class="[
                   isTermPlaced(termIndex)
-                    ? 'bg-slate-50 border-slate-100 text-slate-300 cursor-default'
+                    ? 'bg-slate-100 border-slate-200 text-slate-500 cursor-default'
                     : 'bg-indigo-50 border-indigo-200 text-indigo-800 cursor-grab active:cursor-grabbing hover:border-indigo-400 hover:shadow-sm',
                   draggedItem === termIndex ? 'opacity-40 scale-95' : ''
                 ]"
@@ -293,7 +293,7 @@ onMounted(() => {
               ]"
             >
               <!-- Row index -->
-              <span class="shrink-0 w-6 h-6 rounded-full bg-slate-100 text-slate-400 text-xs font-black flex items-center justify-center">
+              <span class="shrink-0 w-6 h-6 rounded-full bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center">
                 {{ defIndex + 1 }}
               </span>
 
@@ -317,12 +317,12 @@ onMounted(() => {
                   ></span>
                   <button v-if="feedback[defIndex] !== 'correct'"
                     @click="removeFromZone(defIndex)"
-                    class="text-slate-300 hover:text-red-400 transition-colors"
+                    class="text-slate-500 hover:text-red-500 transition-colors"
                     title="Verwijder"
                   ><PhX class="text-sm"/></button>
                 </div>
                 <!-- Empty drop hint -->
-                <div v-else class="px-3 py-1.5 rounded-lg border-2 border-dashed border-slate-300 text-slate-400 text-xs italic">
+                <div v-else class="px-3 py-1.5 rounded-lg border-2 border-dashed border-slate-400 text-slate-600 text-sm italic">
                   sleep hier...
                 </div>
               </div>
@@ -330,12 +330,12 @@ onMounted(() => {
           </div>
 
           <!-- Footer -->
-          <div class="shrink-0 px-6 py-3 border-t border-slate-100 flex justify-between items-center text-sm">
-            <span class="text-slate-400">
+          <div class="shrink-0 px-6 py-3 border-t border-slate-200 flex justify-between items-center text-sm">
+            <span class="text-slate-600">
               <PhStar weight="fill" class="inline text-amber-400 mr-1"/>
               {{ correctCount }}/{{ pairs.length }} correct &nbsp;·&nbsp; {{ attempts }} pogingen
             </span>
-            <button @click="resetActivity" class="text-slate-400 hover:text-slate-600 flex items-center gap-1 transition-colors text-xs font-semibold">
+            <button @click="resetActivity" class="text-slate-600 hover:text-slate-800 flex items-center gap-1 transition-colors text-sm font-semibold">
               <PhArrowClockwise class="text-sm"/> Reset
             </button>
           </div>

@@ -104,9 +104,9 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
             <PhTrophy weight="fill" class="text-6xl text-amber-500"/>
           </div>
           <h2 class="text-3xl font-black text-slate-800 mb-2">Herhaling Voltooid!</h2>
-          <p class="text-lg text-slate-500 mb-8">Je scoorde {{ score }} van de {{ questions.length }} punten.</p>
+          <p class="text-lg text-slate-600 mb-8">Je scoorde {{ score }} van de {{ questions.length }} punten.</p>
           <div class="flex gap-4 justify-center">
-            <button @click="resetActivity" class="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-300 transition-all">
+            <button @click="resetActivity" class="px-6 py-3 bg-slate-200 text-slate-800 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-300 transition-all">
               <PhArrowClockwise weight="bold"/> Opnieuw
             </button>
             <button @click="emit('close')" class="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-500 transition-all">
@@ -115,12 +115,12 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
           </div>
         </div>
 
-        <div v-else class="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-slate-100 animate-in slide-in-from-bottom-4 duration-500">
+        <div v-else class="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-slate-200 animate-in slide-in-from-bottom-4 duration-500">
           <div class="flex items-center justify-between mb-8">
             <span class="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-black uppercase tracking-widest rounded-full">Vraag {{ currentIndex + 1 }}</span>
             <div class="flex gap-1">
                <div v-for="n in questions.length" :key="n" class="w-2 h-2 rounded-full" 
-                    :class="n-1 < currentIndex ? 'bg-emerald-500' : (n-1 === currentIndex ? 'bg-indigo-500 scale-125' : 'bg-slate-200')"></div>
+                    :class="n-1 < currentIndex ? 'bg-emerald-500' : (n-1 === currentIndex ? 'bg-indigo-500 scale-125' : 'bg-slate-300')"></div>
             </div>
           </div>
 
@@ -132,7 +132,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
                     :disabled="isChecked"
                     class="w-full p-5 rounded-2xl border-2 text-left transition-all flex items-center justify-between group"
                     :class="[
-                        selectedOption === idx ? 'border-indigo-500 bg-indigo-50 shadow-md' : 'border-slate-100 hover:border-indigo-200 hover:bg-slate-50',
+                        selectedOption === idx ? 'border-indigo-500 bg-indigo-50 shadow-md' : 'border-slate-200 hover:border-indigo-200 hover:bg-slate-50',
                         isChecked && idx === currentQuestion.c ? '!border-emerald-500 !bg-emerald-50' : '',
                         isChecked && selectedOption === idx && idx !== currentQuestion.c ? '!border-red-500 !bg-red-50' : ''
                     ]">
@@ -161,8 +161,8 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
       </main>
 
       <!-- Footer Info -->
-      <footer class="bg-white border-t border-slate-100 p-4 text-center">
-        <p class="text-slate-400 text-xs font-medium flex items-center justify-center gap-1">
+      <footer class="bg-white border-t border-slate-200 p-4 text-center">
+        <p class="text-slate-600 text-sm font-medium flex items-center justify-center gap-1">
           <PhLightbulb weight="fill" class="text-amber-400"/>
           Tip: Denk rustig na voor je een optie selecteert.
         </p>

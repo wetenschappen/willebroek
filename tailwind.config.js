@@ -60,7 +60,6 @@ export default {
         ink: {
           DEFAULT: '#17252b',
           light: '#34474e',
-          muted: '#52636a',
           dark: '#17252b',
         },
         chrome: {

@@ -5,6 +5,33 @@
 > Dit document is leidend voor nieuwe schermen en componenten. Het doel is niet
 > een opvallende interface, maar een rustig, doelbewust werkblad dat leerlingen
 > zelfstandig van een beamer kunnen lezen.
+>
+> Dit document bestaat uit twee delen. **Deel I** beschrijft principes en is
+> stabiel. **Deel II** beschrijft de tokens en systeemklassen uit
+> `src/style.css`; dat is de implementatie van Deel I. Bij twijfel geldt Deel I:
+> als code en document verschillen, is de code fout, niet het principe.
+
+## Inhoud
+
+- Deel I — Principes
+  - [1. Ontwerpdoel](#1-ontwerpdoel)
+  - [2. Projectorregel: geen zwakke signalen](#2-projectorregel-geen-zwakke-signalen)
+  - [3. Activiteitstaal: kleur hoort bij het soort activiteit](#3-activiteitstaal-kleur-hoort-bij-het-soort-activiteit)
+  - [4. Typografie](#4-typografie)
+  - [5. Lay-out en componenten](#5-lay-out-en-componenten)
+  - [6. ABC-tijdlijn](#6-abc-tijdlijn)
+  - [7. Copy: zo weinig mogelijk, zo specifiek mogelijk](#7-copy-zo-weinig-mogelijk-zo-specifiek-mogelijk)
+  - [8. Verboden vibe-code-signalen](#8-verboden-vibe-code-signalen)
+- Deel II — Implementatie
+  - [9. Bron van waarheid](#9-bron-van-waarheid)
+  - [10. Kleurtokens](#10-kleurtokens)
+  - [11. Radius, schaduw en focus](#11-radius-schaduw-en-focus)
+  - [12. Ruimte](#12-ruimte)
+  - [13. Teksttokens en contrast](#13-teksttokens-en-contrast)
+  - [14. Systeemklassen](#14-systeemklassen)
+  - [15. Verplichte toepassing: welke schermen moeten volgen](#15-verplichte-toepassing-welke-schermen-moeten-volgen)
+  - [16. Opruimlijst](#16-opruimlijst)
+  - [17. Nieuwe schermen controleren](#17-nieuwe-schermen-controleren)
 
 ## 1. Ontwerpdoel
 
@@ -43,8 +70,13 @@ Gebruik wel:
 
 `--color-ink` is de standaard voor gewone leesbare tekst. `--color-ink-soft`
 mag alleen voor ondersteunende tekst worden gebruikt wanneer die nog duidelijk
-leesbaar blijft. `--color-ink-muted` mag niet gebruikt worden voor informatie
-die leerlingen nodig hebben om een opdracht uit te voeren.
+leesbaar blijft (9.7:1 op wit).
+
+Er is **geen** `--color-ink-muted`. Die token bestond vroeger op `#718087`
+(4.09:1) en haalde de drempel niet op een beamer tegen een witte muur. Hij is
+bewust verwijderd, niet behouden als synoniem. Voeg geen lichtgrijze tint
+opnieuw toe: gebruik `--color-ink`, `--color-ink-soft` of `slate-500`
+(`#52636a`, 6.3:1) als de tekst echt ondergeschikt is.
 
 ## 3. Activiteitstaal: kleur hoort bij het soort activiteit
 
@@ -141,7 +173,274 @@ Nieuwe code mag deze patronen niet introduceren:
 Phosphor-iconen zijn functioneel: ze verduidelijken een actie, status of vak.
 Gebruik ze niet als decoratieve opvulling.
 
-## 9. Nieuwe schermen controleren
+---
+
+# Deel II — Implementatie
+
+> Dit deel beschrijft wat er feitelijk in de repo staat. Alles hier is na te
+> kijken in `src/style.css` en `tailwind.config.js`. Wijzig je een token of
+> systeemklasse, werk dan deze sectie in dezelfde commit bij.
+
+## 9. Bron van waarheid
+
+De implementatie staat op drie plaatsen, in deze volgorde van gezag:
+
+| Plaats | Bevat |
+| --- | --- |
+| `src/style.css` — `:root` | de kleur-, radius-, schaduw- en focustokens |
+| `src/style.css` — `@layer components` | de systeemklassen: `.card-*`, `.badge-*`, `.modal-*`, `.btn*`, `.lesson-*` |
+| `tailwind.config.js` | de Tailwind-doorvertaling: `slate`-herkartering, `fontFamily`, `borderRadius`, `boxShadow` |
+
+Gebruik **geen** losse Tailwind-kleurschaal als `blue-600` of `indigo-500` in een
+schermcomponent. Een scherm dat de huisstijl volgt, gebruikt uitsluitend:
+
+1. de systeemklassen uit sectie 14; of
+2. de tokens uit sectie 10 via `var(--color-…)` in een eigen `<style>`-blok.
+
+Er bestaat **geen** Tailwind-utility voor de meeste tokens. `bg-panel`,
+`bg-digital`, `border-line`, `border-line-strong` en `text-ink-soft` bestaan
+niet en werken dus niet. Alleen deze utilities bestaan echt:
+
+```text
+text-ink          text-ink-light    text-ink-dark
+text-physics      text-biology      text-action
+text-surface      text-brand-orange text-math-orange
+rounded-control   rounded-card
+shadow-subtle     shadow-card       shadow-lift       shadow-float
+```
+
+Voor oppervlak- en activiteitskleuren gebruik je dus de systeemklassen of
+`var(--color-…)`, niet een Tailwind-utility.
+
+De standaard Tailwind-schalen zijn niet verboden in een laboratoriumsimulatie
+waar een kleur een natuurkundige grootheid voorstelt (zie sectie 15).
+
+## 10. Kleurtokens
+
+Deze variabelen staan in `:root` in `src/style.css`.
+
+### Oppervlak en tekst
+
+| Token | Waarde | Gebruik |
+| --- | --- | --- |
+| `--color-paper` | `#f5f7f6` | pagina-achtergrond |
+| `--color-panel` | `#ffffff` | kaarten, panelen, modalin houd |
+| `--color-panel-muted` | `#edf2f1` | hover- en rustvlakken, ingesloten blokken |
+| `--color-ink` | `#17252b` | standaard leesbare tekst |
+| `--color-ink-soft` | `#34474e` | ondersteunende tekst die leesbaar moet blijven |
+| `--color-line` | `#52636a` | gewone randen en scheidingen |
+| `--color-line-strong` | `#263a42` | nadrukranden, kleurankerbalken, 2px-scheidingen |
+
+### Activiteitstype
+
+| Token | Waarde | Betekenis | Label |
+| --- | --- | --- | --- |
+| `--color-digital` / `--color-digital-soft` | `#075985` / `#e3f1f5` | digitaal | `DIGITAAL` |
+| `--color-presentation` / `--color-presentation-soft` | `#b4232f` / `#fde8e9` | presentatie | `PRESENTATIE` |
+| `--color-workbook` / `--color-workbook-soft` | `#237a4b` / `#e7f2ea` | fysiek werk | `BOEK / BUNDEL` |
+
+### Vak- en actiekleur
+
+| Token | Waarde | Gebruik |
+| --- | --- | --- |
+| `--color-physics` / `--color-physics-soft` | `#176b87` / `#e3f1f5` | watermerk en eyebrow van het vak Fysica |
+| `--color-biology` / `--color-biology-soft` | `#397553` / `#e7f2ea` | watermerk en eyebrow van het vak Biologie |
+| `--color-action` / `--color-action-soft` | `#b65b2d` / `#fbede5` | het interactieaccent: actieve tijdlijnmarker en -lijn, hover op rijen, links, `.fab-btn` en `.goals-trigger`, en gemarkeerde woorden in de afsprakenpresentatie |
+
+> **Let op — token-schuld, nog niet opgelost.** In de praktijk zijn er te veel
+> bijna-gelijke kleuren:
+>
+> - `--color-ink-muted` is verwijderd. De Tailwind-utility `text-ink-muted`
+>   bestaat **niet meer**; die gaf `#52636a` en botste met het CSS-token. Gebruik
+>   `text-ink`, `text-ink-light`, of `var(--color-ink-soft)`.
+> - Fysica (`#176b87`) en digitaal (`#075985`) liggen dicht bij elkaar, net als
+>   biologie (`#397553`) en boek/bundel (`#237a4b`). Een leerling kan vak- en
+>   activiteitskleur daardoor niet betrouwbaar onderscheiden. Het tekstlabel en
+>   het icoon (`PhPlanet` / `PhMicroscope`) blijven daarom **verplicht**.
+
+## 11. Radius, schaduw en focus
+
+| Token | Waarde | Toepassing |
+| --- | --- | --- |
+| `--radius-control` | `8px` | knoppen, invoervelden, compacte controls |
+| `--radius-card` | `12px` | kaarten, panelen, `modal-content` |
+| `--shadow-rest` | `0 1px 2px` + `0 8px 24px` | rustende kaarten |
+| `--shadow-dialog` | `0 20px 50px rgb(23 37 43 / 0.18)` | dialoogvensters en overlaypanelen |
+| `--focus-ring` | `0 0 0 3px rgb(23 107 135 / 0.24)` | `:focus-visible`, al globaal ingesteld |
+
+Daarnaast heeft `.badge` een vaste `6px` en gebruikt `.fab-btn` een cirkel.
+
+Dit is de volledige, toegestane radiuslijst voor de schil van een scherm:
+
+```text
+0px        fullscreen werkbladen
+6px        .badge
+8px        controls, knoppen, .btn
+12px       kaarten, panelen, dialoogvensters
+50%        uitsluitend .fab-btn
+```
+
+Losse Tailwind-radii zijn niet verboden voor *binnen*elementen van een
+simulatie, maar de schil volgt bovenstaande lijst.
+
+`rounded-2xl` (`16px`), `rounded-3xl` (`24px`), `rounded-xl` (`12px`) en
+`rounded-lg` (`8px`) zijn Tailwind-utilities die toevallig in de buurt komen.
+Gebruik in nieuwe code `rounded-control` of `rounded-card`, zodat de bedoeling
+zichtbaar is.
+
+> Deze lijst vervangt het voorstel `0/4/6/8px` uit `DESIGN-REVIEW-LIVE.md` §8.
+> De repo gebruikt `8` en `12`; dat is nu de afspraak.
+
+## 12. Ruimte
+
+Er is **geen** spacingschaal als token. De afspraak is het 8px-ritme uit
+sectie 5, uitgedrukt in Tailwind-stappen: `2` (8px), `3` (12px), `4` (16px),
+`6` (24px), `8` (32px). Vermijd oneven tussenstappen voor structuur.
+
+## 13. Teksttokens en contrast
+
+Gemeten contrast op `--color-panel` (`#ffffff`):
+
+| Kleur | Ratio | Verdict |
+| --- | ---: | --- |
+| `--color-ink` `#17252b` | 15.7:1 | ruim voldoende |
+| `--color-ink-soft` `#34474e` | 9.7:1 | voldoende |
+| `--color-digital` `#075985` | 7.6:1 | voldoende |
+| `--color-presentation` `#b4232f` | 6.5:1 | voldoende |
+| `slate-500` `#52636a` | 6.3:1 | voldoende, voor echt ondergeschikte tekst |
+| `--color-workbook` `#237a4b` | 5.3:1 | voldoende |
+| `--color-action` `#b65b2d` | 4.6:1 | net voldoende, alleen voor accenten |
+| `slate-400` `#718682` | 3.9:1 | **zakt** — nooit functionele tekst |
+| `slate-300` `#b8c8c6` | 1.7:1 | **zakt** — nooit functionele tekst |
+
+`slate-400` en `slate-300` halen de drempel voor gewone tekst (4.5:1) niet en
+verdwijnen op een beamer. Gebruik `--color-ink` of `--color-ink-soft`, of
+`slate-500` (`#52636a`, 6.3:1) als de tekst echt ondergeschikt is.
+
+## 14. Systeemklassen
+
+Alles hieronder staat in `@layer components` in `src/style.css`. Een scherm dat
+de huisstijl volgt, hergebruikt deze klassen in plaats van eigen Tailwind-
+combinaties.
+
+### Activiteitskaart
+
+| Klasse | Functie |
+| --- | --- |
+| `.card` | basispaneel: wit, `--radius-card`, `--shadow-rest`, 4px kleurankerbalk via `::before` |
+| `.card-interactive` | klikbare kaart met hover op `--color-line-strong` |
+| `.card-locked` | niet-beschikbare kaart |
+| `.card-digital` / `.card-check` | ankerbalk blauw |
+| `.card-paper` | ankerbalk groen |
+| `.card-class` | ankerbalk rood |
+| `.card-done` | afgeronde kaart; kleurt `.lesson-activity-action` terug naar `--color-ink` |
+
+### Activiteit in de ABC-tijdlijn
+
+| Klasse | Functie |
+| --- | --- |
+| `.lesson-activity` | rij met 10px linkerbalk en 2px onderrand |
+| `.lesson-activity-copy`, `.activity-meta`, `.activity-description` | tekstblok; `strong` is `--color-ink` |
+| `.lesson-activity-action` | rechter actie, krijgt de kleur van het activiteitstype |
+| `.extra-branch`, `.branch-activity` | extra materiaal onder de hoofdkaart |
+
+### Badge
+
+`.badge` plus precies één variant: `.badge-digital`, `.badge-paper`,
+`.badge-class`, `.badge-check` (identiek aan `digital`) of `.badge-neutral`.
+De badge is de **tekstlabel-drager** uit sectie 3.
+
+> Deze klassen zijn gedefinieerd maar worden nog nergens gebruikt. De tijdlijn
+> zet het label nu via `.activity-meta` (`ActivityCard.vue`) en de
+> presentatieslides via `MathSlideWrapper`. Zet nieuwe labels op `.badge`.
+
+### Knop
+
+`.btn` als basis, daarna `.btn-primary`, `.btn-ghost`, `.btn-close` of
+`.btn-close-dark`. Sluitknoppen op een donkere balk gebruiken `.btn-close-dark`.
+
+### Overlay en dialoog
+
+| Klasse | Functie |
+| --- | --- |
+| `.modal-backdrop` | egaal `rgb(23 37 43 / 0.72)` — **geen blur** — plus `.open` voor de zichtbare staat |
+| `.modal-content` | wit paneel op `--color-panel`, `1px --color-line`, `--radius-card`, `--shadow-dialog` |
+| `.modal-fullscreen` | volledig scherm op `--color-ink` met witte tekst, `z-[9999]` |
+
+`.modal-fullscreen` is de bedoelde basis voor **elke** activiteit en elk ticket
+die het volledige scherm inneemt. Gebruik geen eigen `fixed inset-0 … bg-black`
+of `bg-slate-900/80 backdrop-blur-sm`; dat is precies de afwijking die
+`DESIGN-REVIEW-LIVE.md` §4 beschrijft.
+
+### Shell en presentatie
+
+`.lesson-nav`, `.lesson-main`, `.lesson-intro`, `.timeline-heading`,
+`.timeline-time`, `.timeline-icon`, `.timeline-line`, `.goals-*`, `.fab-btn`,
+`.tool-item`, `.selection-page`, `.content-page`, `.subject-row`, `.index-row`,
+`.lesson-row`, `.class-choice`, `.empty-state`, `.slide-viewport`, `.ppt-stage`.
+
+## 15. Verplichte toepassing: welke schermen moeten volgen
+
+Deze regel stond nog nergens en veroorzaakte de huidige drift. **Elk scherm dat
+een leerling te zien krijgt, volgt de huisstijl**, inclusief modals en
+activiteiten. Er is geen uitzondering voor oudere componenten.
+
+De activiteiten van de ABC-kaart erven het kleurtype van die kaart. De kaart
+bepaalt dat type via `action` of `type`; zie `LessonContent.vue` (`getCardMeta`)
+en `ActivityCard.vue`.
+
+| Kaart op de tijdlijn | `action` / `type` | Component | Kleur in het scherm |
+| --- | --- | --- | --- |
+| `card-entry` | `entry-ticket` / `digital` | `TicketModal` | blauw `--color-digital`, label `DIGITAAL` |
+| `card-exit` | `exit-ticket` / `digital` | `TicketModal` | blauw `--color-digital`, label `DIGITAAL` |
+| `card-pres-*` | `presentation` / `class` | `PresentationModal` | rood `--color-presentation`, label `PRESENTATIE` |
+| `card-workbook` | `workbook` / `paper` | `WorkbookModal` | groen `--color-workbook`, label `BOEK / BUNDEL` |
+| `card-activity` | `activity` / `digital` | `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw` | blauw `--color-digital`, label `DIGITAAL` |
+
+Concreet voor de entry- en exittickets: die kaarten staan in alle lessen als
+`type: 'digital'`, en `LessonContent.vue` geeft ze allebei het label `DIGITAAL`.
+Het ticket is dus **blauw**, met het label `DIGITAAL`, en niet amber voor entry
+en indigo voor exit zoals `TicketModal.vue` nu doet. Eén ticketcomponent, één
+kleurtype, verschil alleen in tekst en icoon.
+
+Voor de laboratoriumsimulaties (`Circuits`, `ForcesLab`, `SpringForceLab`,
+`IdealGasLaw`) geldt een dubbele afspraak:
+
+1. **De schil volgt het systeem**: een egaal paneel, 2px `--color-line-strong`,
+   `--radius-card`, en de blauwe ankerbalk van het digitale activiteitstype.
+2. **Binnen de simulatie mag kleur een grootheid voorstellen** — een veer, een
+   batterij, een krachtvector. Zo'n kleur is geen UI-accent maar vakinhoud en
+   moet altijd een legenda of label hebben.
+
+Wat ook in de simulatie niet mag: blur, glow, neon, bounce, pulse, emoji als
+object, en een willekeurige radius. Zie sectie 8.
+
+## 16. Opruimlijst
+
+Bekende afwijkingen tussen code en dit document. Deze lijst hoort te krimpen;
+voeg hier niets toe zonder het eerst in de code te zien.
+
+| Klasse | Status | Actie |
+| --- | --- | --- |
+| `.modal-fullscreen` | gedefinieerd, **0 keer gebruikt** | inzetten voor ticket, presentatie en simulaties |
+| `.btn-primary`, `.btn-ghost` | gedefinieerd, **0 keer gebruikt** | knoppen in modals hierop zetten |
+| `.badge` en alle `.badge-*` | gedefinieerd, **0 keer gebruikt** | badges in tijdlijn en modals hierop zetten |
+| `.card` als losse klasse | **0 keer gebruikt**; alleen via `ActivityCard.vue` | rechtstreeks gebruik vermijden, anders verliest de kaart zijn ankerbalk |
+| `TicketModal.vue` | eigen fullscreen, amber + indigo | herbouwen op `.modal-fullscreen` + blauw |
+| `PresentationModal.vue` | eigen `bg-black` fullscreen | herzien; zwart is hier verdedigbaar, maar dan als bewuste uitzondering gedocumenteerd |
+| `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw` | eigen schil, blur, `shadow-2xl` | schil naar sectie 15 |
+| `NamePickerOverlay.vue` | `bg-slate-900/90 backdrop-blur-sm` | egale overlay |
+| `Toolbox.vue` | `indigo`, `purple`, `text-slate-400` | tokens + systeemklassen |
+| `text-slate-400` | 50 voorkomens in 20 bestanden | vervangen, zie sectie 13 |
+| `tailwind.config.js` — `surface`, `chrome` | 0 echte gebruikssites | opruimen; `surface.50/100/200/300` dupliceert `slate.50/100/200/300` |
+| `tailwind.config.js` — `brand`, `ink` | `text-brand-orange` (1×) en `text-ink-dark` (1×), beide een duplicaat van een token | vervangen door `text-action` en `text-ink`, daarna opruimen |
+| `tailwind.config.js` — `math.violet` | `#526b78`, ongebruikt | verwijderen |
+| `text-ink-muted` | **verwijderd** uit `src/style.css` en `tailwind.config.js` | klaar |
+| Geen utility voor `--color-panel`, `--color-line`, `--color-digital`, `--color-presentation`, `--color-workbook` | alleen `var(--color-…)` werkt | bewust zo laten, of de utility's toevoegen |
+| `.badge` als losse klasse | **0 keer gebruikt**; `ActivityCard` toont het label via `.activity-meta`, presentatieslides via eigen markup | badge-markup op `.badge` + `.badge-*` zetten |
+| `rounded-2xl`, `rounded-3xl` | restanten in activiteiten | naar `rounded-card` |
+
+## 17. Nieuwe schermen controleren
 
 Voor elke nieuwe component:
 
@@ -152,5 +451,7 @@ Voor elke nieuwe component:
 - Staat er geen dubbele tekst die de interface langer maakt?
 - Is het schoolvak neutraal en is kleur gereserveerd voor activiteitstype?
 - Verschuift de layout niet bij hover of focus?
+- Gebruikt het scherm de systeemklassen uit sectie 14 in plaats van eigen
+  Tailwind-combinaties?
 - Zijn mobiel en beamerbreedte bruikbaar?
 - Zijn `npm run check`, `npm run build`, `npm run smoke` en `git diff --check` geslaagd?

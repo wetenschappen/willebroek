@@ -9,8 +9,9 @@
     --color-panel-muted: #edf2f1;
     --color-ink: #17252b;
     --color-ink-soft: #34474e;
-    /* Projector rule: no pale text or hairline separators in instructional UI. */
-    --color-ink-muted: #34474e;
+    /* Projectorregel: geen fletse tekst in de lesinterface. Er is bewust géén
+       --color-ink-muted: een lichtere grijstint haalt de contrastdrempel niet
+       op een beamer tegen een witte muur. Gebruik --color-ink of --color-ink-soft. */
     --color-line: #52636a;
     --color-line-strong: #263a42;
     --color-digital: #075985;
@@ -258,7 +259,7 @@
     }
 
     .btn-close {
-        color: var(--color-ink-muted);
+        color: var(--color-ink-soft);
     }
 
     .btn-close:hover {
@@ -904,7 +905,7 @@
     .index-number,
     .lesson-number {
         flex: 0 0 72px;
-        color: var(--color-ink-muted);
+        color: var(--color-ink-soft);
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.875rem;
         font-weight: 500;
@@ -1132,7 +1133,7 @@
     }
 
     .goal-done {
-        color: var(--color-ink-muted);
+        color: var(--color-ink-soft);
         text-decoration: line-through;
     }
 

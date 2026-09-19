@@ -29,6 +29,18 @@ wordt doorgegeven. Activiteitskleur is semantisch: blauw = digitaal, rood =
 presentatie en groen = boek/bundel. Fysica en biologie krijgen geen eigen
 activiteitskleur.
 
+Er is geen uitzondering voor "oudere" componenten: **elk scherm dat een
+leerling ziet volgt de huisstijl**, inclusief modals, tickets en de
+activiteiten op de ABC-kaart. Gebruik de systeemklassen uit `src/style.css`
+(`.card-*`, `.badge-*`, `.modal-*`, `.btn*`) en de tokens uit `:root` in plaats
+van eigen Tailwind-kleurcombinaties. Een activiteit erft het kleurtype van de
+kaart waarop ze staat: `card-entry` en `card-exit` zijn `digital`, dus hun
+modals zijn blauw met het label `DIGITAAL`.
+
+Binnen een laboratoriumsimulatie mag een kleur wel een natuurkundige grootheid
+voorstellen, maar alleen met een legenda of label. Zie Deel II van
+`docs/DESIGN-SYSTEM.md` voor de tokens, de contrastcijfers en de opruimlijst.
+
 ## Commando's
 
 ```bash

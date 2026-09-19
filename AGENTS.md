@@ -30,16 +30,31 @@ presentatie en groen = boek/bundel. Fysica en biologie krijgen geen eigen
 activiteitskleur.
 
 Er is geen uitzondering voor "oudere" componenten: **elk scherm dat een
-leerling ziet volgt de huisstijl**, inclusief modals, tickets en de
+leerling ziet volgt de huisstijl**, inclusief modals, tickets, slides en de
 activiteiten op de ABC-kaart. Gebruik de systeemklassen uit `src/style.css`
-(`.card-*`, `.badge-*`, `.modal-*`, `.btn*`) en de tokens uit `:root` in plaats
-van eigen Tailwind-kleurcombinaties. Een activiteit erft het kleurtype van de
-kaart waarop ze staat: `card-entry` en `card-exit` zijn `digital`, dus hun
-modals zijn blauw met het label `DIGITAAL`.
+(`.card-*`, `.badge-*`, `.modal-*`, `.fullscreen-*`, `.btn*`) en de tokens uit
+`:root` in plaats van eigen Tailwind-kleurcombinaties. Een activiteit erft het
+kleurtype van de kaart waarop ze staat: `card-entry` en `card-exit` zijn
+`digital`, dus hun modals zijn blauw met het label `DIGITAAL`.
+
+**Geen donkere leesvlakken.** De projector staat tegen een witte muur, dus een
+donker scherm is onleesbaar. Achtergrond is `--color-paper` of `--color-panel`,
+tekst is `--color-ink` of `--color-ink-soft`. Geen `bg-black`, `bg-slate-900` of
+`--color-ink` als schermvullend vlak. Kleine donkere elementen (`.lesson-nav`,
+`.btn-primary`, `.timeline-icon`, `.fab-btn`) mogen wel.
+
+Er is één fontpaar: IBM Plex Sans + IBM Plex Mono. Geen `font-serif`, geen
+`Open Sans`.
 
 Binnen een laboratoriumsimulatie mag een kleur wel een natuurkundige grootheid
 voorstellen, maar alleen met een legenda of label. Zie Deel II van
-`docs/DESIGN-SYSTEM.md` voor de tokens, de contrastcijfers en de opruimlijst.
+`docs/DESIGN-SYSTEM.md` voor de tokens, de contrastcijfers, de
+fullscreen-activiteitenshell en de opruimlijst.
+
+`npm run check` bevat een **design-ratchet**: nieuwe overtredingen blokkeren de
+build, bestaande schuld staat in `scripts/design-baseline.json`. Ruim je iets
+op, verlaag dan dat getal in dezelfde commit. Losse meting:
+`node scripts/design-check.mjs`.
 
 ## Commando's
 

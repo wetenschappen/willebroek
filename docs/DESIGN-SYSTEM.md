@@ -31,7 +31,8 @@
   - [14. Systeemklassen](#14-systeemklassen)
   - [15. Verplichte toepassing: welke schermen moeten volgen](#15-verplichte-toepassing-welke-schermen-moeten-volgen)
   - [16. Opruimlijst](#16-opruimlijst)
-  - [17. Nieuwe schermen controleren](#17-nieuwe-schermen-controleren)
+  - [17. Handhaving: `design-baseline.json`](#17-handhaving-design-baselinejson)
+  - [18. Nieuwe schermen controleren](#18-nieuwe-schermen-controleren)
 
 ## 1. Ontwerpdoel
 
@@ -365,12 +366,61 @@ De badge is de **tekstlabel-drager** uit sectie 3.
 | --- | --- |
 | `.modal-backdrop` | egaal `rgb(23 37 43 / 0.72)` — **geen blur** — plus `.open` voor de zichtbare staat |
 | `.modal-content` | wit paneel op `--color-panel`, `1px --color-line`, `--radius-card`, `--shadow-dialog` |
-| `.modal-fullscreen` | volledig scherm op `--color-ink` met witte tekst, `z-[9999]` |
+| `.modal-fullscreen` | schermvullende **lichte** basis: `--color-paper`, `--color-ink`, `z-[9999]`, geen radius |
 
-`.modal-fullscreen` is de bedoelde basis voor **elke** activiteit en elk ticket
-die het volledige scherm inneemt. Gebruik geen eigen `fixed inset-0 … bg-black`
-of `bg-slate-900/80 backdrop-blur-sm`; dat is precies de afwijking die
-`DESIGN-REVIEW-LIVE.md` §4 beschrijft.
+### Fullscreen-activiteitenshell
+
+Elk scherm dat het volledige beeld vult, bouwt op dezelfde vier delen. Dit is de
+skeletstructuur die nieuwe activiteiten hergebruiken:
+
+| Klasse | Functie |
+| --- | --- |
+| `.modal-fullscreen` | de buitenste laag: `fixed inset-0`, `--color-paper`, `100vw × 100vh` |
+| `.fullscreen-bar` | kopbalk op `--color-panel` met `3px` onderrand; de kleur daarvan is het activiteitstype |
+| `.fullscreen-progress` + `span` | voortgangsbalk van `4px` |
+| `.fullscreen-body` | scrollend middenstuk met vaste padding (32/24px, 48px op desktop) |
+| `.fullscreen-foot` | voetbalk op `--color-panel` met `2px` bovenrand, knoppen rechts |
+| `.fullscreen-bar-digital` / `-paper` / `-class` | zet de ankerkleur van de kopbalk |
+| `.fullscreen-title` / `.fullscreen-label` | titel in `--color-ink`, label in IBM Plex Mono |
+
+De verplichte opbouw:
+
+```html
+<div class="modal-fullscreen">
+  <header class="fullscreen-bar fullscreen-bar-digital">
+    <span class="fullscreen-label">DIGITAAL</span>
+    <h2 class="fullscreen-title">Exit ticket</h2>
+  </header>
+  <div class="fullscreen-progress"><span :style="{ width: progress + '%' }"></span></div>
+  <div class="fullscreen-body"><!-- inhoud --></div>
+  <footer class="fullscreen-foot">
+    <button class="btn btn-primary">Volgende</button>
+  </footer>
+</div>
+```
+
+Eigenschappen van de shell, in volgorde van belangrijkheid:
+
+1. **Altijd licht.** Zie sectie 15. Geen `bg-black`, `bg-slate-900` of
+   `bg-slate-950` op een schermvullend leesvlak.
+2. **Het activiteitstype zit in de kopbalk**, niet in een eigen palet.
+3. **Eén radius:** `0` voor de shell, `--radius-card` voor panelen erbinnen.
+4. **Eén schaduw:** `--shadow-dialog` voor overlays, `--shadow-rest` voor
+   panelen. Geen `shadow-2xl`.
+5. **Geen blur, glow, pulse of bounce.** Actieve toestand is statisch en
+   tekstueel.
+6. **Knoppen komen uit `.btn`**, niet uit losse `bg-slate-900 text-white`-
+   combinaties.
+
+> Een klein donker element is toegestaan en soms gewenst: de navigatiebalk
+> (`.lesson-nav`), `.btn-primary`, `.timeline-icon` en `.fab-btn` zijn donker en
+> dat is een bewuste keuze. Verboden is een **groot donker leesvlak**.
+
+`.modal-fullscreen` was donker (`--color-ink` met witte tekst) en is op
+projectorverzoek omgezet naar licht. Gebruik het als lichte basis voor **elke**
+activiteit en elk ticket die het volledige scherm inneemt. Gebruik geen eigen
+`fixed inset-0 … bg-black` of `bg-slate-900/80 backdrop-blur-sm`; dat is precies
+de afwijking die `DESIGN-REVIEW-LIVE.md` §4 beschrijft.
 
 ### Shell en presentatie
 
@@ -403,6 +453,50 @@ Het ticket is dus **blauw**, met het label `DIGITAAL`, en niet amber voor entry
 en indigo voor exit zoals `TicketModal.vue` nu doet. Eén ticketcomponent, één
 kleurtype, verschil alleen in tekst en icoon.
 
+### Geen donkere leesvlakken — harde regel
+
+**De projector staat tegen een witte muur.** Een donker scherm is dan niet
+leesbaar: het licht van de beamer valt naast het beeld en de klas ziet een
+grijze waas in plaats van tekst. Dit is geen smaakvoorkeur maar een gemeten
+klacht uit de praktijk.
+
+Daarom geldt voor élk scherm dat een leerling leest — slides, tickets,
+activiteiten, presentaties:
+
+- achtergrond is `--color-paper` of `--color-panel`;
+- tekst is `--color-ink` of `--color-ink-soft`;
+- **geen** `bg-black`, `bg-slate-900`, `bg-slate-950` of `var(--color-ink)` als
+  schermvullend leesvlak;
+- geen donkere gradient of donkere foto als leesachtergrond, tenzij er een
+  lichte tekstplaat over het leesbare deel ligt.
+
+Kleine donkere elementen blijven toegestaan: `.lesson-nav`, `.btn-primary`,
+`.timeline-icon`, `.fab-btn`. Die zijn een accent, geen leesvlak.
+
+Donkere slides bestaan in de presentatielaag (`SlideHero`, `SlideTitle`,
+`SlideBig`, `SlideCelebration`) en moeten omgezet worden.
+
+### De presentatielaag volgt dezelfde taal
+
+De slides zijn geen apart systeem meer. Ze gebruiken dezelfde tokens, dezelfde
+kopbalklogica en dezelfde activiteitskleur (rood `PRESENTATIE`, want een slide
+hoort bij een `card-pres-*`).
+
+Wat daarbij verdwijnt:
+
+- `bg-slate-900`/`bg-black` slides → `--color-paper`;
+- `font-serif` (`SlideHero`, `SlideTitle`, `SlideStandard`) → het fontpaar is
+  IBM Plex Sans + Mono, niet drie families;
+- `font-family: 'Open Sans'` in 8 slides → **nooit geladen**, valt stil terug op
+  de browserdefault;
+- de `amber-500` ankerbalk in `MathSlideWrapper` → de activiteitskleur;
+- `text-slate-500`/`text-slate-400` labels → `--color-ink-soft`.
+
+Alle 26 slides blijven bestaan. Dat sommige layouts nu niet in een les gebruikt
+worden, betekent niet dat ze weg mogen: ze demonstreren de volledige
+presentatiecapaciteit en moeten dus dezelfde taal spreken. Er is geen "dode"
+slide die mag verouderen.
+
 Voor de laboratoriumsimulaties (`Circuits`, `ForcesLab`, `SpringForceLab`,
 `IdealGasLaw`) geldt een dubbele afspraak:
 
@@ -422,29 +516,67 @@ voeg hier niets toe zonder het eerst in de code te zien.
 
 | Klasse | Status | Actie |
 | --- | --- | --- |
-| `.modal-fullscreen` | gedefinieerd, **0 keer gebruikt** | inzetten voor ticket, presentatie en simulaties |
+| `.modal-fullscreen` | licht gemaakt, **nog 0 keer gebruikt** | inzetten voor ticket, presentatie en simulaties |
+| `.fullscreen-bar/-body/-foot/-progress` | nieuw, **nog 0 keer gebruikt** | zie de shellsectie in sectie 14 |
 | `.btn-primary`, `.btn-ghost` | gedefinieerd, **0 keer gebruikt** | knoppen in modals hierop zetten |
 | `.badge` en alle `.badge-*` | gedefinieerd, **0 keer gebruikt** | badges in tijdlijn en modals hierop zetten |
 | `.card` als losse klasse | **0 keer gebruikt**; alleen via `ActivityCard.vue` | rechtstreeks gebruik vermijden, anders verliest de kaart zijn ankerbalk |
-| `TicketModal.vue` | eigen fullscreen, amber + indigo | herbouwen op `.modal-fullscreen` + blauw |
-| `PresentationModal.vue` | eigen `bg-black` fullscreen | herzien; zwart is hier verdedigbaar, maar dan als bewuste uitzondering gedocumenteerd |
-| `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw` | eigen schil, blur, `shadow-2xl` | schil naar sectie 15 |
+| `TicketModal.vue` | eigen fullscreen, amber + indigo | herbouwen op de shellsectie + blauw |
+| `PresentationModal.vue` | eigen `bg-black` fullscreen, `text-slate-900` op zwart (1.34:1) | naar lichte shell; slides mee |
+| `SlideHero`, `SlideTitle`, `SlideBig`, `SlideCelebration` | donkere slide-roots | naar `--color-paper`, zie sectie 15 |
+| `SlideHero`, `SlideTitle`, `SlideStandard` | `font-serif` | verwijderen; één fontpaar |
+| 8 slidebestanden | `font-family: 'Open Sans'` — nooit geladen | verwijderen |
+| `MathSlideWrapper.vue` | `amber-500` ankerbalk, `text-slate-500` badge | activiteitskleur + `--color-ink-soft` |
+| `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw` | eigen schil, blur, `shadow-2xl` | schil naar sectie 15; sim-inhoud mag vakkleuren houden met legenda |
 | `NamePickerOverlay.vue` | `bg-slate-900/90 backdrop-blur-sm` | egale overlay |
 | `Toolbox.vue` | `indigo`, `purple`, `text-slate-400` | tokens + systeemklassen |
-| `text-slate-400` | 50 voorkomens in 20 bestanden | vervangen, zie sectie 13 |
+| `text-slate-400` / `text-slate-300` | 50 + 10 voorkomens | vervangen, zie sectie 13 |
 | `tailwind.config.js` — `surface`, `chrome` | 0 echte gebruikssites | opruimen; `surface.50/100/200/300` dupliceert `slate.50/100/200/300` |
 | `tailwind.config.js` — `brand`, `ink` | `text-brand-orange` (1×) en `text-ink-dark` (1×), beide een duplicaat van een token | vervangen door `text-action` en `text-ink`, daarna opruimen |
 | `tailwind.config.js` — `math.violet` | `#526b78`, ongebruikt | verwijderen |
 | `text-ink-muted` | **verwijderd** uit `src/style.css` en `tailwind.config.js` | klaar |
 | Geen utility voor `--color-panel`, `--color-line`, `--color-digital`, `--color-presentation`, `--color-workbook` | alleen `var(--color-…)` werkt | bewust zo laten, of de utility's toevoegen |
-| `.badge` als losse klasse | **0 keer gebruikt**; `ActivityCard` toont het label via `.activity-meta`, presentatieslides via eigen markup | badge-markup op `.badge` + `.badge-*` zetten |
 | `rounded-2xl`, `rounded-3xl` | restanten in activiteiten | naar `rounded-card` |
 
-## 17. Nieuwe schermen controleren
+## 17. Handhaving: `design-baseline.json`
+
+De regels uit dit document worden automatisch gecontroleerd door
+`scripts/design-check.mjs`, dat onderdeel is van `npm run check`.
+
+Het werkt als een **ratchet**:
+
+- `scripts/design-baseline.json` bevat het huidige aantal overtredingen per regel;
+- een **nieuwe** overtreding laat `npm run check` zakken en blokkeert de build;
+- bestaande schuld blokkeert niet, maar wordt gerapporteerd;
+- ruim je schuld op, verlaag dan het getal in dezelfde commit.
+
+Huidige baseline (na de eerste meting):
+
+```text
+text-slate-400     50      text-slate-300     10
+font-serif          3      Open Sans           8
+backdrop-blur      19      animate-pulse       6
+bounce              3      ping                2
+shadow-2xl         13      emoji               10
+donkere leesvlakken  7      ink-muted           0  ← moet 0 blijven
+```
+
+`scripts/design-baseline-files.json` onthoudt wélke bestanden al bekend zijn,
+zodat een nieuwe overtreding het juiste bestand aanwijst in plaats van de
+alfabetische top.
+
+Een losse meting:
+
+```bash
+node scripts/design-check.mjs
+```
+
+## 18. Nieuwe schermen controleren
 
 Voor elke nieuwe component:
 
 - Kan een leerling op de achterste rij de hoofdtekst lezen?
+- Is alle achtergrond licht genoeg? (geen donker leesvlak)
 - Is alle belangrijke tekst donker genoeg?
 - Zijn belangrijke scheidingen en kleurankers zichtbaar zonder hover?
 - Is kleur gecombineerd met een tekstlabel of andere betekenis?
@@ -453,5 +585,6 @@ Voor elke nieuwe component:
 - Verschuift de layout niet bij hover of focus?
 - Gebruikt het scherm de systeemklassen uit sectie 14 in plaats van eigen
   Tailwind-combinaties?
+- Bouwt een schermvullende activiteit op de shellsectie uit sectie 14?
 - Zijn mobiel en beamerbreedte bruikbaar?
 - Zijn `npm run check`, `npm run build`, `npm run smoke` en `git diff --check` geslaagd?

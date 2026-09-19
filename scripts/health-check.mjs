@@ -102,6 +102,25 @@ for (const file of runtimeFiles) {
 }
 if (!fail.some(message => message.includes('runtime bevat scope-marker'))) ok('geen wiskunde/chemie/test-playground in actieve runtimecode')
 
+// ── Design language (docs/DESIGN-SYSTEM.md, Deel II) ──────────────────────
+// Ratchet: nieuwe overtredingen blokkeren, bestaande schuld staat in
+// scripts/design-baseline.json en mag alleen naar beneden.
+const { runDesignCheck } = await import(pathToFileURL(path.join(root, 'scripts/design-check.mjs')).href)
+const design = runDesignCheck()
+if (design.regressions.length) {
+  for (const r of design.regressions) {
+    error(`design: ${r.rule.label} — ${r.baseline} → ${r.current} (${r.files.slice(0, 4).join(', ')}${r.files.length > 4 ? ', …' : ''})`)
+  }
+} else {
+  const total = design.allRules.reduce((sum, rule) => sum + (design.counts[rule.id] || 0), 0)
+  ok(`geen nieuwe design-overtredingen; ${total} bestaande gevallen in de baseline`)
+}
+if (design.improvements.length) {
+  for (const i of design.improvements) {
+    console.log(`  · design ${i.rule.id}: ${i.baseline} → ${i.current} — verlaag de baseline`)
+  }
+}
+
 if (fail.length) {
   console.error('\nHealth check mislukt:')
   for (const message of fail) console.error(`✗ ${message}`)

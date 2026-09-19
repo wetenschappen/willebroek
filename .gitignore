@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Niet publiek — uitgeversmateriaal (correctiesleutels) en persoonlijke setup.
+# Bestanden blijven lokaal staan; ze gaan alleen niet naar GitHub.
+materiaal/
+docs/pi_zed_setup_guide.md

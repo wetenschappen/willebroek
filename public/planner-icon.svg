@@ -1,7 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect x="10" y="10" width="80" height="80" rx="15" fill="#4f46e5" />
-  <rect x="30" y="30" width="40" height="8" rx="2" fill="white" opacity="0.8" />
-  <rect x="30" y="45" width="40" height="8" rx="2" fill="white" opacity="0.6" />
-  <rect x="30" y="60" width="25" height="8" rx="2" fill="white" opacity="0.6" />
-  <circle cx="75" cy="75" r="12" fill="#10b981" stroke="white" stroke-width="3" />
+  <!-- Willebroek planner-icon: werkblad met kleurankerbalken.
+       Kleuren komen uit src/style.css :root. Geen indigo, geen gradient. -->
+  <rect width="100" height="100" rx="12" fill="#f5f7f6"/>
+  <!-- de drie activiteitstypes, als ankerbalken -->
+  <rect x="22" y="26" width="6" height="14" fill="#075985"/>
+  <rect x="34" y="28" width="44" height="5" rx="1" fill="#17252b"/>
+  <rect x="34" y="37" width="30" height="4" rx="1" fill="#52636a"/>
+
+  <rect x="22" y="48" width="6" height="14" fill="#b4232f"/>
+  <rect x="34" y="50" width="44" height="5" rx="1" fill="#17252b"/>
+  <rect x="34" y="59" width="36" height="4" rx="1" fill="#52636a"/>
+
+  <rect x="22" y="70" width="6" height="14" fill="#237a4b"/>
+  <rect x="34" y="72" width="44" height="5" rx="1" fill="#17252b"/>
+  <rect x="34" y="81" width="24" height="4" rx="1" fill="#52636a"/>
 </svg>

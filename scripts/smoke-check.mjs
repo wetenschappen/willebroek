@@ -52,7 +52,33 @@ try {
     throw new Error('preview serveert niet de verwachte Willebroek-index')
   }
 
+  // Elke asset waarnaar de HTML of de meta verwijst moet echt bestaan.
+  // Een ontbrekend og-image.png gaf eerder online een 404 zonder dat iemand
+  // het merkte; deze check voorkomt dat.
+  //
+  // Let op: vite preview valt voor onbekende paden terug op index.html met
+  // HTTP 200. Een statuscontrole alleen is dus zinloos — we controleren ook
+  // dat het antwoord geen HTML is.
+  const requiredAssets = ['planner-icon.svg', 'og-image.png']
+  for (const asset of requiredAssets) {
+    const assetResponse = await request(base + asset)
+    const looksLikeHtml = /<html|<!doctype/i.test(assetResponse.body)
+    if (assetResponse.status !== 200 || looksLikeHtml || assetResponse.body.length === 0) {
+      throw new Error(`${asset} ontbreekt in de build (HTTP ${assetResponse.status}${looksLikeHtml ? ', kreeg index.html terug' : ''})`)
+    }
+  }
+
+  const ogImage = /<meta property="og:image" content="([^"]+)">/.exec(response.body)
+  if (!ogImage) throw new Error('og:image ontbreekt in index.html')
+  if (!/^https:\/\//.test(ogImage[1])) {
+    throw new Error(`og:image moet een absolute URL zijn; gevonden: ${ogImage[1]}`)
+  }
+  if (!response.body.includes('og:image:width')) {
+    throw new Error('og:image mist afmetingen')
+  }
+
   console.log(`✓ preview smoke test: ${base} → HTTP ${response.status}`)
+  console.log(`✓ og-image.png, planner-icon.svg en og:image-metadata aanwezig`)
 } catch (error) {
   console.error(error.message)
   if (output) console.error(output)

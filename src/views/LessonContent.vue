@@ -185,11 +185,11 @@ function getCardMeta(card) {
     if (card.meta) return card.meta
 
     // Auto-generate if missing
-    if (card.type === 'class') return 'Klassikaal'
-    if (card.type === 'digital') return 'Digitaal'
-    if (card.type === 'paper') return 'Werkboek'
-    if (card.action === 'entry-ticket' || card.action === 'exit-ticket') return 'Digitaal'
-    if (card.type === 'check') return 'Check'
+    if (card.action === 'entry-ticket' || card.action === 'exit-ticket') return 'DIGITAAL'
+    if (card.type === 'class') return 'PRESENTATIE'
+    if (card.type === 'digital') return 'DIGITAAL'
+    if (card.type === 'paper') return 'BOEK / BUNDEL'
+    if (card.type === 'check') return 'DIGITAAL'
     return 'Activiteit'
 }
 
@@ -260,7 +260,7 @@ const isTimelineComplete = computed(() => {
             <ActivityCard
                 v-for="card in step.cards"
                 :key="card.id"
-                :type="card.type"
+                :type="card.action === 'entry-ticket' || card.action === 'exit-ticket' ? 'digital' : card.type"
                 :meta="getCardMeta(card)"
                 :title="card.title"
                 :description="card.description"

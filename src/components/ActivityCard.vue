@@ -22,17 +22,17 @@ const typeClasses = computed(() => ({
 }[props.type]))
 
 const badgeText = computed(() => ({
-  class: 'Klassikaal',
-  paper: 'Werkboek',
-  digital: 'Digitaal',
-  check: 'Vastzetting'
+  class: 'PRESENTATIE',
+  paper: 'BOEK / BUNDEL',
+  digital: 'DIGITAAL',
+  check: 'DIGITAAL'
 }[props.type]))
 
 const actionText = computed(() => ({
-  class: 'Open activiteit',
-  paper: 'Open werkboek',
-  digital: 'Start activiteit',
-  check: 'Controleer'
+  class: 'Open presentatie',
+  paper: 'Open boek / bundel',
+  digital: 'Start digitaal',
+  check: 'Controleer digitaal'
 }[props.type]))
 </script>
 

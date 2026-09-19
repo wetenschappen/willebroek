@@ -9,9 +9,16 @@
     --color-panel-muted: #edf2f1;
     --color-ink: #17252b;
     --color-ink-soft: #34474e;
-    --color-ink-muted: #52636a;
-    --color-line: #b8c8c6;
-    --color-line-strong: #718682;
+    /* Projector rule: no pale text or hairline separators in instructional UI. */
+    --color-ink-muted: #34474e;
+    --color-line: #52636a;
+    --color-line-strong: #263a42;
+    --color-digital: #075985;
+    --color-digital-soft: #e3f1f5;
+    --color-presentation: #b4232f;
+    --color-presentation-soft: #fde8e9;
+    --color-workbook: #237a4b;
+    --color-workbook-soft: #e7f2ea;
     --color-physics: #176b87;
     --color-physics-soft: #e3f1f5;
     --color-biology: #397553;
@@ -74,22 +81,27 @@
     }
 
     .badge-digital {
-        background: var(--color-physics-soft);
-        color: var(--color-physics);
-        border-color: #b9dce5;
+        background: var(--color-digital-soft);
+        color: var(--color-digital);
+        border-color: var(--color-digital);
     }
 
     .badge-paper {
-        background: var(--color-biology-soft);
-        color: var(--color-biology);
-        border-color: #c7dfce;
+        background: var(--color-workbook-soft);
+        color: var(--color-workbook);
+        border-color: var(--color-workbook);
     }
 
-    .badge-class,
+    .badge-class {
+        background: var(--color-presentation-soft);
+        color: var(--color-presentation);
+        border-color: var(--color-presentation);
+    }
+
     .badge-check {
-        background: var(--color-action-soft);
-        color: var(--color-action);
-        border-color: #efc9b7;
+        background: var(--color-digital-soft);
+        color: var(--color-digital);
+        border-color: var(--color-digital);
     }
 
     /* --- CARDS --- */
@@ -119,7 +131,6 @@
 
     .card-locked {
         cursor: not-allowed;
-        opacity: 0.62;
         background: var(--color-panel-muted);
         filter: none;
         box-shadow: none;
@@ -135,15 +146,15 @@
         background: var(--color-line-strong);
     }
 
-    .card-digital::before { background: var(--color-physics); }
-    .card-paper::before { background: var(--color-biology); }
-    .card-class::before,
-    .card-check::before { background: var(--color-action); }
+    .card-digital::before,
+    .card-check::before { background: var(--color-digital); }
+    .card-paper::before { background: var(--color-workbook); }
+    .card-class::before { background: var(--color-presentation); }
 
-    .card-digital:hover { border-color: #9bcbd7; }
-    .card-paper:hover { border-color: #aed1b9; }
-    .card-class:hover,
-    .card-check:hover { border-color: #e3ad94; }
+    .card-digital:hover { border-color: var(--color-digital); }
+    .card-paper:hover { border-color: var(--color-workbook); }
+    .card-class:hover { border-color: var(--color-presentation); }
+    .card-check:hover { border-color: var(--color-digital); }
 
     .card-done .status-icon {
         opacity: 1;
@@ -321,7 +332,7 @@
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        color: rgb(255 255 255 / 0.7);
+        color: #ffffff;
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.75rem;
         font-weight: 500;
@@ -349,7 +360,7 @@
     .lesson-intro {
         margin-bottom: 64px;
         padding-bottom: 32px;
-        border-bottom: 1px solid var(--color-line-strong);
+        border-bottom: 2px solid var(--color-line-strong);
     }
 
     .lesson-intro h1 {
@@ -401,7 +412,7 @@
         align-items: center;
         gap: 6px;
         padding: 6px 0;
-        color: var(--color-ink-muted);
+        color: var(--color-ink);
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.75rem;
         cursor: pointer;
@@ -421,29 +432,38 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        position: relative;
         width: 100%;
-        min-height: 88px;
+        min-height: 96px;
         gap: 24px;
-        padding: 20px 0;
+        padding: 20px 16px 20px 24px;
         text-align: left;
         border: 0;
-        border-bottom: 1px solid var(--color-line);
+        border-left: 10px solid var(--color-line-strong);
+        border-bottom: 2px solid var(--color-line);
         cursor: pointer;
-        transition: background-color 160ms ease, padding 160ms ease;
+        transition: background-color 160ms ease, border-color 160ms ease;
     }
 
     .lesson-activity:first-of-type {
-        border-top: 1px solid var(--color-line);
+        border-top: 2px solid var(--color-line);
     }
 
     .lesson-activity:hover {
-        padding-right: 8px;
-        padding-left: 8px;
-        background: rgb(255 255 255 / 0.54);
+        background: var(--color-panel-muted);
     }
 
-    .lesson-activity::before {
-        display: none;
+    .lesson-activity.card-digital,
+    .lesson-activity.card-check {
+        border-left-color: var(--color-digital);
+    }
+
+    .lesson-activity.card-class {
+        border-left-color: var(--color-presentation);
+    }
+
+    .lesson-activity.card-paper {
+        border-left-color: var(--color-workbook);
     }
 
     .lesson-activity-copy {
@@ -461,9 +481,9 @@
     }
 
     .activity-meta {
-        color: var(--color-ink-muted);
+        color: var(--color-ink);
         font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.6875rem;
+        font-size: 0.8125rem;
         font-weight: 600;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -471,8 +491,8 @@
 
     .activity-description {
         max-width: 560px;
-        color: var(--color-ink-soft);
-        font-size: 0.9375rem;
+        color: var(--color-ink);
+        font-size: 1rem;
         line-height: 1.5;
     }
 
@@ -481,26 +501,25 @@
         align-items: center;
         flex-shrink: 0;
         gap: 8px;
-        color: var(--color-action);
-        font-size: 0.8125rem;
-        font-weight: 600;
+        color: var(--color-ink);
+        font-size: 0.9375rem;
+        font-weight: 700;
     }
 
-    .card-paper .lesson-activity-action { color: var(--color-biology); }
-    .card-digital .lesson-activity-action { color: var(--color-physics); }
+    .card-paper .lesson-activity-action { color: var(--color-workbook); }
+    .card-digital .lesson-activity-action,
+    .card-check .lesson-activity-action { color: var(--color-digital); }
+    .card-class .lesson-activity-action { color: var(--color-presentation); }
 
-    .lesson-activity.card-done .lesson-activity-action {
-        color: var(--color-biology);
-    }
-
+    .lesson-activity.card-done .lesson-activity-action,
     .lesson-activity.card-locked .lesson-activity-action {
-        color: var(--color-ink-muted);
+        color: var(--color-ink);
     }
 
     .extra-branch {
         margin-top: 24px;
         padding-top: 16px;
-        border-top: 1px solid var(--color-line);
+        border-top: 2px solid var(--color-line);
     }
 
     .extra-branch-toggle {
@@ -508,7 +527,7 @@
         align-items: center;
         gap: 8px;
         padding: 0;
-        color: var(--color-ink-muted);
+        color: var(--color-ink);
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.6875rem;
         font-weight: 600;
@@ -539,7 +558,7 @@
         color: var(--color-ink-soft);
         text-align: left;
         border: 0;
-        border-bottom: 1px solid var(--color-line);
+        border-bottom: 2px solid var(--color-line);
         cursor: pointer;
     }
 
@@ -554,7 +573,7 @@
 
     .prose p {
         @apply mb-6 text-lg leading-relaxed;
-        color: var(--color-ink-soft);
+        color: var(--color-ink);
     }
 
     .slide-viewport {
@@ -602,6 +621,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        color: var(--color-ink);
     }
 
     .back-link {
@@ -612,7 +632,7 @@
         min-height: 40px;
         margin-bottom: 64px;
         padding: 8px 0;
-        color: var(--color-ink-soft);
+        color: var(--color-ink);
         font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
@@ -654,9 +674,9 @@
     .section-meta,
     .lesson-meta,
     .module-number {
-        color: var(--color-ink-muted);
+        color: var(--color-ink);
         font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.6875rem;
+        font-size: 0.8125rem;
         font-weight: 600;
         letter-spacing: 0.1em;
         line-height: 1.4;
@@ -666,7 +686,7 @@
     .intro-copy {
         max-width: 580px;
         margin: 0;
-        color: var(--color-ink-soft);
+        color: var(--color-ink);
         font-size: 1.125rem;
         line-height: 1.6;
     }
@@ -717,7 +737,7 @@
     .subject-rows,
     .year-list,
     .class-list {
-        border-bottom: 1px solid var(--color-line);
+        border-bottom: 2px solid var(--color-line);
     }
 
     .subject-row,
@@ -726,13 +746,14 @@
         display: flex;
         align-items: center;
         width: 100%;
-        min-height: 88px;
-        padding: 20px 0;
+        min-height: 96px;
+        padding: 20px 16px;
         text-align: left;
         border: 0;
-        border-bottom: 1px solid var(--color-line);
+        border-left: 10px solid var(--color-ink);
+        border-bottom: 2px solid var(--color-line);
         cursor: pointer;
-        transition: color 160ms ease, background-color 160ms ease, padding 160ms ease;
+        transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
     }
 
     .subject-row:last-child,
@@ -744,9 +765,7 @@
     .subject-row:hover,
     .index-row:hover,
     .lesson-row:hover {
-        padding-right: 8px;
-        padding-left: 8px;
-        background: rgb(255 255 255 / 0.52);
+        background: var(--color-panel-muted);
     }
 
     .subject-row-icon {
@@ -761,8 +780,8 @@
         font-size: 1.5rem;
     }
 
-    .subject-row-physics .subject-row-icon { color: var(--color-physics); }
-    .subject-row-biology .subject-row-icon { color: var(--color-biology); }
+    .subject-row-physics .subject-row-icon,
+    .subject-row-biology .subject-row-icon { color: var(--color-ink); }
 
     .subject-row-copy,
     .index-copy,
@@ -785,7 +804,7 @@
 
     .subject-row-copy span,
     .index-copy span {
-        color: var(--color-ink-soft);
+        color: var(--color-ink);
         font-size: 0.9375rem;
         line-height: 1.45;
     }
@@ -795,7 +814,7 @@
     .lesson-arrow {
         flex-shrink: 0;
         margin-left: 24px;
-        color: var(--color-ink-muted);
+        color: var(--color-ink);
         font-size: 1.25rem;
     }
 
@@ -821,15 +840,15 @@
 
     .empty-state {
         margin-top: 24px;
-        color: var(--color-ink-soft);
+        color: var(--color-ink);
         line-height: 1.6;
     }
 
     .selection-footer {
         margin-top: 72px;
-        color: var(--color-ink-muted);
+        color: var(--color-ink);
         font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.6875rem;
+        font-size: 0.8125rem;
         letter-spacing: 0.06em;
         text-transform: uppercase;
     }
@@ -875,8 +894,8 @@
     }
 
     .lesson-meta {
-        color: var(--color-ink-muted);
-        font-size: 0.625rem;
+        color: var(--color-ink);
+        font-size: 0.8125rem;
     }
 
     .lesson-copy strong {

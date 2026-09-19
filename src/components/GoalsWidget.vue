@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue'
-import { PhFlask, PhX, PhCheck } from '@phosphor-icons/vue'
+import { PhLightning, PhX, PhCheck } from '@phosphor-icons/vue'
 import { subjectById } from '../data/subjects.js'
 
 const props = defineProps({
@@ -10,7 +10,7 @@ const props = defineProps({
   },
   subject: {
     type: String,
-    default: 'math'
+    default: 'physics'
   },
   lessonId: {
     type: String,
@@ -20,7 +20,7 @@ const props = defineProps({
 
 const iconComponent = computed(() => {
     const s = subjectById(props.subject)
-    return s.watermarkIcon || PhFlask
+    return s.watermarkIcon || PhLightning
 })
 
 const isOpen = ref(false)
@@ -71,7 +71,7 @@ const toggleGoal = (index) => {
   <div>
     <!-- FAB Button Area -->
     <div class="fixed bottom-6 left-6 z-40 group">
-        
+
         <!-- Dramatic Radar Ping Effect -->
         <div v-if="!hasInteracted" class="absolute inset-0 rounded-full bg-amber-500 opacity-75 animate-ping z-30"></div>
         <div v-if="!hasInteracted" class="absolute inset-0 rounded-full bg-amber-500/30 animate-pulse z-30"></div>
@@ -81,22 +81,22 @@ const toggleGoal = (index) => {
             LEES DIT EERST!
         </div>
 
-        <button 
-            @click="toggle" 
+        <button
+            @click="toggle"
             class="w-16 h-16 bg-slate-900 text-amber-500 border-4 border-slate-800 rounded-full shadow-[0_0_30px_rgba(245,158,11,0.4)] flex items-center justify-center text-3xl hover:bg-slate-800 hover:border-amber-500/50 transition-all duration-200 hover:scale-110 relative z-40"
             :class="{'rotate-180 bg-slate-800 border-slate-700': isOpen}"
             title="Doelstellingen"
         >
             <component :is="iconComponent" v-if="!isOpen" weight="fill" class="drop-shadow-lg" />
             <PhX v-else weight="bold" class="text-slate-400" />
-            
+
             <!-- Notification Dot -->
             <div v-if="!hasInteracted" class="absolute top-0 right-0 w-5 h-5 bg-red-600 border-2 border-slate-900 rounded-full animate-pulse"></div>
         </button>
     </div>
 
     <!-- Centered Modal Overlay -->
-    <div 
+    <div
         v-if="isOpen"
         class="fixed inset-0 z-50 flex items-center justify-center p-4"
     >
@@ -104,7 +104,7 @@ const toggleGoal = (index) => {
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="toggle"></div>
 
         <!-- Mission Dossier Modal - SCALABLE -->
-        <div 
+        <div
             class="relative bg-slate-50 w-full sm:w-fit min-w-[320px] max-w-3xl max-h-[90vh] rounded-xl shadow-2xl border-2 border-slate-800 flex flex-col font-mono transform transition-all duration-300 scale-100"
         >
             <!-- Header -->
@@ -119,7 +119,7 @@ const toggleGoal = (index) => {
                     </div>
                 </div>
                 <!-- Close Button -->
-                <button 
+                <button
                     @click="toggle"
                     class="text-slate-400 hover:text-white p-2 hover:bg-slate-700 rounded-lg transition-colors"
                     title="Sluiten"
@@ -136,31 +136,31 @@ const toggleGoal = (index) => {
                 </div>
 
                 <div class="relative z-10 space-y-6">
-                    
+
                     <!-- Doelstellingen -->
                     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
 
-                        
+
                         <!-- Content -->
                         <ul class="p-5 space-y-3">
-                            <li 
-                                v-for="(goal, i) in goals" 
-                                :key="i" 
+                            <li
+                                v-for="(goal, i) in goals"
+                                :key="i"
                                 @click="toggleGoal(i)"
                                 class="flex items-start gap-3 p-2 -mx-2 rounded-lg cursor-pointer transition-all duration-200 group"
                                 :class="completedGoals.includes(i) ? 'bg-amber-50' : 'hover:bg-slate-50'"
                             >
                                 <!-- Checkbox -->
-                                <div 
+                                <div
                                     class="w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 mt-0.5"
-                                    :class="completedGoals.includes(i) 
-                                        ? 'bg-amber-500 border-amber-500 text-white' 
+                                    :class="completedGoals.includes(i)
+                                        ? 'bg-amber-500 border-amber-500 text-white'
                                         : 'bg-white border-slate-300 text-transparent group-hover:border-amber-500'"
                                 >
                                     <PhCheck weight="bold" class="text-xs" />
                                 </div>
-                                
-                                <span 
+
+                                <span
                                     class="text-sm text-slate-700 leading-snug"
                                     :class="completedGoals.includes(i) ? 'text-amber-700 line-through opacity-70' : ''"
                                 >
@@ -172,7 +172,7 @@ const toggleGoal = (index) => {
 
                 </div>
             </div>
-            
+
             <!-- Footer / Status Bar -->
             <div class="bg-slate-100 px-5 py-3 text-[11px] text-slate-500 flex justify-center items-center border-t border-slate-200 font-medium italic">
                 <span>Vink de doelen af die je bereikt hebt!</span>

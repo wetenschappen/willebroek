@@ -3,11 +3,11 @@ import { ref, computed } from 'vue'
 import {
     PhWrench, PhX, PhFilePdf, PhEnvelope, PhCheck,
     PhLink, PhMathOperations, PhFunction, PhGraph,
-    PhLockKey, PhAtom, PhLeaf, PhDna, PhTree, PhMicroscope
+    PhLockKey, PhAtom, PhLeaf, PhDna, PhTree
 } from '@phosphor-icons/vue'
 
 const props = defineProps({
-    subject: { type: String, default: 'math' },
+    subject: { type: String, default: 'physics' },
     extraTools: { type: Array, default: () => [] }
 })
 
@@ -27,17 +27,12 @@ function copyEmail() {
 }
 
 // ── External links ─────────────────────────────────────
-// Formularium verschilt per vak. Wiskunde heeft een eigen PDF;
-// de andere vakken verwijzen tot die er is naar het lesmateriaal-overzicht.
 const FORMULARIA = {
-    math:      { url: 'https://albertshalaj.github.io/lesmateriaal/formularium-wiskunde.pdf', label: 'Formularium', subtitle: 'Wiskundige formules PDF' },
-    physics:   { url: 'https://albertshalaj.github.io/lesmateriaal/', label: 'Formularium', subtitle: 'Fysische formules' },
-    biology:   { url: 'https://albertshalaj.github.io/lesmateriaal/', label: 'Lesmateriaal', subtitle: 'Overzichten en naslag' },
-    chemistry: { url: 'https://albertshalaj.github.io/lesmateriaal/', label: 'Formularium', subtitle: 'Chemische formules' },
-    science:   { url: 'https://albertshalaj.github.io/lesmateriaal/', label: 'Lesmateriaal', subtitle: 'Overzichten en naslag' }
+    physics: { url: 'https://albertshalaj.github.io/lesmateriaal/', label: 'Formularium', subtitle: 'Fysische formules' },
+    biology: { url: 'https://albertshalaj.github.io/lesmateriaal/', label: 'Lesmateriaal', subtitle: 'Overzichten en naslag' }
 }
 
-const formularium = computed(() => FORMULARIA[props.subject] || FORMULARIA.math)
+const formularium = computed(() => FORMULARIA[props.subject] || FORMULARIA.physics)
 
 // ── Gereedschap per vak ────────────────────────────────
 const COMMON_TOOLS = [
@@ -58,16 +53,6 @@ const COMMON_TOOLS = [
 ]
 
 const SUBJECT_TOOLS = {
-    math: [
-        ...COMMON_TOOLS,
-        {
-            label: 'GeoGebra',
-            subtitle: 'Meetkunde & algebra',
-            url: 'https://www.geogebra.org/calculator',
-            icon: PhFunction,
-            color: 'bg-violet-100 text-violet-700'
-        }
-    ],
     physics: [
         ...COMMON_TOOLS,
         {
@@ -105,26 +90,6 @@ const SUBJECT_TOOLS = {
             subtitle: 'Biologie simulaties',
             url: 'https://phet.colorado.edu/nl/simulations/browse',
             icon: PhTree,
-            color: 'bg-teal-100 text-teal-700'
-        }
-    ],
-    chemistry: [
-        ...COMMON_TOOLS,
-        {
-            label: 'Periodiek Systeem',
-            subtitle: 'Interactief PSE',
-            url: 'https://ptable.com/',
-            icon: PhAtom,
-            color: 'bg-orange-100 text-orange-700'
-        }
-    ],
-    science: [
-        ...COMMON_TOOLS,
-        {
-            label: 'PhET Simulaties',
-            subtitle: 'Wetenschap simulaties',
-            url: 'https://phet.colorado.edu/nl/simulations/browse',
-            icon: PhMicroscope,
             color: 'bg-teal-100 text-teal-700'
         }
     ]

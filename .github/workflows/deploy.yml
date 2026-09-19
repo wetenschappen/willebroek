@@ -34,8 +34,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Scope and registry health check
+        run: npm run check
+
       - name: Build
         run: npm run build
+
+      - name: Preview smoke test
+        run: npm run smoke
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

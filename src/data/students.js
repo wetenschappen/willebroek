@@ -62,13 +62,6 @@ export const classesBySubjectYear = {
         3: ['3NWa', '3NWb', '3HW'],
         4: ['4NWa', '4NWb']
     },
-    // Uitgeschakelde vakken — laten staan voor heractivering.
-    chemistry: {},
-    science: {},
-    math: {
-        3: ['3NWa', '3NWb', '3HW'],
-        4: ['4NWa', '4NWb']
-    }
 }
 
 /** Klassen voor één vak + leerjaar. Leeg als er niets geconfigureerd is. */

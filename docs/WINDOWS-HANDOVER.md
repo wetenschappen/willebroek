@@ -167,7 +167,7 @@ src/
 │   └── LessonView.vue         ← laadt de les dynamisch
 ├── lessons/            ← één .js-bestand per les
 ├── components/
-│   ├── activities/     ← activiteiten (dragDrop, hotspot, …)
+│   ├── activities/     ← generieke fysica-/biologieactiviteiten
 │   ├── presentation/   ← slide-layouts
 │   └── modals/         ← presentatie, werkboek, tickets
 └── composables/        ← logica (progress, activity system, math engine)
@@ -179,26 +179,24 @@ In `src/data/subjects.js` bepaalt `subjectState` wat zichtbaar is:
 
 ```javascript
 export const subjectState = {
-  physics:   true,     // zichtbaar
-  biology:   true,     // zichtbaar
-  chemistry: false,    // in de repo, verborgen
-  science:   false,    // in de repo, verborgen
-  math:      false     // in de repo, verborgen
+  physics: true,
+  biology: true
 }
 ```
 
-Een vak uitzetten verwijdert niets — de lessen blijven staan en zijn zo weer aan
-te zetten met één boolean. Willebroek geeft nu fysica en biologie; wiskunde
-staat klaar voor als de gebruiker het weer gaat geven.
+Deze repo bevat uitsluitend fysica en biologie. Andere vakken horen in een
+aparte repo en worden hier niet opnieuw toegevoegd.
 
 ### Een les toevoegen
 
 ```bash
 cp src/lessons/_template.js src/lessons/fys3-m01-l03-weerstand.js
+# of
+cp src/lessons/_template.js src/lessons/bio3-m01-l03-celademhaling.js
 ```
 
 Vul het bestand in en registreer het in `src/data/modules.js` met het juiste
-`subject` (`physics`, `biology`, `chemistry`, `science` of `math`).
+`subject` (`physics` of `biology`).
 Het `subject` moet op beide plekken exact hetzelfde zijn, anders klopt het
 thema (kleur, icoon, watermerk) niet.
 

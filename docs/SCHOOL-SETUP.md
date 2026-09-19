@@ -44,16 +44,12 @@ export const school = {
 }
 
 export const subjectState = {
-  physics:   true,     // ← zet aan wat je geeft
-  biology:   true,
-  chemistry: false,
-  science:   false,
-  math:      false
+  physics: true,
+  biology: true
 }
 ```
 
-Vakken op `false` blijven volledig in de repo (lessen, modules, activiteiten).
-Opnieuw aanzetten is één boolean omzetten.
+Deze schoolrepo bevat uitsluitend fysica en biologie. Andere vakken horen in een aparte repo.
 
 ### `src/data/students.js`
 - `studentLists`: **enkel voornamen** per klas

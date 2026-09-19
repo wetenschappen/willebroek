@@ -12,11 +12,6 @@ const routes = [
     name: 'Home',
     component: SubjectSelection
   },
-  {
-    path: '/test-activities',
-    name: 'ActivityTester',
-    component: () => import('../views/ActivityTester.vue')
-  },
 
   // ── Per vak ───────────────────────────────────────────────────────────────
   // Alle navigatie loopt via de vak-slug, bv. /fysica, /fysica/year/3/class ...

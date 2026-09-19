@@ -39,10 +39,7 @@ function openSubject(subject) {
           :class="[
             'w-16 h-16 rounded-xl flex items-center justify-center shadow-inner mb-6 transition-colors duration-300',
             subject.id === 'physics' ? 'bg-blue-50 group-hover:bg-blue-100' :
-            subject.id === 'biology' ? 'bg-emerald-50 group-hover:bg-emerald-100' :
-            subject.id === 'chemistry' ? 'bg-orange-50 group-hover:bg-orange-100' :
-            subject.id === 'science' ? 'bg-teal-50 group-hover:bg-teal-100' :
-            'bg-amber-50 group-hover:bg-amber-100'
+            'bg-emerald-50 group-hover:bg-emerald-100'
           ]"
         >
           <component

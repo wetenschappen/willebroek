@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doorverwijzen...</title>
+  <script>
+    // GitHub Pages SPA-redirect: bewaar het pad als hash-fragment.
+    //
+    // Werkt voor elke repo-naam: het eerste padsegment is de repo
+    // (bv. /willebroek/...), de rest hoort bij de app. Er wordt dus niets
+    // hardcoded — dit bestand kan ongewijzigd mee naar een nieuwe school.
+    var base = '/' + window.location.pathname.split('/').filter(Boolean)[0] + '/'
+    var rest = window.location.pathname
+      .slice(base.length)
+      .replace(/^\/+/, '')
+      .split('/')
+      .filter(Boolean)
+
+    window.location.replace(rest.length > 0 ? base + '#!/' + rest.join('/') : base)
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0;url=./" />
+  </noscript>
+</head>
+<body>
+  <p>Doorverwijzen naar de app...</p>
+  <p><a href="./">Klik hier als u niet automatisch wordt doorgestuurd.</a></p>
+</body>
+</html>

@@ -1,13 +1,12 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { PhBooks } from '@phosphor-icons/vue'
 import { subjectBySlug, subjectById } from './data/subjects.js'
 import { modules } from './data/modules.js'
 
 const route = useRoute()
 
-// Het actieve vak bepaalt het watermerk en de achtergrond.
+// Het actieve vak bepaalt alleen de rustige achtergrondtint.
 // - Routes met een vak-slug  → dat vak
 // - /les/:id                 → het vak van die les (via de module-registry)
 // - overige                  → neutraal thema
@@ -24,26 +23,13 @@ const activeSubject = computed(() => {
   return null
 })
 
-const watermarkIcon = computed(() => activeSubject.value?.watermarkIcon || PhBooks)
-const watermarkColor = computed(() => activeSubject.value?.watermarkColor || 'text-slate-300')
-
-const backgroundStyle = computed(() => {
-  const bg = activeSubject.value?.background || { color: '#f5f7f6', dot: '#d5dfde' }
-  return {
-    backgroundColor: bg.color,
-    backgroundImage: `linear-gradient(${bg.dot} 1px, transparent 1px), linear-gradient(90deg, ${bg.dot} 1px, transparent 1px)`,
-    backgroundSize: '32px 32px'
-  }
-})
+const backgroundStyle = computed(() => ({
+  backgroundColor: activeSubject.value?.background?.color || '#f5f7f6'
+}))
 </script>
 
 <template>
-  <div class="min-h-screen relative overflow-x-hidden text-[10px]" :style="backgroundStyle">
-    <!-- Vak-watermerk -->
-    <div class="fixed top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none transform -rotate-12 select-none z-0">
-        <component :is="watermarkIcon" weight="fill" :size="800" :class="watermarkColor" />
-    </div>
-
+  <div class="min-h-screen relative overflow-x-hidden text-base" :style="backgroundStyle">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />

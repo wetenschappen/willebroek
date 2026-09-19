@@ -1,10 +1,10 @@
 <script setup>
 import { ref, reactive, onMounted, onUnmounted, watch, defineAsyncComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { 
-    PhPresentationChart, PhInfo, PhGameController, PhFlask, PhPlanet, PhTextAa, 
-    PhArrowsDownUp, PhThumbsUp, PhListBullets, PhDiamondsFour, PhTrophy, PhTarget, 
-    PhAtom, PhWrench, PhFilePdf, PhUsers, PhLightbulb, PhScales, PhChartLine, PhMathOperations, PhQuestion 
+import {
+    PhPresentationChart, PhInfo, PhGameController, PhFlask, PhPlanet, PhTextAa,
+    PhArrowsDownUp, PhThumbsUp, PhListBullets, PhDiamondsFour, PhTrophy, PhTarget,
+    PhAtom, PhWrench, PhFilePdf, PhUsers, PhLightbulb, PhScales, PhChartLine, PhMathOperations, PhQuestion
 } from '@phosphor-icons/vue'
 import { namesForClass } from '../data/students.js'
 import { subjectById } from '../data/subjects.js'
@@ -101,7 +101,7 @@ onUnmounted(() => {
 
 function handleGlobalKeydown(e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
-    
+
     if (e.key === 'n' || e.key === 'N') {
         e.preventDefault()
         showNamePicker.value = !showNamePicker.value
@@ -120,21 +120,21 @@ watch([showPres, showWork, showExit, showNamePicker, showSpotCheck, showSolution
 
 const iconMap = {
     PhPresentationChart, PhInfo, PhGameController, PhFlask, PhPlanet, PhAtom,
-    PhTextAa, PhArrowsDownUp, PhThumbsUp, PhListBullets, PhDiamondsFour, PhTrophy, PhTarget, PhWrench, 
+    PhTextAa, PhArrowsDownUp, PhThumbsUp, PhListBullets, PhDiamondsFour, PhTrophy, PhTarget, PhWrench,
     PhFilePdf, PhUsers, PhLightbulb, PhScales, PhChartLine, PhMathOperations, PhQuestion
 }
 
 function handleCardAction(card) {
     currentCardId.value = card.id
-    
+
     if (card.action === 'presentation') {
         const key = card.slidesKey || 'slides'
         currentSlides.value = lessonData[key] || lesson.slides
-        
+
         // Auto-detect if this is the very first presentation card in the entire planner
         const steps = lesson.timeline.value
         const firstPresCardId = steps.find(s => s.cards?.some(c => c.action === 'presentation'))?.cards.find(c => c.action === 'presentation')?.id
-        
+
         showDiscipline.value = (card.id === firstPresCardId) || !!card.showDiscipline
         showPres.value = true
     }
@@ -168,10 +168,10 @@ function isStepDone(step) {
 function getStepStatus(step, index) {
     if (isStepDone(step)) return 'done'
     if (index === 0) return 'active'
-    
+
     const prevStep = lesson.timeline.value[index - 1]
     if (prevStep && isStepDone(prevStep)) return 'active'
-    
+
     return 'pending'
 }
 
@@ -183,7 +183,7 @@ function getBranchLabel(step) {
 
 function getCardMeta(card) {
     if (card.meta) return card.meta
-    
+
     // Auto-generate if missing
     if (card.type === 'class') return 'Klassikaal'
     if (card.type === 'digital') return 'Digitaal'
@@ -229,64 +229,57 @@ const isTimelineComplete = computed(() => {
     <!-- BACKGROUND -->
     <!-- BACKGROUND REMOVED (Handled in App.vue) -->
 
-    <!-- HEADER -->
-    <nav class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-lg">
-        <div class="max-w-3xl mx-auto px-4 h-11 flex items-center justify-between">
-            <div class="flex items-center gap-3 select-none">
-                <span class="font-mono font-bold tracking-widest text-xl uppercase text-amber-500">
-                  {{ subject.label }}
-                </span>
-                <span class="text-slate-700 text-xl font-bold">|</span>
-                
-                <button @click="router.push('/')" class="flex items-center gap-2 font-mono font-bold tracking-widest text-xl text-slate-200 hover:text-amber-500 transition-colors cursor-pointer">
-                    {{ lesson.config.className }}
-                </button>
-
-            </div>
+    <!-- LESSON HEADER -->
+    <nav class="lesson-nav">
+        <div class="lesson-nav-inner">
+            <button type="button" class="lesson-nav-back" @click="router.push('/')">
+                <span class="lesson-nav-subject">{{ subject.label }}</span>
+                <span aria-hidden="true">/</span>
+                <span>{{ lesson.config.className }}</span>
+            </button>
             <TimerWidget :isOpen="showTimer" :start-duration="timerStartDuration" @close="showTimer = false" />
         </div>
     </nav>
 
-  <main class="max-w-3xl mx-auto px-6 pt-12 pb-32 relative z-10">
+  <main class="lesson-main">
       <LessonHeader :title="lesson.config.title" :description="lesson.config.description" />
 
       <!-- DYNAMIC TIMELINE LOOP -->
       <template v-for="(step, index) in lesson.timeline.value" :key="step.id">
 
         <!-- STANDARD TIMELINE STEP -->
-        <TimelineItem 
-            :step="step.step" 
-            :title="step.title" 
-            :time="step.time" 
-            :status="getStepStatus(step, index)" 
+        <TimelineItem
+            :step="step.step"
+            :title="step.title"
+            :time="step.time"
+            :status="getStepStatus(step, index)"
             :isLast="index === lesson.timeline.value.length - 1"
             @start-timer="handleStartTimer"
         >
             <!-- ACTIVITY CARDS -->
-            <ActivityCard 
+            <ActivityCard
                 v-for="card in step.cards"
                 :key="card.id"
                 :type="card.type"
                 :meta="getCardMeta(card)"
                 :title="card.title"
                 :description="card.description"
-                :icon="iconMap[card.icon] || PhInfo"
                 :isDone="progress.isDone(card.id)"
                 @click="handleCardAction(card)"
             >
                 <template #action>{{ getActionText(card) }}</template>
             </ActivityCard>
-            
+
             <!-- EXTRA BRANCH (step B only) -->
-            <ExtraChallengeBranch 
+            <ExtraChallengeBranch
                 v-if="step.step === 'B'"
-                v-model:isOpen="branchStates[step.id]" 
+                v-model:isOpen="branchStates[step.id]"
                 :label="getBranchLabel(step)"
 
             >
-                <div class="p-3">
+                <div class="extra-branch-list">
                     <template v-if="step.extraActivities && step.extraActivities.length">
-                        <BranchActivityButton 
+                        <BranchActivityButton
                             v-for="act in step.extraActivities"
                             :key="act.id"
                             :title="act.title"
@@ -296,7 +289,7 @@ const isTimelineComplete = computed(() => {
                             @click="activitySystem.handleOpenActivity(act.id.toLowerCase())"
                         />
                     </template>
-                    <p v-else class="text-xs text-slate-400 text-center py-3 italic tracking-wide">
+                    <p v-else class="empty-state">
                         Geen extra materiaal beschikbaar
                     </p>
                 </div>
@@ -308,21 +301,21 @@ const isTimelineComplete = computed(() => {
   </main>
 
   <!-- WORKSPACE TOOLS -->
-  <Toolbox 
-    @open-tool="(t) => { if(t==='names') showNamePicker=true; if(t==='solutions') showSolutions=true; }" 
-    @open-pdf="window.open(lesson.config.cursusLink, '_blank')" 
+  <Toolbox
+    @open-tool="(t) => { if(t==='names') showNamePicker=true; if(t==='solutions') showSolutions=true; }"
+    @open-pdf="window.open(lesson.config.cursusLink, '_blank')"
     :subject="lesson.config.subject"
     :extra-tools="lesson.config.extraTools"
   />
 
   <!-- MODALS -->
   <PresentationModal :isOpen="showPres" :slides="currentSlides" :config="lesson.config" :showDisciplineSlide="showDiscipline" @close="showPres = false" @complete="progress.markAsDone(currentCardId || 'card-pres')" />
-  
-  <WorkbookModal 
-    :isOpen="showWork" 
+
+  <WorkbookModal
+    :isOpen="showWork"
     :workbook="lesson.workbook"
     @close="showWork = false"
-    @complete="progress.markAsDone(currentCardId || 'card-workbook')" 
+    @complete="progress.markAsDone(currentCardId || 'card-workbook')"
   />
 
   <SolutionsModal
@@ -332,20 +325,20 @@ const isTimelineComplete = computed(() => {
     @close="showSolutions = false"
   />
 
-  <TicketModal 
+  <TicketModal
     v-if="currentExitTicket"
-    :isOpen="showExit" 
+    :isOpen="showExit"
     :mode="currentTicketMode"
-    :questions="currentExitTicket" 
+    :questions="currentExitTicket"
     :goals="lesson.goals"
-    @close="showExit = false" 
-    @complete="progress.markAsDone(currentTicketMode === 'entry' ? currentEntryCardId : currentCardId)" 
+    @close="showExit = false"
+    @complete="progress.markAsDone(currentTicketMode === 'entry' ? currentEntryCardId : currentCardId)"
   />
 
   <SpotCheckModal :isOpen="showSpotCheck" :questions="lesson.spotCheck" title="Check-up" @close="showSpotCheck = false" @complete="progress.markAsDone('card-spotcheck')" />
-  
+
   <!-- DYNAMIC ACTIVITY -->
-  <component 
+  <component
     v-if="activitySystem.activeActivity.value"
     :is="activitySystem.activeActivity.value.component"
     :isOpen="true"
@@ -354,12 +347,12 @@ const isTimelineComplete = computed(() => {
     @close="activitySystem.closeActivity"
     @complete="activitySystem.completeActivity"
   />
-  
+
   <!-- WIDGETS -->
-  <NamePickerOverlay 
-     :isOpen="showNamePicker" 
-     :names="namesForClass(lesson.config.classId, lessonData.subject)" 
-     @close="showNamePicker = false" 
+  <NamePickerOverlay
+     :isOpen="showNamePicker"
+     :names="namesForClass(lesson.config.classId, lessonData.subject)"
+     @close="showNamePicker = false"
   />
 
   <GoalsWidget :lessonId="lessonData.id" :goals="lesson.goals" :prerequisites="lesson.config.prerequisites" :equipment="lesson.config.equipment" :textbook="lesson.config.textbook" :subject="lesson.config.subject" />

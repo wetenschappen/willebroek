@@ -2,7 +2,7 @@
 import { inject, computed, ref, watch } from 'vue'
 import MathGraphSvg from '../activities/MathGraphSvg.vue'
 import MathSlideWrapper from './shared/MathSlideWrapper.vue'
-import { PhCheckCircle, PhCheck } from '@phosphor-icons/vue'
+import { PhCheckCircle, PhCheck, PhX } from '@phosphor-icons/vue'
 
 const props = defineProps({
     slide: { type: Object, required: true },
@@ -122,8 +122,8 @@ const mergedConfig = computed(() => {
                     <div class="text-[1.3rem] font-bold tracking-wide">
                         Geselecteerd: <span class="text-amber-400 font-mono text-[1.4rem] ml-1">{{ interactivePoint.x.toFixed(1) }} ↦ {{ interactivePoint.y.toFixed(1) }}</span>
                     </div>
-                    <button @click.stop="interactivePoint = null" class="ml-2 text-white/40 hover:text-white text-[1.1rem] hover:bg-white/10 w-6 h-6 rounded-full flex items-center justify-center transition-colors cursor-pointer">
-                        ✕
+                    <button @click.stop="interactivePoint = null" class="ml-2 text-white/40 hover:text-white text-[1.1rem] hover:bg-white/10 w-6 h-6 rounded-full flex items-center justify-center transition-colors cursor-pointer" aria-label="Selectie wissen">
+                        <PhX weight="regular" />
                     </button>
                 </div>
             </div>

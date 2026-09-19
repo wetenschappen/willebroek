@@ -3,7 +3,7 @@
  * Deze schoolrepo is bewust beperkt tot fysica en biologie.
  */
 
-import { PhLeaf, PhLightning, PhWaves, PhMagnet, PhAtom } from '@phosphor-icons/vue'
+import { PhPlanet, PhMicroscope } from '@phosphor-icons/vue'
 
 export const school = {
   name: 'Willebroek',
@@ -22,19 +22,19 @@ export const subjects = {
     id: 'physics', slug: 'fysica', label: 'Fysica',
     title: 'Fysica Leerpad',
     description: 'Krachten, energie, elektriciteit en golven.',
-    icon: PhLightning, accentColor: 'text-blue-600',
+    icon: PhPlanet, accentColor: 'text-physics',
     hoverBorder: 'hover:border-physics/50', hoverBg: 'hover:bg-physics-soft/60',
-    hoverText: 'group-hover:text-physics', watermarkIcon: PhLightning,
-    watermarkColor: 'text-physics', background: { color: '#f2f8fa', dot: '#d3e7ec' }
+    hoverText: 'group-hover:text-physics', watermarkIcon: PhPlanet,
+    watermarkColor: 'text-physics', background: { color: '#f2f8fa' }
   },
   biology: {
     id: 'biology', slug: 'biologie', label: 'Biologie',
     title: 'Biologie Leerpad',
     description: 'Cellen, planten, ecosystemen en erfelijkheid.',
-    icon: PhLeaf, accentColor: 'text-emerald-600',
+    icon: PhMicroscope, accentColor: 'text-biology',
     hoverBorder: 'hover:border-biology/50', hoverBg: 'hover:bg-biology-soft/60',
-    hoverText: 'group-hover:text-biology', watermarkIcon: PhLeaf,
-    watermarkColor: 'text-biology', background: { color: '#f3f8f4', dot: '#d5e6d9' }
+    hoverText: 'group-hover:text-biology', watermarkIcon: PhMicroscope,
+    watermarkColor: 'text-biology', background: { color: '#f3f8f4' }
   }
 }
 

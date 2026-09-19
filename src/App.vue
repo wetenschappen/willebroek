@@ -28,10 +28,10 @@ const watermarkIcon = computed(() => activeSubject.value?.watermarkIcon || PhBoo
 const watermarkColor = computed(() => activeSubject.value?.watermarkColor || 'text-slate-300')
 
 const backgroundStyle = computed(() => {
-  const bg = activeSubject.value?.background || { color: '#f8fafc', dot: '#cbd5e1' }
+  const bg = activeSubject.value?.background || { color: '#f5f7f6', dot: '#d5dfde' }
   return {
     backgroundColor: bg.color,
-    backgroundImage: `radial-gradient(${bg.dot} 1.5px, transparent 1.5px)`,
+    backgroundImage: `linear-gradient(${bg.dot} 1px, transparent 1px), linear-gradient(90deg, ${bg.dot} 1px, transparent 1px)`,
     backgroundSize: '32px 32px'
   }
 })

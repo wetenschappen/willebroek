@@ -23,18 +23,18 @@ export const subjects = {
     title: 'Fysica Leerpad',
     description: 'Krachten, energie, elektriciteit en golven.',
     icon: PhLightning, accentColor: 'text-blue-600',
-    hoverBorder: 'hover:border-blue-500/50', hoverBg: 'hover:bg-blue-50/60',
-    hoverText: 'group-hover:text-blue-500', watermarkIcon: PhLightning,
-    watermarkColor: 'text-blue-500', background: { color: '#eff6ff', dot: '#bfdbfe' }
+    hoverBorder: 'hover:border-physics/50', hoverBg: 'hover:bg-physics-soft/60',
+    hoverText: 'group-hover:text-physics', watermarkIcon: PhLightning,
+    watermarkColor: 'text-physics', background: { color: '#f2f8fa', dot: '#d3e7ec' }
   },
   biology: {
     id: 'biology', slug: 'biologie', label: 'Biologie',
     title: 'Biologie Leerpad',
     description: 'Cellen, planten, ecosystemen en erfelijkheid.',
     icon: PhLeaf, accentColor: 'text-emerald-600',
-    hoverBorder: 'hover:border-emerald-500/50', hoverBg: 'hover:bg-emerald-50/60',
-    hoverText: 'group-hover:text-emerald-500', watermarkIcon: PhLeaf,
-    watermarkColor: 'text-emerald-500', background: { color: '#f0fdf4', dot: '#bbf7d0' }
+    hoverBorder: 'hover:border-biology/50', hoverBg: 'hover:bg-biology-soft/60',
+    hoverText: 'group-hover:text-biology', watermarkIcon: PhLeaf,
+    watermarkColor: 'text-biology', background: { color: '#f3f8f4', dot: '#d5e6d9' }
   }
 }
 

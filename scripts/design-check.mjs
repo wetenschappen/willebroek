@@ -32,7 +32,7 @@ export const RULES = [
   { id: 'bounce', label: 'bounce-animatie — geen bounce in de lesinterface', pattern: /animate-bounce|animate-\[bounce/g },
   { id: 'ping', label: 'ping-animatie — geen ping in de lesinterface', pattern: /animate-ping|animate-\[ping/g },
   { id: 'shadow-2xl', label: 'shadow-2xl — gebruik --shadow-dialog', pattern: /shadow-2xl/g },
-  { id: 'emoji', label: 'emoji als UI-element', pattern: /[\u{1F300}-\u{1FAFF}\u{1F000}-\u{1F0FF}\u{2700}-\u{27BF}]/gu }
+  { id: 'emoji', label: 'emoji als UI-element', pattern: /[\u{1F000}-\u{1F0FF}\u{1F300}-\u{1FAFF}\u{2700}-\u{27BF}\u{2600}-\u{26FF}\u{25A0}-\u{25FF}\u{2B00}-\u{2BFF}\u{FE0F}]/gu }
 ]
 
 /**

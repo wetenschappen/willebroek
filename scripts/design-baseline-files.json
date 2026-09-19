@@ -87,7 +87,6 @@
     "src/components/widgets/TimerWidget.vue"
   ],
   "emoji": [
-    "s-activities/ForcesLabActivity.vue",
     "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],

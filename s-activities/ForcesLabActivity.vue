@@ -1,6 +1,18 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { PhEye, PhNavigationArrow, PhCheckCircle, PhWarningCircle, PhPlayCircle, PhArrowRight, PhTrash, PhX, PhCube, PhCircle, PhArrowDown, PhArrowUp } from '@phosphor-icons/vue'
+import ForcesObjectShape from './ForcesObjectShape.vue'
+
+/** Ruwe markup van een objectvorm, voor de kleine knopjes in de keuzebalk. */
+const SHAPE_MARKUP = {
+  auto: '<path d="M6 62 L6 44 Q6 38 13 38 L25 38 L35 22 Q37 19 41 19 L63 19 Q67 19 70 23 L79 38 L89 38 Q94 38 94 44 L94 62 Z"/><circle cx="27" cy="62" r="12"/><circle cx="73" cy="62" r="12"/>',
+  mens: '<circle cx="50" cy="15" r="12"/><path d="M38 32 Q50 28 62 32 L65 66 L35 66 Z"/><path d="M37 34 L26 58 Q24 63 29 64 L34 65 L42 44 Z"/><path d="M63 34 L74 58 Q76 63 71 64 L66 65 L58 44 Z"/><path d="M36 65 L34 93 L45 93 L48 65 Z"/><path d="M64 65 L66 93 L55 93 L52 65 Z"/>',
+  hond: '<rect x="6" y="30" width="8" height="26" rx="4" transform="rotate(-30 10 43)"/><rect x="20" y="56" width="11" height="34" rx="5"/><rect x="62" y="56" width="11" height="34" rx="5"/><path d="M14 44 Q14 33 26 33 L70 33 Q82 33 84 45 L84 56 Q84 62 77 62 L21 62 Q14 62 14 56 Z"/><rect x="34" y="56" width="11" height="34" rx="5"/><rect x="48" y="56" width="11" height="34" rx="5"/><path d="M74 40 Q80 26 88 22 L96 34 Q88 42 82 52 Z"/><ellipse cx="86" cy="24" rx="13" ry="11"/><ellipse cx="97" cy="30" rx="7" ry="6"/><path d="M76 18 L72 4 L86 12 Z"/>',
+  appel: '<path d="M52 33 C58 30 68 32 72 41 C77 52 76 68 69 78 C65 84 58 88 53 88 C51 88 51 86 50 86 C49 86 49 88 47 88 C42 88 35 84 31 78 C24 68 23 52 28 41 C32 32 42 30 48 33 C49 34 51 34 52 33 Z"/><rect x="48.5" y="10" width="4" height="22" rx="2" transform="rotate(-6 50.5 21)"/><ellipse cx="67" cy="15" rx="13" ry="7" transform="rotate(-22 67 15)"/>'
+}
+function shapeMarkup(shape) {
+  return SHAPE_MARKUP[shape] || SHAPE_MARKUP.auto
+}
 
 const props = defineProps({
   isOpen: Boolean,
@@ -17,10 +29,10 @@ const emit = defineEmits(['close', 'complete'])
 const selectedObject = ref('doos')
 const objectOptions = [
   { id: 'doos', label: 'Doos', icon: PhCube, dy: 0, size: 70 },
-  { id: 'auto', label: 'Auto', emoji: '🚗', dy: 20, size: 70 },
-  { id: 'mens', label: 'Persoon', emoji: '🧍', dy: 22, size: 70 },
-  { id: 'hond', label: 'Hond', emoji: '🐕', dy: 20, size: 70 },
-  { id: 'appel', label: 'Appel', emoji: '🍎', dy: 22, size: 60 }
+  { id: 'auto', label: 'Auto', shape: 'auto', dy: 20, size: 80 },
+  { id: 'mens', label: 'Persoon', shape: 'mens', dy: 22, size: 80 },
+  { id: 'hond', label: 'Hond', shape: 'hond', dy: 20, size: 80 },
+  { id: 'appel', label: 'Appel', shape: 'appel', dy: 22, size: 60 }
 ]
 
 const objectLabel = computed(() => {
@@ -33,6 +45,10 @@ const objectLabel = computed(() => {
   if (obj.id === 'appel') return 'een appel';
   return 'een doos';
 })
+
+const selectedObjectOption = computed(() =>
+  objectOptions.find(o => o.id === selectedObject.value) || objectOptions[0]
+)
 
 const scenarios = [
   {
@@ -451,7 +467,9 @@ function handleOriginClick(forceId, originStr) {
                         :title="(scenario.isHanging && (obj.id === 'mens' || obj.id === 'hond')) ? 'Niet toegestaan in Ophanging' : obj.label"
                     >
                         <component v-if="obj.icon" :is="obj.icon" weight="fill" class="w-5 h-5 text-indigo-500" />
-                        <span v-else class="text-[1.15rem] leading-none select-none filter drop-shadow-sm">{{ obj.emoji }}</span>
+                        <svg v-else viewBox="0 0 100 100" class="w-5 h-5" fill="currentColor" aria-hidden="true">
+                            <g v-html="shapeMarkup(obj.shape)" />
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -540,11 +558,13 @@ function handleOriginClick(forceId, originStr) {
                               <!-- The Box (object mode: solid, combined mode: translucent) -->
                              <g v-if="viewMode === 'object'">
                                 <rect v-if="selectedObject === 'doos'" x="-30" y="-30" width="60" height="60" rx="6" class="fill-amber-100 stroke-amber-500 shadow-xl" stroke-width="4" />
-                                <text v-else-if="selectedObject !== 'doos'" x="0" y="0" :dy="objectOptions.find(o => o.id === selectedObject).dy" :font-size="objectOptions.find(o => o.id === selectedObject).size || 70" text-anchor="middle" class="select-none pointer-events-none drop-shadow-xl">{{ objectOptions.find(o => o.id === selectedObject).emoji }}</text>
+                                <ForcesObjectShape v-else :shape="selectedObjectOption.shape" :size="selectedObjectOption.size" color="#334155" />
                              </g>
                              <g v-if="viewMode === 'combined'">
                                 <rect v-if="selectedObject === 'doos'" x="-30" y="-30" width="60" height="60" rx="6" fill="rgb(251 191 36 / 0.15)" stroke="rgb(245 158 11 / 0.4)" stroke-width="2.5" stroke-dasharray="6 3" />
-                                <text v-else-if="selectedObject !== 'doos'" x="0" y="0" :dy="objectOptions.find(o => o.id === selectedObject).dy" :font-size="objectOptions.find(o => o.id === selectedObject).size || 70" text-anchor="middle" class="select-none pointer-events-none opacity-30">{{ objectOptions.find(o => o.id === selectedObject).emoji }}</text>
+                                <g v-else opacity="0.3">
+                                    <ForcesObjectShape :shape="selectedObjectOption.shape" :size="selectedObjectOption.size" color="#334155" />
+                                </g>
                              </g>
                              
                              <!-- Center Point (Interaction Point: Zwaartepunt/Massamiddelpunt) -->
@@ -786,8 +806,8 @@ function handleOriginClick(forceId, originStr) {
                                                  <option value="none">Niet getekend / Geen</option>
                                                  
                                                  <!-- Always show all options to force critical thinking -->
-                                                 <option value="center">⚫ Zwaartepunt/Massamiddelpunt</option>
-                                                 <option v-if="scenario.hasSupport" value="surface">🟢 {{ scenario.isSpring ? 'Aangrijpingspunt op veer' : 'Aangrijpingspunt op steunvlak' }}</option>
+                                                 <option value="center">Zwaartepunt / massamiddelpunt</option>
+                                                 <option v-if="scenario.hasSupport" value="surface">{{ scenario.isSpring ? 'Aangrijpingspunt op veer' : 'Aangrijpingspunt op steunvlak' }}</option>
                                              </select>
                                          </div>
                                      </div>

@@ -27,10 +27,7 @@ const isActive = computed(() => props.status === 'active' || isDone.value)
     </div>
 
     <div class="timeline-heading">
-      <div>
-        <p class="timeline-kicker">Fase {{ step }}</p>
-        <h2>{{ title }}</h2>
-      </div>
+      <h2>{{ title }}</h2>
       <button
         v-if="time"
         type="button"

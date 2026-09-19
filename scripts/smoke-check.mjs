@@ -48,7 +48,7 @@ try {
   if (!response || response.status !== 200) {
     throw new Error(`preview gaf geen HTTP 200 voor ${base}`)
   }
-  if (!response.body.includes('<title>Fysica &amp; Biologie')) {
+  if (!response.body.includes('<title>GO! Atheneum Willebroek</title>')) {
     throw new Error('preview serveert niet de verwachte Willebroek-index')
   }
 

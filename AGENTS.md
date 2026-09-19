@@ -20,6 +20,15 @@ Deze repository bevat alleen:
 Andere vakken horen in een aparte schoolrepo en mogen niet opnieuw als verborgen
 productiescope in deze repo worden toegevoegd.
 
+## Design system
+
+Volg `docs/DESIGN-SYSTEM.md` voor alle nieuwe schermen en componenten. De
+belangrijkste regel is projectorleesbaarheid: geen fletse grijze lesinformatie,
+geen belangrijke haarlijntjes en geen betekenis die alleen via hover of kleur
+wordt doorgegeven. Activiteitskleur is semantisch: blauw = digitaal, rood =
+presentatie en groen = boek/bundel. Fysica en biologie krijgen geen eigen
+activiteitskleur.
+
 ## Commando's
 
 ```bash

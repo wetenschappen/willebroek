@@ -332,6 +332,7 @@
         display: inline-flex;
         align-items: center;
         gap: 12px;
+        min-height: 56px;
         color: #ffffff;
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.75rem;
@@ -347,7 +348,11 @@
     }
 
     .lesson-nav-subject {
-        color: #f0b08f;
+        color: #ffffff;
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1;
     }
 
     .lesson-main {
@@ -390,21 +395,11 @@
     }
 
     .timeline-heading h2 {
-        margin: 4px 0 0;
+        margin: 0;
         color: var(--color-ink);
         font-size: 1.25rem;
         font-weight: 600;
         letter-spacing: -0.02em;
-    }
-
-    .timeline-kicker {
-        margin: 0;
-        color: var(--color-action);
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.6875rem;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
     }
 
     .timeline-time {

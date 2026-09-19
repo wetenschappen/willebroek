@@ -1,0 +1,12 @@
+# Regelafbrekingen
+#
+# Bash-scripts MOETEN LF houden. CRLF maakt ze onbruikbaar in Git Bash:
+#   ./git-save: line 1: $'\r': command not found
+# Dit is de enige reden dat dit bestand bestaat.
+*.sh text eol=lf
+scripts/git-save text eol=lf
+
+# Bewust GEEN '* text=auto eol=lf': er staan al 28 tekstbestanden met CRLF in
+# de repo. Een globale regel zou die allemaal hernormaliseren en een enorme
+# diff veroorzaken. Node, Vite en Vue maken niet uit welke van de twee er
+# gebruikt wordt — laat ze dus met rust.

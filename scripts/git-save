@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# ─── git-save — commit alles en push meteen naar GitHub ────────────────────
+#
+# Gebruik (vanuit de projectmap):
+#   git-save "les 3 elektriciteit afgewerkt"
+#   git-save                 # vraagt om een bericht
+#
+# GitHub Pages bouwt daarna automatisch opnieuw (± 2 min).
+#
+# Dit bestand staat in de repo zelf (scripts/git-save), zodat het meegaat naar
+# elke machine en elke schoolrepo. Installeer het één keer per machine met:
+#   bash scripts/install-git-save.sh
+
+set -euo pipefail
+
+# Altijd vanuit de repo-root werken, ook als je dieper in de map staat.
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [ -z "$ROOT" ]; then
+  echo "Fout: je zit niet in een git-repository." >&2
+  exit 1
+fi
+cd "$ROOT"
+
+# ── Commit-bericht ─────────────────────────────────────────────────────────
+if [ $# -eq 0 ]; then
+  read -rp "Commit message: " msg
+else
+  msg="$*"
+fi
+
+if [ -z "${msg// }" ]; then
+  echo "Fout: leeg commit-bericht. Gestopt." >&2
+  exit 1
+fi
+
+# ── Niets te doen? ─────────────────────────────────────────────────────────
+if git diff --quiet && git diff --cached --quiet && \
+   [ -z "$(git ls-files --others --exclude-standard)" ]; then
+  echo "Niets gewijzigd — niets te committen."
+  exit 0
+fi
+
+# ── Upstream-check (voorkomt de klassieke 'src refspec does not match') ────
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+if ! git rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+  echo "Geen upstream ingesteld voor '$BRANCH' — instellen op origin/$BRANCH..."
+  git push -u origin "$BRANCH"
+fi
+
+# ── Commit + push ──────────────────────────────────────────────────────────
+git add -A
+git commit -m "$msg"
+git push
+
+# ── Status ─────────────────────────────────────────────────────────────────
+echo ""
+echo "✅ Opgeslagen en gepusht"
+echo "   $(git log --oneline -1)"
+echo ""
+echo "   GitHub Pages bouwt opnieuw (± 2 min):"
+echo "   https://github.com/$(git remote get-url origin | sed -E 's#.*[:/]([^/]+/[^/.]+)(\.git)?$#\1#')/actions"

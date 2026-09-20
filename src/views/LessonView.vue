@@ -27,16 +27,20 @@ watch(() => route.params.id, async (id) => {
 <template>
   <LessonContent v-if="lessonData" :lessonData="lessonData" :key="route.params.id" />
   
-  <div v-else-if="error" class="min-h-screen flex items-center justify-center relative z-10">
-    <div class="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl text-center border border-red-200">
+  <!-- Fout- en laadstatus: egaal paneel met zichtbare rand.
+       Geen blur en geen doorschijnendheid — op een beamer zijn vaste vlakken
+       voorspelbaarder. Rood blijft gereserveerd voor het presentatietype,
+       dus de status leest via het woord 'Fout', niet via een kleur. -->
+  <div v-else-if="error" class="min-h-screen flex items-center justify-center relative z-10 px-6">
+    <div class="bg-white p-8 text-center max-w-lg w-full rounded-card" style="border: 2px solid var(--color-line-strong); box-shadow: var(--shadow-rest);">
       <h2 class="text-2xl font-bold text-slate-800 mb-2">Fout</h2>
       <p class="text-slate-600">{{ error }}</p>
     </div>
   </div>
   
-  <div v-else class="min-h-screen flex items-center justify-center relative z-10">
-    <div class="bg-white/60 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white flex flex-col items-center">
-      <PhSpinner class="animate-spin text-brand-orange text-4xl mb-4" />
+  <div v-else class="min-h-screen flex items-center justify-center relative z-10 px-6">
+    <div class="bg-white p-6 flex flex-col items-center rounded-card" style="border: 2px solid var(--color-line-strong); box-shadow: var(--shadow-rest);">
+      <PhSpinner class="animate-spin text-slate-600 text-4xl mb-4" />
       <span class="text-slate-600 font-medium">Les wordt geladen...</span>
     </div>
   </div>

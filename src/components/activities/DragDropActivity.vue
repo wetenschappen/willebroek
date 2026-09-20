@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue'
-import { PhX, PhCheckCircle, PhXCircle, PhArrowsLeftRight, PhStar, PhTrophy, PhArrowClockwise } from '@phosphor-icons/vue'
+import { PhX, PhCheckCircle, PhXCircle, PhArrowsLeftRight, PhArrowClockwise } from '@phosphor-icons/vue'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -205,7 +205,7 @@ onMounted(() => {
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0">
-    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="close"></div>
+    <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="close"></div>
     <div class="relative bg-white shadow-2xl overflow-hidden flex flex-col w-screen h-screen rounded-none" @click.stop>
 
       <!-- Header -->
@@ -237,16 +237,16 @@ onMounted(() => {
 
         <!-- Completion State -->
         <div v-if="isComplete" class="flex flex-col items-center justify-center flex-1 gap-4 px-8">
-          <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center animate-[bounce_0.6s_ease-out]">
-            <PhTrophy weight="fill" class="text-4xl text-emerald-500"/>
+          <div class="w-16 h-16 rounded-control flex items-center justify-center" style="background: var(--color-workbook-soft); color: var(--color-workbook);">
+            <PhCheckCircle weight="fill" class="text-3xl"/>
           </div>
-          <h4 class="text-2xl font-bold text-slate-900">Uitstekend!</h4>
+          <h4 class="text-2xl font-bold text-slate-900">Klaar</h4>
           <p class="text-slate-600">Alle {{ pairs.length }} begrippen correct gekoppeld in {{ attempts }} {{ attempts === 1 ? 'poging' : 'pogingen' }}</p>
           <div class="flex gap-3 mt-2">
-            <button @click="resetActivity" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl font-semibold flex items-center gap-2 transition-colors">
+            <button @click="resetActivity" class="btn btn-ghost" style="border: 2px solid var(--color-line-strong);">
               <PhArrowClockwise weight="bold"/> Opnieuw
             </button>
-            <button @click="close" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-colors">
+            <button @click="close" class="btn btn-primary">
               Sluiten
             </button>
           </div>
@@ -332,7 +332,6 @@ onMounted(() => {
           <!-- Footer -->
           <div class="shrink-0 px-6 py-3 border-t border-slate-200 flex justify-between items-center text-sm">
             <span class="text-slate-600">
-              <PhStar weight="fill" class="inline text-amber-400 mr-1"/>
               {{ correctCount }}/{{ pairs.length }} correct &nbsp;·&nbsp; {{ attempts }} pogingen
             </span>
             <button @click="resetActivity" class="text-slate-600 hover:text-slate-800 flex items-center gap-1 transition-colors text-sm font-semibold">

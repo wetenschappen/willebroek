@@ -18,8 +18,7 @@
     "src/components/presentation/SlideMultichoice.vue",
     "src/components/presentation/SlideRealworld.vue",
     "src/components/presentation/SlideTheoremProof.vue",
-    "src/components/presentation/SlideWorkedExample.vue",
-    "src/components/widgets/TimerWidget.vue"
+    "src/components/presentation/SlideWorkedExample.vue"
   ],
   "pale-300": [
     "s-activities/IdealGasLawActivity.vue",
@@ -46,33 +45,15 @@
     "src/components/presentation/shared/PedagogyPanel.vue"
   ],
   "blur": [
-    "s-activities/CircuitsActivity.vue",
-    "s-activities/ForcesLabActivity.vue",
-    "s-activities/IdealGasLawActivity.vue",
-    "s-activities/SpringForceLabActivity.vue",
-    "src/components/NamePickerOverlay.vue",
-    "src/components/activities/DragDropActivity.vue",
-    "src/components/activities/MixedRetrievalActivity.vue",
-    "src/components/modals/PresentationModal.vue",
-    "src/components/modals/SpotCheckModal.vue",
-    "src/components/modals/TicketModal.vue",
-    "src/components/widgets/TimerWidget.vue",
-    "src/views/LessonView.vue"
+    "src/components/modals/PresentationModal.vue"
   ],
   "pulse": [
     "s-activities/IdealGasLawActivity.vue",
-    "s-activities/SpringForceLabActivity.vue",
-    "src/components/NamePickerOverlay.vue",
-    "src/components/widgets/TimerWidget.vue"
+    "s-activities/SpringForceLabActivity.vue"
   ],
-  "bounce": [
-    "src/components/activities/DragDropActivity.vue",
-    "src/components/modals/TicketModal.vue",
-    "src/components/widgets/TimerWidget.vue"
-  ],
+  "bounce": [],
   "ping": [
-    "src/components/presentation/SlideMathGraph.vue",
-    "src/components/widgets/TimerWidget.vue"
+    "src/components/presentation/SlideMathGraph.vue"
   ],
   "shadow-2xl": [
     "s-activities/CircuitsActivity.vue",
@@ -83,8 +64,7 @@
     "src/components/activities/DragDropActivity.vue",
     "src/components/activities/MixedRetrievalActivity.vue",
     "src/components/modals/PresentationModal.vue",
-    "src/components/presentation/SlideHero.vue",
-    "src/components/widgets/TimerWidget.vue"
+    "src/components/presentation/SlideHero.vue"
   ],
   "emoji": [
     "s-activities/IdealGasLawActivity.vue",
@@ -92,7 +72,6 @@
   ],
   "dark": [
     "s-activities/IdealGasLawActivity.vue",
-    "src/components/NamePickerOverlay.vue",
     "src/components/modals/PresentationModal.vue",
     "src/components/presentation/SlideBig.vue",
     "src/components/presentation/SlideCelebration.vue",

@@ -1,8 +1,8 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm text-white" @keydown.escape="handleClose">
+  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 text-white" @keydown.escape="handleClose">
     <div class="w-screen h-screen flex flex-col bg-slate-900 shadow-2xl shadow-black/50 overflow-hidden">
       <!-- Header -->
-      <header class="flex-shrink-0 bg-slate-950/70 border-b border-white/10 px-4 py-2 flex items-center justify-between text-lg z-10 backdrop-blur-sm">
+      <header class="flex-shrink-0 bg-slate-950 border-b border-white/10 px-4 py-2 flex items-center justify-between text-lg z-10">
         <div class="flex items-center gap-4">
           <div class="p-2 bg-cyan-900/50 rounded-lg ring-1 ring-cyan-400/30">
             <PhFlask class="text-cyan-300 animate-pulse-slow" :size="28" weight="duotone" />
@@ -192,7 +192,7 @@
                 </g>
               </g>
             </svg>
-            <div v-if="activeLaw === 'avogadro'" class="absolute left-0 top-1/2 flex flex-col gap-2 p-2 bg-slate-700/30 backdrop-blur-sm rounded-2xl ring-1 ring-white/10" style="top: 375px; transform: translateY(-50%)">
+            <div v-if="activeLaw === 'avogadro'" class="absolute left-0 top-1/2 flex flex-col gap-2 p-2 bg-slate-700/30 rounded-card ring-1 ring-white/10" style="top: 375px; transform: translateY(-50%)">
                 <button @mousedown="startAddMoles" @mouseup="stopMoleChange" @mouseleave="stopMoleChange" class="p-2 bg-emerald-600/50 rounded-full text-emerald-200 hover:bg-emerald-600/70 hover:scale-110 active:scale-100 transition-all duration-200"><PhPlus weight="bold" /></button>
                 <PhAtom :size="24" class="text-slate-400 mx-auto my-2" weight="duotone"/>
                 <button @mousedown="startRemoveMoles" @mouseup="stopMoleChange" @mouseleave="stopMoleChange" class="p-2 bg-red-600/50 rounded-full text-red-200 hover:bg-red-600/70 hover:scale-110 active:scale-100 transition-all duration-200"><PhMinus weight="bold"/></button>
@@ -343,7 +343,7 @@
                   <!-- Hover tooltip -->
                   <transition name="fade-in">
                     <div v-if="isGraphHovered && hoveredGraphPoint.point"
-                         class="pointer-events-none absolute top-2 right-2 bg-slate-950/90 backdrop-blur-sm px-2.5 py-1.5 rounded-xl text-xs font-mono text-amber-200 ring-1 ring-white/10 shadow-xl">
+                         class="pointer-events-none absolute top-2 right-2 bg-slate-950 px-2.5 py-1.5 rounded-control text-xs font-mono text-amber-200 ring-1 ring-white/10">
                       <div class="text-sky-300">{{ lawConfig.graph.x.label }}: <span class="text-white">{{ formatTooltip(hoveredGraphPoint.point.x, lawConfig.graph.x) }}</span></div>
                       <div class="text-amber-300">{{ lawConfig.graph.y.label }}: <span class="text-white">{{ formatTooltip(hoveredGraphPoint.point.y, lawConfig.graph.y) }}</span></div>
                     </div>

@@ -420,14 +420,14 @@ const getLabel = (q) => {
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0">
-    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="emit('close')"></div>
+    <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="emit('close')"></div>
     
     <div v-if="currentCircuit" class="relative flex flex-col w-screen h-screen overflow-hidden shadow-2xl bg-white rounded-none">
       
       <!-- Header -->
       <header class="flex items-center justify-between px-6 py-5 bg-indigo-600 shrink-0 shadow-md z-20">
         <div class="flex items-center gap-4">
-          <div class="flex items-center justify-center p-2.5 rounded-xl bg-white/20 text-white shadow-sm backdrop-blur-md">
+          <div class="flex items-center justify-center p-2.5 rounded-control bg-white/20 text-white">
             <component :is="props.icon" weight="fill" class="w-6 h-6" />
           </div>
           <div>

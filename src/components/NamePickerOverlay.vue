@@ -6,7 +6,7 @@
  * knop, het beschermt de gegevens niet. Zie src/data/students.js.
  */
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import { PhUserCircle, PhX, PhLockKey, PhArrowRight } from '@phosphor-icons/vue'
+import { PhX, PhLockKey, PhArrowRight } from '@phosphor-icons/vue'
 import { school } from '../data/subjects.js'
 
 const props = defineProps({
@@ -121,21 +121,24 @@ onUnmounted(() => {
 <template>
     <Teleport to="body">
         <Transition name="fade">
-            <div v-if="isOpen" class="fixed inset-0 z-[10020] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm">
+            <!-- Naamkiezer: licht, egaal vlak. Geen blur, geen doorschijnende
+                 tekst. De gekozen naam is het grootste element op het scherm,
+                 zodat de klas hem vanaf de achterste rij leest. -->
+            <div v-if="isOpen" class="modal-fullscreen">
 
-                <button @click="close" class="absolute top-6 right-6 p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                <button @click="close" class="btn-close absolute top-6 right-6 z-10" aria-label="Sluiten">
                     <PhX class="text-2xl" />
                 </button>
 
                 <!-- ── VERGRENDELD ───────────────────────────────────────── -->
-                <div v-if="!unlocked" class="text-center px-8 w-full max-w-md">
+                <div v-if="!unlocked" class="flex-1 flex flex-col items-center justify-center px-8">
 
-                    <div class="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-8 bg-slate-700">
-                        <PhLockKey class="text-6xl text-white/80" weight="fill" />
+                    <div class="w-24 h-24 rounded-full flex items-center justify-center mb-8" style="background: var(--color-panel-muted);">
+                        <PhLockKey class="text-5xl" style="color: var(--color-ink-soft);" weight="fill" />
                     </div>
 
-                    <p class="text-2xl text-white/60 mb-2 font-medium">Naamkiezer vergrendeld</p>
-                    <p class="text-white/30 text-sm mb-8">Voer de code in om verder te gaan.</p>
+                    <p class="text-2xl font-bold text-slate-800 mb-2">Naamkiezer vergrendeld</p>
+                    <p class="text-base text-slate-600 mb-8">Voer de code in om verder te gaan.</p>
 
                     <form @submit.prevent="submitCode" class="flex flex-col items-center gap-4">
                         <input
@@ -145,59 +148,54 @@ onUnmounted(() => {
                             autocomplete="off"
                             placeholder="Code"
                             :class="[
-                                'w-64 px-5 py-3 rounded-xl bg-white/10 border text-white text-center text-xl tracking-widest outline-none transition-colors',
-                                codeError ? 'border-red-400 placeholder-red-300' : 'border-white/20 focus:border-amber-400'
+                                'w-64 px-5 py-3 rounded-control bg-white border-2 text-slate-800 text-center text-xl tracking-widest outline-none transition-colors',
+                                codeError ? 'border-red-400 placeholder-red-300' : 'border-slate-300 focus:border-slate-700'
                             ]"
                         />
 
                         <button
                             type="submit"
-                            class="px-8 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-black rounded-xl text-base uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-amber-500/30 flex items-center gap-2"
+                            class="btn btn-primary"
+                            style="min-height: 48px; padding: 0 32px;"
                         >
                             Ontgrendelen
                             <PhArrowRight weight="bold" />
                         </button>
 
-                        <p v-if="codeError" class="text-red-300 text-sm font-medium">
+                        <p v-if="codeError" class="text-base font-medium" style="color: var(--color-presentation);">
                             Onjuiste code.
                         </p>
                     </form>
                 </div>
 
                 <!-- ── ONTGRENDELD ───────────────────────────────────────── -->
-                <div v-else class="text-center px-8">
+                <div v-else class="flex-1 flex flex-col items-center justify-center px-8 text-center">
 
-                    <div :class="[
-                        'w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-8 transition-all duration-300',
-                        isSpinning ? 'bg-amber-500 animate-pulse' : 'bg-amber-600'
-                    ]">
-                        <PhUserCircle class="text-7xl text-white" weight="fill" />
-                    </div>
+                    <p class="fullscreen-label mb-6">Wie mag antwoorden?</p>
 
-                    <p class="text-2xl text-white/60 mb-4 font-medium">Wie mag antwoorden?</p>
-
-                    <div class="min-h-[120px] flex items-center justify-center">
-                        <h1 :class="[
-                            'font-bold text-white transition-all duration-200',
-                            isSpinning ? 'text-6xl text-white/70' : 'text-8xl md:text-9xl'
+                    <div class="min-h-[160px] flex items-center justify-center">
+                        <p :class="[
+                            'font-bold transition-opacity duration-200',
+                            isSpinning ? 'text-5xl text-slate-600' : 'text-7xl md:text-8xl text-slate-900'
                         ]">
                             {{ displayName || '...' }}
-                        </h1>
+                        </p>
                     </div>
 
                     <div class="mt-10 flex flex-col items-center gap-3">
                         <button
                             @click="pickRandomName"
                             :disabled="isSpinning || names.length === 0"
-                            class="px-8 py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-slate-900 font-black rounded-xl text-base uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-amber-500/30"
+                            class="btn btn-primary"
+                            style="min-height: 48px; padding: 0 32px;"
                         >
                             {{ isSpinning ? 'Kiezen...' : 'Opnieuw' }}
                         </button>
 
-                        <p v-if="names.length === 0" class="text-white/40 text-sm">
+                        <p v-if="names.length === 0" class="text-base text-slate-600">
                             Geen namen gevonden voor deze klas.
                         </p>
-                        <p v-else class="text-white/30 text-xs font-medium tracking-wider uppercase">
+                        <p v-else class="text-sm text-slate-500 font-medium tracking-wider uppercase">
                             Spatie of Enter om opnieuw te kiezen &nbsp;&bull;&nbsp; Esc om te sluiten
                         </p>
                     </div>

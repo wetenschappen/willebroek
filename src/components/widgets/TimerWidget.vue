@@ -170,20 +170,35 @@ function enforceTwoDigits(type) {
 
 <template>
   <div>
-      <!-- ALARM OVERLAY (Bonkers Mode) - Keep Teleported to body -->
+      <!-- ALARM: statische, contrastrijke toestand.
+           Geen blur, pulse, bounce of glow: op een beamer is een vaste rode
+           balk met grote tekst beter leesbaar dan een bewegend effect. -->
       <Teleport to="body">
           <div
             v-if="timeLeft === 0 && initialTime > 0"
-            @click="stopTimer"
-            class="fixed inset-0 z-[100] cursor-pointer flex flex-col items-center justify-center overflow-hidden"
+            class="fixed inset-0 z-[100] flex flex-col items-center justify-center"
+            style="background: var(--color-paper);"
           >
-              <div class="absolute inset-0 bg-red-500/20 animate-pulse backdrop-blur-sm"></div>
-              <div class="bg-red-600 text-white font-black text-9xl transform rotate-3 border-8 border-white shadow-[0_0_50px_rgba(220,38,38,0.8)] px-12 py-6 rounded-3xl animate-[bounce_0.5s_infinite] select-none">
-                  TIME'S UP!
+              <div class="w-full" style="border-top: 16px solid var(--color-presentation);"></div>
+
+              <div class="flex flex-1 flex-col items-center justify-center px-8 text-center">
+                  <p class="fullscreen-label mb-6" style="color: var(--color-presentation);">
+                      Tijd voorbij
+                  </p>
+
+                  <p
+                    class="font-mono font-bold tabular-nums"
+                    style="color: var(--color-ink); font-size: clamp(6rem, 18vw, 13rem); line-height: 1; letter-spacing: -0.02em;"
+                  >
+                      00:00
+                  </p>
+
+                  <button class="btn btn-primary mt-12" style="min-height: 56px; padding: 0 40px; font-size: 1.125rem;" @click="stopTimer">
+                      Sluiten
+                  </button>
               </div>
-              <div class="relative mt-8 bg-white/90 text-red-600 px-6 py-2 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl animate-pulse select-none">
-                  Klik ergens om te sluiten
-              </div>
+
+              <div class="w-full" style="border-top: 16px solid var(--color-presentation);"></div>
           </div>
       </Teleport>
 
@@ -194,7 +209,7 @@ function enforceTwoDigits(type) {
               <!-- Timer Display - Bigger & integrated -->
               <div
                   class="font-mono font-bold text-2xl tracking-widest tabular-nums leading-none"
-                  :class="{'text-amber-500': timeLeft === 0 && initialTime === 0, 'text-emerald-400': isRunning && timeLeft > 0, 'text-red-100 font-black animate-[ping_1s_cubic-bezier(0,0,0.2,1)_infinite]': timeLeft === 0 && initialTime > 0}"
+                  :class="{'text-slate-500': timeLeft === 0 && initialTime === 0, 'text-emerald-400': isRunning && timeLeft > 0, 'text-red-100 font-black': timeLeft === 0 && initialTime > 0}"
               >
                   {{ formattedTime }}
               </div>
@@ -239,7 +254,8 @@ function enforceTwoDigits(type) {
           <!-- EXPANDED SETUP VIEW (Dropdown) -->
           <div
               v-if="isExpanded"
-              class="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-2xl border border-slate-300 w-[260px] p-4 flex flex-col z-[100] animate-[floatIn_0.2s_ease-out] origin-top-right"
+              class="absolute right-0 top-full mt-2 bg-white rounded-card border-2 w-[260px] p-4 flex flex-col z-[100] origin-top-right"
+              style="border-color: var(--color-line-strong); box-shadow: var(--shadow-dialog);"
           >
               <div class="mb-3 text-center">
                   <span class="text-sm font-bold text-slate-600 uppercase tracking-widest">Stel timer in</span>
@@ -255,7 +271,7 @@ function enforceTwoDigits(type) {
                       @focus="$event.target.select()"
                       @blur="padInput('min')"
                       @input="enforceTwoDigits('min')"
-                      class="w-16 text-4xl text-center font-bold text-slate-800 border-b-2 border-slate-300 focus:border-amber-500 outline-none bg-transparent p-1 font-mono selection:bg-amber-100 placeholder:text-slate-400"
+                      class="w-16 text-4xl text-center font-bold text-slate-800 border-b-2 border-slate-300 focus:border-slate-700 outline-none bg-transparent p-1 font-mono selection:bg-slate-200 placeholder:text-slate-500"
                       placeholder="00"
                     />
                     <span class="text-2xl text-slate-500 font-light pb-2 select-none">:</span>
@@ -267,7 +283,7 @@ function enforceTwoDigits(type) {
                       @focus="$event.target.select()"
                       @blur="padInput('sec')"
                       @input="enforceTwoDigits('sec')"
-                      class="w-16 text-4xl text-center font-bold text-slate-800 border-b-2 border-slate-300 focus:border-amber-500 outline-none bg-transparent p-1 font-mono selection:bg-amber-100 placeholder:text-slate-400"
+                      class="w-16 text-4xl text-center font-bold text-slate-800 border-b-2 border-slate-300 focus:border-slate-700 outline-none bg-transparent p-1 font-mono selection:bg-slate-200 placeholder:text-slate-500"
                       placeholder="00"
                     />
               </div>
@@ -275,10 +291,10 @@ function enforceTwoDigits(type) {
               <!-- Start Button -->
               <button
                   @click="applySetup"
-                  class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg shadow-amber-500/20"
+                  class="btn btn-primary w-full"
               >
                     <PhPlay weight="fill" />
-                    Start Timer
+                    Start timer
               </button>
           </div>
       </div>
@@ -286,8 +302,5 @@ function enforceTwoDigits(type) {
 </template>
 
 <style scoped>
-@keyframes floatIn {
-    from { opacity: 0; transform: translateY(-5px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
+/* Geen floatIn-animatie meer: de dropdown verschijnt direct, zonder beweging. */
 </style>

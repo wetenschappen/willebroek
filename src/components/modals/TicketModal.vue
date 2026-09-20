@@ -260,7 +260,7 @@ const progressBarColor = computed(() => isEntry.value ? 'bg-amber-500' : 'bg-ind
               :config="getGraphConfig(currentPart)" 
               @graph-click="(pt) => selectGraphPoint(currentPart.id, pt)" 
             />
-            <div v-if="answers[currentPart.id]" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-xl shadow-lg border border-slate-100 text-sm font-mono font-bold text-slate-700 flex items-center gap-2">
+            <div v-if="answers[currentPart.id]" class="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-control text-sm font-mono font-bold text-slate-700 flex items-center gap-2" style="border: 2px solid var(--color-line-strong);">
               <div class="w-3 h-3 rounded-full bg-indigo-600"></div>
               Gekozen: ({{ answers[currentPart.id].x.toFixed(1) }}, {{ answers[currentPart.id].y.toFixed(1) }})
             </div>
@@ -291,11 +291,11 @@ const progressBarColor = computed(() => isEntry.value ? 'bg-amber-500' : 'bg-ind
 
         <!-- FINISH -->
         <div v-else-if="currentPart.type === 'finish'" :key="'finish-'+currentPart.id" class="flex-1 flex flex-col items-center text-center max-w-2xl mx-auto w-full justify-center">
-          <div class="w-20 h-20 rounded-full flex items-center justify-center mb-6 animate-[bounce_0.6s_ease-out]" :class="isEntry ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'">
+          <div class="w-16 h-16 rounded-control flex items-center justify-center mb-6" style="background: var(--color-digital-soft); color: var(--color-digital);" :class="isEntry ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'">
             <PhCheckCircle weight="fill" class="text-4xl"/>
           </div>
-          <h4 class="text-3xl font-bold text-slate-900 mb-4" v-if="isEntry">Klaar!</h4>
-          <h4 class="text-3xl font-bold text-slate-900 mb-4" v-else>Les Afgerond!</h4>
+          <h4 class="text-3xl font-bold text-slate-900 mb-4" v-if="isEntry">Klaar</h4>
+          <h4 class="text-3xl font-bold text-slate-900 mb-4" v-else>Einde van de les</h4>
           
           <div class="w-full bg-slate-50 border border-slate-100 rounded-3xl p-8 mt-4 space-y-6">
             <!-- ENTRY: Diagnostic per-question results -->

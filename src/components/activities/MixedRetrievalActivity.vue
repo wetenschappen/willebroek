@@ -73,7 +73,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0 font-sans">
-    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="emit('close')"></div>
+    <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="emit('close')"></div>
     <div class="relative bg-white shadow-2xl overflow-hidden flex flex-col w-screen h-screen rounded-none" @click.stop>
       
       <!-- Header -->

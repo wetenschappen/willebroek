@@ -447,7 +447,7 @@ function handleOriginClick(forceId, originStr) {
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0">
-    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="$emit('close')"></div>
+    <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="$emit('close')"></div>
     
     <div class="relative bg-slate-100 shadow-2xl overflow-hidden flex flex-col w-screen h-screen rounded-none">
         <!-- HEADER -->
@@ -490,7 +490,7 @@ function handleOriginClick(forceId, originStr) {
                 <div class="bg-white rounded-3xl shadow-xl border-4 border-slate-200 relative w-full flex items-center justify-center overflow-hidden flex-1 min-h-[300px]">
                     <!-- View Toggle: 3 modes -->
                     <div class="absolute top-4 left-4 z-10">
-                        <div class="inline-flex bg-white/80 backdrop-blur-sm p-1.5 rounded-2xl shadow-sm border border-slate-200/60 pointer-events-auto">
+                        <div class="inline-flex bg-white p-1.5 rounded-card pointer-events-auto" style="border: 2px solid var(--color-line-strong);">
                             <button @click="viewMode = 'object'" 
                                     class="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300"
                                     :class="viewMode === 'object' ? 'bg-slate-800 text-white shadow-lg scale-105' : 'text-slate-500 hover:bg-slate-100'">

@@ -102,6 +102,44 @@ for (const file of runtimeFiles) {
 }
 if (!fail.some(message => message.includes('runtime bevat scope-marker'))) ok('geen wiskunde/chemie/test-playground in actieve runtimecode')
 
+// ── Klasroutes ─────────────────────────────────────────────────────────────
+// Elke klas in classesBySubject moet via yearByClass een leerjaar vinden.
+// Anders toont die route een lege modulelijst zonder dat iemand het merkt.
+const studentsSource = read('src/data/students.js')
+const classBlock = studentsSource.match(/classesBySubject = \{([\s\S]*?)\n\}/)
+const yearBlock = studentsSource.match(/yearByClass = \{([\s\S]*?)\n\}/)
+if (!classBlock || !yearBlock) {
+  error('students.js: classesBySubject of yearByClass niet gevonden')
+} else {
+  const yearsFor = new Map(
+    [...yearBlock[1].matchAll(/'([^']+)':\s*(\d+)/g)].map(match => [match[1], Number(match[2])])
+  )
+  const mappedClasses = []
+  for (const match of classBlock[1].matchAll(/(\w+):\s*\[([^\]]*)\]/g)) {
+    for (const idMatch of match[2].matchAll(/'([^']+)'/g)) mappedClasses.push(idMatch[1])
+  }
+  const unmapped = mappedClasses.filter(id => !yearsFor.has(id))
+  if (unmapped.length) {
+    error(`klas zonder leerjaar in yearByClass: ${unmapped.join(', ')}`)
+  } else {
+    ok(`${new Set(mappedClasses).size} klassen hebben een leerjaar in yearByClass`)
+  }
+
+  // Rapporteer klassen die nog geen lessen hebben. Dat is toegestaan, maar het
+  // moet zichtbaar zijn: zo'n klas toont een lege modulelijst.
+  const yearsWithLessons = new Set(modules.map(module => `${module.subject}:${module.year}`))
+  const subjectOfClass = {}
+  for (const match of classBlock[1].matchAll(/(\w+):\s*\[([^\]]*)\]/g)) {
+    for (const idMatch of match[2].matchAll(/'([^']+)'/g)) subjectOfClass[idMatch[1]] = match[1]
+  }
+  const emptyClasses = [...new Set(mappedClasses)].filter(
+    id => !yearsWithLessons.has(`${subjectOfClass[id]}:${yearsFor.get(id)}`)
+  )
+  if (emptyClasses.length) {
+    console.log(`  · klassen zonder lessen (tonen de lege staat): ${emptyClasses.join(', ')}`)
+  }
+}
+
 // ── Design language (docs/DESIGN-SYSTEM.md, Deel II) ──────────────────────
 // Ratchet: nieuwe overtredingen blokkeren, bestaande schuld staat in
 // scripts/design-baseline.json en mag alleen naar beneden.

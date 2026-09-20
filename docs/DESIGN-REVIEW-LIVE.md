@@ -423,6 +423,15 @@ Dit is een geldige GitHub Pages-oplossing, maar directe links zijn hierdoor mind
 
 ## Inhoudelijke routecontrole
 
+> **Aangevuld.** Naast biologie 5D en 6D heeft ook **fysica 6D/A** geen lessen.
+> Drie klassen tonen dus een lege modulelijst. Opgelost door:
+>
+> - de lege staat uitleg en een uitweg te geven in plaats van een dood einde;
+> - de klascode-naar-leerjaar-mapping naar één bron te verhuizen
+>   (`yearByClass` in `src/data/students.js`), want die stond dubbel;
+> - `npm run check` die mapping te laten controleren en de klassen zonder
+>   lessen te rapporteren.
+
 De directe biologieklassen zijn:
 
 ```text

@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { PhArrowLeft, PhArrowRight } from '@phosphor-icons/vue'
 import { modulesFor } from '../data/modules'
 import { subjectBySlug } from '../data/subjects.js'
+import { yearForClass } from '../data/students.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -12,8 +13,9 @@ const classId = computed(() => route.params.classId)
 const filteredModules = computed(() => {
   if (!subject.value) return []
   if (route.params.id) return modulesFor(subject.value.id, parseInt(route.params.id, 10))
-  const yearByClass = { '3D': 3, '4D': 4, '5D': 5, '6D': 6, '6D-A': 6 }
-  return modulesFor(subject.value.id, yearByClass[classId.value])
+  const year = yearForClass(classId.value)
+  if (year === null) return []
+  return modulesFor(subject.value.id, year)
 })
 
 const groupedModules = computed(() => {
@@ -38,6 +40,11 @@ function openLesson(lessonId) {
 function goBack() {
   router.push('/')
 }
+
+/** Terug naar de klassenlijst van dit vak. */
+function chooseClass() {
+  if (subject.value) router.push('/' + subject.value.slug)
+}
 </script>
 
 <template>
@@ -58,7 +65,16 @@ function goBack() {
       </div>
     </header>
 
-    <div v-if="groupedModules.length === 0" class="empty-state">Nog geen modules beschikbaar.</div>
+    <!-- Lege staat: zeg wat er aan de hand is en bied een uitweg.
+         Een klas zonder lessen is geen fout van de leerling. -->
+    <div v-if="groupedModules.length === 0" class="empty-state">
+      <p><strong>Voor deze klas staan nog geen lessen klaar.</strong></p>
+      <p>De lessen voor {{ classId }} worden later toegevoegd. Kies een andere klas of ga terug naar het vakkenoverzicht.</p>
+      <div class="flex flex-wrap gap-3 mt-4">
+        <button type="button" class="btn btn-primary" @click="chooseClass">Andere klas kiezen</button>
+        <button type="button" class="btn btn-ghost" style="border: 2px solid var(--color-line-strong);" @click="goBack">Naar de vakken</button>
+      </div>
+    </div>
 
     <div v-else class="module-index">
       <section v-for="group in groupedModules" :key="group.moduleNum" class="module-section">

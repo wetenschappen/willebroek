@@ -46,12 +46,32 @@ export const studentLists = {
 }
 
 /**
- * Welke klassen verschijnen per vak en leerjaar.
+ * Welke klassen verschijnen per vak.
  * Pas dit aan per school — dit is het enige bestand dat je daarvoor hoeft te wijzigen.
  */
 export const classesBySubject = {
     physics: ['3D', '4D', '6D-A'],
     biology: ['5D', '6D']
+}
+
+/**
+ * Welk leerjaar achter een klascode zit. Eén bron van waarheid: de modulelijst
+ * en de routering lezen allebei deze tabel, zodat ze niet uit elkaar kunnen lopen.
+ *
+ * Let op: een klas hier vermelden betekent niet dat er al lessen voor bestaan.
+ * De modulelijst toont een lege staat zolang een leerjaar geen lessen heeft.
+ */
+export const yearByClass = {
+    '3D': 3,
+    '4D': 4,
+    '5D': 5,
+    '6D': 6,
+    '6D-A': 6
+}
+
+/** Leerjaar voor een klascode, of null als de klas onbekend is. */
+export function yearForClass(classId) {
+    return yearByClass[classId] ?? null
 }
 
 /** Klassen die leerlingen voor een vak kunnen kiezen. */

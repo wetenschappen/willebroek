@@ -1217,6 +1217,24 @@
         min-height: 72px;
     }
 
+    /* Lessenlijst (ModuleSelection): losse rijen zodat de zwarte
+       aanloopbalken niet één doorlopende balk vormen. Alleen tellen
+       vanaf afstand wordt zo makkelijker. De ABC-kaarten in de les
+       (ActivityCard) blijven bewust aaneengesloten. */
+    .lesson-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .lesson-list .lesson-row {
+        border-bottom: 2px solid var(--color-line);
+    }
+
+    .lesson-list .lesson-row:last-child {
+        border-bottom: 2px solid var(--color-line);
+    }
+
     .lesson-meta {
         display: none;
     }

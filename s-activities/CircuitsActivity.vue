@@ -422,29 +422,25 @@ const getLabel = (q) => {
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0">
     <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="emit('close')"></div>
     
-    <div v-if="currentCircuit" class="relative flex flex-col w-screen h-screen overflow-hidden shadow-2xl bg-white rounded-none">
+    <div v-if="currentCircuit" class="relative flex flex-col w-screen h-screen overflow-hidden">
       
       <!-- Header -->
-      <header class="flex items-center justify-between px-6 py-5 bg-indigo-600 shrink-0 shadow-md z-20">
-        <div class="flex items-center gap-4">
-          <div class="flex items-center justify-center p-2.5 rounded-control bg-white/20 text-white">
-            <component :is="props.icon" weight="fill" class="w-6 h-6" />
-          </div>
-          <div>
-            <h2 class="text-xl font-bold text-white m-0 leading-tight flex items-center gap-2">
-              {{ title }} <span class="text-indigo-300 font-normal">|</span> <span class="font-medium text-white/90">{{ currentCircuit.title }}</span>
-            </h2>
-            <p v-if="totalStepsLocal > 1" class="text-xs font-bold text-indigo-200 uppercase tracking-widest m-0 mt-0.5 flex items-center gap-2">
-              <button @click="navigateStep(-1)" class="p-1 rounded-md transition-colors hover:bg-white/20 text-indigo-300 hover:text-white"><PhCaretLeft weight="bold"/></button>
-              Experiment {{ localStep }} van {{ totalStepsLocal }}
-              <button @click="navigateStep(1)" class="p-1 rounded-md transition-colors hover:bg-white/20 text-indigo-300 hover:text-white"><PhCaretRight weight="bold"/></button>
-            </p>
-          </div>
+      <header class="fullscreen-bar fullscreen-bar-digital">
+        <div class="p-2 rounded-control shrink-0" style="background: var(--color-digital-soft); color: var(--color-digital);">
+          <component :is="props.icon" weight="fill" class="w-6 h-6" />
         </div>
-        <button @click="emit('close')" 
-                class="relative p-2.5 text-white/70 transition-all rounded-full hover:bg-white/10 hover:text-white group"
-                :class="{ 'ring-pulse-white': shouldPulse }">
-          <PhX class="w-6 h-6 group-hover:scale-110 transition-transform" weight="bold" />
+        <div class="min-w-0">
+          <h2 class="fullscreen-title">{{ title }}</h2>
+          <p class="fullscreen-label">{{ currentCircuit.title }}</p>
+        </div>
+        <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
+        <div v-if="totalStepsLocal > 1" class="flex items-center gap-2 ml-auto mr-2 shrink-0">
+          <button @click="navigateStep(-1)" class="btn-close" aria-label="Vorige stap"><PhCaretLeft weight="bold"/></button>
+          <span class="font-mono text-sm font-semibold text-slate-700">Experiment {{ localStep }} / {{ totalStepsLocal }}</span>
+          <button @click="navigateStep(1)" class="btn-close" aria-label="Volgende stap"><PhCaretRight weight="bold"/></button>
+        </div>
+        <button @click="emit('close')" class="btn-close shrink-0" aria-label="Sluiten">
+          <PhX class="w-6 h-6" weight="bold" />
         </button>
       </header>
 
@@ -455,16 +451,16 @@ const getLabel = (q) => {
             
             <!-- Situatie -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-6 transition-all hover:shadow-md">
-              <h3 class="mb-3 text-xs font-black tracking-widest text-indigo-500 uppercase flex items-center gap-2">
-                <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Situatie
+              <h3 class="mb-3 text-sm font-bold tracking-widest text-slate-700 uppercase flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-slate-700"></div> Situatie
               </h3>
-              <p class="mb-4 text-sm font-medium italic text-slate-500 border-l-4 border-indigo-200 pl-3 py-1 bg-indigo-50/30 rounded-r-lg" v-html="instruction"></p>
+              <p class="mb-4 text-sm font-medium italic text-slate-500 border-l-4 pl-3 py-1 rounded-r-lg" style="border-color: var(--color-line); background: var(--color-panel-muted);" v-html="instruction"></p>
               <div class="text-sm font-medium text-slate-700 leading-relaxed">{{ currentCircuit.description }}</div>
             </div>
             
             <!-- Gegevens -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-6 transition-all hover:shadow-md">
-              <h3 class="mb-4 text-xs font-black tracking-widest text-slate-400 uppercase flex items-center gap-2">
+              <h3 class="mb-4 text-sm font-bold tracking-widest text-slate-700 uppercase flex items-center gap-2">
                 <div class="w-1.5 h-1.5 rounded-full bg-slate-400"></div> Gegevens
               </h3>
               <div class="space-y-3">
@@ -474,7 +470,7 @@ const getLabel = (q) => {
                 </div>
                 <div v-for="(r, index) in currentCircuit.resistors" :key="index" 
                      class="flex justify-between items-center p-3.5 bg-slate-50 rounded-xl border border-slate-100 transition-colors hover:border-slate-300">
-                  <span class="text-sm font-bold text-slate-600">{{ r.label }} <span class="text-slate-400 text-xs ml-1">(R{{ index + 1 }})</span></span>
+                  <span class="text-sm font-bold text-slate-600">{{ r.label }} <span class="text-slate-600 text-sm ml-1">(R{{ index + 1 }})</span></span>
                   <span class="font-black text-slate-800 text-lg bg-white px-3 py-1 rounded-lg border border-slate-200 shadow-sm">{{ r.value }} Ω</span>
                 </div>
               </div>
@@ -498,15 +494,15 @@ const getLabel = (q) => {
 
             <!-- Bereken -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-2">
-              <h3 class="mb-4 text-xs font-black tracking-widest text-indigo-500 uppercase flex items-center gap-2">
-                <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Bereken
+              <h3 class="mb-4 text-xs font-black tracking-widest text-slate-700 uppercase flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-slate-700"></div> Bereken
               </h3>
               <div class="space-y-4">
                 <div v-for="q in currentCircuit.questions" :key="q" class="relative">
                   <label :for="q" class="block text-sm font-bold text-slate-700 mb-2" v-html="getLabel(q)"></label>
                   <input type="text" :id="q" v-model="userInput[q]"
                          @keydown.enter="checkAnswer"
-                         class="block w-full px-4 py-3 border-2 rounded-xl outline-none focus:border-indigo-500 focus:bg-white focus:shadow-[0_0_0_4px_rgba(99,102,241,0.1)] transition-all font-bold placeholder:font-normal placeholder:text-slate-400"
+                         class="block w-full px-4 py-3 border-2 rounded-control outline-none focus:border-slate-700 focus:bg-white font-bold placeholder:font-normal placeholder:text-slate-600"
                          :class="{
                            'bg-slate-50 border-slate-200 text-slate-800': !fieldValidation[q],
                            'border-emerald-500 bg-emerald-50 text-emerald-900': fieldValidation[q] === 'correct',
@@ -538,7 +534,7 @@ const getLabel = (q) => {
               </button>
               
               <button v-if="!isCorrect" @click="checkAnswer" :disabled="isChecked && !isCorrect" 
-                      class="flex-1 py-3.5 px-6 font-black text-white transition-all rounded-xl shadow-lg bg-indigo-600 hover:bg-indigo-500 hover:shadow-indigo-500/30 disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none disabled:cursor-not-allowed active:scale-[0.98]">
+                      class="flex-1 btn btn-primary" style="min-height: 52px;">
                 Controleer
               </button>
               
@@ -580,14 +576,14 @@ const getLabel = (q) => {
                  <div v-if="localStep === 1" class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200 flex items-center">
                     <button @click="currentVoltage = 12"
                             class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all"
-                            :class="currentVoltage === 12 ? 'bg-indigo-100 text-indigo-700 shadow-inner' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'">
-                       <PhLightning weight="fill" :class="currentVoltage === 12 ? 'text-indigo-500' : 'text-slate-400'" />
+                            :class="currentVoltage === 12 ? 'bg-slate-200 text-slate-900' : 'text-slate-700 hover:bg-slate-100'">
+                       <PhLightning weight="fill" :class="currentVoltage === 12 ? 'text-slate-900' : 'text-slate-600'" />
                        12V
                     </button>
                     <button @click="currentVoltage = 230"
                             class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all"
                             :class="currentVoltage === 230 ? 'bg-rose-100 text-rose-700 shadow-inner' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'">
-                       <PhLightning weight="fill" :class="currentVoltage === 230 ? 'text-rose-500' : 'text-slate-400'" />
+                       <PhLightning weight="fill" :class="currentVoltage === 230 ? 'text-slate-900' : 'text-slate-600'" />
                        230V
                     </button>
                  </div>
@@ -595,7 +591,7 @@ const getLabel = (q) => {
              </div>
 
              <!-- Diagram Container -->
-             <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-slate-200 min-h-[450px] w-full max-w-3xl flex items-center justify-center relative transition-all hover:border-indigo-100 hover:shadow-indigo-500/10">
+             <div class="bg-white p-10 rounded-card min-h-[450px] w-full max-w-3xl flex items-center justify-center relative" style="border: 2px solid var(--color-line-strong);">
                 <svg viewBox="0 0 400 220" class="w-full h-full circuit-svg overflow-visible">
                     <defs>
                         <g id="resistor-symbol" class="circuit-component transition-all">

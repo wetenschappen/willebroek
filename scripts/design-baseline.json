@@ -1,14 +1,14 @@
 {
-  "pale-400": 17,
-  "pale-300": 2,
+  "pale-400": 4,
+  "pale-300": 1,
   "ink-muted": 0,
   "serif": 0,
   "open-sans": 0,
   "blur": 0,
-  "pulse": 3,
+  "pulse": 2,
   "bounce": 0,
   "ping": 0,
-  "shadow-2xl": 6,
+  "shadow-2xl": 2,
   "emoji": 6,
-  "dark": 1
+  "dark": 0
 }

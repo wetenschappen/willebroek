@@ -449,24 +449,24 @@ function handleOriginClick(forceId, originStr) {
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0">
     <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="$emit('close')"></div>
     
-    <div class="relative bg-slate-100 shadow-2xl overflow-hidden flex flex-col w-screen h-screen rounded-none">
+    <div class="relative overflow-hidden flex flex-col w-screen h-screen">
         <!-- HEADER -->
         <div class="p-2 md:p-3 border-b border-slate-200 flex items-center justify-between bg-white shadow-sm z-10 relative shrink-0">
             <div class="flex items-center gap-4">
                 <h2 class="text-lg md:text-xl font-extrabold text-slate-800 tracking-tight">{{ title || 'Interactief Krachtenlab' }}</h2>
                 
                 <!-- Object Selector -->
-                <div class="flex bg-slate-100 p-1 rounded-xl">
+                <div class="flex p-1 rounded-control shrink-0" style="background: var(--color-panel-muted);">
                     <button 
                         v-for="obj in objectOptions" 
                         :key="obj.id"
                         @click="selectedObject = obj.id"
                         :disabled="scenario.isHanging && (obj.id === 'mens' || obj.id === 'hond')"
-                        class="p-1.5 rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed"
-                        :class="selectedObject === obj.id ? 'bg-white shadow-sm ring-1 ring-slate-200/50 scale-105 z-10' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 grayscale opacity-70'"
+                        class="p-1.5 rounded-control flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed"
+                        :style="selectedObject === obj.id ? { background: '#ffffff', border: '2px solid var(--color-digital)' } : { border: '2px solid transparent', color: '#34474e' }"
                         :title="(scenario.isHanging && (obj.id === 'mens' || obj.id === 'hond')) ? 'Niet toegestaan in Ophanging' : obj.label"
                     >
-                        <component v-if="obj.icon" :is="obj.icon" weight="fill" class="w-5 h-5 text-indigo-500" />
+                        <component v-if="obj.icon" :is="obj.icon" weight="fill" class="w-5 h-5" />
                         <svg v-else viewBox="0 0 100 100" class="w-5 h-5" fill="currentColor" aria-hidden="true">
                             <g v-html="shapeMarkup(obj.shape)" />
                         </svg>
@@ -474,7 +474,7 @@ function handleOriginClick(forceId, originStr) {
                 </div>
             </div>
             <button @click="$emit('close')" 
-                    class="p-2 md:p-3 bg-slate-100 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-200 transition-all shadow-inner relative"
+                    class="btn-close relative"
                     :class="{ 'ring-pulse-red': shouldPulse }">
                 <PhX class="text-xl font-bold" />
             </button>
@@ -700,7 +700,7 @@ function handleOriginClick(forceId, originStr) {
                     <div class="flex flex-col gap-1.5 relative z-10">
                         <div class="flex flex-col md:flex-row justify-between md:items-center gap-3">
                             <select :value="currentStep" @change="goToScenario(parseInt($event.target.value))"
-                                    class="appearance-none bg-slate-900 text-white font-extrabold text-base md:text-lg py-2.5 px-4 pr-10 rounded-xl outline-none hover:bg-slate-800 focus:ring-4 focus:ring-indigo-500/30 cursor-pointer transition-all shadow-md tracking-tight w-full md:max-w-xs relative bg-no-repeat bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[position:right_12px_center] bg-[length:16px_16px]">
+                                    class="appearance-none bg-slate-900 text-white font-extrabold text-base md:text-lg py-2.5 px-4 pr-10 rounded-xl outline-none hover:bg-slate-800 cursor-pointer font-bold text-base md:text-lg tracking-tight w-full md:max-w-xs relative bg-no-repeat bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[position:right_12px_center] bg-[length:16px_16px]">
                                 <option v-for="(scen, idx) in scenarios" :key="idx" :value="idx" class="font-bold text-slate-100 bg-slate-800">{{ scen.title }}</option>
                             </select>
                             <p class="text-sm font-medium text-slate-600 leading-tight flex-1 md:text-right">{{ scenario.desc.replace(/\{object\}/g, objectLabel).replace(/^(.)/, c => c.toUpperCase()) }}</p>
@@ -734,14 +734,14 @@ function handleOriginClick(forceId, originStr) {
                      
                      <div v-if="viewMode !== 'combined'" class="h-full flex flex-col items-center justify-center p-6 bg-slate-100/80 rounded-2xl border-2 border-dashed border-slate-300 min-h-[400px]">
                          <div class="bg-white border text-center shadow-lg rounded-2xl p-6 max-w-sm mx-auto">
-                             <div class="bg-indigo-50 text-indigo-600 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 ring-4 ring-indigo-50/50">
+                             <div class="w-14 h-14 rounded-control flex items-center justify-center mx-auto mb-4" style="background: var(--color-panel-muted); color: var(--color-ink-soft);">
                                  <PhEye weight="fill" size="28" />
                              </div>
                              <h4 class="font-extrabold text-slate-800 text-xl mb-2">Dit is een voorbeeldweergave</h4>
                              <p class="text-sm font-medium text-slate-500 mb-6 leading-relaxed">
                                  Hier zie je hoe de krachten zich vormen naar het theoretische <span class="text-slate-700 font-bold">{{ viewMode === 'object' ? 'Star Lichaam' : 'Puntmassa' }}</span> diagram.
                              </p>
-                             <button @click="viewMode = 'combined'" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-3 px-6 rounded-xl shadow-md transition-all text-sm w-full block">
+                             <button @click="viewMode = 'combined'" class="btn btn-primary w-full" style="min-height: 48px;">
                                  Ga naar Gecombineerd om aan te passen
                              </button>
                          </div>
@@ -769,16 +769,16 @@ function handleOriginClick(forceId, originStr) {
 
                              <div class="p-3 md:p-4 pb-5 space-y-4 transition-all" :class="{'bg-slate-50/50': inputs[force.id].origin === 'none'}">
                                  <!-- ROW 1: Omschrijving -->
-                                 <div class="bg-indigo-50/50 -mx-3 -mt-3 mb-2 p-3 border-b border-indigo-50/10 transition-all">
-                                     <p class="text-[9px] font-bold uppercase tracking-widest text-indigo-800 mb-2 flex items-center gap-1"><PhNavigationArrow size="12" /> 1. Formuleer in een zin</p>
+                                 <div class="-mx-3 -mt-3 mb-2 p-3" style="background: var(--color-panel-muted); border-bottom: 2px solid var(--color-line);">
+                                     <p class="text-sm font-bold uppercase tracking-widest text-slate-800 mb-2 flex items-center gap-1"><PhNavigationArrow size="12" /> 1. Formuleer in een zin</p>
                                      <div class="flex flex-wrap items-center gap-2 text-sm text-slate-700 w-full justify-center lg:justify-start">
                                          <span class="font-medium">De kracht uitgeoefend door</span>
-                                         <select v-model="inputs[force.id].sender" class="bg-white border-2 border-indigo-200 rounded-lg px-2 py-1 font-bold text-indigo-900 focus:outline-none focus:border-indigo-500 hover:border-indigo-400 cursor-pointer min-w-[120px] shadow-sm appearance-none text-center transition-colors text-xs">
+                                         <select v-model="inputs[force.id].sender" class="bg-white border-2 rounded-control px-2 py-1 font-bold text-slate-900 focus:outline-none cursor-pointer min-w-[120px] appearance-none text-center text-sm" style="border-color: var(--color-line);">
                                              <option value="" disabled selected>Kies...</option>
                                              <option v-for="actor in actors" :key="'s'+actor.id" :value="actor.id">{{ actor.label }}</option>
                                          </select>
                                          <span class="font-medium">op</span>
-                                         <select v-model="inputs[force.id].receiver" class="bg-white border-2 border-indigo-200 rounded-lg px-2 py-1 font-bold text-indigo-900 focus:outline-none focus:border-indigo-500 hover:border-indigo-400 cursor-pointer min-w-[120px] shadow-sm appearance-none text-center transition-colors text-xs">
+                                         <select v-model="inputs[force.id].receiver" class="bg-white border-2 rounded-control px-2 py-1 font-bold text-slate-900 focus:outline-none cursor-pointer min-w-[120px] appearance-none text-center text-sm" style="border-color: var(--color-line);">
                                              <option value="" disabled selected>Kies...</option>
                                              <option v-for="actor in actors" :key="'r'+actor.id" :value="actor.id">{{ actor.label }}</option>
                                          </select>
@@ -797,7 +797,7 @@ function handleOriginClick(forceId, originStr) {
                                                  @change="handleOriginClick(force.id, $event.target.value)"
                                                  class="w-full bg-white border-2 rounded-lg px-3 py-1.5 font-bold focus:outline-none shadow-sm transition-all cursor-pointer appearance-none text-xs md:text-[13px]"
                                                  :class="[
-                                                     inputs[force.id].origin === 'none' ? 'border-slate-200 text-slate-400' : '',
+                                                     inputs[force.id].origin === 'none' ? 'text-slate-600' : '',
                                                      inputs[force.id].origin === 'center' ? 'border-amber-400 bg-amber-50/30 text-amber-900' : '',
                                                      inputs[force.id].origin === 'surface' ? 'border-emerald-500 text-emerald-600' : '',
                                                      (viewMode !== 'object' && force.id !== 'fg') ? 'border-amber-200' : ''

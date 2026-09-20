@@ -72,28 +72,11 @@ export default {
           'emerald-light': '#c7dfce',
           'emerald-bg': '#e7f2ea',
         },
-        surface: {
-          white: '#ffffff',
-          50: '#f5f7f6',
-          100: '#edf2f1',
-          200: '#d5dfde',
-          300: '#b8c8c6',
-        },
         ink: {
           DEFAULT: '#17252b',
           light: '#34474e',
           soft: '#34474e',
           dark: '#17252b',
-        },
-        chrome: {
-          dark: '#17252b',
-          border: '#34474e',
-        },
-        brand: {
-          dark: '#17252b',
-          mid: '#34474e',
-          orange: '#b65b2d',
-          accent: '#397553',
         },
       },
       borderRadius: {

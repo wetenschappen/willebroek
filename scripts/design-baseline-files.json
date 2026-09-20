@@ -1,12 +1,8 @@
 {
   "pale-400": [
-    "s-activities/CircuitsActivity.vue",
-    "s-activities/ForcesLabActivity.vue",
-    "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],
   "pale-300": [
-    "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],
   "ink-muted": [],
@@ -14,22 +10,16 @@
   "open-sans": [],
   "blur": [],
   "pulse": [
-    "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],
   "bounce": [],
   "ping": [],
   "shadow-2xl": [
-    "s-activities/CircuitsActivity.vue",
-    "s-activities/ForcesLabActivity.vue",
-    "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],
   "emoji": [
     "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],
-  "dark": [
-    "s-activities/IdealGasLawActivity.vue"
-  ]
+  "dark": []
 }

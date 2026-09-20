@@ -523,27 +523,29 @@ voeg hier niets toe zonder het eerst in de code te zien.
 
 | Klasse | Status | Actie |
 | --- | --- | --- |
-| `.modal-fullscreen` | licht gemaakt, **nog 0 keer gebruikt** | inzetten voor ticket, presentatie en simulaties |
-| `.fullscreen-bar/-body/-foot/-progress` | nieuw, **nog 0 keer gebruikt** | zie de shellsectie in sectie 14 |
-| `.btn-primary`, `.btn-ghost` | gedefinieerd, **0 keer gebruikt** | knoppen in modals hierop zetten |
-| `.badge` en alle `.badge-*` | gedefinieerd, **0 keer gebruikt** | badges in tijdlijn en modals hierop zetten |
+| `.modal-fullscreen` | **in gebruik** door ticket, naamkiezer en alle activiteiten | klaar |
+| `.fullscreen-bar/-body/-foot/-progress` | **in gebruik** door ticket, dragdrop, gemengde herhaling, gaswetten, krachtenlab en circuits | klaar |
+| `.btn-primary`, `.btn-ghost` | **in gebruik** in alle omgezette activiteiten | klaar |
+| `.badge` en `.badge-*` | **in gebruik** in ticket, dragdrop, gemengde herhaling, gaswetten, circuits en slides | klaar |
 | `.card` als losse klasse | **0 keer gebruikt**; alleen via `ActivityCard.vue` | rechtstreeks gebruik vermijden, anders verliest de kaart zijn ankerbalk |
-| `TicketModal.vue` | eigen fullscreen, amber + indigo | herbouwen op de shellsectie + blauw |
+| `TicketModal.vue` | **omgezet**: fullscreen-shell, blauw `DIGITAAL` | klaar |
 | `PresentationModal.vue` | **omgezet** naar lichte shell met rode voortgangsbalk | klaar |
 | `SlideHero`, `SlideTitle`, `SlideBig`, `SlideClosing` | **omgezet** naar `--color-paper` | klaar |
 | `font-serif` | **verwijderd** uit alle slides | klaar |
 | `Open Sans` | **verwijderd** uit alle slides | klaar |
 | `MathSlideWrapper.vue` | **omgezet**: rode ankerbalk + badge met label | klaar |
-| `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw` | eigen schil, blur, `shadow-2xl` | schil naar sectie 15; sim-inhoud mag vakkleuren houden met legenda |
-| `NamePickerOverlay.vue` | `bg-slate-900/90 backdrop-blur-sm` | egale overlay |
-| `Toolbox.vue` | `indigo`, `purple`, `text-slate-400` | tokens + systeemklassen |
-| `text-slate-400` / `text-slate-300` | 50 + 10 voorkomens | vervangen, zie sectie 13 |
+| `Circuits`, `ForcesLab`, `IdealGasLaw` | **omgezet** naar de fullscreen-shell | klaar |
+| `SpringForceLab` | prototype — bewust overgeslagen | vervangen door een nieuwe activiteit op de shell |
+| `DragDrop`, `MixedRetrieval` | **omgezet** naar de fullscreen-shell | klaar |
+| `NamePickerOverlay.vue` | **omgezet** naar lichte fullscreen | klaar |
+| `Toolbox.vue` | **omgezet** naar tokens en systeemklassen | klaar |
+| `text-slate-400` / `text-slate-300` | 50 + 10 → **4 + 1** (alleen nog in `SpringForceLab`) | vervangen zodra die activiteit vervangen wordt |
 | `tailwind.config.js` — `surface`, `chrome` | 0 echte gebruikssites | opruimen; `surface.50/100/200/300` dupliceert `slate.50/100/200/300` |
 | `tailwind.config.js` — `brand`, `ink` | `text-brand-orange` (1×) en `text-ink-dark` (1×), beide een duplicaat van een token | vervangen door `text-action` en `text-ink`, daarna opruimen |
 | `tailwind.config.js` — `math.violet` | **verwijderd** | klaar |
 | `text-ink-muted` | **verwijderd** uit `src/style.css` en `tailwind.config.js` | klaar |
 | Geen utility voor `--color-panel`, `--color-line`, `--color-digital`, `--color-presentation`, `--color-workbook` | **opgelost**: de kleurgroepen `paper`, `panel`, `line`, `digital`, `presentation`, `workbook` en `ink.soft` bestaan nu in `tailwind.config.js` | klaar |
-| `rounded-2xl`, `rounded-3xl` | restanten in activiteiten | naar `rounded-card` |
+| `rounded-2xl`, `rounded-3xl` | restanten in `SpringForceLab` | naar `rounded-card` bij vervanging |
 
 ## 17. Handhaving: `design-baseline.json`
 

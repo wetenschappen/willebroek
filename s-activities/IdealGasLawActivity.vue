@@ -1,45 +1,45 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 text-white" @keydown.escape="handleClose">
-    <div class="w-screen h-screen flex flex-col bg-slate-900 shadow-2xl shadow-black/50 overflow-hidden">
-      <!-- Header -->
-      <header class="flex-shrink-0 bg-slate-950 border-b border-white/10 px-4 py-2 flex items-center justify-between text-lg z-10">
-        <div class="flex items-center gap-4">
-          <div class="p-2 bg-cyan-900/50 rounded-lg ring-1 ring-cyan-400/30">
-            <PhFlask class="text-cyan-300 animate-pulse-slow" :size="28" weight="duotone" />
-          </div>
-          <span class="font-bold tracking-tight text-slate-100">De Gaswetten</span>
+  <!-- Fullscreen-activiteitenshell: licht. De simulatie erbinnen mag
+       vakkleuren gebruiken, maar het leesvlak blijft papier. -->
+  <div v-if="isOpen" class="modal-fullscreen" @keydown.escape="handleClose">
+    <div class="w-full h-full flex flex-col overflow-hidden">
+      <!-- Kopbalk: blauw anker, dit is een digitale activiteit -->
+      <header class="fullscreen-bar fullscreen-bar-digital">
+        <div class="p-2 rounded-control shrink-0" style="background: var(--color-digital-soft); color: var(--color-digital);">
+          <PhFlask :size="26" weight="fill" />
         </div>
-        <div class="font-mono text-base bg-black/20 text-amber-300 flex items-center gap-3 px-3 py-1.5 rounded-md ring-1 ring-white/5">
+        <div class="min-w-0">
+          <h2 class="fullscreen-title">De gaswetten</h2>
+          <p class="fullscreen-label">{{ lawConfig.name }}</p>
+        </div>
+        <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
+        <div class="font-mono text-base text-slate-900 flex items-center gap-2 px-3 py-1.5 rounded-control ml-auto mr-2 shrink-0" style="background: var(--color-panel-muted); border: 2px solid var(--color-line);">
            <span>{{ constantLabel }} = {{ kValue.toFixed(2) }}</span>
-           <span class="text-slate-500 text-sm font-sans">{{ constantUnit }}</span>
+           <span class="text-slate-600 text-sm">{{ constantUnit }}</span>
         </div>
-        <button @click="handleClose" class="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400 focus-visible:ring-offset-slate-900">
-          <PhX :size="24" weight="bold" />
+        <button @click="handleClose" class="btn-close shrink-0" aria-label="Sluiten">
+          <PhX :size="22" weight="bold" />
         </button>
       </header>
 
-      <!-- Tabs -->
-      <nav class="relative flex-shrink-0 bg-slate-900 flex justify-center border-b border-slate-800 shadow-md">
+      <!-- Wettabs: actieve tab via tekst en onderrand, niet via glow -->
+      <nav class="relative flex-shrink-0 flex justify-center gap-1 px-4" style="background: var(--color-panel); border-bottom: 2px solid var(--color-line);">
         <button
           v-for="law in Object.values(laws)"
           :key="law.id"
           @click="setActiveLaw(law.id)"
-          :class="[
-            'px-6 py-3 font-semibold text-base transition-colors duration-300 relative',
-            activeLaw === law.id
-              ? 'text-amber-300'
-              : 'text-slate-400 hover:text-white'
-          ]"
+          class="px-5 py-3 font-semibold text-base relative"
+          :style="activeLaw === law.id
+            ? { color: 'var(--color-digital)', borderBottom: '4px solid var(--color-digital)' }
+            : { color: 'var(--color-ink-soft)', borderBottom: '4px solid transparent' }"
         >
-          <span class="relative z-10">{{ law.name }}</span>
-          <span v-if="activeLaw === law.id" class="absolute inset-x-0 bottom-0 h-1 bg-amber-400 rounded-t-full shadow-lg shadow-amber-400/50" :style="{ viewTransitionName: 'active-tab' }"></span>
+          {{ law.name }}
         </button>
       </nav>
-
       <!-- Main Content: Simulation + Data -->
       <main class="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-0 min-h-0">
         <!-- Simulation Panel (Left) -->
-        <div class="lg:col-span-3 bg-gradient-to-br from-slate-900 to-slate-950 flex flex-col items-center justify-center p-4 gap-0 min-h-0">
+        <div class="lg:col-span-3 flex flex-col items-center justify-center p-4 gap-0 min-h-0" style="background: var(--color-panel);">
           <div class="w-full flex-1 min-h-0 relative">
             <svg ref="simSvg" :viewBox="`0 0 ${svgWidth} ${svgHeight}`" class="w-full h-full">
               <defs>
@@ -194,7 +194,7 @@
             </svg>
             <div v-if="activeLaw === 'avogadro'" class="absolute left-0 top-1/2 flex flex-col gap-2 p-2 bg-slate-700/30 rounded-card ring-1 ring-white/10" style="top: 375px; transform: translateY(-50%)">
                 <button @mousedown="startAddMoles" @mouseup="stopMoleChange" @mouseleave="stopMoleChange" class="p-2 bg-emerald-600/50 rounded-full text-emerald-200 hover:bg-emerald-600/70 hover:scale-110 active:scale-100 transition-all duration-200"><PhPlus weight="bold" /></button>
-                <PhAtom :size="24" class="text-slate-400 mx-auto my-2" weight="duotone"/>
+                <PhAtom :size="24" class="text-slate-600 mx-auto my-2" weight="duotone"/>
                 <button @mousedown="startRemoveMoles" @mouseup="stopMoleChange" @mouseleave="stopMoleChange" class="p-2 bg-red-600/50 rounded-full text-red-200 hover:bg-red-600/70 hover:scale-110 active:scale-100 transition-all duration-200"><PhMinus weight="bold"/></button>
             </div>
           </div>
@@ -218,10 +218,10 @@
         </div>
 
         <!-- Data Panel (Right) -->
-        <div class="lg:col-span-2 bg-slate-800/70 p-4 flex flex-col gap-4 overflow-y-auto border-l border-white/10">
+        <div class="lg:col-span-2 p-4 flex flex-col gap-4 overflow-y-auto" style="background: var(--color-paper); border-left: 2px solid var(--color-line-strong);">
           <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
-            <div v-for="meter in meters" :key="meter.id" class="flex flex-col items-center justify-between gap-2 bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-3 rounded-2xl ring-1 ring-white/5">
-              <span class="font-bold text-slate-300 text-sm tracking-wide">{{ meter.label }}</span>
+            <div v-for="meter in meters" :key="meter.id" class="flex flex-col items-center justify-between gap-2 bg-white p-3 rounded-card" style="border: 2px solid var(--color-line);">
+              <span class="font-semibold text-slate-800 text-sm tracking-wide">{{ meter.label }}</span>
               <div class="h-20 w-full flex items-center justify-center">
                   <svg v-if="meter.id==='pressure'" viewBox="0 0 100 65" class="w-full h-full">
                       <defs><linearGradient id="pressureGradient"><stop offset="0%" stop-color="#34d399"/><stop offset="50%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f87171"/></linearGradient></defs>
@@ -244,14 +244,14 @@
                   </svg>
               <div v-if="meter.id === 'collisions'" class="text-center">
                     <span class="font-mono text-4xl text-amber-300 tabular-nums">{{ collisionsPerSecond }}</span>
-                    <span class="text-xs text-slate-400 block -mt-1">botsingen/s</span>
+                    <span class="text-sm text-slate-600 block -mt-1">botsingen/s</span>
                   </div>
               </div>
-              <span class="font-mono text-base whitespace-nowrap tabular-nums tracking-tight">{{ meter.value }}</span>
+              <span class="font-mono text-base whitespace-nowrap tabular-nums tracking-tight text-slate-900">{{ meter.value }}</span>
             </div>
           </div>
           
-          <div class="flex-1 flex flex-col bg-slate-900/50 p-4 rounded-2xl min-h-[300px] ring-1 ring-white/5">
+          <div class="flex-1 flex flex-col bg-white p-4 rounded-card min-h-[300px]" style="border: 2px solid var(--color-line);">
              <!-- Graph header -->
              <div class="flex items-center justify-between gap-2 mb-3">
                <div class="flex items-center gap-2">
@@ -343,9 +343,9 @@
                   <!-- Hover tooltip -->
                   <transition name="fade-in">
                     <div v-if="isGraphHovered && hoveredGraphPoint.point"
-                         class="pointer-events-none absolute top-2 right-2 bg-slate-950 px-2.5 py-1.5 rounded-control text-xs font-mono text-amber-200 ring-1 ring-white/10">
-                      <div class="text-sky-300">{{ lawConfig.graph.x.label }}: <span class="text-white">{{ formatTooltip(hoveredGraphPoint.point.x, lawConfig.graph.x) }}</span></div>
-                      <div class="text-amber-300">{{ lawConfig.graph.y.label }}: <span class="text-white">{{ formatTooltip(hoveredGraphPoint.point.y, lawConfig.graph.y) }}</span></div>
+                         class="pointer-events-none absolute top-2 right-2 bg-white px-2.5 py-1.5 rounded-control text-sm font-mono text-slate-800" style="border: 2px solid var(--color-line-strong); box-shadow: var(--shadow-rest);">
+                      <div class="text-slate-700">{{ lawConfig.graph.x.label }}: <span class="font-bold text-slate-900">{{ formatTooltip(hoveredGraphPoint.point.x, lawConfig.graph.x) }}</span></div>
+                      <div class="text-slate-700">{{ lawConfig.graph.y.label }}: <span class="font-bold text-slate-900">{{ formatTooltip(hoveredGraphPoint.point.y, lawConfig.graph.y) }}</span></div>
                     </div>
                   </transition>
                </div>
@@ -357,9 +357,10 @@
         </div>
       </main>
 
-      <footer class="flex-shrink-0 bg-black/20 border-t border-slate-800 px-6 py-3 text-center text-slate-400 text-sm flex items-center justify-center gap-2">
-        <PhInfo weight="duotone" class="text-sky-400 flex-shrink-0" />
-        <span>{{ lawConfig.explanation }}</span>
+      <!-- Voetbalk: uitleg van de actieve wet -->
+      <footer class="fullscreen-foot" style="justify-content: flex-start;">
+        <PhInfo weight="fill" class="flex-shrink-0" style="color: var(--color-digital);" />
+        <span class="text-base text-slate-800">{{ lawConfig.explanation }}</span>
       </footer>
     </div>
   </div>

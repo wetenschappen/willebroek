@@ -57,7 +57,7 @@ const handleAnswer = (index) => {
                             selectedAnswer === index && option.correct ? 'bg-emerald-600 text-white' : '',
                             selectedAnswer === index && !option.correct ? 'bg-red-500 text-white' : '',
                             selectedAnswer !== null && selectedAnswer !== index && option.correct ? 'bg-emerald-600/70 text-white' : '',
-                            selectedAnswer !== null && selectedAnswer !== index && !option.correct ? 'bg-slate-100 text-slate-400' : ''
+                            selectedAnswer !== null && selectedAnswer !== index && !option.correct ? 'bg-slate-100 text-slate-600' : ''
                          ]">
                         {{ option.label || String.fromCharCode(65 + index) }}
                     </div>

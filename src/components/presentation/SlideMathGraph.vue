@@ -117,12 +117,12 @@ const mergedConfig = computed(() => {
                 </Transition>
 
                 <!-- Interactive Coordinates Overlay Badge -->
-                <div v-if="interactivePoint" class="absolute bottom-6 left-6 bg-slate-900/90 text-white border border-slate-700 px-5 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-[fadeInUp_0.2s_ease-out] z-20">
-                    <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></div>
-                    <div class="text-[1.3rem] font-bold tracking-wide">
-                        Geselecteerd: <span class="text-amber-400 font-mono text-[1.4rem] ml-1">{{ interactivePoint.x.toFixed(1) }} ↦ {{ interactivePoint.y.toFixed(1) }}</span>
+                <div v-if="interactivePoint" class="absolute bottom-6 left-6 bg-white px-5 py-3 rounded-card flex items-center gap-3 z-20" style="border: 2px solid var(--color-line-strong); box-shadow: var(--shadow-rest);">
+                    <div class="w-3 h-3 rounded-full" style="background: var(--color-digital);"></div>
+                    <div class="text-[1.3rem] font-bold tracking-wide text-slate-900">
+                        Geselecteerd: <span class="font-mono text-[1.3rem] ml-1" style="color: var(--color-digital);">{{ interactivePoint.x.toFixed(1) }} ↦ {{ interactivePoint.y.toFixed(1) }}</span>
                     </div>
-                    <button @click.stop="interactivePoint = null" class="ml-2 text-white/40 hover:text-white text-[1.1rem] hover:bg-white/10 w-6 h-6 rounded-full flex items-center justify-center transition-colors cursor-pointer" aria-label="Selectie wissen">
+                    <button @click.stop="interactivePoint = null" class="btn-close ml-2" aria-label="Selectie wissen">
                         <PhX weight="regular" />
                     </button>
                 </div>
@@ -192,9 +192,6 @@ const mergedConfig = computed(() => {
 </template>
 
 <style scoped>
-table, th, td {
-  font-family: 'Open Sans', sans-serif;
-}
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }

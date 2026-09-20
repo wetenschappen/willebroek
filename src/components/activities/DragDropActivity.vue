@@ -179,7 +179,7 @@ onMounted(() => {
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0">
     <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="close"></div>
-    <div class="relative bg-white shadow-2xl overflow-hidden flex flex-col w-screen h-screen rounded-none" @click.stop>
+    <div class="relative bg-white overflow-hidden flex flex-col w-screen h-screen rounded-none" @click.stop>
 
       <!-- Kopbalk: dit is een digitale activiteit, dus blauw anker -->
       <div class="fullscreen-bar fullscreen-bar-digital">

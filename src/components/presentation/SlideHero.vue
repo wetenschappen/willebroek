@@ -14,24 +14,23 @@ const resolveImageUrl = inject('resolveImageUrl')
 </script>
 
 <template>
-<div class="absolute inset-0 bg-slate-900 flex items-center justify-center select-none">
-     <div class="relative w-full h-full overflow-hidden group">
-         <img :src="resolveImageUrl(slide.image)" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110 opacity-60" />
-         
-         <!-- Content Overlay -->
-         <div class="absolute inset-0 flex flex-col items-center justify-center p-20 text-center z-10">
-             <div class="bg-amber-500 w-16 h-1 mb-8"></div>
-             <h3 class="text-8xl font-serif italic text-white mb-6 tracking-tight drop-shadow-2xl" v-html="slide.title"></h3>
-             <p v-if="slide.subtitle" class="text-4xl text-amber-100 font-light max-w-4xl leading-relaxed drop-shadow-lg" v-html="slide.subtitle"></p>
-         </div>
-         
-         <!-- Subtle Gradient Bottom -->
-         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
-         
-         <div v-if="slide.credit" class="absolute bottom-10 right-10 text-white/40 text-sm font-mono uppercase tracking-[0.2em] z-20">
-             {{ slide.credit }}
-         </div>
-     </div>
+<!-- Beeldslide: een donkere foto is niet leesbaar tegen een witte muur, dus de
+     afbeelding staat naast de tekst op een licht vlak. -->
+<div class="absolute inset-0 bg-paper flex items-stretch">
+    <div class="flex-1 flex flex-col items-start justify-center px-16 py-12">
+        <div class="w-16 h-2 mb-8" style="background: var(--color-presentation);"></div>
+        <h3 class="text-5xl font-bold text-slate-900 mb-6 tracking-tight" v-html="slide.title"></h3>
+        <p v-if="slide.subtitle" class="text-2xl text-slate-700 leading-relaxed" v-html="slide.subtitle"></p>
+        <p v-if="slide.credit" class="mt-8 font-mono text-sm text-slate-600">{{ slide.credit }}</p>
+    </div>
+    <div class="w-2/5 shrink-0 p-8">
+        <img
+            :src="resolveImageUrl(slide.image)"
+            alt=""
+            class="w-full h-full object-cover rounded-card"
+            style="border: 2px solid var(--color-line-strong);"
+        />
+    </div>
 </div>
 </template>
 

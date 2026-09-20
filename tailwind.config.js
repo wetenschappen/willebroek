@@ -23,6 +23,30 @@ export default {
           800: '#1f3138',
           900: '#17252b',
         },
+        /* Ontbrekende systeemkleuren als Tailwind-utilities.
+           Zonder deze groep bestaat bg-paper, text-digital, border-line enz.
+           niet en valt een klasse stil weg. Zie docs/DESIGN-SYSTEM.md §9. */
+        paper: '#f5f7f6',
+        panel: {
+          DEFAULT: '#ffffff',
+          muted: '#edf2f1',
+        },
+        line: {
+          DEFAULT: '#52636a',
+          strong: '#263a42',
+        },
+        digital: {
+          DEFAULT: '#075985',
+          soft: '#e3f1f5',
+        },
+        presentation: {
+          DEFAULT: '#b4232f',
+          soft: '#fde8e9',
+        },
+        workbook: {
+          DEFAULT: '#237a4b',
+          soft: '#e7f2ea',
+        },
         physics: {
           DEFAULT: '#176b87',
           soft: '#e3f1f5',
@@ -35,7 +59,8 @@ export default {
           DEFAULT: '#b65b2d',
           soft: '#fbede5',
         },
-        /* Kept for lesson-specific presentation content during the migration. */
+        /* Bewust verwijderd: math.violet (#526b78) — ongebruikt en
+           verwarrend naast het echte violet-palette. */
         math: {
           blue: '#176b87',
           'blue-light': '#e3f1f5',
@@ -46,9 +71,6 @@ export default {
           emerald: '#397553',
           'emerald-light': '#c7dfce',
           'emerald-bg': '#e7f2ea',
-          violet: '#526b78',
-          'violet-light': '#d5dfde',
-          'violet-bg': '#edf2f1',
         },
         surface: {
           white: '#ffffff',
@@ -60,6 +82,7 @@ export default {
         ink: {
           DEFAULT: '#17252b',
           light: '#34474e',
+          soft: '#34474e',
           dark: '#17252b',
         },
         chrome: {

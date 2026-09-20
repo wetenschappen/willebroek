@@ -69,7 +69,7 @@ const emit = defineEmits(['revealNext'])
             
             <!-- Progress interaction -->
             <div v-if="revealedSteps < slide.steps.length" class="mt-6 pt-4 border-t border-slate-100 flex justify-center shrink-0">
-                <div class="flex items-center gap-2 text-slate-400 font-bold text-[1.2rem] uppercase tracking-wide">
+                <div class="flex items-center gap-2 text-slate-600 font-bold text-[1.2rem] uppercase tracking-wide">
                     <span>Druk op</span>
                     <span class="px-2 py-1 bg-slate-100 rounded border border-slate-300 font-mono text-[1.1rem] text-slate-600 font-extrabold select-none">SPATIE</span>
                     <span>voor de volgende stap</span>

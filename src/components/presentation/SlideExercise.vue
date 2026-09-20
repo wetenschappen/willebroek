@@ -25,7 +25,7 @@ const hasVisualContent = computed(() => {
     
     <!-- Context block (No Left Border) -->
     <div v-if="slide.context && !hasVisualContent" class="mb-8 p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
-        <div class="text-[1.1rem] font-bold text-slate-400 uppercase tracking-wider mb-2">Context</div>
+        <div class="text-[1.1rem] font-bold text-slate-600 uppercase tracking-wider mb-2">Context</div>
         <p class="text-[1.7rem] text-slate-700 leading-relaxed" v-html="slide.context"></p>
     </div>
 

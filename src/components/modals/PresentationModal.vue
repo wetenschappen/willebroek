@@ -20,7 +20,7 @@ import SlideRealworld from '../presentation/SlideRealworld.vue'
 import SlideRecap from '../presentation/SlideRecap.vue'
 import SlideSummary from '../presentation/SlideSummary.vue'
 import SlideImageHero from '../presentation/SlideImageHero.vue'
-import SlideCelebration from '../presentation/SlideCelebration.vue'
+import SlideClosing from '../presentation/SlideClosing.vue'
 import SlideDefinition from '../presentation/SlideDefinition.vue'
 import SlideWorkedExample from '../presentation/SlideWorkedExample.vue'
 import SlideValueTable from '../presentation/SlideValueTable.vue'
@@ -47,7 +47,7 @@ const layoutComponentMap = {
     'recap': SlideRecap,
     'summary': SlideSummary,
     'image-hero': SlideImageHero,
-    'celebration': SlideCelebration,
+    'closing': SlideClosing,
     'definition': SlideDefinition,
     'worked-example': SlideWorkedExample,
     'value-table': SlideValueTable,
@@ -62,7 +62,7 @@ import {
   PhArrowsOutSimple,
   PhSpeakerHigh, PhSpeakerSlash,
   PhFinnTheHuman,
-  PhWarning, PhLightbulb, PhStar, PhConfetti, PhXCircle,
+  PhWarning, PhLightbulb, PhStar, PhXCircle,
   PhFlag, PhArrowsClockwise, PhGlobeHemisphereWest, PhTrophy, PhFunction, PhTriangle, PhMedal,
   PhUsers, PhBrain, PhTarget, PhChartLineUp, PhWrench, PhArrowDown, PhTrendDown, PhArrowFatDown, PhArrowLineDown, PhUploadSimple,
   PhBookOpen, PhHandPointing, PhHourglassLow, PhUserFocus,
@@ -93,7 +93,7 @@ const currentSlide = ref(0)
 const answerRevealed = ref(false)
 const revealedSteps = ref(0)
 const selectedAnswer = ref(null)
-const showConfetti = ref(false)
+const showCorrectPopup = ref(false)
 const transitionName = ref('slide')
 const linkCopied = ref(false)
 
@@ -262,8 +262,8 @@ function reverseStep() {
 function selectAnswer(option) {
     selectedAnswer.value = option.id
     if (option.correct) {
-        showConfetti.value = true
-        setTimeout(() => showConfetti.value = false, 2000)
+        showCorrectPopup.value = true
+        setTimeout(() => showCorrectPopup.value = false, 2000)
     }
 }
 
@@ -403,28 +403,28 @@ function resolveImageUrl(url) {
 <template>
 <Teleport to="body">
     <Transition name="fade">
-        <div v-if="isOpen" class="fixed inset-0 z-[9999] bg-black text-slate-900 flex flex-col font-sans overflow-hidden w-screen h-screen">
+        <div v-if="isOpen" class="fixed inset-0 z-[9999] bg-paper text-slate-900 flex flex-col font-sans overflow-hidden w-screen h-screen">
             
-            <!-- PROGRESS BAR -->
-            <!-- Position absolute at top of viewport so it overlays -->
-            <div class="absolute top-0 left-0 right-0 h-2 bg-slate-900 z-[70]">
-                <div class="h-full bg-amber-500 transition-all duration-500 ease-out shadow-[0_0_15px_rgba(245,158,11,0.6)]" :style="{ width: progressPercentage + '%' }"></div>
+            <!-- Voortgangsbalk: rood anker, want dit is een presentatie -->
+            <div class="absolute top-0 left-0 right-0 h-2 z-[70]" style="background: var(--color-panel-muted);">
+                <div class="h-full" style="background: var(--color-presentation);" :style="{ width: progressPercentage + '%' }"></div>
             </div>
 
-            <!-- HEADER (Close Btn) -->
+            <!-- Sluiten -->
             <div class="absolute top-6 right-6 z-50">
-                <button @click="emit('close')" class="bg-black/50 hover:bg-black/80 text-white/80 hover:text-white p-3 rounded-full transition-all hover:rotate-90 backdrop-blur-md border border-white/10 group">
-                    <PhX class="text-xl group-hover:scale-110 transition-transform" />
+                <button @click="emit('close')" class="btn-close" style="background: var(--color-panel); border: 2px solid var(--color-line-strong);" aria-label="Sluiten">
+                    <PhX class="text-xl" />
                 </button>
             </div>
 
-            <!-- Success Popup - Simplified -->
-            <div v-if="showConfetti" class="fixed inset-0 z-[150] pointer-events-none flex items-center justify-center bg-black/30">
-                <div class="bg-white px-12 py-8 rounded-2xl shadow-2xl flex items-center gap-6 animate-[fadeInUp_0.3s_ease-out]">
-                    <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center">
-                        <PhCheck weight="bold" class="text-4xl text-white" />
+            <!-- Statische statusmelding: geen confetti, geen overlay over het scherm.
+                 Het vinkje en het woord 'Correct' dragen de betekenis. -->
+            <div v-if="showCorrectPopup" class="fixed inset-0 z-[150] pointer-events-none flex items-center justify-center">
+                <div class="bg-white px-10 py-6 rounded-card flex items-center gap-6" style="border: 2px solid var(--color-workbook); box-shadow: var(--shadow-dialog);">
+                    <div class="w-14 h-14 rounded-control flex items-center justify-center" style="background: var(--color-workbook-soft); color: var(--color-workbook);">
+                        <PhCheck weight="bold" class="text-3xl" />
                     </div>
-                    <span class="text-4xl font-bold text-ink-dark">Correct!</span>
+                    <span class="text-3xl font-bold text-slate-900">Correct</span>
                 </div>
             </div>
             
@@ -446,7 +446,7 @@ function resolveImageUrl(url) {
                                     @revealNext="revealNextStep"
                                     @selectAnswer="selectAnswer"
                                     @copyLink="copyLink"
-                                    @showConfetti="() => { showConfetti = true; setTimeout(() => showConfetti = false, 2000) }"
+                                    @showCorrectPopup="() => { showCorrectPopup = true; setTimeout(() => showCorrectPopup = false, 2000) }"
                                 />
                                 <div v-else-if="slides[currentSlide]" class="flex items-center justify-center w-full h-full bg-white text-3xl text-red-500">
                                     Unknown Slide Layout: {{ slides[currentSlide].layout }}
@@ -460,15 +460,15 @@ function resolveImageUrl(url) {
                     </Transition>
                 </div>
 
-                <!-- FOOTER CONTROLS (Floating in black space) -->
-                <div class="absolute bottom-6 left-6 flex items-center gap-2 z-[80] bg-slate-900/90 text-white/50 p-1.5 rounded-full border border-white/10 backdrop-blur-md shadow-2xl hover:text-white transition-colors">
-                    <button @click.stop="prevSlide" class="hover:bg-white/10 rounded-full p-1.5 transition-colors disabled:opacity-30 disabled:hover:bg-transparent" :disabled="currentSlide === 0">
+                <!-- Voetnavigatie -->
+                <div class="absolute bottom-6 left-6 flex items-center gap-2 z-[80] bg-white rounded-control" style="border: 2px solid var(--color-line-strong);">
+                    <button @click.stop="prevSlide" class="btn-close" :disabled="currentSlide === 0">
                         <PhCaretLeft class="text-lg" />
                     </button>
                     
-                    <span class="text-xs font-mono tracking-widest min-w-[2.5rem] text-center select-none">{{ currentSlide + 1 }} / {{ totalSlides }}</span>
+                    <span class="font-mono text-sm font-semibold tracking-[0.08em] text-slate-700 min-w-[3.5rem] text-center select-none">{{ currentSlide + 1 }} / {{ totalSlides }}</span>
 
-                    <button @click.stop="advancePresentation" class="hover:bg-white/10 rounded-full p-1.5 transition-colors disabled:opacity-30 disabled:hover:bg-transparent" 
+                    <button @click.stop="advancePresentation" class="btn-close"
                             :disabled="currentSlide === totalSlides - 1 && (!slides[currentSlide]?.steps || slides[currentSlide].layout === 'exercise' || revealedSteps === slides[currentSlide].steps.length) && (!slides[currentSlide]?.revealText || answerRevealed)">
                         <PhCaretRight class="text-lg" />
                     </button>

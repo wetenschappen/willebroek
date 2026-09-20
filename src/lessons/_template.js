@@ -180,8 +180,8 @@ export default {
             '[Kernpunt 2]',
             '[Kernpunt 3]'
         ]},
-        { layout: 'celebration', title: 'Klaar!', subtitle: 'Goed gewerkt vandaag.',
-          stats: [{ label: 'Module', value: 'XX' }, { label: 'Status', value: 'TOP' }] }
+        { layout: 'closing', title: 'Einde van de les', subtitle: 'Je hebt deze les afgerond.',
+          stats: [{ label: 'Module', value: 'XX' }] }
     ],
 
     // ─── 8. TICKETS ─────────────────────────────────────────────────────────────

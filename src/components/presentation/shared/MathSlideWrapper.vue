@@ -44,31 +44,32 @@ const resolvedIcon = computed(() => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col items-center justify-center p-20 bg-white relative">
+  <!-- Slidebasis: licht werkblad met de kleurankerbalk van het presentatietype.
+       Zie docs/DESIGN-SYSTEM.md sectie 15: slides volgen dezelfde taal als de
+       ABC-tijdlijn. Rood = presentatie. -->
+  <div class="w-full h-full flex flex-col items-center justify-center p-20 bg-paper relative">
     <div class="w-full max-w-7xl flex flex-col h-full">
-      <!-- Planner Academic Header -->
-      <div v-if="title" class="flex items-center gap-8 mb-16 shrink-0">
-          <div class="h-24 w-2 bg-amber-500 shrink-0"></div>
-          <h3 class="text-7xl font-bold text-slate-900 tracking-tight" v-html="title"></h3>
-          
-          <!-- Badge -->
-          <div v-if="badge" class="ml-auto flex items-center gap-4 bg-slate-50 px-6 py-3 rounded-2xl border border-slate-100 shadow-sm">
-             <component :is="resolvedIcon" weight="duotone" class="text-3xl text-amber-500" />
-             <span class="text-xl font-bold uppercase tracking-widest text-slate-500">{{ badge }}</span>
+      <!-- Kop: ankerbalk + titel + label -->
+      <div v-if="title" class="flex items-center gap-6 mb-12 shrink-0">
+          <div class="h-20 w-2 shrink-0" style="background: var(--color-presentation);"></div>
+          <h3 class="text-6xl font-bold text-slate-900 tracking-tight" v-html="title"></h3>
+
+          <!-- Label: kleur vergezeld van tekst, nooit kleur alleen -->
+          <div v-if="badge" class="ml-auto flex items-center gap-3 px-5 py-3 rounded-control shrink-0" style="background: var(--color-presentation-soft); border: 2px solid var(--color-presentation);">
+             <component :is="resolvedIcon" weight="fill" class="text-2xl" style="color: var(--color-presentation);" />
+             <span class="font-mono text-base font-semibold uppercase tracking-[0.08em]" style="color: var(--color-presentation);">{{ badge }}</span>
           </div>
       </div>
       
-      <!-- Scrollable Content Area -->
+      <!-- Inhoud -->
       <div class="flex-1 w-full exercise-scroll overflow-y-auto relative z-10" :class="padding">
         <slot />
-        <div class="h-20 w-full shrink-0"></div> <!-- Bottom spacer -->
+        <div class="h-20 w-full shrink-0"></div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-h2, span {
-  font-family: 'Open Sans', sans-serif;
-}
+/* Lettertype komt uit het systeem (IBM Plex). Geen eigen font-family meer. */
 </style>

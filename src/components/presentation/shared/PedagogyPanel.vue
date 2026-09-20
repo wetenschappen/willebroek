@@ -60,7 +60,5 @@ const themeColors = computed(() => {
 </template>
 
 <style scoped>
-span, div {
-  font-family: 'Open Sans', sans-serif;
-}
+/* Lettertype komt uit het systeem (IBM Plex). */
 </style>

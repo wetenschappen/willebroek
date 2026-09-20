@@ -54,7 +54,7 @@ const emit = defineEmits(['revealNext'])
         
         <!-- Next Step Prompt -->
         <div class="mt-8 h-10 flex justify-center">
-            <div v-if="revealedSteps < slide.steps.length - 1" class="flex items-center gap-2 text-slate-400 font-bold text-[1.2rem] uppercase tracking-wide">
+            <div v-if="revealedSteps < slide.steps.length - 1" class="flex items-center gap-2 text-slate-600 font-bold text-[1.2rem] uppercase tracking-wide">
                 <span>Druk op</span>
                 <span class="px-2.5 py-1 bg-white border border-slate-200 shadow-sm rounded-md font-mono text-[1.1rem] text-slate-600 font-extrabold select-none">SPATIE</span>
                 <span>voor de volgende stap</span>

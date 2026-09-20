@@ -648,10 +648,13 @@
     }
 
     .slide-viewport {
-        @apply relative flex items-center justify-center overflow-hidden bg-black;
+        @apply relative flex items-center justify-center overflow-hidden;
         width: 100%;
         height: 100%;
         flex: 1;
+        /* Licht, niet zwart: een donkere letterbox is onleesbaar tegen een
+           witte muur en geeft een zwarte band rond elke slide. */
+        background: var(--color-paper);
     }
 
     .ppt-stage {

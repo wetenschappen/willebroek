@@ -198,20 +198,22 @@ schermcomponent. Een scherm dat de huisstijl volgt, gebruikt uitsluitend:
 1. de systeemklassen uit sectie 14; of
 2. de tokens uit sectie 10 via `var(--color-…)` in een eigen `<style>`-blok.
 
-Er bestaat **geen** Tailwind-utility voor de meeste tokens. `bg-panel`,
-`bg-digital`, `border-line`, `border-line-strong` en `text-ink-soft` bestaan
-niet en werken dus niet. Alleen deze utilities bestaan echt:
+Er bestaan nu Tailwind-utilities voor de systeemkleuren:
 
 ```text
-text-ink          text-ink-light    text-ink-dark
-text-physics      text-biology      text-action
-text-surface      text-brand-orange text-math-orange
-rounded-control   rounded-card
-shadow-subtle     shadow-card       shadow-lift       shadow-float
+bg-paper            bg-panel           bg-panel-muted
+bg-digital          bg-digital-soft    text-digital
+bg-presentation     bg-presentation-soft  text-presentation
+bg-workbook         bg-workbook-soft   text-workbook
+border-line         border-line-strong
+text-ink            text-ink-light     text-ink-soft      text-ink-dark
+text-physics        text-biology       text-action
+rounded-control     rounded-card
+shadow-subtle       shadow-card        shadow-lift        shadow-float
 ```
 
-Voor oppervlak- en activiteitskleuren gebruik je dus de systeemklassen of
-`var(--color-…)`, niet een Tailwind-utility.
+Gebruik die in nieuwe code. Voor de resterende gevallen blijft `var(--color-…)`
+in een `style`-attribuut het alternatief.
 
 De standaard Tailwind-schalen zijn niet verboden in een laboratoriumsimulatie
 waar een kleur een natuurkundige grootheid voorstelt (zie sectie 15).
@@ -473,8 +475,7 @@ activiteiten, presentaties:
 Kleine donkere elementen blijven toegestaan: `.lesson-nav`, `.btn-primary`,
 `.timeline-icon`, `.fab-btn`. Die zijn een accent, geen leesvlak.
 
-Donkere slides bestaan in de presentatielaag (`SlideHero`, `SlideTitle`,
-`SlideBig`, `SlideCelebration`) en moeten omgezet worden.
+De presentatielaag is omgezet: alle slides zijn licht.
 
 ### De presentatielaag volgt dezelfde taal
 
@@ -482,15 +483,21 @@ De slides zijn geen apart systeem meer. Ze gebruiken dezelfde tokens, dezelfde
 kopbalklogica en dezelfde activiteitskleur (rood `PRESENTATIE`, want een slide
 hoort bij een `card-pres-*`).
 
-Wat daarbij verdwijnt:
+Wat is verwijderd:
 
 - `bg-slate-900`/`bg-black` slides → `--color-paper`;
 - `font-serif` (`SlideHero`, `SlideTitle`, `SlideStandard`) → het fontpaar is
-  IBM Plex Sans + Mono, niet drie families;
-- `font-family: 'Open Sans'` in 8 slides → **nooit geladen**, valt stil terug op
+  IBM Plex Sans + Mono;
+- `font-family: 'Open Sans'` in 8 slides → **nooit geladen**, viel stil terug op
   de browserdefault;
-- de `amber-500` ankerbalk in `MathSlideWrapper` → de activiteitskleur;
-- `text-slate-500`/`text-slate-400` labels → `--color-ink-soft`.
+- de `amber-500` ankerbalk in `MathSlideWrapper` → de rode activiteitskleur;
+- `text-slate-500`/`text-slate-400` labels → `--color-ink-soft`;
+- de zwarte letterbox in `.slide-viewport` → `--color-paper`.
+
+De afsluitende slide heette `SlideCelebration` en toonde confetti, een ster en
+"Klaar!". Feestelijke afsluitingen horen niet in een werkblad: de slide heet nu
+`SlideClosing`, de layoutkey is `closing`, en de tekst is `Einde van de les` /
+`Je hebt deze les afgerond.` zonder decoratie.
 
 Alle 26 slides blijven bestaan. Dat sommige layouts nu niet in een les gebruikt
 worden, betekent niet dat ze weg mogen: ze demonstreren de volledige
@@ -522,20 +529,20 @@ voeg hier niets toe zonder het eerst in de code te zien.
 | `.badge` en alle `.badge-*` | gedefinieerd, **0 keer gebruikt** | badges in tijdlijn en modals hierop zetten |
 | `.card` als losse klasse | **0 keer gebruikt**; alleen via `ActivityCard.vue` | rechtstreeks gebruik vermijden, anders verliest de kaart zijn ankerbalk |
 | `TicketModal.vue` | eigen fullscreen, amber + indigo | herbouwen op de shellsectie + blauw |
-| `PresentationModal.vue` | eigen `bg-black` fullscreen, `text-slate-900` op zwart (1.34:1) | naar lichte shell; slides mee |
-| `SlideHero`, `SlideTitle`, `SlideBig`, `SlideCelebration` | donkere slide-roots | naar `--color-paper`, zie sectie 15 |
-| `SlideHero`, `SlideTitle`, `SlideStandard` | `font-serif` | verwijderen; één fontpaar |
-| 8 slidebestanden | `font-family: 'Open Sans'` — nooit geladen | verwijderen |
-| `MathSlideWrapper.vue` | `amber-500` ankerbalk, `text-slate-500` badge | activiteitskleur + `--color-ink-soft` |
+| `PresentationModal.vue` | **omgezet** naar lichte shell met rode voortgangsbalk | klaar |
+| `SlideHero`, `SlideTitle`, `SlideBig`, `SlideClosing` | **omgezet** naar `--color-paper` | klaar |
+| `font-serif` | **verwijderd** uit alle slides | klaar |
+| `Open Sans` | **verwijderd** uit alle slides | klaar |
+| `MathSlideWrapper.vue` | **omgezet**: rode ankerbalk + badge met label | klaar |
 | `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw` | eigen schil, blur, `shadow-2xl` | schil naar sectie 15; sim-inhoud mag vakkleuren houden met legenda |
 | `NamePickerOverlay.vue` | `bg-slate-900/90 backdrop-blur-sm` | egale overlay |
 | `Toolbox.vue` | `indigo`, `purple`, `text-slate-400` | tokens + systeemklassen |
 | `text-slate-400` / `text-slate-300` | 50 + 10 voorkomens | vervangen, zie sectie 13 |
 | `tailwind.config.js` — `surface`, `chrome` | 0 echte gebruikssites | opruimen; `surface.50/100/200/300` dupliceert `slate.50/100/200/300` |
 | `tailwind.config.js` — `brand`, `ink` | `text-brand-orange` (1×) en `text-ink-dark` (1×), beide een duplicaat van een token | vervangen door `text-action` en `text-ink`, daarna opruimen |
-| `tailwind.config.js` — `math.violet` | `#526b78`, ongebruikt | verwijderen |
+| `tailwind.config.js` — `math.violet` | **verwijderd** | klaar |
 | `text-ink-muted` | **verwijderd** uit `src/style.css` en `tailwind.config.js` | klaar |
-| Geen utility voor `--color-panel`, `--color-line`, `--color-digital`, `--color-presentation`, `--color-workbook` | alleen `var(--color-…)` werkt | bewust zo laten, of de utility's toevoegen |
+| Geen utility voor `--color-panel`, `--color-line`, `--color-digital`, `--color-presentation`, `--color-workbook` | **opgelost**: de kleurgroepen `paper`, `panel`, `line`, `digital`, `presentation`, `workbook` en `ink.soft` bestaan nu in `tailwind.config.js` | klaar |
 | `rounded-2xl`, `rounded-3xl` | restanten in activiteiten | naar `rounded-card` |
 
 ## 17. Handhaving: `design-baseline.json`

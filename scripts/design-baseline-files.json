@@ -3,71 +3,33 @@
     "s-activities/CircuitsActivity.vue",
     "s-activities/ForcesLabActivity.vue",
     "s-activities/IdealGasLawActivity.vue",
-    "s-activities/SpringForceLabActivity.vue",
-    "src/components/presentation/SlideCelebration.vue",
-    "src/components/presentation/SlideDiscipline.vue",
-    "src/components/presentation/SlideEquation.vue",
-    "src/components/presentation/SlideEquationSolver.vue",
-    "src/components/presentation/SlideExercise.vue",
-    "src/components/presentation/SlideImageGrid.vue",
-    "src/components/presentation/SlideMultichoice.vue",
-    "src/components/presentation/SlideRealworld.vue",
-    "src/components/presentation/SlideTheoremProof.vue",
-    "src/components/presentation/SlideWorkedExample.vue"
+    "s-activities/SpringForceLabActivity.vue"
   ],
   "pale-300": [
     "s-activities/IdealGasLawActivity.vue",
-    "s-activities/SpringForceLabActivity.vue",
-    "src/components/presentation/SlideBig.vue",
-    "src/components/presentation/SlideCelebration.vue",
-    "src/components/presentation/SlideTitle.vue"
+    "s-activities/SpringForceLabActivity.vue"
   ],
   "ink-muted": [],
-  "serif": [
-    "src/components/presentation/SlideHero.vue",
-    "src/components/presentation/SlideStandard.vue",
-    "src/components/presentation/SlideTitle.vue"
-  ],
-  "open-sans": [
-    "src/components/presentation/SlideBig.vue",
-    "src/components/presentation/SlideCelebration.vue",
-    "src/components/presentation/SlideDiscipline.vue",
-    "src/components/presentation/SlideImageHero.vue",
-    "src/components/presentation/SlideMathGraph.vue",
-    "src/components/presentation/SlideValueTable.vue",
-    "src/components/presentation/shared/MathSlideWrapper.vue",
-    "src/components/presentation/shared/PedagogyPanel.vue"
-  ],
-  "blur": [
-    "src/components/modals/PresentationModal.vue"
-  ],
+  "serif": [],
+  "open-sans": [],
+  "blur": [],
   "pulse": [
     "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],
   "bounce": [],
-  "ping": [
-    "src/components/presentation/SlideMathGraph.vue"
-  ],
+  "ping": [],
   "shadow-2xl": [
     "s-activities/CircuitsActivity.vue",
     "s-activities/ForcesLabActivity.vue",
     "s-activities/IdealGasLawActivity.vue",
-    "s-activities/SpringForceLabActivity.vue",
-    "src/components/activities/DragDropActivity.vue",
-    "src/components/modals/PresentationModal.vue",
-    "src/components/presentation/SlideHero.vue"
+    "s-activities/SpringForceLabActivity.vue"
   ],
   "emoji": [
     "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue"
   ],
   "dark": [
-    "s-activities/IdealGasLawActivity.vue",
-    "src/components/modals/PresentationModal.vue",
-    "src/components/presentation/SlideBig.vue",
-    "src/components/presentation/SlideCelebration.vue",
-    "src/components/presentation/SlideHero.vue",
-    "src/components/presentation/SlideTitle.vue"
+    "s-activities/IdealGasLawActivity.vue"
   ]
 }

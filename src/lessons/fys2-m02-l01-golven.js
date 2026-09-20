@@ -107,8 +107,8 @@ export default {
             'TODO: kernpunt 1',
             'TODO: kernpunt 2'
         ]},
-        { layout: 'celebration', title: 'Klaar!', subtitle: 'Goed gewerkt vandaag.',
-          stats: [{ label: 'Module', value: '02' }, { label: 'Status', value: 'TOP' }] }
+        { layout: 'closing', title: 'Einde van de les', subtitle: 'Je hebt deze les afgerond.',
+          stats: [{ label: 'Module', value: '02' }] }
     ],
 
     // ─── 8. TICKETS ───────────────────────────────────────────────────────────

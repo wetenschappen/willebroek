@@ -14,7 +14,7 @@ const props = defineProps({
     <div class="flex flex-col gap-8 h-full">
       <!-- Context Box -->
       <div v-if="slide.context" class="p-8 bg-white border border-slate-200 rounded-xl shadow-sm">
-        <div class="text-[1.1rem] font-bold text-slate-400 uppercase tracking-wider mb-2">Context</div>
+        <div class="text-[1.1rem] font-bold text-slate-600 uppercase tracking-wider mb-2">Context</div>
         <div class="text-[1.7rem] text-slate-700 leading-relaxed" v-html="slide.context"></div>
       </div>
       

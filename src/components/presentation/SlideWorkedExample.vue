@@ -29,7 +29,7 @@ const emit = defineEmits(['revealNext', 'selectAnswer', 'checkAnswer', 'copyLink
         
         <!-- Right: Solution steps -->
         <div class="flex flex-col gap-5 pt-4">
-            <h4 class="text-[1.2rem] font-bold uppercase tracking-wider text-slate-400 mb-2 pl-2">Uitwerking</h4>
+            <h4 class="text-[1.2rem] font-bold uppercase tracking-wider text-slate-600 mb-2 pl-2">Uitwerking</h4>
             
             <div class="space-y-4">
                 <div v-for="(step, idx) in slide.steps" :key="idx"

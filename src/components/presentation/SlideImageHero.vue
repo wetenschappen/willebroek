@@ -27,7 +27,4 @@ const props = defineProps({
 </template>
 
 <style scoped>
-.slide-image-hero {
-  font-family: 'Open Sans', sans-serif;
-}
 </style>

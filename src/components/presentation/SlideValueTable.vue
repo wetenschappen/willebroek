@@ -63,7 +63,4 @@ const hasHighlight = computed(() => {
 </template>
 
 <style scoped>
-table, th, td {
-  font-family: 'Open Sans', sans-serif;
-}
 </style>

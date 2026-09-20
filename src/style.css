@@ -855,7 +855,7 @@
     .selection-page {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         color: var(--color-ink);
     }
 

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
-import { PhX, PhBrain, PhCheckCircle, PhWarningCircle, PhArrowRight, PhTrophy, PhArrowClockwise, PhLightbulb, PhCards } from '@phosphor-icons/vue'
+import { PhX, PhCheckCircle, PhArrowRight, PhArrowClockwise, PhLightbulb, PhCards } from '@phosphor-icons/vue'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -72,112 +72,107 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-0 font-sans">
-    <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="emit('close')"></div>
-    <div class="relative bg-white shadow-2xl overflow-hidden flex flex-col w-screen h-screen rounded-none" @click.stop>
-      
-      <!-- Header -->
-      <header class="bg-indigo-600 px-6 py-5 flex justify-between items-center shrink-0">
-        <div class="flex items-center gap-3 text-white">
-          <div class="bg-white/20 p-2 rounded-lg"><PhCards weight="fill" class="text-xl"/></div>
-          <div>
-            <h3 class="text-lg font-bold m-0">{{ title }}</h3>
-            <p class="text-xs text-white/70 m-0">Consolidatie & Herhaling</p>
-          </div>
-        </div>
-        <button @click="emit('close')" class="text-white/70 hover:text-white p-2 rounded-full transition-all">
-          <PhX class="text-2xl" />
-        </button>
-      </header>
+  <!-- Fullscreen-activiteitenshell: licht, blauw anker (digitale activiteit). -->
+  <div v-if="isOpen" class="modal-fullscreen">
 
-      <!-- Progress -->
-      <div class="h-1 bg-slate-200 shrink-0">
-        <div class="h-full bg-emerald-500 transition-all duration-500" 
-             :style="{ width: ((currentIndex + (isComplete?1:0)) / questions.length * 100) + '%' }"></div>
+    <!-- Kopbalk -->
+    <header class="fullscreen-bar fullscreen-bar-digital">
+      <div class="p-2 rounded-control shrink-0" style="background: var(--color-digital-soft); color: var(--color-digital);">
+        <PhCards weight="fill" class="text-xl"/>
+      </div>
+      <div class="min-w-0">
+        <h2 class="fullscreen-title">{{ title }}</h2>
+        <p class="fullscreen-label">Consolidatie en herhaling</p>
+      </div>
+      <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
+      <button @click="emit('close')" class="btn-close ml-auto" aria-label="Sluiten">
+        <PhX class="text-2xl" />
+      </button>
+    </header>
+
+    <!-- Voortgangsbalk -->
+    <div class="fullscreen-progress">
+      <span :style="{ width: ((currentIndex + (isComplete ? 1 : 0)) / questions.length * 100) + '%' }"></span>
+    </div>
+
+    <!-- Midden -->
+    <div class="fullscreen-body flex flex-col items-center justify-center">
+
+      <div v-if="isComplete" class="text-center max-w-2xl w-full">
+        <div class="w-16 h-16 rounded-control flex items-center justify-center mx-auto mb-6" style="background: var(--color-digital-soft); color: var(--color-digital);">
+          <PhCheckCircle weight="fill" class="text-4xl"/>
+        </div>
+        <h2 class="text-3xl font-bold text-slate-900 mb-2">Klaar</h2>
+        <p class="text-lg text-slate-700 mb-8">Je scoorde {{ score }} van de {{ questions.length }} punten.</p>
+        <div class="flex gap-4 justify-center">
+          <button @click="resetActivity" class="btn btn-ghost" style="border: 2px solid var(--color-line-strong);">
+            <PhArrowClockwise weight="bold"/> Opnieuw
+          </button>
+          <button @click="emit('close')" class="btn btn-primary">
+            Sluiten
+          </button>
+        </div>
       </div>
 
-      <!-- Main -->
-      <main class="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center bg-slate-50">
-        
-        <div v-if="isComplete" class="text-center animate-in fade-in zoom-in duration-300">
-          <div class="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <PhTrophy weight="fill" class="text-6xl text-amber-500"/>
-          </div>
-          <h2 class="text-3xl font-black text-slate-800 mb-2">Herhaling Voltooid!</h2>
-          <p class="text-lg text-slate-600 mb-8">Je scoorde {{ score }} van de {{ questions.length }} punten.</p>
-          <div class="flex gap-4 justify-center">
-            <button @click="resetActivity" class="px-6 py-3 bg-slate-200 text-slate-800 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-300 transition-all">
-              <PhArrowClockwise weight="bold"/> Opnieuw
-            </button>
-            <button @click="emit('close')" class="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-500 transition-all">
-              Sluiten
-            </button>
+      <div v-else class="w-full max-w-2xl bg-white rounded-card p-8" style="border: 2px solid var(--color-line-strong); box-shadow: var(--shadow-rest);">
+        <div class="flex items-center justify-between mb-8">
+          <span class="badge badge-digital">Vraag {{ currentIndex + 1 }} van {{ questions.length }}</span>
+          <div class="flex gap-1">
+             <div v-for="n in questions.length" :key="n" class="w-3 h-3 rounded-full"
+                  :style="n-1 < currentIndex
+                    ? { background: 'var(--color-digital)' }
+                    : n-1 === currentIndex
+                      ? { background: 'var(--color-line-strong)' }
+                      : { background: 'var(--color-line)' }"></div>
           </div>
         </div>
 
-        <div v-else class="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-slate-200 animate-in slide-in-from-bottom-4 duration-500">
-          <div class="flex items-center justify-between mb-8">
-            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-black uppercase tracking-widest rounded-full">Vraag {{ currentIndex + 1 }}</span>
-            <div class="flex gap-1">
-               <div v-for="n in questions.length" :key="n" class="w-2 h-2 rounded-full" 
-                    :class="n-1 < currentIndex ? 'bg-emerald-500' : (n-1 === currentIndex ? 'bg-indigo-500 scale-125' : 'bg-slate-300')"></div>
+        <h4 class="text-2xl font-bold text-slate-800 mb-8 leading-tight" v-html="currentQuestion.q"></h4>
+
+        <div class="space-y-3">
+          <button v-for="(opt, idx) in currentQuestion.a" :key="idx"
+                  @click="selectOption(idx)"
+                  :disabled="isChecked"
+                  class="w-full p-5 rounded-card border-2 text-left flex items-center justify-between gap-4"
+                  :style="isChecked && idx === currentQuestion.c
+                    ? { borderColor: 'var(--color-workbook)', background: 'var(--color-workbook-soft)' }
+                    : isChecked && selectedOption === idx
+                      ? { borderColor: 'var(--color-presentation)', background: 'var(--color-presentation-soft)' }
+                      : selectedOption === idx
+                        ? { borderColor: 'var(--color-digital)', background: 'var(--color-digital-soft)' }
+                        : { borderColor: '#d5dfde', background: '#ffffff' }">
+            <span class="font-bold text-lg text-slate-800" v-html="opt"></span>
+            <div v-if="isChecked" class="shrink-0">
+              <PhCheckCircle v-if="idx === currentQuestion.c" weight="fill" class="text-2xl" style="color: var(--color-workbook);"/>
+              <PhXCircle v-else-if="selectedOption === idx" weight="fill" class="text-2xl" style="color: var(--color-presentation);"/>
             </div>
-          </div>
-
-          <h4 class="text-2xl font-bold text-slate-800 mb-8 leading-tight" v-html="currentQuestion.q"></h4>
-
-          <div class="space-y-3">
-            <button v-for="(opt, idx) in currentQuestion.a" :key="idx"
-                    @click="selectOption(idx)"
-                    :disabled="isChecked"
-                    class="w-full p-5 rounded-2xl border-2 text-left transition-all flex items-center justify-between group"
-                    :class="[
-                        selectedOption === idx ? 'border-indigo-500 bg-indigo-50 shadow-md' : 'border-slate-200 hover:border-indigo-200 hover:bg-slate-50',
-                        isChecked && idx === currentQuestion.c ? '!border-emerald-500 !bg-emerald-50' : '',
-                        isChecked && selectedOption === idx && idx !== currentQuestion.c ? '!border-red-500 !bg-red-50' : ''
-                    ]">
-              <span class="font-bold text-lg" :class="isChecked && idx === currentQuestion.c ? 'text-emerald-700' : (isChecked && selectedOption === idx ? 'text-red-700' : 'text-slate-700')" v-html="opt">
-              </span>
-              <div v-if="isChecked">
-                <PhCheckCircle v-if="idx === currentQuestion.c" weight="fill" class="text-2xl text-emerald-500"/>
-                <PhXCircle v-else-if="selectedOption === idx" weight="fill" class="text-2xl text-red-500"/>
-              </div>
-            </button>
-          </div>
-
-          <div class="mt-10 flex gap-4">
-            <button v-if="!isChecked" @click="checkAnswer" :disabled="selectedOption === null"
-                    class="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-lg hover:bg-slate-800 disabled:opacity-30 transition-all active:scale-95">
-              Controleer Antwoord
-            </button>
-            <button v-else @click="nextQuestion"
-                    class="flex-1 py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-lg hover:bg-indigo-500 transition-all flex items-center justify-center gap-2">
-              {{ currentIndex < questions.length - 1 ? 'Volgende Vraag' : 'Bekijk Resultaat' }}
-              <PhArrowRight weight="bold" />
-            </button>
-          </div>
+          </button>
         </div>
 
-      </main>
-
-      <!-- Footer Info -->
-      <footer class="bg-white border-t border-slate-200 p-4 text-center">
-        <p class="text-slate-600 text-sm font-medium flex items-center justify-center gap-1">
-          <PhLightbulb weight="fill" class="text-amber-400"/>
-          Tip: Denk rustig na voor je een optie selecteert.
-        </p>
-      </footer>
+        <div class="mt-10 flex gap-4">
+          <button v-if="!isChecked" @click="checkAnswer" :disabled="selectedOption === null"
+                  class="flex-1 btn btn-primary" style="min-height: 56px;">
+            Controleer antwoord
+          </button>
+          <button v-else @click="nextQuestion"
+                  class="flex-1 btn btn-primary" style="min-height: 56px;">
+            {{ currentIndex < questions.length - 1 ? 'Volgende vraag' : 'Bekijk resultaat' }}
+            <PhArrowRight weight="bold" />
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- Voetbalk -->
+    <footer class="fullscreen-foot">
+      <p class="text-sm font-medium text-slate-700 flex items-center gap-2 mr-auto">
+        <PhLightbulb weight="fill" style="color: var(--color-action);"/>
+        Denk rustig na voor je een optie selecteert.
+      </p>
+    </footer>
   </div>
 </template>
 
 <style scoped>
-.animate-in { animation-duration: 0.5s; animation-fill-mode: both; }
-.fade-in { animation-name: fadeIn; }
-.zoom-in { animation-name: zoomIn; }
-.slide-in-from-bottom-4 { animation-name: slideInBottom; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-@keyframes slideInBottom { from { opacity: 0; transform: translateY(1rem); } to { opacity: 1; transform: translateY(0); } }
+/* Geen in-animaties meer: schermen verschijnen direct en rustig. */
 </style>

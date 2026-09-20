@@ -104,14 +104,14 @@ function close() {
                     >
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
-                                :class="unlockedIndices.has(idx) ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400 group-hover:bg-amber-100 group-hover:text-amber-600'"
+                                :class="unlockedIndices.has(idx) ? 'bg-slate-100 text-slate-700' : 'bg-slate-100 text-slate-600'"
                             >
                                 <PhCheckCircle v-if="unlockedIndices.has(idx)" weight="fill" class="text-2xl" />
                                 <PhFilePdf v-else weight="bold" class="text-2xl" />
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900 m-0 leading-tight">{{ link.label }}</h4>
-                                <p class="text-[11px] text-slate-400 m-0 uppercase font-bold tracking-wider mt-0.5">
+                                <p class="text-[11px] text-slate-600 m-0 uppercase font-bold tracking-wider mt-0.5">
                                     {{ unlockedIndices.has(idx) ? 'Ontgrendeld' : (link.password ? 'Beveiligd met code' : 'Vrij toegankelijk') }}
                                 </p>
                             </div>
@@ -167,7 +167,7 @@ function close() {
 
             <!-- NO LINKS STATE -->
             <div v-else class="bg-slate-50 border border-slate-200 shadow-sm rounded-2xl p-8 text-center">
-                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="w-16 h-16 bg-slate-100 text-slate-600 rounded-control flex items-center justify-center mx-auto mb-4">
                     <PhWarning weight="fill" class="text-3xl"/>
                 </div>
                 <h3 class="text-lg font-bold text-slate-900 mb-2">Niet Beschikbaar</h3>

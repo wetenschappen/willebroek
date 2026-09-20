@@ -150,27 +150,13 @@ function close() {
   emit('close')
 }
 
-// FULLSCREEN & PULSE
-const shouldPulse = ref(false)
-
+// FULLSCREEN
 watch(() => props.isOpen, (val) => {
     if (!val) {
         window.removeEventListener('keydown', handleKeydown)
-        shouldPulse.value = false
     } else {
         window.addEventListener('keydown', handleKeydown)
 
-        nextTick(() => {
-            shouldPulse.value = true
-            setTimeout(() => { shouldPulse.value = false }, 3000)
-        })
-
-        if (props.fullscreen) {
-            nextTick(() => {
-                if (!document.fullscreenElement) {
-                }
-            })
-        }
     }
 }, { immediate: true })
 
@@ -181,24 +167,11 @@ function handleKeydown(e) {
     }
 }
 
-const handleFullscreenChange = () => {
-    if (props.isOpen && props.fullscreen && !document.fullscreenElement) {
-        emit('close')
-    }
-}
-
 onUnmounted(() => {
     window.removeEventListener('keydown', handleKeydown)
-    document.removeEventListener('fullscreenchange', handleFullscreenChange)
-    if (document.fullscreenElement) {
-    }
 })
 
-// Add listener in onMounted (keeping existing mounted logic)
-const originalOnMounted = onMounted
 onMounted(() => {
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    // original onMounted content (resetActivity is already there in the file, but I'll make sure it runs)
     resetActivity()
 })
 </script>
@@ -208,28 +181,26 @@ onMounted(() => {
     <div class="absolute inset-0" style="background: rgb(23 37 43 / 0.72);" @click="close"></div>
     <div class="relative bg-white shadow-2xl overflow-hidden flex flex-col w-screen h-screen rounded-none" @click.stop>
 
-      <!-- Header -->
-      <div class="bg-amber-500 px-6 py-4 flex justify-between items-center shrink-0">
-        <div class="flex items-center gap-3">
-          <div class="bg-white/20 p-2 rounded-lg text-white">
+      <!-- Kopbalk: dit is een digitale activiteit, dus blauw anker -->
+      <div class="fullscreen-bar fullscreen-bar-digital">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="p-2 rounded-control shrink-0" style="background: var(--color-digital-soft); color: var(--color-digital);">
             <PhArrowsLeftRight weight="bold" class="text-xl"/>
           </div>
-          <div>
-            <h3 class="text-base font-bold text-white m-0">{{ title }}</h3>
-            <p class="text-xs text-white/70 m-0">Begrippen koppelen</p>
+          <div class="min-w-0">
+            <h2 class="fullscreen-title">{{ title }}</h2>
+            <p class="fullscreen-label">Begrippen koppelen</p>
           </div>
         </div>
-        <button @click="close"
-                class="text-white/70 hover:text-white p-2 rounded-full transition-all relative"
-                :class="{ 'ring-pulse-white': shouldPulse }">
+        <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
+        <button @click="close" class="btn-close ml-auto" aria-label="Sluiten">
           <PhX class="text-2xl" />
         </button>
       </div>
 
-      <!-- Progress Bar -->
-      <div class="h-1 bg-slate-200 shrink-0">
-        <div class="h-full bg-emerald-500 transition-all duration-500 ease-out"
-             :style="{ width: progressPercent + '%' }"></div>
+      <!-- Voortgangsbalk -->
+      <div class="fullscreen-progress">
+        <span :style="{ width: progressPercent + '%' }"></span>
       </div>
 
       <!-- Body -->
@@ -264,13 +235,11 @@ onMounted(() => {
                 :draggable="!isTermPlaced(termIndex)"
                 @dragstart="onDragStart(termIndex, $event)"
                 @dragend="onDragEnd"
-                class="px-3 py-1.5 rounded-lg border text-sm font-semibold select-none transition-all"
-                :class="[
-                  isTermPlaced(termIndex)
-                    ? 'bg-slate-100 border-slate-200 text-slate-500 cursor-default'
-                    : 'bg-indigo-50 border-indigo-200 text-indigo-800 cursor-grab active:cursor-grabbing hover:border-indigo-400 hover:shadow-sm',
-                  draggedItem === termIndex ? 'opacity-40 scale-95' : ''
-                ]"
+                class="px-3 py-2 rounded-control border-2 text-sm font-semibold select-none"
+                :style="isTermPlaced(termIndex)
+                  ? { background: '#edf2f1', borderColor: '#d5dfde', color: '#52636a' }
+                  : { background: '#ffffff', borderColor: 'var(--color-digital)', color: '#17252b', cursor: 'grab' }"
+                :class="draggedItem === termIndex ? 'opacity-40' : ''"
               >
                 <span v-html="pairs[termIndex].term"></span>
               </div>
@@ -284,60 +253,59 @@ onMounted(() => {
               :key="'def-' + defIndex"
               @dragover="onDragOver"
               @drop="onDrop(defIndex, $event)"
-              class="flex items-center gap-4 rounded-xl border px-4 py-3 transition-all"
-              :class="[
-                feedback[defIndex] === 'correct'  ? 'bg-emerald-50 border-emerald-200' :
-                feedback[defIndex] === 'incorrect' ? 'bg-red-50 border-red-200' :
-                getTermInZone(defIndex) !== null   ? 'bg-white border-slate-200' :
-                                                     'bg-slate-50 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40'
-              ]"
+              class="flex items-center gap-4 rounded-card border-2 px-4 py-3"
+              :style="feedback[defIndex] === 'correct'
+                ? { background: 'var(--color-workbook-soft)', borderColor: 'var(--color-workbook)' }
+                : feedback[defIndex] === 'incorrect'
+                  ? { background: 'var(--color-presentation-soft)', borderColor: 'var(--color-presentation)' }
+                  : { background: '#ffffff', borderColor: 'var(--color-line-strong)' }"
             >
               <!-- Row index -->
-              <span class="shrink-0 w-6 h-6 rounded-full bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center">
+              <span class="shrink-0 w-6 h-6 rounded-full font-mono text-xs font-bold flex items-center justify-center" style="background: var(--color-panel-muted); color: var(--color-ink-soft);">
                 {{ defIndex + 1 }}
               </span>
 
               <!-- Definition text -->
-              <p class="flex-1 text-sm text-slate-600 leading-snug m-0" v-html="pair.definition"></p>
+              <p class="flex-1 text-sm text-slate-800 leading-snug m-0" v-html="pair.definition"></p>
 
               <!-- Drop zone / placed chip -->
               <div class="shrink-0 min-w-[140px] flex items-center justify-end">
                 <!-- Placed term -->
                 <div v-if="getTermInZone(defIndex) !== null" class="flex items-center gap-1.5">
-                  <PhCheckCircle v-if="feedback[defIndex] === 'correct'"  weight="fill" class="text-emerald-500 text-lg shrink-0"/>
-                  <PhXCircle    v-else-if="feedback[defIndex] === 'incorrect'" weight="fill" class="text-red-500 text-lg shrink-0"/>
+                  <PhCheckCircle v-if="feedback[defIndex] === 'correct'"  weight="fill" class="text-lg shrink-0" style="color: var(--color-workbook);"/>
+                  <PhXCircle    v-else-if="feedback[defIndex] === 'incorrect'" weight="fill" class="text-lg shrink-0" style="color: var(--color-presentation);"/>
                   <span
-                    class="px-2.5 py-1 rounded-lg text-sm font-semibold"
-                    :class="
-                      feedback[defIndex] === 'correct'   ? 'bg-emerald-100 text-emerald-800' :
-                      feedback[defIndex] === 'incorrect' ? 'bg-red-100 text-red-800' :
-                                                          'bg-indigo-100 text-indigo-800'
-                    "
+                    class="px-2.5 py-1 rounded-control text-sm font-semibold"
+                    :style="feedback[defIndex] === 'correct'
+                      ? { background: 'var(--color-workbook)', color: '#ffffff' }
+                      : feedback[defIndex] === 'incorrect'
+                        ? { background: 'var(--color-presentation)', color: '#ffffff' }
+                        : { background: 'var(--color-digital-soft)', color: 'var(--color-digital)' }"
                     v-html="pairs[getTermInZone(defIndex)].term"
                   ></span>
                   <button v-if="feedback[defIndex] !== 'correct'"
                     @click="removeFromZone(defIndex)"
-                    class="text-slate-500 hover:text-red-500 transition-colors"
+                    class="btn-close"
                     title="Verwijder"
                   ><PhX class="text-sm"/></button>
                 </div>
                 <!-- Empty drop hint -->
-                <div v-else class="px-3 py-1.5 rounded-lg border-2 border-dashed border-slate-400 text-slate-600 text-sm italic">
-                  sleep hier...
+                <div v-else class="px-3 py-2 rounded-control border-2 border-dashed text-sm" style="border-color: var(--color-line); color: var(--color-ink-soft);">
+                  nog niet ingevuld
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Footer -->
-          <div class="shrink-0 px-6 py-3 border-t border-slate-200 flex justify-between items-center text-sm">
-            <span class="text-slate-600">
-              {{ correctCount }}/{{ pairs.length }} correct &nbsp;·&nbsp; {{ attempts }} pogingen
+          <!-- Voetbalk -->
+          <footer class="fullscreen-foot">
+            <span class="fullscreen-label mr-auto">
+              {{ correctCount }}/{{ pairs.length }} correct · {{ attempts }} {{ attempts === 1 ? 'poging' : 'pogingen' }}
             </span>
-            <button @click="resetActivity" class="text-slate-600 hover:text-slate-800 flex items-center gap-1 transition-colors text-sm font-semibold">
-              <PhArrowClockwise class="text-sm"/> Reset
+            <button @click="resetActivity" class="btn btn-ghost" style="border: 2px solid var(--color-line-strong);">
+              <PhArrowClockwise /> Opnieuw
             </button>
-          </div>
+          </footer>
 
         </template>
       </div>
@@ -346,26 +314,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.ring-pulse-white {
-    animation: ring-pulse-white 0.8s cubic-bezier(0.24, 1, 0.32, 1) 3;
-    z-index: 50;
-}
-
-@keyframes ring-pulse-white {
-    0% {
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
-        background-color: rgba(255, 255, 255, 0.3);
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 0 0 20px rgba(255, 255, 255, 0.8);
-        background-color: rgba(255, 255, 255, 0.6);
-        transform: scale(1.1);
-    }
-    100% {
-        box-shadow: 0 0 0 40px rgba(255, 255, 255, 0);
-        background-color: transparent;
-        transform: scale(1);
-    }
-}
+/* Geen pulse- of bounce-animatie: de actieve toestand is statisch. */
 </style>

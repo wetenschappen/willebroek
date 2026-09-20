@@ -81,7 +81,7 @@ const exercises = (props.workbook?.exercises?.length) ? props.workbook.exercises
           >
             <span class="text-sm font-bold text-emerald-600 tabular-nums">{{ ex.nr }}</span>
             <span class="text-sm font-medium text-slate-500">{{ ex.title }}</span>
-            <span class="text-sm font-semibold text-slate-400 text-right tabular-nums">{{ ex.page }}</span>
+            <span class="text-sm font-semibold text-slate-700 text-right tabular-nums">{{ ex.page }}</span>
           </div>
         </template>
 

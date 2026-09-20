@@ -41,14 +41,14 @@ const COMMON_TOOLS = [
         subtitle: 'Wetenschappelijke rekenmachine',
         url: 'https://www.desmos.com/scientific',
         icon: PhMathOperations,
-        color: 'bg-emerald-100 text-emerald-700'
+        color: 'bg-slate-100 text-slate-700'
     },
     {
         label: 'Desmos Grafieken',
         subtitle: 'Interactieve grafiekenplotter',
         url: 'https://www.desmos.com/calculator',
         icon: PhGraph,
-        color: 'bg-indigo-100 text-indigo-700'
+        color: 'bg-slate-100 text-slate-700'
     }
 ]
 
@@ -76,7 +76,7 @@ const SUBJECT_TOOLS = {
             subtitle: 'Uitleg biologie',
             url: 'https://www.bioplek.org/',
             icon: PhLeaf,
-            color: 'bg-emerald-100 text-emerald-700'
+            color: 'bg-slate-100 text-slate-700'
         },
         {
             label: 'Biodigital',
@@ -90,7 +90,7 @@ const SUBJECT_TOOLS = {
             subtitle: 'Biologie simulaties',
             url: 'https://phet.colorado.edu/nl/simulations/browse',
             icon: PhTree,
-            color: 'bg-teal-100 text-teal-700'
+            color: 'bg-slate-100 text-slate-700'
         }
     ]
 }
@@ -122,7 +122,7 @@ function openPdf() {
     <button
         @click="toggle"
         class="fab-btn"
-        :class="{ 'bg-amber-500 text-slate-900 hover:bg-amber-400': isOpen }"
+
         title="Werkbalk"
     >
         <PhWrench v-if="!isOpen" weight="bold" />
@@ -147,12 +147,12 @@ function openPdf() {
     >
         <div
             v-if="isOpen"
-            class="fixed bottom-24 right-6 z-40 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200/80 overflow-hidden origin-bottom-right"
+            class="fixed bottom-24 right-6 z-40 w-72 bg-white rounded-card overflow-hidden origin-bottom-right" style="border: 2px solid var(--color-line-strong); box-shadow: var(--shadow-dialog);"
         >
             <!-- Panel header -->
             <div class="bg-slate-900 px-4 py-3 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <PhWrench weight="bold" class="text-amber-500 text-base" />
+                    <PhWrench weight="bold" class="text-white text-base" />
                     <span class="text-xs font-black text-white uppercase tracking-widest">Werkbalk</span>
                 </div>
                 <button @click="close" class="btn-close-dark !p-1">
@@ -164,39 +164,39 @@ function openPdf() {
 
                 <!-- ── SECTION: Les ─────────────────────────────── -->
                 <div class="px-3 pt-3 pb-1">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.12em] px-2 mb-1.5">Les</p>
+                    <p class="text-[11px] font-bold text-slate-700 uppercase tracking-[0.12em] px-2 mb-1.5">Les</p>
 
                     <!-- Correctiesleutel — top of list -->
                     <button @click="openTool('solutions')" class="tool-item w-full">
-                        <div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
+                        <div class="w-8 h-8 rounded-control bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
                             <PhLockKey weight="bold" class="text-base" />
                         </div>
                         <div class="flex-1 text-left">
                             <div class="text-sm font-semibold text-slate-800 leading-tight">Correctiesleutel</div>
-                            <div class="text-[10px] text-slate-400">Beveiligd met wachtwoord</div>
+                            <div class="text-[11px] text-slate-600">Beveiligd met wachtwoord</div>
                         </div>
-                        <span class="text-[9px] font-black bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-md uppercase tracking-wider flex-shrink-0">Slot</span>
+                        <span class="badge badge-neutral flex-shrink-0">Slot</span>
                     </button>
 
                     <!-- Cursus PDF -->
                     <button @click="openPdf()" class="tool-item w-full">
-                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center flex-shrink-0">
+                        <div class="w-8 h-8 rounded-control bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
                             <PhFilePdf weight="bold" class="text-base" />
                         </div>
                         <div class="flex-1 text-left">
                             <div class="text-sm font-semibold text-slate-800 leading-tight">Lege Cursus</div>
-                            <div class="text-[10px] text-slate-400">Open cursus als PDF</div>
+                            <div class="text-[11px] text-slate-600">Open cursus als PDF</div>
                         </div>
                     </button>
 
                     <!-- Formularium -->
                     <button @click="openLink(formularium.url)" class="tool-item w-full">
-                        <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
+                        <div class="w-8 h-8 rounded-control bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
                             <PhMathOperations weight="bold" class="text-base" />
                         </div>
                         <div class="flex-1 text-left">
                             <div class="text-sm font-semibold text-slate-800 leading-tight">{{ formularium.label }}</div>
-                            <div class="text-[10px] text-slate-400">{{ formularium.subtitle }}</div>
+                            <div class="text-[11px] text-slate-600">{{ formularium.subtitle }}</div>
                         </div>
                     </button>
 
@@ -207,7 +207,7 @@ function openPdf() {
                         @click="openLink(tool.url)"
                         class="tool-item w-full"
                     >
-                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center flex-shrink-0">
+                        <div class="w-8 h-8 rounded-control bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
                             <component :is="iconMap[tool.icon] || PhLink" weight="bold" class="text-base" :class="tool.color || 'text-slate-500'" />
                         </div>
                         <div class="flex-1 text-left">
@@ -220,7 +220,7 @@ function openPdf() {
 
                 <!-- ── SECTION: Rekenmachines ────────────────────── -->
                 <div class="px-3 pb-1">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.12em] px-2 mb-1.5 pt-2">Rekenmachines</p>
+                    <p class="text-[11px] font-bold text-slate-700 uppercase tracking-[0.12em] px-2 mb-1.5 pt-2">Rekenmachines</p>
 
                     <button
                         v-for="tool in subjectTools"
@@ -228,12 +228,12 @@ function openPdf() {
                         @click="openLink(tool.url)"
                         class="tool-item w-full"
                     >
-                        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" :class="tool.color">
+                        <div class="w-8 h-8 rounded-control flex items-center justify-center flex-shrink-0" :class="tool.color">
                             <component :is="tool.icon" weight="bold" class="text-base" />
                         </div>
                         <div class="flex-1 text-left">
                             <div class="text-sm font-semibold text-slate-800 leading-tight">{{ tool.label }}</div>
-                            <div class="text-[10px] text-slate-400">{{ tool.subtitle }}</div>
+                            <div class="text-[11px] text-slate-600">{{ tool.subtitle }}</div>
                         </div>
                     </button>
                 </div>
@@ -242,30 +242,30 @@ function openPdf() {
 
                 <!-- ── SECTION: Hulp ─────────────────────────────── -->
                 <div class="px-3 pb-3">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.12em] px-2 mb-1.5 pt-2">Contact</p>
+                    <p class="text-[11px] font-bold text-slate-700 uppercase tracking-[0.12em] px-2 mb-1.5 pt-2">Contact</p>
 
                     <!-- Email copy button -->
                     <button
                         @click="copyEmail"
                         class="tool-item w-full"
-                        :class="copied ? 'bg-emerald-50' : ''"
+                        :class="copied ? 'bg-slate-50' : ''"
                     >
                         <template v-if="copied">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center flex-shrink-0">
+                            <div class="w-8 h-8 rounded-control bg-slate-900 text-white flex items-center justify-center flex-shrink-0">
                                 <PhCheck weight="bold" class="text-base" />
                             </div>
                             <div class="flex-1 text-left">
-                                <div class="text-sm font-semibold text-emerald-700 leading-tight">Gekopieerd!</div>
-                                <div class="text-[10px] text-emerald-600/70">Klaar om te plakken</div>
+                                <div class="text-sm font-semibold text-slate-900 leading-tight">Gekopieerd!</div>
+                                <div class="text-[11px] text-slate-600">Klaar om te plakken</div>
                             </div>
                         </template>
                         <template v-else>
-                            <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                            <div class="w-8 h-8 rounded-control bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0 group-hover:bg-slate-900 group-hover:text-white transition-colors">
                                 <PhEnvelope weight="bold" class="text-base" />
                             </div>
                             <div class="flex-1 text-left">
                                 <div class="text-sm font-semibold text-slate-800 leading-tight">Mail de leerkracht</div>
-                                <div class="text-[10px] text-slate-400">Klik om e-mailadres te kopiëren</div>
+                                <div class="text-[11px] text-slate-600">Klik om e-mailadres te kopiëren</div>
                             </div>
                         </template>
                     </button>

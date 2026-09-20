@@ -338,7 +338,7 @@ function optionLeave(event, selected) {
             <div v-else class="flex justify-center items-center gap-8">
               <div class="text-left">
                 <p class="fullscreen-label">Jouw score</p>
-                <p class="text-4xl font-bold text-slate-900">{{ scoredCorrect }} <span class="text-slate-400">/</span> {{ scoredTotal }}</p>
+                <p class="text-4xl font-bold text-slate-900">{{ scoredCorrect }} <span class="text-slate-600">/</span> {{ scoredTotal }}</p>
               </div>
               <div class="w-px h-12" style="background: var(--color-line);"></div>
               <div class="text-left">

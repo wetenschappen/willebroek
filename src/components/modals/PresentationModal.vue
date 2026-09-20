@@ -451,7 +451,7 @@ function resolveImageUrl(url) {
                                 <div v-else-if="slides[currentSlide]" class="flex items-center justify-center w-full h-full bg-white text-3xl text-red-500">
                                     Unknown Slide Layout: {{ slides[currentSlide].layout }}
                                 </div>
-                                <div v-else class="flex items-center justify-center w-full h-full bg-slate-50 text-2xl text-slate-400">
+                                <div v-else class="flex items-center justify-center w-full h-full bg-slate-50 text-2xl text-slate-600">
                                     Geen slides beschikbaar.
                                 </div>
 

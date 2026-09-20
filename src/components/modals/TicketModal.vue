@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { PhX, PhCheckCircle, PhXCircle, PhSmiley, PhSmileyMeh, PhSmileySad, PhPaperPlaneRight, PhClipboardText, PhArrowRight, PhWarning } from '@phosphor-icons/vue'
+import { PhX, PhCheckCircle, PhXCircle, PhSmiley, PhSmileyMeh, PhSmileySad, PhPaperPlaneRight, PhClipboardText, PhArrowRight } from '@phosphor-icons/vue'
 import MathGraphSvg from '../activities/MathGraphSvg.vue'
 
 const props = defineProps({
@@ -39,7 +39,7 @@ const parts = computed(() => {
         correctPoint: q.correctPoint,
         tolerance: q.tolerance
     }))
-    
+
     if (isEntry.value) {
         return [
             ...questionParts,
@@ -171,69 +171,88 @@ function getGraphConfig(part) {
     return baseConfig
 }
 
-const accentBorder   = computed(() => isEntry.value ? 'border-amber-500'   : 'border-indigo-600')
-const accentBorderHover = computed(() => isEntry.value ? 'hover:border-amber-400' : 'hover:border-indigo-300')
-const accentBgSelected = computed(() => isEntry.value ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-indigo-600 bg-indigo-50 text-indigo-900')
-const accentBgHover  = computed(() => isEntry.value ? 'hover:border-amber-300 hover:bg-slate-50' : 'hover:border-indigo-300 hover:bg-slate-50')
-const accentDot      = computed(() => isEntry.value ? 'border-amber-500 bg-amber-500' : 'border-indigo-600 bg-indigo-600')
-const accentDotHover = computed(() => isEntry.value ? 'group-hover:border-amber-300' : 'group-hover:border-indigo-300')
-const accentNavBtn   = computed(() => isEntry.value ? 'hover:bg-amber-500 hover:shadow-amber-200' : 'hover:bg-indigo-600 hover:shadow-indigo-200')
-const accentSubmitBtn = computed(() => isEntry.value ? 'bg-amber-500 hover:bg-amber-400 shadow-amber-200' : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-200')
-// These are still used in the template header / progress bar
-const title = computed(() => isEntry.value ? 'Toegangsticket' : 'Exit Ticket')
-const accentBg = computed(() => isEntry.value ? 'bg-amber-100 text-amber-600' : 'bg-indigo-100 text-indigo-600')
-const progressBarColor = computed(() => isEntry.value ? 'bg-amber-500' : 'bg-indigo-500')
+// Eén kleurtype: dit is een digitale activiteit (card-entry en card-exit zijn
+// allebei type 'digital'), dus blauw --color-digital. Entry en exit verschillen
+// alleen in titel, icoon en vraagset — niet in kleur.
+const ACCENT = '#075985'
+const ACCENT_SOFT = '#e3f1f5'
+const title = computed(() => isEntry.value ? 'Toegangsticket' : 'Exitticket')
+
+/**
+ * Antwoordoptie: geselecteerd = blauw met de blauwe zachte vulling.
+ * De actieve staat is zichtbaar zonder hover en verschuift de layout niet.
+ */
+function optionStyle(selected) {
+  return selected
+    ? { borderColor: ACCENT, background: ACCENT_SOFT, color: '#17252b' }
+    : { borderColor: '#d5dfde', background: '#ffffff', color: '#34474e' }
+}
+
+function optionHover(event, selected) {
+  if (selected) return
+  event.currentTarget.style.borderColor = ACCENT
+  event.currentTarget.style.background = '#f5f7f6'
+}
+
+function optionLeave(event, selected) {
+  if (selected) return
+  event.currentTarget.style.borderColor = '#d5dfde'
+  event.currentTarget.style.background = '#ffffff'
+}
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 bg-white flex flex-col overflow-hidden">
-    
-    <!-- Header -->
-    <div class="flex-shrink-0 h-16 border-b border-slate-200 flex items-center justify-between px-4 md:px-8" :class="isEntry ? 'bg-amber-50/50' : 'bg-indigo-50/30'">
-      <div class="flex items-center gap-3">
-        <div class="p-2 rounded-lg" :class="accentBg">
-          <PhClipboardText v-if="isEntry" weight="fill" class="text-xl" />
-          <PhPaperPlaneRight v-else weight="fill" class="text-xl" />
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-slate-900">{{ title }}</h3>
-          <div class="flex items-center gap-2 text-xs text-slate-400 font-mono">
-            <span v-if="['mc', 'open', 'graph-point'].includes(currentPart.type)">Vraag {{ actualQuestionNumber }} van {{ totalQuestions }}</span>
-            <span v-else>{{ currentPart.type === 'mood' ? 'Reflectie' : 'Resultaat' }}</span>
-          </div>
-        </div>
+  <!-- Fullscreen-activiteitenshell: licht, met het kleurtype in de kopbalk.
+       Zie docs/DESIGN-SYSTEM.md sectie 14. -->
+  <div v-if="isOpen" class="modal-fullscreen">
+
+    <!-- Kopbalk: blauw anker, want dit is een digitale activiteit -->
+    <header class="fullscreen-bar fullscreen-bar-digital">
+      <div class="p-2 rounded-control shrink-0" :style="{ background: ACCENT_SOFT, color: ACCENT }">
+        <PhClipboardText v-if="isEntry" weight="fill" class="text-xl" />
+        <PhPaperPlaneRight v-else weight="fill" class="text-xl" />
       </div>
-      <button @click="close" class="btn-close">
+      <div class="min-w-0">
+        <h2 class="fullscreen-title">{{ title }}</h2>
+        <p class="fullscreen-label">
+          <template v-if="['mc', 'open', 'graph-point'].includes(currentPart.type)">
+            Vraag {{ actualQuestionNumber }} van {{ totalQuestions }}
+          </template>
+          <template v-else>{{ currentPart.type === 'mood' ? 'Reflectie' : 'Resultaat' }}</template>
+        </p>
+      </div>
+      <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
+      <button @click="close" class="btn-close ml-auto" aria-label="Sluiten">
         <PhX weight="bold" class="text-xl" />
       </button>
-    </div>
+    </header>
 
-    <!-- Progress Bar -->
-    <div class="flex-shrink-0 h-1 bg-slate-100 w-full" v-if="currentPart.type !== 'finish'">
-      <div class="h-full transition-all duration-500 ease-out" :class="progressBarColor" :style="{ width: progress + '%' }"></div>
+    <!-- Voortgangsbalk -->
+    <div class="fullscreen-progress" v-if="currentPart.type !== 'finish'">
+      <span :style="{ width: progress + '%' }"></span>
     </div>
 
     <!-- Body -->
-    <div class="flex-1 overflow-y-auto px-4 md:px-16 lg:px-32 py-8 flex flex-col">
-      
+    <div class="fullscreen-body flex flex-col">
+
       <Transition name="fade-slide" mode="out-in">
 
         <!-- MULTIPLE CHOICE -->
         <div v-if="currentPart.type === 'mc'" :key="'mc-'+currentPart.id" class="flex-1 flex flex-col max-w-3xl mx-auto w-full">
           <h4 class="text-2xl md:text-3xl font-bold text-slate-900 mb-8" v-html="currentPart.question"></h4>
             <div class="space-y-4">
-            <button 
-              v-for="(opt, idx) in currentPart.options" 
+            <button
+              v-for="(opt, idx) in currentPart.options"
               :key="idx"
               @click="selectOption(idx)"
-              class="w-full text-left p-5 md:p-6 rounded-2xl border-2 transition-all flex items-center justify-between group text-slate-600"
-              :class="answers[currentPart.id] === idx
-                ? accentBgSelected
-                : ['border-slate-200 text-slate-600', accentBgHover]"
+              @mouseenter="optionHover($event, answers[currentPart.id] === idx)"
+              @mouseleave="optionLeave($event, answers[currentPart.id] === idx)"
+              class="w-full text-left p-5 md:p-6 rounded-card border-2 flex items-center justify-between gap-4"
+              :style="optionStyle(answers[currentPart.id] === idx)"
             >
               <span class="text-base md:text-lg font-medium" v-html="opt"></span>
-              <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ml-4"
-                   :class="answers[currentPart.id] === idx ? accentDot : ['border-slate-300', accentDotHover]">
+              <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                   :style="answers[currentPart.id] === idx ? { borderColor: ACCENT, background: ACCENT } : { borderColor: '#b8c8c6' }">
                 <div v-if="answers[currentPart.id] === idx" class="w-3 h-3 bg-white rounded-full"></div>
               </div>
             </button>
@@ -243,10 +262,11 @@ const progressBarColor = computed(() => isEntry.value ? 'bg-amber-500' : 'bg-ind
         <!-- OPEN QUESTION -->
         <div v-else-if="currentPart.type === 'open'" :key="'open-'+currentPart.id" class="flex-1 flex flex-col max-w-3xl mx-auto w-full">
           <h4 class="text-2xl md:text-3xl font-bold text-slate-900 mb-4" v-html="currentPart.question"></h4>
-          <p class="text-slate-500 text-base md:text-lg mb-6" v-html="currentPart.description"></p>
-          <textarea 
-            v-model="answers[currentPart.id]" 
-            class="flex-1 min-h-64 w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all resize-none text-slate-700 placeholder-slate-400 text-base md:text-lg leading-relaxed"
+          <p class="text-slate-600 text-base md:text-lg mb-6" v-html="currentPart.description"></p>
+          <textarea
+            v-model="answers[currentPart.id]"
+            class="flex-1 min-h-64 w-full p-6 bg-white border-2 rounded-card outline-none resize-none text-slate-700 text-base md:text-lg leading-relaxed"
+            style="border-color: var(--color-line);"
             placeholder="Typ je antwoord hier..."
           ></textarea>
         </div>
@@ -254,14 +274,14 @@ const progressBarColor = computed(() => isEntry.value ? 'bg-amber-500' : 'bg-ind
         <!-- GRAPH POINT -->
         <div v-else-if="currentPart.type === 'graph-point'" :key="'graph-'+currentPart.id" class="flex-1 flex flex-col max-w-4xl mx-auto w-full">
           <h4 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2" v-html="currentPart.question"></h4>
-          <p class="text-slate-500 text-base mb-6" v-html="currentPart.description"></p>
-          <div class="flex-1 border-2 border-slate-200 rounded-2xl overflow-hidden bg-white relative cursor-crosshair min-h-[400px]">
-            <MathGraphSvg 
-              :config="getGraphConfig(currentPart)" 
-              @graph-click="(pt) => selectGraphPoint(currentPart.id, pt)" 
+          <p class="text-slate-600 text-base mb-6" v-html="currentPart.description"></p>
+          <div class="flex-1 border-2 rounded-card overflow-hidden bg-white relative cursor-crosshair min-h-[400px]" style="border-color: var(--color-line-strong);">
+            <MathGraphSvg
+              :config="getGraphConfig(currentPart)"
+              @graph-click="(pt) => selectGraphPoint(currentPart.id, pt)"
             />
             <div v-if="answers[currentPart.id]" class="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-control text-sm font-mono font-bold text-slate-700 flex items-center gap-2" style="border: 2px solid var(--color-line-strong);">
-              <div class="w-3 h-3 rounded-full bg-indigo-600"></div>
+              <div class="w-3 h-3 rounded-full" :style="{ background: ACCENT }"></div>
               Gekozen: ({{ answers[currentPart.id].x.toFixed(1) }}, {{ answers[currentPart.id].y.toFixed(1) }})
             </div>
           </div>
@@ -270,44 +290,46 @@ const progressBarColor = computed(() => isEntry.value ? 'bg-amber-500' : 'bg-ind
         <!-- MOOD SELECTOR -->
         <div v-else-if="currentPart.type === 'mood'" :key="'mood-'+currentPart.id" class="flex-1 flex flex-col justify-center items-center text-center max-w-3xl mx-auto w-full">
           <h4 class="text-3xl md:text-4xl font-bold text-slate-900 mb-12" v-html="currentPart.question"></h4>
+          <!-- Gevoel: geen eigen kleuren per emotie. Kleur is gereserveerd voor
+               activiteitstype; de keuze leest via de rand en het label. -->
           <div class="flex justify-center gap-6 md:gap-8">
-            <button @click="selectedMood = 'happy'" class="group relative w-28 h-28 md:w-32 md:h-32 rounded-3xl border-2 transition-all flex flex-col items-center justify-center gap-2" 
-              :class="selectedMood === 'happy' ? 'border-emerald-500 bg-emerald-50 text-emerald-600 scale-110 shadow-xl' : 'border-slate-200 text-slate-300 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-400'">
-              <PhSmiley weight="fill" class="text-6xl md:text-7xl transition-transform group-hover:scale-110"/>
-              <span class="text-sm font-bold absolute -bottom-10 opacity-0 group-hover:opacity-100 transition-opacity text-emerald-600">Zeker</span>
-            </button>
-            <button @click="selectedMood = 'meh'" class="group relative w-28 h-28 md:w-32 md:h-32 rounded-3xl border-2 transition-all flex flex-col items-center justify-center gap-2"
-              :class="selectedMood === 'meh' ? 'border-amber-400 bg-amber-50 text-amber-500 scale-110 shadow-xl' : 'border-slate-200 text-slate-300 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-400'">
-              <PhSmileyMeh weight="fill" class="text-6xl md:text-7xl transition-transform group-hover:scale-110"/>
-              <span class="text-sm font-bold absolute -bottom-10 opacity-0 group-hover:opacity-100 transition-opacity text-amber-500">Twijfel</span>
-            </button>
-            <button @click="selectedMood = 'sad'" class="group relative w-28 h-28 md:w-32 md:h-32 rounded-3xl border-2 transition-all flex flex-col items-center justify-center gap-2"
-              :class="selectedMood === 'sad' ? 'border-rose-400 bg-rose-50 text-rose-500 scale-110 shadow-xl' : 'border-slate-200 text-slate-300 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-400'">
-              <PhSmileySad weight="fill" class="text-6xl md:text-7xl transition-transform group-hover:scale-110"/>
-              <span class="text-sm font-bold absolute -bottom-10 opacity-0 group-hover:opacity-100 transition-opacity text-rose-500">Onzeker</span>
+            <button v-for="mood in [
+                { id: 'happy', label: 'Zeker', icon: PhSmiley },
+                { id: 'meh', label: 'Twijfel', icon: PhSmileyMeh },
+                { id: 'sad', label: 'Onzeker', icon: PhSmileySad }
+              ]"
+              :key="mood.id"
+              @click="selectedMood = mood.id"
+              class="w-28 h-28 md:w-32 md:h-32 rounded-card border-2 flex flex-col items-center justify-center gap-2"
+              :style="selectedMood === mood.id
+                ? { borderColor: ACCENT, background: ACCENT_SOFT, color: ACCENT }
+                : { borderColor: '#d5dfde', background: '#ffffff', color: '#52636a' }"
+            >
+              <component :is="mood.icon" weight="fill" class="text-5xl md:text-6xl" />
+              <span class="text-sm font-bold">{{ mood.label }}</span>
             </button>
           </div>
         </div>
 
         <!-- FINISH -->
         <div v-else-if="currentPart.type === 'finish'" :key="'finish-'+currentPart.id" class="flex-1 flex flex-col items-center text-center max-w-2xl mx-auto w-full justify-center">
-          <div class="w-16 h-16 rounded-control flex items-center justify-center mb-6" style="background: var(--color-digital-soft); color: var(--color-digital);" :class="isEntry ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'">
+          <div class="w-16 h-16 rounded-control flex items-center justify-center mb-6" :style="{ background: ACCENT_SOFT, color: ACCENT }">
             <PhCheckCircle weight="fill" class="text-4xl"/>
           </div>
           <h4 class="text-3xl font-bold text-slate-900 mb-4" v-if="isEntry">Klaar</h4>
           <h4 class="text-3xl font-bold text-slate-900 mb-4" v-else>Einde van de les</h4>
-          
-          <div class="w-full bg-slate-50 border border-slate-100 rounded-3xl p-8 mt-4 space-y-6">
+
+          <div class="w-full bg-white border-2 rounded-card p-8 mt-4 space-y-6" style="border-color: var(--color-line);">
             <!-- ENTRY: Diagnostic per-question results -->
             <div v-if="isEntry" class="space-y-3">
-              <div v-for="(r, i) in questionResults" :key="r.id" class="flex items-start gap-3 text-left p-3 rounded-xl" :class="r.isCorrect ? 'bg-emerald-50' : 'bg-amber-50'">
+              <div v-for="(r, i) in questionResults" :key="r.id" class="flex items-start gap-3 text-left p-3 rounded-control" :style="{ background: r.isCorrect ? '#e7f2ea' : '#fde8e9' }">
                 <div class="shrink-0 mt-0.5">
-                  <PhCheckCircle v-if="r.isCorrect" weight="fill" class="text-emerald-500 text-lg" />
-                  <PhXCircle v-else weight="fill" class="text-amber-500 text-lg" />
+                  <PhCheckCircle v-if="r.isCorrect" weight="fill" class="text-lg" style="color: var(--color-workbook);" />
+                  <PhXCircle v-else weight="fill" class="text-lg" style="color: var(--color-presentation);" />
                 </div>
                 <div>
                   <p class="text-sm font-medium text-slate-800" v-html="r.question"></p>
-                  <p v-if="!r.isCorrect" class="text-xs text-amber-600 mt-1 font-medium">Dit onderwerp vraagt nog aandacht.</p>
+                  <p v-if="!r.isCorrect" class="text-sm mt-1 font-medium" style="color: var(--color-presentation);">Dit onderwerp vraagt nog aandacht.</p>
                 </div>
               </div>
             </div>
@@ -315,74 +337,75 @@ const progressBarColor = computed(() => isEntry.value ? 'bg-amber-500' : 'bg-ind
             <!-- EXIT: Score + mood -->
             <div v-else class="flex justify-center items-center gap-8">
               <div class="text-left">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Jouw Score</p>
-                <p class="text-4xl font-black text-slate-900">{{ scoredCorrect }} <span class="text-slate-300">/</span> {{ scoredTotal }}</p>
+                <p class="fullscreen-label">Jouw score</p>
+                <p class="text-4xl font-bold text-slate-900">{{ scoredCorrect }} <span class="text-slate-400">/</span> {{ scoredTotal }}</p>
               </div>
-              <div class="w-px h-12 bg-slate-200"></div>
+              <div class="w-px h-12" style="background: var(--color-line);"></div>
               <div class="text-left">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Gevoel</p>
+                <p class="fullscreen-label">Gevoel</p>
                 <p class="text-xl font-bold text-slate-700">{{ getMoodLabel(selectedMood) }}</p>
               </div>
             </div>
 
             <!-- EXIT: Goals check -->
-            <div class="space-y-3 pt-6 border-t border-slate-200" v-if="!isEntry && goals && goals.length > 0">
-              <p class="text-xs font-bold text-slate-500 uppercase text-center">Ik kan nu...</p>
+            <div class="space-y-3 pt-6 border-t-2" style="border-color: var(--color-line);" v-if="!isEntry && goals && goals.length > 0">
+              <p class="fullscreen-label text-center">Ik kan nu...</p>
               <div class="grid grid-cols-1 gap-3 text-left">
-                <div v-for="(goal, idx) in goals" :key="idx" class="flex items-center gap-3 text-base text-slate-600">
-                  <PhCheckCircle weight="fill" class="text-emerald-500 shrink-0" />
+                <div v-for="(goal, idx) in goals" :key="idx" class="flex items-center gap-3 text-base text-slate-700">
+                  <PhCheckCircle weight="fill" class="shrink-0" style="color: var(--color-workbook);" />
                   <span v-html="goal"></span>
                 </div>
               </div>
             </div>
 
             <!-- ENTRY: Summary line -->
-            <div v-if="isEntry && scoredTotal > 0" class="pt-4 border-t border-slate-200">
-              <p class="text-sm font-medium text-slate-600">
-                Je hebt <span class="font-bold" :class="scoredCorrect >= scoredTotal ? 'text-emerald-600' : 'text-amber-600'">{{ scoredCorrect }} van {{ scoredTotal }}</span> vragen goed.
-                <template v-if="scoredCorrect < scoredTotal"> 
+            <div v-if="isEntry && scoredTotal > 0" class="pt-4 border-t-2" style="border-color: var(--color-line);">
+              <p class="text-base text-slate-700">
+                Je hebt <span class="font-bold" :style="{ color: scoredCorrect >= scoredTotal ? 'var(--color-workbook)' : 'var(--color-presentation)' }">{{ scoredCorrect }} van {{ scoredTotal }}</span> vragen goed.
+                <template v-if="scoredCorrect < scoredTotal">
                   Kijk de theorie over deze onderwerpen nog eens na voor je verdergaat.
                 </template>
                 <template v-else>
-                  Je voorkennis zit goed! Je bent klaar voor de les.
+                  Je voorkennis zit goed. Je bent klaar voor de les.
                 </template>
               </p>
             </div>
           </div>
 
-          <button @click="close" class="mt-8 px-10 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors text-lg">
+          <button @click="close" class="btn btn-primary mt-8" style="min-height: 48px; padding: 0 40px;">
             Sluiten
           </button>
         </div>
 
       </Transition>
 
-      <!-- Footer Actions -->
-      <div class="flex-shrink-0 mt-8 pt-6 border-t border-slate-100 flex justify-between items-center max-w-3xl mx-auto w-full" v-if="currentPart.type !== 'finish'">
-        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">
-          {{ currentPart.type === 'mc' ? 'Meerkeuze' : currentPart.type === 'open' ? 'Reflectie' : currentPart.type === 'graph-point' ? 'Interactief' : 'Gevoel' }}
-        </div>
-        
-        <button 
-          v-if="currentPart.type !== 'mood'"
-          @click="nextStep" 
-          :disabled="!canProceed"
-          class="px-8 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg shadow-slate-200 disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center gap-2 group text-base"
-          :class="accentNavBtn"
-        >
-          Volgende <PhArrowRight weight="bold" class="group-hover:translate-x-1 transition-transform"/>
-        </button>
-        <button 
-          v-else
-          @click="submit"
-          :disabled="!canProceed"
-          class="px-10 py-3 text-white font-bold rounded-xl shadow-lg disabled:opacity-50 transition-all flex items-center gap-2 text-base"
-          :class="accentSubmitBtn"
-        >
-          Afronden <PhPaperPlaneRight weight="bold"/>
-        </button>
-      </div>
     </div>
+
+    <!-- Voetbalk met de navigatieacties -->
+    <footer class="fullscreen-foot" v-if="currentPart.type !== 'finish'">
+      <span class="fullscreen-label mr-auto">
+        {{ currentPart.type === 'mc' ? 'Meerkeuze' : currentPart.type === 'open' ? 'Reflectie' : currentPart.type === 'graph-point' ? 'Interactief' : 'Gevoel' }}
+      </span>
+
+      <button
+        v-if="currentPart.type !== 'mood'"
+        @click="nextStep"
+        :disabled="!canProceed"
+        class="btn btn-primary"
+        style="min-height: 48px; padding: 0 32px;"
+      >
+        Volgende <PhArrowRight weight="bold" />
+      </button>
+      <button
+        v-else
+        @click="submit"
+        :disabled="!canProceed"
+        class="btn btn-primary"
+        style="min-height: 48px; padding: 0 32px;"
+      >
+        Afronden <PhPaperPlaneRight weight="bold"/>
+      </button>
+    </footer>
   </div>
 </template>
 

@@ -23,7 +23,6 @@
   "pale-300": [
     "s-activities/IdealGasLawActivity.vue",
     "s-activities/SpringForceLabActivity.vue",
-    "src/components/modals/TicketModal.vue",
     "src/components/presentation/SlideBig.vue",
     "src/components/presentation/SlideCelebration.vue",
     "src/components/presentation/SlideTitle.vue"

@@ -84,7 +84,6 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
         <h2 class="fullscreen-title">{{ title }}</h2>
         <p class="fullscreen-label">Consolidatie en herhaling</p>
       </div>
-      <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
       <button @click="emit('close')" class="btn-close ml-auto" aria-label="Sluiten">
         <PhX class="text-2xl" />
       </button>

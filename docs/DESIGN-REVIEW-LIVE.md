@@ -56,6 +56,14 @@ maar worden niet als decoratieve student-facing badge gerenderd.
 De discipline-slide behoudt zijn bruikbare rode contextanker, maar gebruikt een
 compacte kopregel met titel en `AFSPRAKEN` in plaats van een gestapelde badgekop.
 
+### Activiteiten openen vanuit de tijdlijn
+
+De tijdlijn draagt de type-informatie (`DIGITAAL`, `PRESENTATIE` of
+`BOEK / BUNDEL`). Een geopende activiteit krijgt die informatie niet nog eens in
+de header: de blauwe shell en de duidelijke titel zijn voldoende. Dit geldt ook
+voor toegangstickets en exittickets; `Exitticket` en functionele voortgang zoals
+`Vraag 1 van 5` blijven wel zichtbaar.
+
 ## Wat goed overeenkomt met de designrichtlijnen
 
 ### Rustigere hoofdflow

@@ -91,10 +91,16 @@ neutraal; hun onderscheid komt via de functionele iconen `PhPlanet` en
 | Rood | presentatie | `PRESENTATIE` | theorie, klassikale uitleg, demonstratie |
 | Groen | fysiek werk | `BOEK / BUNDEL` | boek, bundel of werkblad |
 
-Een activiteitstype krijgt altijd:
+Een activiteitstype krijgt altijd op de tijdlijn:
 
 1. een vaste, zichtbare kleurankerbalk;
 2. een tekstlabel dat de kleur betekenis geeft;
+
+In een geopende activiteit is die oriëntatie al gegeven door de tijdlijnkaart
+én de gekleurde modal- of activiteitenshell. Herhaal `DIGITAAL` daarom niet in
+de modalheader of in een ticketvenster wanneer de titel (bijvoorbeeld
+`Meerkeuze` of `Exitticket`) de activiteit al duidelijk benoemt. Functionele
+voortganglabels zoals `Vraag 1 van 5` blijven uiteraard behouden.
 3. voldoende contrast voor titel, beschrijving en actie;
 4. geen extra vierde kleur voor een technische status zoals `check`.
 

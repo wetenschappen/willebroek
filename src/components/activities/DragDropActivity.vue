@@ -192,7 +192,6 @@ onMounted(() => {
             <p class="fullscreen-label">Begrippen koppelen</p>
           </div>
         </div>
-        <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
         <button @click="close" class="btn-close ml-auto" aria-label="Sluiten">
           <PhX class="text-2xl" />
         </button>

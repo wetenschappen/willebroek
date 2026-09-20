@@ -8,6 +8,7 @@ const props = defineProps({
   title: String,
   description: String,
   time: String,
+  hideMeta: Boolean,
   isDone: Boolean,
   locked: Boolean
 })
@@ -44,7 +45,7 @@ const actionText = computed(() => ({
     :disabled="locked"
   >
     <span class="lesson-activity-copy">
-      <span class="activity-meta">{{ meta || badgeText }}</span>
+      <span v-if="!hideMeta" class="activity-meta">{{ meta || badgeText }}</span>
       <strong>{{ title }}</strong>
       <span v-if="description" class="activity-description">{{ description }}</span>
     </span>

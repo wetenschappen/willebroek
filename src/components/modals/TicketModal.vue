@@ -221,7 +221,6 @@ function optionLeave(event, selected) {
           <template v-else>{{ currentPart.type === 'mood' ? 'Reflectie' : 'Resultaat' }}</template>
         </p>
       </div>
-      <span class="ml-2 shrink-0 badge badge-digital">Digitaal</span>
       <button @click="close" class="btn-close ml-auto" aria-label="Sluiten">
         <PhX weight="bold" class="text-xl" />
       </button>

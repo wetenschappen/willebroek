@@ -175,7 +175,7 @@
 
               <g :transform="`translate(${wallRight + 20}, ${pistonY + pistonThickness / 2})`" class="transition-transform duration-200">
                 <text x="0" :y="0" dominant-baseline="middle" :fill="pistonState === 'locked' ? '#fca5a5' : pistonState === 'draggable' ? '#bbf7d0' : '#94a3b8'" font-size="12" font-weight="600" class="drop-shadow-sm">
-                  {{ pistonState === 'locked' ? '🔒 V-vast' : pistonState === 'draggable' ? '↕ Sleep' : '⚡ Vrij' }}
+                  {{ pistonState === 'locked' ? 'Volume vast' : pistonState === 'draggable' ? 'Sleep de zuiger' : 'Volume vrij' }}
                 </text>
               </g>
 

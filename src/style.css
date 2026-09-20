@@ -657,6 +657,167 @@
         background: var(--color-paper);
     }
 
+    /* --- Presentatielaag ---------------------------------------------------
+       De slides staan op een vast 1920x1080-canvas (.ppt-stage) dat naar het
+       scherm geschaald wordt: ca. 0,72x op een 14" laptop en 0,60x op een 12"
+       chromebook. Alles binnen dat canvas wordt dus nog eens verkleind.
+
+       Daarom mag een slide GEEN app-schermmaat hergebruiken: `.badge` is 11px
+       op een gewoon scherm maar 8px op een slide, en dat is onleesbaar vanachter
+       in de klas. Onderstaande klassen horen bij het canvas en zijn in
+       canvas-px. Gebruik ze in plaats van `.badge`, `.fullscreen-label` en
+       losse tekstmaten. Zie docs/DESIGN-SYSTEM.md §15. */
+    .slide-label {
+        @apply inline-flex items-center font-mono font-semibold uppercase;
+        font-size: 30px;
+        letter-spacing: 0.08em;
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: 2px solid;
+    }
+
+    /* Een presentatiekop is één lijn: accentbalk en titel. Een categorie- of
+       badge-rij is geen extra informatie en zou alleen headroom kosten. */
+    .slide-header-compact {
+        @apply flex items-center gap-8;
+        min-height: 64px;
+        margin-bottom: 28px;
+    }
+
+    .slide-kicker {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-presentation);
+    }
+
+    /* Rood: de presentatie is het enige activiteitstype in deze laag. */
+    .slide-label {
+        background: var(--color-presentation-soft);
+        color: var(--color-presentation);
+        border-color: var(--color-presentation);
+    }
+
+    /* Kleurloze variant voor een neutrale vermelding zoals 'Einde van de les'. */
+    .slide-label-neutral {
+        background: var(--color-panel-muted);
+        color: var(--color-ink-soft);
+        border-color: var(--color-line);
+    }
+
+    /* Klein monodetail binnen een slide: paginanummer, 'SPATIE', contextlabel.
+       Blijft bewust groot genoeg om te lezen (21px op een 14" laptop). */
+    .slide-meta {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-ink-soft);
+    }
+
+    /* Ankerbalk van het presentatietype, in canvas-px. */
+    .slide-anchor {
+        background: var(--color-presentation);
+    }
+
+    /* Paneel op een slide. Zelfde taal als .card buiten de presentatie, maar
+       met maten die bij het 1920x1080-canvas horen. */
+    .slide-panel {
+        background: var(--color-panel);
+        border: 2px solid var(--color-line);
+        border-radius: var(--radius-card);
+    }
+
+    .slide-panel-muted {
+        background: var(--color-panel-muted);
+        border: 2px solid var(--color-line);
+        border-radius: var(--radius-card);
+    }
+
+    /* Toegestane nadrukrand, bijvoorbeeld het opvallendste paneel van de slide. */
+    .slide-panel-strong {
+        border-color: var(--color-line-strong);
+    }
+
+    /* Onthuld antwoord: het presentatietype in zijn eigen kleur, altijd met een
+       tekstlabel erbij zodat kleur nooit de enige betekenis draagt. */
+    .slide-panel-answer {
+        background: var(--color-presentation-soft);
+        border: 2px solid var(--color-presentation);
+        border-radius: var(--radius-card);
+    }
+
+    /* Nummerbadge bij een stap of vraag. */
+    .slide-number {
+        @apply inline-flex items-center justify-center shrink-0;
+        width: 76px;
+        height: 76px;
+        border-radius: var(--radius-control);
+        background: var(--color-ink);
+        color: #ffffff;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 34px;
+        font-weight: 600;
+    }
+
+    /* Knop op een slide. De maten zijn canvas-px, net als de tekst. */
+    .slide-btn {
+        @apply inline-flex items-center justify-center gap-4 font-semibold;
+        padding: 20px 36px;
+        font-size: 30px;
+        border-radius: var(--radius-control);
+        border: 2px solid var(--color-line-strong);
+        background: var(--color-panel);
+        color: var(--color-ink);
+        cursor: pointer;
+        transition: background-color 160ms ease, color 160ms ease;
+    }
+
+    .slide-btn:hover {
+        background: var(--color-panel-muted);
+    }
+
+    /* Enige donkere knop, gelijk aan .btn-primary buiten de presentatie. */
+    .slide-btn-primary {
+        background: var(--color-ink);
+        border-color: var(--color-ink);
+        color: #ffffff;
+    }
+
+    .slide-btn-primary:hover {
+        background: var(--color-ink-soft);
+        color: #ffffff;
+    }
+
+    /* Donkere foto met een licht tekstvlak erover: het tekstvlak draagt de
+       leesbaarheid, de foto is alleen beeld. Zonder zo'n vlak mag dit niet,
+       zie docs/DESIGN-SYSTEM.md §15. */
+    .slide-photo-scrim {
+        background: rgb(23 37 43 / 0.4);
+    }
+
+    /* Invoerhint zoals 'Druk op SPATIE'. */
+    .slide-hint {
+        @apply inline-flex items-center gap-4;
+        font-size: 30px;
+        color: var(--color-ink-soft);
+    }
+
+    .slide-key {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        padding: 6px 14px;
+        border-radius: var(--radius-control);
+        border: 2px solid var(--color-line-strong);
+        background: var(--color-panel);
+        color: var(--color-ink);
+    }
+
     .ppt-stage {
         @apply relative flex-shrink-0 origin-center bg-white;
         width: 1920px;

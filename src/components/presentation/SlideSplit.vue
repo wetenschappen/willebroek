@@ -15,12 +15,12 @@ const resolveImageUrl = inject('resolveImageUrl')
 </script>
 
 <template>
-  <MathSlideWrapper :title="slide.title || 'Uitleg'" badge="UITLEG">
+  <MathSlideWrapper :title="slide.title || 'Uitleg'">
     <div class="grid grid-cols-2 gap-8 h-full flex-1 min-h-[400px]">
       <!-- Text Side -->
       <div class="flex flex-col h-full" :class="{ 'order-first': slide.imagePosition === 'right', 'order-last': slide.imagePosition === 'left' }">
         <div class="flex-1 bg-white rounded-xl border border-slate-200 p-8 overflow-y-auto exercise-scroll shadow-sm">
-          <div class="text-[1.6rem] leading-relaxed text-slate-700 font-medium" v-html="slide.content || slide.text"></div>
+          <div class="text-slide-body leading-relaxed text-slate-700 font-medium" v-html="slide.content || slide.text"></div>
         </div>
       </div>
       

@@ -10,5 +10,9 @@
   "ping": 0,
   "shadow-2xl": 2,
   "emoji": 4,
+  "presentation-app-scale": 0,
+  "presentation-badge": 0,
+  "presentation-legacy-palette": 0,
+  "presentation-invalid-shade": 0,
   "dark": 0
 }

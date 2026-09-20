@@ -483,6 +483,22 @@ De slides zijn geen apart systeem meer. Ze gebruiken dezelfde tokens, dezelfde
 kopbalklogica en dezelfde activiteitskleur (rood `PRESENTATIE`, want een slide
 hoort bij een `card-pres-*`).
 
+De presentatie gebruikt een vaste canvasmaat van `1920×1080` en schaalt die
+proportioneel naar het beschikbare scherm. Daarom zijn gewone app-maten zoals
+`.badge`, `.fullscreen-label`, `text-sm` en `text-lg` in het canvas verboden:
+na het schalen worden ze te klein of ogen ze als extra, dubbele metadata. Een
+slide krijgt één duidelijke titelankerbalk en één betekenisvolle inhoudskop;
+generieke categorielabels zoals `VOORBEELD`, `OEFENING` en `WAARDETABEL` worden
+niet als decoratieve pill/badge gerenderd. Het label mag wel in de slide-data
+blijven voor compatibiliteit met lesregistraties.
+
+De gedeelde `MathSlideWrapper` levert hiervoor de enige slidekop. Slide-inhoud
+gebruikt de `slide-*` schaal uit `tailwind.config.js` en de primitives in
+`src/style.css` (`slide-label`, `slide-panel`, `slide-btn`, `slide-hint`).
+De discipline-slide is de uitzondering voor context: de rode ankerbalk, titel en
+het compacte label `AFSPRAKEN` staan in één lage kopregel; die kop mag niet
+uitgroeien tot een hoge badgekolom.
+
 Wat is verwijderd:
 
 - `bg-slate-900`/`bg-black` slides → `--color-paper`;
@@ -526,14 +542,14 @@ voeg hier niets toe zonder het eerst in de code te zien.
 | `.modal-fullscreen` | **in gebruik** door ticket, naamkiezer en alle activiteiten | klaar |
 | `.fullscreen-bar/-body/-foot/-progress` | **in gebruik** door ticket, dragdrop, gemengde herhaling, gaswetten, krachtenlab en circuits | klaar |
 | `.btn-primary`, `.btn-ghost` | **in gebruik** in alle omgezette activiteiten | klaar |
-| `.badge` en `.badge-*` | **in gebruik** in ticket, dragdrop, gemengde herhaling, gaswetten, circuits en slides | klaar |
+| `.badge` en `.badge-*` | in gebruik in app-activiteiten; **niet** in student-facing presentation slides | presentaties gebruiken `slide-*`-primitives zonder generieke categorie-badges |
 | `.card` als losse klasse | **0 keer gebruikt**; alleen via `ActivityCard.vue` | rechtstreeks gebruik vermijden, anders verliest de kaart zijn ankerbalk |
 | `TicketModal.vue` | **omgezet**: fullscreen-shell, blauw `DIGITAAL` | klaar |
 | `PresentationModal.vue` | **omgezet** naar lichte shell met rode voortgangsbalk | klaar |
 | `SlideHero`, `SlideTitle`, `SlideBig`, `SlideClosing` | **omgezet** naar `--color-paper` | klaar |
 | `font-serif` | **verwijderd** uit alle slides | klaar |
 | `Open Sans` | **verwijderd** uit alle slides | klaar |
-| `MathSlideWrapper.vue` | **omgezet**: rode ankerbalk + badge met label | klaar |
+| `MathSlideWrapper.vue` | **omgezet**: rode ankerbalk + één titel, zonder generieke categorie-badge | klaar |
 | `Circuits`, `ForcesLab`, `IdealGasLaw` | **omgezet** naar de fullscreen-shell | klaar |
 | `SpringForceLab` | prototype — bewust overgeslagen | vervangen door een nieuwe activiteit op de shell |
 | `DragDrop`, `MixedRetrieval` | **omgezet** naar de fullscreen-shell | klaar |

@@ -15,7 +15,7 @@ const resolveImageUrl = inject('resolveImageUrl')
 </script>
 
 <template>
-  <MathSlideWrapper :title="slide.title || 'Afbeeldingen'" badge="AFBEELDINGEN">
+  <MathSlideWrapper :title="slide.title || 'Afbeeldingen'">
     <div class="grid gap-6 h-full flex-1"
          :class="{
            'grid-cols-2': !slide.columns || slide.columns === 2,
@@ -27,8 +27,8 @@ const resolveImageUrl = inject('resolveImageUrl')
           <img :src="resolveImageUrl(img.src)" class="max-w-full max-h-full object-contain">
         </div>
         <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col gap-1 text-center">
-          <p class="text-[1.5rem] text-slate-800 font-semibold" v-html="img.caption"></p>
-          <p v-if="img.title" class="text-[1.2rem] text-slate-600 font-medium" v-html="img.title"></p>
+          <p class="text-slide-body text-slate-800 font-semibold" v-html="img.caption"></p>
+          <p v-if="img.title" class="text-slide-small text-slate-600 font-medium" v-html="img.title"></p>
         </div>
       </div>
     </div>

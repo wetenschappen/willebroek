@@ -44,6 +44,18 @@ De grootste resterende afwijkingen zitten in oudere interactieve lescomponenten.
 | Technische metadata | 7/10 | Titel, description en favicon zijn goed; OG-afbeelding ontbreekt |
 | Projectorvriendelijkheid | 6/10 | Goed in de shell, wisselend in modals en activiteiten |
 
+## Presentatiemodal: specifieke reviewregel
+
+De presentatie gebruikt een vaste `1920×1080`-canvas die naar het scherm schaalt.
+Daarom zijn generieke app-badges, kleine `text-sm`-labels en dubbele categorieën
+niet geschikt binnen slides: op een Chromebook worden ze te klein en inhoudelijk
+herhalen ze vaak al de titel. `MathSlideWrapper` toont centraal alleen de rode
+ankerbalk en de titel. Categoriegegevens blijven beschikbaar voor compatibiliteit,
+maar worden niet als decoratieve student-facing badge gerenderd.
+
+De discipline-slide behoudt zijn bruikbare rode contextanker, maar gebruikt een
+compacte kopregel met titel en `AFSPRAKEN` in plaats van een gestapelde badgekop.
+
 ## Wat goed overeenkomt met de designrichtlijnen
 
 ### Rustigere hoofdflow

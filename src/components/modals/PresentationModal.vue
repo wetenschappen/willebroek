@@ -339,20 +339,38 @@ function handleKeydown(e) {
 }
 
 const handleFullscreenChange = () => {
+    // Fullscreen verandert de viewportgrootte; opnieuw meten, anders blijft de
+    // slide op de oude schaal staan.
+    nextTick(updateScale)
     if (props.isOpen && !document.fullscreenElement) {
         emit('close')
     }
 }
 
+// De stage hangt aan de grootte van de container: volg die ook als de klas een
+// chromebook dichtklapt of de projector van resolutie wisselt.
+let resizeObserver = null
+
 onMounted(() => {
     window.addEventListener('resize', updateScale)
     document.addEventListener('fullscreenchange', handleFullscreenChange)
+    // Eenmalig meten bij het openen. Zonder dit blijft de schaal op 1 tot de
+    // gebruiker het venster aanraakt en steekt de slide buiten het scherm.
+    updateScale()
 })
 
 onUnmounted(() => {
     window.removeEventListener('keydown', handleKeydown)
     window.removeEventListener('resize', updateScale)
     document.removeEventListener('fullscreenchange', handleFullscreenChange)
+    resizeObserver?.disconnect()
+})
+
+watch(containerRef, (el) => {
+    resizeObserver?.disconnect()
+    if (!el || typeof ResizeObserver === 'undefined') return
+    resizeObserver = new ResizeObserver(updateScale)
+    resizeObserver.observe(el)
 })
 
 const iconMap = {
@@ -406,25 +424,28 @@ function resolveImageUrl(url) {
         <div v-if="isOpen" class="fixed inset-0 z-[9999] bg-paper text-slate-900 flex flex-col font-sans overflow-hidden w-screen h-screen">
             
             <!-- Voortgangsbalk: rood anker, want dit is een presentatie -->
-            <div class="absolute top-0 left-0 right-0 h-2 z-[70]" style="background: var(--color-panel-muted);">
-                <div class="h-full" style="background: var(--color-presentation);" :style="{ width: progressPercentage + '%' }"></div>
+            <div class="absolute top-0 left-0 right-0 h-3 z-[70]" style="background: var(--color-panel-muted);">
+                <div class="h-full slide-anchor" :style="{ width: progressPercentage + '%' }"></div>
             </div>
 
-            <!-- Sluiten -->
-            <div class="absolute top-6 right-6 z-50">
+            <!-- Sluiten: buiten het 1920x1080-canvas, dus echte schermpunten.
+                 Blijft bewust klein: dit is bediening voor de leerkracht, geen
+                 leesvlak voor de klas. -->
+            <div class="absolute top-5 right-5 z-50">
                 <button @click="emit('close')" class="btn-close" style="background: var(--color-panel); border: 2px solid var(--color-line-strong);" aria-label="Sluiten">
                     <PhX class="text-xl" />
                 </button>
             </div>
 
-            <!-- Statische statusmelding: geen confetti, geen overlay over het scherm.
-                 Het vinkje en het woord 'Correct' dragen de betekenis. -->
+            <!-- Statische statusmelding: geen confetti, geen overlay over het hele
+                 scherm. Valt buiten het canvas en is dus een schermmaat; hij moet
+                 vanachter in de klas nog leesbaar zijn, vandaar deze maat. -->
             <div v-if="showCorrectPopup" class="fixed inset-0 z-[150] pointer-events-none flex items-center justify-center">
-                <div class="bg-white px-10 py-6 rounded-card flex items-center gap-6" style="border: 2px solid var(--color-workbook); box-shadow: var(--shadow-dialog);">
-                    <div class="w-14 h-14 rounded-control flex items-center justify-center" style="background: var(--color-workbook-soft); color: var(--color-workbook);">
-                        <PhCheck weight="bold" class="text-3xl" />
+                <div class="bg-white px-12 py-8 rounded-card flex items-center gap-6" style="border: 2px solid var(--color-workbook); box-shadow: var(--shadow-dialog);">
+                    <div class="w-16 h-16 rounded-control flex items-center justify-center shrink-0" style="background: var(--color-workbook-soft); color: var(--color-workbook);">
+                        <PhCheck weight="bold" class="text-4xl" />
                     </div>
-                    <span class="text-3xl font-bold text-slate-900">Correct</span>
+                    <span class="text-4xl font-bold text-slate-900">Juist</span>
                 </div>
             </div>
             
@@ -448,10 +469,10 @@ function resolveImageUrl(url) {
                                     @copyLink="copyLink"
                                     @showCorrectPopup="() => { showCorrectPopup = true; setTimeout(() => showCorrectPopup = false, 2000) }"
                                 />
-                                <div v-else-if="slides[currentSlide]" class="flex items-center justify-center w-full h-full bg-white text-3xl text-red-500">
-                                    Unknown Slide Layout: {{ slides[currentSlide].layout }}
+                                <div v-else-if="slides[currentSlide]" class="flex items-center justify-center w-full h-full bg-paper text-slide-heading text-presentation">
+                                    Onbekende slidelayout: {{ slides[currentSlide].layout }}
                                 </div>
-                                <div v-else class="flex items-center justify-center w-full h-full bg-slate-50 text-2xl text-slate-600">
+                                <div v-else class="flex items-center justify-center w-full h-full bg-paper text-slide-heading text-slate-700">
                                     Geen slides beschikbaar.
                                 </div>
 
@@ -460,17 +481,19 @@ function resolveImageUrl(url) {
                     </Transition>
                 </div>
 
-                <!-- Voetnavigatie -->
+                <!-- Voetnavigatie: bediening voor de leerkracht, dus echte
+                     schermpunten. Groot genoeg om te raken, klein genoeg om
+                     niet met de slide te wedijveren. -->
                 <div class="absolute bottom-6 left-6 flex items-center gap-2 z-[80] bg-white rounded-control" style="border: 2px solid var(--color-line-strong);">
-                    <button @click.stop="prevSlide" class="btn-close" :disabled="currentSlide === 0">
-                        <PhCaretLeft class="text-lg" />
+                    <button @click.stop="prevSlide" class="btn-close" :disabled="currentSlide === 0" aria-label="Vorige slide">
+                        <PhCaretLeft class="text-xl" />
                     </button>
                     
-                    <span class="font-mono text-sm font-semibold tracking-[0.08em] text-slate-700 min-w-[3.5rem] text-center select-none">{{ currentSlide + 1 }} / {{ totalSlides }}</span>
+                    <span class="font-mono text-base font-semibold tracking-[0.08em] text-slate-800 min-w-[4.5rem] text-center select-none">{{ currentSlide + 1 }} / {{ totalSlides }}</span>
 
-                    <button @click.stop="advancePresentation" class="btn-close"
+                    <button @click.stop="advancePresentation" class="btn-close" aria-label="Volgende slide"
                             :disabled="currentSlide === totalSlides - 1 && (!slides[currentSlide]?.steps || slides[currentSlide].layout === 'exercise' || revealedSteps === slides[currentSlide].steps.length) && (!slides[currentSlide]?.revealText || answerRevealed)">
-                        <PhCaretRight class="text-lg" />
+                        <PhCaretRight class="text-xl" />
                     </button>
                 </div>
             </div>

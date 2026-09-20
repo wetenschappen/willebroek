@@ -83,6 +83,24 @@ export default {
         control: '8px',
         card: '12px',
       },
+      /* Presentatieschaal. De slides staan op een vast 1920x1080-canvas dat
+         naar het scherm geschaald wordt (ca. 0,72x op een 14" laptop, 0,60x
+         op een 12" chromebook). Maten zijn dus canvas-px, geen scherm-px:
+         een waarde van 30 hier is op een chromebook maar 18 scherm-px.
+
+         Daarom zijn dit de ENIGE tekstmaten in de presentatielaag. Een slide
+         kiest een rol, geen losse waarde. Zie docs/DESIGN-SYSTEM.md §15.
+
+         Kleinste rol (small, 30) is 21px op een 14" laptop en 18px op een
+         12" chromebook — de ondergrens om vanachter in de klas te lezen. */
+      fontSize: {
+        'slide-small': ['30px', { lineHeight: '1.35' }],
+        'slide-body': ['36px', { lineHeight: '1.5' }],
+        'slide-heading': ['46px', { lineHeight: '1.25' }],
+        'slide-title': ['72px', { lineHeight: '1.15' }],
+        'slide-hero': ['104px', { lineHeight: '1.05' }],
+        'slide-display': ['132px', { lineHeight: '1' }],
+      },
       boxShadow: {
         subtle: '0 1px 2px rgb(23 37 43 / 0.06)',
         card: '0 1px 2px rgb(23 37 43 / 0.06), 0 8px 24px rgb(23 37 43 / 0.04)',

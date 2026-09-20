@@ -27,7 +27,7 @@ function getIcon(iconName) {
 </script>
 
 <template>
-<MathSlideWrapper :title="slide.title" badge="EIGENSCHAPPEN">
+<MathSlideWrapper :title="slide.title">
     
     <div class="flex-1 grid grid-cols-[1.2fr_1fr] gap-8 mt-4 pb-6">
         <!-- Properties List -->
@@ -38,11 +38,11 @@ function getIcon(iconName) {
                 <div class="flex items-start gap-4">
                     <!-- Clean Icon Badge (No Gradients) -->
                     <div class="w-11 h-11 rounded-lg bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
-                        <component :is="getIcon(prop.icon)" weight="bold" class="text-[1.6rem]" />
+                        <component :is="getIcon(prop.icon)" weight="bold" class="text-slide-body" />
                     </div>
                     <div class="flex-1 pt-0.5">
-                        <div class="text-[1.2rem] font-bold text-amber-600 uppercase tracking-wider mb-1.5" v-html="prop.label"></div>
-                        <div class="text-[1.7rem] text-slate-700 font-medium leading-relaxed" v-html="prop.value"></div>
+                        <div class="text-slide-small font-bold text-presentation uppercase tracking-wider mb-1.5" v-html="prop.label"></div>
+                        <div class="text-slide-body text-slate-700 font-medium leading-relaxed" v-html="prop.value"></div>
                     </div>
                 </div>
             </div>
@@ -64,8 +64,8 @@ function getIcon(iconName) {
     
     <!-- Summary block (No Left Border, No Gradients) -->
     <div v-if="slide.summary" class="mt-4">
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 shadow-sm">
-            <p class="text-[1.6rem] text-amber-900 font-semibold leading-relaxed" v-html="slide.summary"></p>
+        <div class="bg-presentation-soft border border-presentation rounded-xl p-6 shadow-sm">
+            <p class="text-slide-body text-presentation font-semibold leading-relaxed" v-html="slide.summary"></p>
         </div>
     </div>
 </MathSlideWrapper>

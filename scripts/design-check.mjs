@@ -43,6 +43,32 @@ export const RULES = [
  */
 const DARK_SURFACE = /bg-(black|slate-900|slate-950)/
 
+// Deze regels gelden uitsluitend voor het geschaalde 1920×1080-slidecanvas.
+// App-controls in PresentationModal mogen schermmaten gebruiken; student-facing
+// slide-inhoud niet.
+const PRESENTATION_RULES = [
+  {
+    id: 'presentation-app-scale',
+    label: 'app-schaal in een presentation slide — gebruik slide-*',
+    pattern: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\b/g
+  },
+  {
+    id: 'presentation-badge',
+    label: 'decoratieve badge in een presentatie',
+    pattern: /\b(?:badge|fullscreen-label)\b/g
+  },
+  {
+    id: 'presentation-legacy-palette',
+    label: 'legacy amber/emerald-palet in een presentatie',
+    pattern: /\b(?:amber|emerald)-(?:\d{2,3}|\d{2,3}\/\d{1,3})\b/g
+  },
+  {
+    id: 'presentation-invalid-shade',
+    label: 'ongeldige Tailwind-kleurshade in een presentatie',
+    pattern: /\b(?:slate|amber|emerald)-(?:250|450|650|750|850)\b/g
+  }
+]
+
 function walk(directory, files = []) {
   for (const entry of fs.readdirSync(path.join(root, directory), { withFileTypes: true })) {
     const relative = path.posix.join(directory.split(path.sep).join('/'), entry.name)
@@ -86,6 +112,11 @@ export function runDesignCheck(saveBaselineFiles = false) {
     locations[rule.id] = new Set()
   }
 
+  for (const rule of PRESENTATION_RULES) {
+    counts[rule.id] = 0
+    locations[rule.id] = new Set()
+  }
+
   for (const file of files) {
     const source = fs.readFileSync(path.join(root, file), 'utf8')
     for (const rule of RULES) {
@@ -94,6 +125,22 @@ export function runDesignCheck(saveBaselineFiles = false) {
       if (found) {
         counts[rule.id] += found.length
         locations[rule.id].add(file)
+      }
+    }
+
+    // Alleen classes in student-facing slidecomponents vallen onder deze
+    // extra schaalregels; de bediening buiten het stage-canvas niet.
+    if (file.startsWith('src/components/presentation/')) {
+      const classSource = [...source.matchAll(/class="([^"]*)"/g)]
+        .map(match => match[1])
+        .join(' ')
+      for (const rule of PRESENTATION_RULES) {
+        rule.pattern.lastIndex = 0
+        const found = classSource.match(rule.pattern)
+        if (found) {
+          counts[rule.id] += found.length
+          locations[rule.id].add(file)
+        }
       }
     }
     const dark = findDarkSurfaces(file, source)
@@ -113,7 +160,11 @@ export function runDesignCheck(saveBaselineFiles = false) {
   const regressions = []
   const improvements = []
 
-  const allRules = [...RULES, { id: 'dark', label: 'donker schermvullend leesvlak op een projector' }]
+  const allRules = [
+    ...RULES,
+    ...PRESENTATION_RULES,
+    { id: 'dark', label: 'donker schermvullend leesvlak op een projector' }
+  ]
   for (const rule of allRules) {
     const current = counts[rule.id] || 0
     const base = baseline[rule.id] ?? 0

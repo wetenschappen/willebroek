@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import SubjectSelection from '../views/SubjectSelection.vue'
-import YearSelection from '../views/YearSelection.vue'
 import ClassSelection from '../views/ClassSelection.vue'
 import ModuleSelection from '../views/ModuleSelection.vue'
 import LessonView from '../views/LessonView.vue'
@@ -14,7 +13,8 @@ const routes = [
   },
 
   // ── Per vak ───────────────────────────────────────────────────────────────
-  // Alle navigatie loopt via de vak-slug, bv. /fysica, /fysica/year/3/class ...
+  // De landing page biedt meteen vak + klas. De oude tussenpagina voor
+  // leerjaren is niet meer deel van de gebruikersflow.
   {
     path: '/:subject',
     name: 'ClassSelectionDirect',
@@ -25,12 +25,6 @@ const routes = [
     path: '/:subject/class/:classId',
     name: 'ModuleSelectionDirect',
     component: ModuleSelection,
-    props: true
-  },
-  {
-    path: '/:subject/year/:id/class',
-    name: 'ClassSelection',
-    component: ClassSelection,
     props: true
   },
   {

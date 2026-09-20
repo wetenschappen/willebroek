@@ -106,11 +106,15 @@ van zijn unieke id dynamisch geladen door `LessonView.vue`.
 Routes gebruiken hash-routing:
 
 ```text
-#/                 vakkenkeuze
-#/fysica           leerjaren fysica
-#/biologie         leerjaren biologie
-#/les/<id>         lesweergave
+#/                         landing page: vak + klas kiezen
+#/fysica/class/<klas>      lessen voor een klas
+#/biologie/class/<klas>    lessen voor een klas
+#/les/<id>                 lesweergave
 ```
+
+De oude tussenpagina voor leerjaren is geen onderdeel meer van de leerlingflow.
+Klassen zonder lessen tonen op de modulepagina een eerlijke lege staat met één
+actie terug naar de landing page; er wordt geen leerjaarselectie aangeboden.
 
 ## Een les toevoegen
 

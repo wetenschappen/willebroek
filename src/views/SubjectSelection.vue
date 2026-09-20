@@ -14,13 +14,20 @@ function openClass(subject, classId) {
 
 <template>
   <main class="selection-page">
+    <header class="selection-intro selection-intro-home">
+      <p class="eyebrow">LEERPAD WILLEBROEK</p>
+      <h1>Kies je vak en klas</h1>
+      <p class="intro-copy">Kies een vak en daarna je klas om naar het leerpad te gaan.</p>
+    </header>
+
     <section class="subject-list" aria-labelledby="subject-heading">
-      <h1 id="subject-heading" class="sr-only">Kies je klas</h1>
+      <h2 id="subject-heading" class="sr-only">Vakken en klassen</h2>
 
       <div
         v-for="subject in availableSubjects"
         :key="subject.id"
         class="subject-choice"
+        :class="`subject-choice-${subject.id}`"
       >
         <div class="subject-choice-heading">
           <span class="subject-row-icon" aria-hidden="true">

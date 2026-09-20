@@ -160,9 +160,9 @@ src/
 │   ├── modules.js      ← alle lessen (id, subject, jaar, titel, icoon)
 │   └── students.js     ← voornamen per klas + klassen per vak/jaar
 ├── views/
-│   ├── SubjectSelection.vue   ← vakkenkeuze
-│   ├── YearSelection.vue      ← leerjaar (enkel jaren met lessen)
-│   ├── ClassSelection.vue     ← klas
+│   ├── SubjectSelection.vue   ← landing page: vak + klas kiezen
+│   ├── ClassSelection.vue     ← legacy/directe klasroute
+│   ├── YearSelection.vue      ← behouden bestand, niet in de leerlingflow
 │   ├── ModuleSelection.vue    ← lessenlijst per module
 │   └── LessonView.vue         ← laadt de les dynamisch
 ├── lessons/            ← één .js-bestand per les
@@ -212,10 +212,14 @@ Lees dat door voor je iets aanpast.
 dus `/les/fys3-m01-l02-stroomkringen` werkt zonder `fysica` ervoor. De les
 bepaalt zelf zijn vak via `modules.js`.
 
-**GitHub Pages gebruikt hash-routing.** Een link ziet er zo uit:
+**GitHub Pages gebruikt hash-routing.** De landing page combineert vak- en klaskeuze;
+de leerjaar-tussenpagina is verwijderd uit de leerlingflow. Een link ziet er zo uit:
 
 ```
-https://wetenschappen.github.io/willebroek/#/fysica
+https://wetenschappen.github.io/willebroek/#/
+
+# Voor een specifieke klas:
+https://wetenschappen.github.io/willebroek/#/fysica/class/3D
 ```
 
 Een pad zonder `#` (`/willebroek/fysica`) bestaat niet als bestand en geeft een

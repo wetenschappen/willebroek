@@ -40,11 +40,6 @@ function openLesson(lessonId) {
 function goBack() {
   router.push('/')
 }
-
-/** Terug naar de klassenlijst van dit vak. */
-function chooseClass() {
-  if (subject.value) router.push('/' + subject.value.slug)
-}
 </script>
 
 <template>
@@ -71,8 +66,7 @@ function chooseClass() {
       <p><strong>Voor deze klas staan nog geen lessen klaar.</strong></p>
       <p>De lessen voor {{ classId }} worden later toegevoegd. Kies een andere klas of ga terug naar het vakkenoverzicht.</p>
       <div class="flex flex-wrap gap-3 mt-4">
-        <button type="button" class="btn btn-primary" @click="chooseClass">Andere klas kiezen</button>
-        <button type="button" class="btn btn-ghost" style="border: 2px solid var(--color-line-strong);" @click="goBack">Naar de vakken</button>
+        <button type="button" class="btn btn-primary" @click="goBack">Naar de landing page</button>
       </div>
     </div>
 

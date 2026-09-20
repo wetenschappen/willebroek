@@ -8,8 +8,6 @@ const router = useRouter()
 const route = useRoute()
 
 const subject = computed(() => subjectBySlug(route.params.subject))
-const subjectSlug = computed(() => route.params.subject)
-
 
 function goBack() {
   router.push('/')

@@ -415,7 +415,7 @@ Dit is riskant voor projectie wanneer de tekst functioneel is, bijvoorbeeld:
 De router gebruikt `createWebHashHistory()`. De werkelijke routes zijn daardoor hash-routes, bijvoorbeeld:
 
 ```text
-/willebroek/#/fysica
+/willebroek/#/
 /willebroek/#/fysica/class/3D
 ```
 
@@ -438,7 +438,9 @@ Dit is een geldige GitHub Pages-oplossing, maar directe links zijn hierdoor mind
 > **Aangevuld.** Naast biologie 5D en 6D heeft ook **fysica 6D/A** geen lessen.
 > Drie klassen tonen dus een lege modulelijst. Opgelost door:
 >
-> - de lege staat uitleg en een uitweg te geven in plaats van een dood einde;
+> - de landing page meteen vak en klas laat kiezen;
+> - de lege staat uitleg en één uitweg naar de landing page te geven in plaats van
+>   een tweede keuze naar de oude jaarpagina;
 > - de klascode-naar-leerjaar-mapping naar één bron te verhuizen
 >   (`yearByClass` in `src/data/students.js`), want die stond dubbel;
 > - `npm run check` die mapping te laten controleren en de klassen zonder

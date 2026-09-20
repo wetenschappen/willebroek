@@ -23,12 +23,11 @@ const groupedModules = computed(() => {
   filteredModules.value.forEach(m => {
     const match = m.id.match(/m(\d+)-l(\d+)/)
     const moduleNum = match ? match[1] : '00'
-    const lessonNum = match ? parseInt(match[2]) : 1
     if (!groups[moduleNum]) {
       const topic = m.title.includes(':') ? m.title.split(':')[0].trim() : m.title
       groups[moduleNum] = { moduleNum, topic, lessons: [] }
     }
-    groups[moduleNum].lessons.push({ ...m, lessonNum })
+    groups[moduleNum].lessons.push(m)
   })
   return Object.values(groups).sort((a, b) => parseInt(a.moduleNum) - parseInt(b.moduleNum))
 })
@@ -60,14 +59,11 @@ function goBack() {
       </div>
     </header>
 
-    <!-- Lege staat: zeg wat er aan de hand is en bied een uitweg.
-         Een klas zonder lessen is geen fout van de leerling. -->
+    <!-- Lege staat: zeg wat er aan de hand is zonder een tweede navigatiekeuze.
+         De zichtbare knop Klassen bovenaan is de terugweg. -->
     <div v-if="groupedModules.length === 0" class="empty-state">
       <p><strong>Voor deze klas staan nog geen lessen klaar.</strong></p>
-      <p>De lessen voor {{ classId }} worden later toegevoegd. Kies een andere klas of ga terug naar het vakkenoverzicht.</p>
-      <div class="flex flex-wrap gap-3 mt-4">
-        <button type="button" class="btn btn-primary" @click="goBack">Naar de landing page</button>
-      </div>
+      <p>De lessen voor {{ classId }} worden later toegevoegd. Gebruik de knop Klassen hierboven om terug te keren naar de selectie.</p>
     </div>
 
     <div v-else class="module-index">
@@ -86,9 +82,7 @@ function goBack() {
             class="lesson-row"
             @click="openLesson(lesson.id)"
           >
-            <span class="lesson-number">{{ String(lesson.lessonNum).padStart(2, '0') }}</span>
             <span class="lesson-copy">
-              <span class="lesson-meta">M{{ group.moduleNum }} · Les {{ lesson.lessonNum }}</span>
               <strong>{{ lesson.title }}</strong>
             </span>
             <PhArrowRight weight="regular" class="lesson-arrow" aria-hidden="true" />

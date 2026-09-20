@@ -113,8 +113,9 @@ Routes gebruiken hash-routing:
 ```
 
 De oude tussenpagina voor leerjaren is geen onderdeel meer van de leerlingflow.
-Klassen zonder lessen tonen op de modulepagina een eerlijke lege staat met één
-actie terug naar de landing page; er wordt geen leerjaarselectie aangeboden.
+Klassen zonder lessen tonen op de modulepagina een eerlijke lege staat. De
+zichtbare knop Klassen bovenaan is de enige terugweg; er wordt geen extra actie
+of leerjaarselectie aangeboden.
 
 ## Een les toevoegen
 

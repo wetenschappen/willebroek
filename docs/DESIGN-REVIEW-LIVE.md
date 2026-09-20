@@ -60,6 +60,12 @@ compacte kopregel met titel en `AFSPRAKEN` in plaats van een gestapelde badgekop
 
 ### Rustigere hoofdflow
 
+De hoofdflow is gewijzigd naar directe klasselectie. De landing page toont geen
+extra productnaam boven de instructie; die voegt geen keuze-informatie toe.
+Binnen de lessenlijst wordt een module één keer benoemd in de modulekop. De
+leskaarten herhalen daarom niet opnieuw `M01`/`Les 01`; de modulecode blijft
+wel duidelijk zichtbaar als kopanker (`M01`, `M02`, enzovoort).
+
 De hoofdflow is gewijzigd naar directe klasselectie:
 
 ```text
@@ -439,8 +445,8 @@ Dit is een geldige GitHub Pages-oplossing, maar directe links zijn hierdoor mind
 > Drie klassen tonen dus een lege modulelijst. Opgelost door:
 >
 > - de landing page meteen vak en klas laat kiezen;
-> - de lege staat uitleg en één uitweg naar de landing page te geven in plaats van
->   een tweede keuze naar de oude jaarpagina;
+> - de lege staat uitleg te geven zonder een tweede knop: de zichtbare knop
+>   Klassen bovenaan is de terugweg;
 > - de klascode-naar-leerjaar-mapping naar één bron te verhuizen
 >   (`yearByClass` in `src/data/students.js`), want die stond dubbel;
 > - `npm run check` die mapping te laten controleren en de klassen zonder

@@ -15,7 +15,6 @@ function openClass(subject, classId) {
 <template>
   <main class="selection-page">
     <header class="selection-intro selection-intro-home">
-      <p class="eyebrow">LEERPAD WILLEBROEK</p>
       <h1>Kies je vak en klas</h1>
       <p class="intro-copy">Kies een vak en daarna je klas om naar het leerpad te gaan.</p>
     </header>

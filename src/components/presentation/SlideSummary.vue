@@ -25,7 +25,7 @@ const props = defineProps({
       
       <!-- Key Takeaway Box (No Left Border, No Gradients) -->
       <div v-if="slide.keyTakeaway" class="p-6 border border-presentation bg-presentation-soft rounded-xl shadow-sm mt-2">
-        <div class="text-slide-small font-bold text-presentation uppercase tracking-wider mb-2">Belangrijkste inzicht</div>
+        <div class="text-slide-small font-bold text-presentation mb-2">Belangrijkste inzicht</div>
         <div class="text-slide-body text-slate-800 leading-relaxed font-semibold" v-html="slide.keyTakeaway"></div>
       </div>
     </div>

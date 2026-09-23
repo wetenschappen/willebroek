@@ -27,6 +27,9 @@ const currentStepIndex = ref(0)
 const answers = ref({})
 const selectedMood = ref(null)
 
+const selectedLeftItem = ref(null)
+const shuffledRightMap = ref({})
+
 const parts = computed(() => {
     const questionParts = props.questions.map((q, index) => ({
         id: q.id || `q${index}`,
@@ -34,6 +37,7 @@ const parts = computed(() => {
         question: q.question,
         description: q.description,
         options: q.options,
+        pairs: q.pairs,
         correct: q.correct,
         mathConfig: q.mathConfig,
         correctPoint: q.correctPoint,
@@ -57,9 +61,52 @@ const currentPart = computed(() => parts.value[currentStepIndex.value])
 const totalParts = computed(() => parts.value.length)
 const progress = computed(() => ((currentStepIndex.value) / (totalParts.value - 1)) * 100)
 
+function getShuffledRight(part) {
+    if (!part.pairs) return []
+    if (!shuffledRightMap.value[part.id]) {
+        const items = part.pairs.map((p, idx) => ({ text: p.right, originalIndex: idx }))
+        // Deterministic offset shuffle so items are not opposite each other
+        if (items.length > 1) {
+            const shift = 1 + (part.id.charCodeAt(0) % (items.length - 1))
+            const shifted = [...items.slice(shift), ...items.slice(0, shift)]
+            shuffledRightMap.value[part.id] = shifted
+        } else {
+            shuffledRightMap.value[part.id] = items
+        }
+    }
+    return shuffledRightMap.value[part.id]
+}
+
+function selectMatchingLeft(leftIdx) {
+    selectedLeftItem.value = selectedLeftItem.value === leftIdx ? null : leftIdx
+}
+
+function selectMatchingRight(partId, rightIdx) {
+    if (selectedLeftItem.value === null) return
+    if (!answers.value[partId]) answers.value[partId] = {}
+    
+    // If another left item was already mapped to this right item, remove that mapping
+    for (const [k, v] of Object.entries(answers.value[partId])) {
+        if (v === rightIdx) delete answers.value[partId][k]
+    }
+
+    answers.value[partId][selectedLeftItem.value] = rightIdx
+    selectedLeftItem.value = null
+}
+
+function unpairMatching(partId, leftIdx) {
+    if (answers.value[partId]) {
+        delete answers.value[partId][leftIdx]
+    }
+}
+
 const canProceed = computed(() => {
     const p = currentPart.value
     if (p.type === 'mc') return answers.value[p.id] !== undefined
+    if (p.type === 'matching') {
+        const userMatches = answers.value[p.id] || {}
+        return p.pairs && Object.keys(userMatches).length === p.pairs.length
+    }
     if (p.type === 'open') return (answers.value[p.id] || '').trim().length > 10
     if (p.type === 'graph-point') return answers.value[p.id] !== undefined
     if (p.type === 'mood') return selectedMood.value !== null
@@ -90,6 +137,8 @@ function close() {
         currentStepIndex.value = 0
         answers.value = {}
         selectedMood.value = null
+        selectedLeftItem.value = null
+        shuffledRightMap.value = {}
     }, 500)
 }
 
@@ -123,7 +172,7 @@ function getMoodLabel(mood) {
 
 const questionResults = computed(() => {
     return parts.value
-        .filter(p => ['mc', 'graph-point'].includes(p.type))
+        .filter(p => ['mc', 'graph-point', 'matching'].includes(p.type))
         .map(p => {
             let isCorrect = false
             if (p.type === 'mc') {
@@ -135,6 +184,13 @@ const questionResults = computed(() => {
                     const dy = ans.y - p.correctPoint.y
                     isCorrect = Math.sqrt(dx*dx + dy*dy) <= (p.tolerance || 0.5)
                 }
+            } else if (p.type === 'matching') {
+                const userMatches = answers.value[p.id] || {}
+                const rightItems = getShuffledRight(p)
+                isCorrect = Boolean(p.pairs && p.pairs.length > 0 && p.pairs.every((pair, lIdx) => {
+                    const rIdx = userMatches[lIdx]
+                    return rIdx !== undefined && rightItems[rIdx]?.originalIndex === lIdx
+                }))
             }
             return { id: p.id, question: p.question, isCorrect, answer: answers.value[p.id] }
         })
@@ -146,13 +202,13 @@ const scoredCorrect = computed(() => questionResults.value.filter(r => r.isCorre
 const actualQuestionNumber = computed(() => {
     let count = 0
     for (let i = 0; i <= currentStepIndex.value; i++) {
-        if (['mc', 'open', 'graph-point'].includes(parts.value[i].type)) count++
+        if (['mc', 'open', 'graph-point', 'matching'].includes(parts.value[i].type)) count++
     }
     return count
 })
 
 const totalQuestions = computed(() => {
-    return parts.value.filter(p => ['mc', 'open', 'graph-point'].includes(p.type)).length
+    return parts.value.filter(p => ['mc', 'open', 'graph-point', 'matching'].includes(p.type)).length
 })
 
 function selectGraphPoint(id, pt) {
@@ -173,7 +229,7 @@ function getGraphConfig(part) {
 
 // Eén kleurtype: dit is een digitale activiteit (card-entry en card-exit zijn
 // allebei type 'digital'), dus blauw --color-digital. Entry en exit verschillen
-// alleen in titel, icoon en vraagset — niet in kleur.
+// alleen in titel, icoon en vraagset - niet in kleur.
 const ACCENT = '#075985'
 const ACCENT_SOFT = '#e3f1f5'
 const title = computed(() => isEntry.value ? 'Toegangsticket' : 'Exitticket')
@@ -215,7 +271,7 @@ function optionLeave(event, selected) {
       <div class="min-w-0">
         <h2 class="fullscreen-title">{{ title }}</h2>
         <p class="fullscreen-label">
-          <template v-if="['mc', 'open', 'graph-point'].includes(currentPart.type)">
+          <template v-if="['mc', 'open', 'graph-point', 'matching'].includes(currentPart.type)">
             Vraag {{ actualQuestionNumber }} van {{ totalQuestions }}
           </template>
           <template v-else>{{ currentPart.type === 'mood' ? 'Reflectie' : 'Resultaat' }}</template>
@@ -255,6 +311,67 @@ function optionLeave(event, selected) {
                 <div v-if="answers[currentPart.id] === idx" class="w-3 h-3 bg-white rounded-full"></div>
               </div>
             </button>
+          </div>
+        </div>
+
+        <!-- MATCHING QUESTION -->
+        <div v-else-if="currentPart.type === 'matching'" :key="'match-'+currentPart.id" class="flex-1 flex flex-col max-w-4xl mx-auto w-full">
+          <h4 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2" v-html="currentPart.question"></h4>
+          <p class="text-slate-600 text-base mb-6" v-html="currentPart.description || 'Klik eerst op een situatie links en kies vervolgens de juiste verklaring rechts.'"></p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 items-start">
+            <!-- Left column: Situations -->
+            <div class="space-y-3">
+              <p class="text-xs font-bold text-slate-500 mb-1">Situatie / Verschijnsel</p>
+              <div
+                v-for="(pair, lIdx) in currentPart.pairs"
+                :key="'left-'+lIdx"
+                @click="selectMatchingLeft(lIdx)"
+                class="p-4 rounded-card border-2 cursor-pointer transition-all flex items-center justify-between gap-3 select-none"
+                :style="selectedLeftItem === lIdx
+                  ? { borderColor: ACCENT, background: ACCENT_SOFT, color: '#17252b' }
+                  : (answers[currentPart.id]?.[lIdx] !== undefined
+                    ? { borderColor: '#0ea5e9', background: '#f0f9ff', color: '#0369a1' }
+                    : { borderColor: '#d5dfde', background: '#ffffff', color: '#34474e' })"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                        :style="answers[currentPart.id]?.[lIdx] !== undefined ? { background: '#0284c7', color: '#fff' } : { background: '#e2e8f0', color: '#475569' }">
+                    {{ lIdx + 1 }}
+                  </span>
+                  <span class="text-sm font-medium" v-html="pair.left"></span>
+                </div>
+                <div v-if="answers[currentPart.id]?.[lIdx] !== undefined" class="flex items-center gap-2">
+                  <span class="text-xs font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-control">
+                    → {{ String.fromCharCode(65 + answers[currentPart.id][lIdx]) }}
+                  </span>
+                  <button @click.stop="unpairMatching(currentPart.id, lIdx)" class="text-slate-600 hover:text-slate-900 p-1" title="Ontkoppelen">
+                    <PhX weight="bold" class="text-sm" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right column: Explanations -->
+            <div class="space-y-3">
+              <p class="text-xs font-bold text-slate-500 mb-1">Fysische verklaring</p>
+              <div
+                v-for="(rItem, rIdx) in getShuffledRight(currentPart)"
+                :key="'right-'+rIdx"
+                @click="selectMatchingRight(currentPart.id, rIdx)"
+                class="p-4 rounded-card border-2 transition-all flex items-start gap-3 select-none"
+                :class="selectedLeftItem !== null ? 'cursor-pointer hover:border-sky-500 hover:bg-sky-50' : 'cursor-default'"
+                :style="Object.values(answers[currentPart.id] || {}).includes(rIdx)
+                  ? { borderColor: '#0ea5e9', background: '#f0f9ff', color: '#0369a1' }
+                  : { borderColor: '#d5dfde', background: '#ffffff', color: '#34474e' }"
+              >
+                <span class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
+                      :style="Object.values(answers[currentPart.id] || {}).includes(rIdx) ? { background: '#0284c7', color: '#fff' } : { background: '#e2e8f0', color: '#475569' }">
+                  {{ String.fromCharCode(65 + rIdx) }}
+                </span>
+                <span class="text-sm font-medium leading-relaxed" v-html="rItem.text"></span>
+              </div>
+            </div>
           </div>
         </div>
 

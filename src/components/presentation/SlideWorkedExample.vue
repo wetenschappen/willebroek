@@ -1,5 +1,5 @@
 <script setup>
-import { inject } from 'vue'
+import { computed } from 'vue'
 import MathSlideWrapper from './shared/MathSlideWrapper.vue'
 import PedagogyPanel from './shared/PedagogyPanel.vue'
 
@@ -10,62 +10,82 @@ const props = defineProps({
     currentMathConfigForAnalysis: { type: Object, default: null }
 })
 
-const emit = defineEmits(['revealNext', 'selectAnswer', 'checkAnswer', 'copyLink', 'showConfetti'])
+defineEmits(['revealNext', 'selectAnswer', 'checkAnswer', 'copyLink', 'showConfetti'])
+
+const problemText = computed(() => {
+    if (props.slide.problem) return props.slide.problem
+    if (props.slide.opgave) return props.slide.opgave
+    if (props.slide.situation) return props.slide.situation
+    if (props.slide.description) return props.slide.description
+    const firstStep = props.slide.steps?.[0]
+    if (firstStep && (firstStep.label === 'Situatie' || firstStep.label === 'Opgave' || firstStep.label === 'Gegeven')) {
+        return (firstStep.content || firstStep.result || firstStep.text)
+    }
+    return props.slide.title || 'Uitgewerkt voorbeeld'
+})
+
+const displaySteps = computed(() => {
+    if (!props.slide.steps) return []
+    const firstStep = props.slide.steps[0]
+    // If first step was used as problem text and was explicitly 'Situatie' or 'Opgave', omit it from right steps
+    if (firstStep && (firstStep.label === 'Situatie' || firstStep.label === 'Opgave') && !props.slide.problem) {
+        return props.slide.steps.slice(1)
+    }
+    return props.slide.steps
+})
+
+const visibleSteps = computed(() => {
+    return displaySteps.value.slice(0, props.revealedSteps)
+})
 </script>
 
 <template>
-<MathSlideWrapper :title="slide.title">
-    
-    <div class="flex-1 grid grid-cols-[1fr_1.2fr] gap-8 mt-4 pb-6">
+<MathSlideWrapper :title="slide.title || 'Voorbeeld'">
+    <div class="grid grid-cols-[0.85fr_1.55fr] gap-8 mt-2 pb-6 items-start">
         <!-- Left: Problem -->
         <div>
-            <PedagogyPanel variant="example" title="Opgave" icon="worked-example">
-                <div v-if="slide.method" class="mb-4 inline-flex px-4 py-1 bg-presentation-soft border border-presentation text-presentation rounded-full text-slide-small font-bold tracking-wider uppercase">
+            <PedagogyPanel variant="example" title="Opgave">
+                <div v-if="slide.method" class="mb-4 inline-flex px-3 py-1 bg-presentation-soft border border-presentation text-presentation rounded-full text-slide-small font-bold">
                     Methode: {{ slide.method }}
                 </div>
-                <div class="text-slide-body leading-relaxed text-slate-700 font-medium" v-html="slide.problem"></div>
+                <div class="text-slide-body leading-relaxed text-slate-700 font-medium" v-html="problemText"></div>
             </PedagogyPanel>
         </div>
         
         <!-- Right: Solution steps -->
-        <div class="flex flex-col gap-5 pt-4">
-            <h4 class="text-slide-small font-bold uppercase tracking-wider text-slate-600 mb-2 pl-2">Uitwerking</h4>
+        <div class="flex flex-col gap-3">
+            <h4 class="text-slide-small font-bold text-slate-600 mb-1 pl-1">Uitwerking</h4>
             
-            <div class="space-y-4">
-                <div v-for="(step, idx) in slide.steps" :key="idx"
-                     class="relative transition-all duration-300"
-                     :class="idx < revealedSteps ? 'opacity-100' : 'opacity-0 translate-y-8 absolute pointer-events-none'">
+            <div class="space-y-3">
+                <div v-for="(step, idx) in visibleSteps" :key="idx"
+                     class="bg-white rounded-xl p-4 border border-slate-200 flex gap-4 shadow-sm items-start animate-[fadeInUp_0.25s_ease-out]">
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center text-slide-small font-bold shrink-0 mt-0.5">
+                        {{ idx + 1 }}
+                    </div>
                     
-                    <div class="relative bg-white rounded-xl p-6 border border-slate-200 flex gap-5 overflow-hidden shadow-sm">
-                        <!-- Step vertical timeline connector -->
-                        <div class="absolute left-9 top-18 bottom-[-2rem] w-px bg-slate-200" v-if="idx < slide.steps.length - 1"></div>
-                        
-                        <!-- Functionele stapmarkering: nummer en connector dragen de volgorde. -->
-                        <div class="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center text-slide-body font-bold shrink-0 shadow-sm relative z-10">
-                            {{ idx + 1 }}
-                        </div>
-                        
-                        <!-- Step content -->
-                        <div class="flex-1 pt-0.5">
-                            <p class="text-slide-body text-presentation mb-2 font-bold tracking-wider uppercase" v-html="step.action"></p>
-                            <p class="text-slide-heading font-bold text-slate-800 font-mono" v-html="step.result"></p>
-                        </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-slide-small text-presentation mb-0.5 font-bold" v-html="step.action || step.label || step.title || ('Stap ' + (idx + 1))"></p>
+                        <div class="text-slide-body text-slate-800 font-medium leading-snug" v-html="step.result || step.content || step.text"></div>
                     </div>
                 </div>
             </div>
             
-            <!-- Answer Box (Flat border style, Amber theme) -->
-            <div v-if="slide.answer && revealedSteps >= slide.steps.length" 
-                 class="mt-4 relative bg-presentation-soft border border-presentation text-slate-800 p-6 rounded-xl shadow-sm animate-[fadeInUp_0.3s_ease-out]">
-                 
-                 <div class="relative z-10">
-                    <h4 class="text-slide-small font-bold uppercase tracking-wider text-presentation mb-2 flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Eindresultaat
-                    </h4>
-                    <p class="text-slide-heading font-extrabold text-slate-900 font-mono" v-html="slide.answer"></p>
-                    <p v-if="slide.check" class="text-slide-body text-slate-700 mt-4 bg-white p-3 rounded-lg border border-slate-200" v-html="slide.check"></p>
-                 </div>
+            <!-- Answer Box if provided: only visible when all steps have been revealed -->
+            <div v-if="slide.answer && revealedSteps >= displaySteps.length" 
+                 class="mt-2 bg-presentation-soft border border-presentation text-slate-800 p-4 rounded-xl shadow-sm animate-[fadeInUp_0.3s_ease-out]">
+                 <h4 class="text-slide-small font-bold text-presentation mb-1 flex items-center gap-2">
+                     Eindresultaat
+                 </h4>
+                 <div class="text-slide-body font-bold text-slate-900" v-html="slide.answer"></div>
+            </div>
+
+            <!-- Next step reveal button / guide when steps remain -->
+            <div v-if="revealedSteps < displaySteps.length" class="mt-2 flex justify-start">
+                <button @click="$emit('revealNext', displaySteps.length)"
+                        class="px-4 py-2.5 rounded-lg border border-dashed border-presentation text-presentation hover:bg-presentation-soft transition-colors flex items-center gap-2 text-slide-small font-bold cursor-pointer">
+                    <span>Stap {{ revealedSteps + 1 }} onthullen<template v-if="displaySteps[revealedSteps]?.label">: {{ displaySteps[revealedSteps].label }}</template></span>
+                    <span class="bg-presentation text-white px-1.5 py-0.5 rounded font-mono select-none text-slide-small">Spatie / →</span>
+                </button>
             </div>
         </div>
     </div>

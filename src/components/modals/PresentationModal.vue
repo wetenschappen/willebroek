@@ -136,10 +136,10 @@ const disciplineSlide = computed(() => ({
     layout: 'discipline',
     cursusLink: props.config?.cursusLink || '',
     rules: props.config?.disciplineRules || [
-        { icon: 'speaker-slash', text: 'In <span class="text-math-orange">stilte</span> binnenkomen en plaatsnemen.' },
-        { icon: 'book-open', text: '<span class="text-math-orange">Jassen uit</span>, cursus op de bank klaarleggen.' },
-        { icon: 'hand-pointing', text: '<span class="text-math-orange">Rust</span> bewaren: praten enkel na hand opsteken en toestemming.' },
-        { icon: 'hourglass', text: 'Samen werken van de eerste tot de <span class="text-math-orange">laatste minuut</span>.' }
+        { text: 'In <span class="text-math-orange">stilte</span> binnenkomen en plaatsnemen.' },
+        { text: '<span class="text-math-orange">Jassen uit</span>, cursus op de bank klaarleggen.' },
+        { text: '<span class="text-math-orange">Rust</span> bewaren: praten enkel na hand opsteken en toestemming.' },
+        { text: 'Samen werken van de eerste tot de <span class="text-math-orange">laatste minuut</span>.' }
     ]
 }))
 

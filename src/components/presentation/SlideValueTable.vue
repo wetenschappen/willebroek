@@ -23,7 +23,7 @@ const hasHighlight = computed(() => {
     <div class="flex flex-col items-center justify-center min-h-[450px] mt-4">
         
         <!-- Formula Header -->
-        <PedagogyPanel v-if="slide.formula" variant="formula" title="Functievoorschrift" icon="formula" class="w-full max-w-4xl mb-8 shadow-sm">
+        <PedagogyPanel v-if="slide.formula" variant="formula" title="Functievoorschrift" class="w-full max-w-4xl mb-8 shadow-sm">
             <div class="text-slide-heading font-bold text-center font-mono text-slate-800" v-html="slide.formula"></div>
         </PedagogyPanel>
         

@@ -3,185 +3,62 @@
  *
  * Elk item = één les. `subject` bepaalt onder welk vak de les verschijnt en
  * moet overeenkomen met `subject:` in het lesbestand zelf.
- * Zichtbaarheid per school staat in src/data/subjects.js — niet hier.
+ * Zichtbaarheid per school staat in src/data/subjects.js - niet hier.
  */
 export const modules = [
 
   // ══════════════════════════════════════════════════════════════════════════
-  // FYSICA
+  // FYSICA (Actief - Gouden standaard)
   // ══════════════════════════════════════════════════════════════════════════
 
-  // ── 1ste jaar ──────────────────────────────────────────────────────────────
+  // ── 4de jaar (WACO 4 - Thema 1: Druk) ────────────────────────────────────────
   {
-    id: 'fys1-m01-l01-krachten',
+    id: 'fys4-m01-druk-vaste-stoffen',
     subject: 'physics',
-    title: 'Krachten: Introductie',
-    year: 1
-  },
-  {
-    id: 'fys1-m01-l02-meten',
-    subject: 'physics',
-    title: 'Krachten: Meten & Eenheden',
-    year: 1
-  },
-  {
-    id: 'fys1-m02-l01-beweging',
-    subject: 'physics',
-    title: 'Beweging: Snelheid',
-    year: 1
-  },
-  {
-    id: 'fys1-m02-l02-versnelling',
-    subject: 'physics',
-    title: 'Beweging: Versnelling',
-    year: 1
-  },
+    year: 4,
+    module: 1,
+    topic: 'Druk',
+    title: 'Druk bij vaste stoffen',
+    date: '24/09/2026'
+  }
 
-  // ── 2de jaar ──────────────────────────────────────────────────────────────
-  {
-    id: 'fys2-m01-l01-energie',
-    subject: 'physics',
-    title: 'Energie: Vormen & Omzetting',
-    year: 2
-  },
-  {
-    id: 'fys2-m01-l02-warmte',
-    subject: 'physics',
-    title: 'Energie: Warmteleer',
-    year: 2
-  },
-  {
-    id: 'fys2-m02-l01-golven',
-    subject: 'physics',
-    title: 'Golven: Geluid',
-    year: 2
-  },
+]
 
-  // ── 3de jaar ──────────────────────────────────────────────────────────────
-  {
-    id: 'fys3-m01-l01-elektriciteit',
-    subject: 'physics',
-    title: 'Elektriciteit: Lading & Spanning',
-    year: 3
-  },
-  {
-    id: 'fys3-m01-l02-stroomkringen',
-    subject: 'physics',
-    title: 'Elektriciteit: Stroomkringen',
-    year: 3
-  },
-  {
-    id: 'fys3-m02-l01-magnetisme',
-    subject: 'physics',
-    title: 'Magnetisme: Velden',
-    year: 3
-  },
+/**
+ * Gearchiveerde lessen (ter referentie bewaard in src/lessons/_archive/)
+ */
+export const archivedModules = [
+  // WACO 4 Thema 1 (Druk) lessen 2-10
+  { id: 'fys4-m01-l02-toepassingen-druk-vaste-stoffen', subject: 'physics', year: 4, title: 'Druk: Toepassingen & Vraagstukken' },
+  { id: 'fys4-m01-l03-gasdruk-atmosfeer', subject: 'physics', year: 4, title: 'Druk: Gasdruk & Atmosferische Druk' },
+  { id: 'fys4-m01-l04-meten-gasdruk-manometer', subject: 'physics', year: 4, title: 'Druk: Meten van Druk, Over- & Onderdruk' },
+  { id: 'fys4-m01-l05-hydrostatische-druk', subject: 'physics', year: 4, title: 'Druk: Hydrostatische Druk & Diepte' },
+  { id: 'fys4-m01-l06-totale-vloeistofdruk-vaten', subject: 'physics', year: 4, title: 'Druk: Totale Druk & Communicerende Vaten' },
+  { id: 'fys4-m01-l07-beginsel-van-pascal', subject: 'physics', year: 4, title: 'Druk: Beginsel van Pascal & Hydraulica' },
+  { id: 'fys4-m01-l08-vraagstukken-vloeistofdruk', subject: 'physics', year: 4, title: 'Druk: Vloeistofdruk Vraagstukken & Synthese' },
+  { id: 'fys4-m01-l09-archimedeskracht-vloeistoffen', subject: 'physics', year: 4, title: 'Druk: Archimedeskracht in Vloeistoffen' },
+  { id: 'fys4-m01-l10-archimedeskracht-gassen', subject: 'physics', year: 4, title: 'Druk: Archimedeskracht in Gassen & Synthese' },
 
-  // ── 4de jaar ──────────────────────────────────────────────────────────────
-  {
-    id: 'fys4-m01-l01-optica',
-    subject: 'physics',
-    title: 'Optica: Licht & Breking',
-    year: 4
-  },
-  {
-    id: 'fys4-m02-l01-kernfysica',
-    subject: 'physics',
-    title: 'Kernfysica: Radioactiviteit',
-    year: 4
-  },
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // BIOLOGIE
-  // ══════════════════════════════════════════════════════════════════════════
-
-  // ── 1ste jaar ──────────────────────────────────────────────────────────────
-  {
-    id: 'bio1-m01-l01-levend',
-    subject: 'biology',
-    title: 'Levende Wezens: Kenmerken',
-    year: 1
-  },
-  {
-    id: 'bio1-m01-l02-indeling',
-    subject: 'biology',
-    title: 'Levende Wezens: Indeling',
-    year: 1
-  },
-  {
-    id: 'bio1-m02-l01-cel',
-    subject: 'biology',
-    title: 'De Cel: Bouw',
-    year: 1
-  },
-  {
-    id: 'bio1-m02-l02-celfuncties',
-    subject: 'biology',
-    title: 'De Cel: Functies',
-    year: 1
-  },
-
-  // ── 2de jaar ──────────────────────────────────────────────────────────────
-  {
-    id: 'bio2-m01-l01-planten',
-    subject: 'biology',
-    title: 'Planten: Bouw & Functies',
-    year: 2
-  },
-  {
-    id: 'bio2-m01-l02-fotosynthese',
-    subject: 'biology',
-    title: 'Planten: Fotosynthese',
-    year: 2
-  },
-  {
-    id: 'bio2-m02-l01-ecosysteem',
-    subject: 'biology',
-    title: 'Ecosystemen: Voedselketens',
-    year: 2
-  },
-
-  // ── 3de jaar ──────────────────────────────────────────────────────────────
-  {
-    id: 'bio3-m01-l01-erfelijkheid',
-    subject: 'biology',
-    title: 'Erfelijkheid: DNA & Genen',
-    year: 3
-  },
-  {
-    id: 'bio3-m01-l02-overerving',
-    subject: 'biology',
-    title: 'Erfelijkheid: Mendel',
-    year: 3
-  },
-  {
-    id: 'bio3-m02-l01-evolutie',
-    subject: 'biology',
-    title: 'Evolutie: Basisprincipes',
-    year: 3
-  },
-
-  // ── 4de jaar ──────────────────────────────────────────────────────────────
-  {
-    id: 'bio4-m01-l01-stofwisseling',
-    subject: 'biology',
-    title: 'Stofwisseling: Cellulaire Ademhaling',
-    year: 4
-  },
-  {
-    id: 'bio4-m02-l01-immunologie',
-    subject: 'biology',
-    title: 'Immunologie: Afweersysteem',
-    year: 4
-  },
-
-  // ══════════════════════════════════════════════════════════════════════════
+  // WACO 3 Thema 1 (Optica) lessen 1-13
+  { id: 'fys3-m01-l01-lichtbronnen-en-voortplanting', subject: 'physics', year: 3, title: 'Optica: Lichtbronnen & Voortplanting' },
+  { id: 'fys3-m01-l02-schaduwvorming', subject: 'physics', year: 3, title: 'Optica: Schaduwvorming & Eclipsen' },
+  { id: 'fys3-m01-l03-lichamen-zien-terugkaatsing', subject: 'physics', year: 3, title: 'Optica: Lichamen Zien & Terugkaatsingswet' },
+  { id: 'fys3-m01-l04-diffuse-weerkaatsing', subject: 'physics', year: 3, title: 'Optica: Regelmatige & Diffuse Weerkaatsing' },
+  { id: 'fys3-m01-l05-vlakke-spiegel-beeld', subject: 'physics', year: 3, title: 'Optica: Beeldvorming Vlakke Spiegel' },
+  { id: 'fys3-m01-l06-gezichtsveld-spiegel', subject: 'physics', year: 3, title: 'Optica: Gezichtsveld & Dode Hoek' },
+  { id: 'fys3-m01-l07-lichtbreking-basis', subject: 'physics', year: 3, title: 'Optica: Lichtbreking & Middenstoffen' },
+  { id: 'fys3-m01-l08-totale-weerkaatsing', subject: 'physics', year: 3, title: 'Optica: Grenshoek & Totale Weerkaatsing' },
+  { id: 'fys3-m01-l09-bolle-lenzen-hoofdstralen', subject: 'physics', year: 3, title: 'Optica: Bolle Lenzen & 3 Hoofdstralen' },
+  { id: 'fys3-m01-l10-bolle-lenzen-beeldvorming', subject: 'physics', year: 3, title: 'Optica: Beeldvorming bij Bolle Lenzen' },
+  { id: 'fys3-m01-l11-vergrotingsfactor', subject: 'physics', year: 3, title: 'Optica: De Vergrotingsfactor (N)' },
+  { id: 'fys3-m01-l12-kleuren-wit-licht', subject: 'physics', year: 3, title: 'Optica: Kleuren in Wit Licht & Dispersie' },
+  { id: 'fys3-m01-l13-kleur-donkere-lichamen', subject: 'physics', year: 3, title: 'Optica: Kleur van Donkere Lichamen & Synthese' }
 ]
 
 /**
  * Lessen van één vak in één jaar.
  * @param {string} subjectId  bv. 'physics'
- * @param {number} year       bv. 3
+ * @param {number} year       bv. 4
  */
 export function modulesFor(subjectId, year) {
   return modules.filter(m => m.subject === subjectId && m.year === year)

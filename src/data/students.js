@@ -1,5 +1,5 @@
 /**
- * LEERLINGENLIJSTEN — Willebroek
+ * LEERLINGENLIJSTEN - Willebroek
  *
  * ── AFSPRAKEN ───────────────────────────────────────────────────────────────
  * • Enkel VOORNAMEN. Geen achternamen, geen initialen met achternaam.
@@ -11,7 +11,7 @@
  * ── KLASSEN KOPPELEN ────────────────────────────────────────────────────────
  * `classesBySubjectYear` bepaalt welke klassen op het klasscherm staan.
  * De sleutel moet exact overeenkomen met een sleutel in `studentLists`.
- * Een klas zonder namen werkt ook — de naamkiezer valt dan terug op de
+ * Een klas zonder namen werkt ook - de naamkiezer valt dan terug op de
  * volledige lijst van dat vak.
  */
 
@@ -47,11 +47,11 @@ export const studentLists = {
 
 /**
  * Welke klassen verschijnen per vak.
- * Pas dit aan per school — dit is het enige bestand dat je daarvoor hoeft te wijzigen.
+ * Pas dit aan per school - dit is het enige bestand dat je daarvoor hoeft te wijzigen.
  */
 export const classesBySubject = {
-    physics: ['3D', '4D', '6D-A'],
-    biology: ['5D', '6D']
+    physics: ['3NAWE+3SPOWE', '4NAWE+4SPOWE', '4ECWE+4LAT', '6ELTE+6IICT'],
+    biology: ['5MOWE+5SPOWE', '6MOWE+6SPOWE']
 }
 
 /**
@@ -62,11 +62,12 @@ export const classesBySubject = {
  * De modulelijst toont een lege staat zolang een leerjaar geen lessen heeft.
  */
 export const yearByClass = {
-    '3D': 3,
-    '4D': 4,
-    '5D': 5,
-    '6D': 6,
-    '6D-A': 6
+    '3NAWE+3SPOWE': 3,
+    '4NAWE+4SPOWE': 4,
+    '4ECWE+4LAT': 4,
+    '6ELTE+6IICT': 6,
+    '5MOWE+5SPOWE': 5,
+    '6MOWE+6SPOWE': 6
 }
 
 /** Leerjaar voor een klascode, of null als de klas onbekend is. */
@@ -81,7 +82,11 @@ export function classesForSubject(subjectId) {
 
 /** Toon de klascode zoals die op school gebruikt wordt. */
 export function classLabel(classId) {
-    return classId === '6D-A' ? '6D/A' : classId
+    if (!classId) return classId
+    // Verenigde klassen tonen als één groep: '4NAWE+4SPOWE' → '4NAWE + 4SPOWE'.
+    if (classId.includes('+')) return classId.split('+').join(' + ')
+    if (classId === '6D-A') return '6D/A'
+    return classId
 }
 
 // Oude leerjaarindeling blijft beschikbaar voor bestaande lesdata en helpers.

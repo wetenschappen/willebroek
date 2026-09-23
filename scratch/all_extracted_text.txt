@@ -1,0 +1,82 @@
+
+
+================ STREAM 1 (length: 360) ================
+  10           Het kompas geeft een overzicht van wat  er allemaal geleerd wordt in het boek.   Per thema staat opgelicht wat er net in  het thema aan bod komt. Zo zien de  leerlingen perfect welk deel van het  kompas behandeld wordt, en wat de  samenhang is met de andere them a's.  Benadruk zeker deze samenhang \(te zien  aan de pijlen\ tussen de thema's.  
+
+================ STREAM 2 (length: 185) ================
+  11           Feed - up: Hier wordt geduid wat de  leerling op het einde van het thema moet  kennen en kunnen. Een overzicht van de  titels in dit thema linkt de te bereiken  doelen.  
+
+================ STREAM 5 (length: 642) ================
+  13             Verwijs naar een kogel die  loodrecht op een muur inslaat en  een kogel die schuin afketst.     De leerlingen kunnen zelf nog  enkele voorbeelden zoeken  waarbij een opperv l aktevergroting  gebruikt wordt om de vervorming  te verkleinen \(ski's,  rupsbanden, \205   Deze leerdoelen bundelen de  voorkennisinhouden uit de  voorgaande jaren die relevant zijn  voor dit hoofdstuk. Op Scoodle  vind je per leerdoel oefeningen op  basisniveau terug, gekoppeld aan  theorie \(theoriekaders en/of  kennisclips\     Om tijd uit te sparen in de klas,  kun je de leerlingen motiveren om  deze voorkennisoefeningen thuis  te maken.    
+
+================ STREAM 7 (length: 390) ================
+  14           De proef kan natuurlijk ook met   een gewone baksteen uitgevoerd   worden.   Zorg ervoor dat de spons groot   genoeg is zodat de steen met de   grootste oppervlakte niet te veel   uitsteekt.   Test vooraf uit of de spons zacht   genoeg is zodat de vervorming   goed zichtbaar is.   Als de steen niet te zwaar is, kun   je eventueel ook een dik stuk   glaswol gebruiken.      
+
+================ STREAM 9 (length: 525) ================
+  15           Om duidelijk te maken dat deze eenheid  slechts een kleine waarde is, kun je hier  vermelden dat de normale luchtdruk op  zeeniveau 100 000 Pa is.   Een andere veel gebruikte eenheid van  druk is de millimeter kwikdruk \(1 mm Hg  = 133,322 Pa\ die veel gebruikt wordt bij  het meten van de bloeddruk of de druk  in de oogbol.   De normale luchtdruk is  760 mm Hg. Ook de atmosfeer \(atm\  wordt gebruikt en is 101   325 Pa.  In de VS  wordt de psi gebruikt \(pounds per  square inch\ en 1 psi = 6 894,757 Pa.  
+
+================ STREAM 11 (length: 307) ================
+  16           De asset over de bijtkracht bij  verschillende dieren geeft de druk die  uitgeoefend wordt in psi \(zie tip  verderop\.  De bijtkracht wordt niet in  verhouding tot de grootte van het dier  bepaald. Daardoor komt de witte haai,  en niet de zoutwaterkrokodil, op d e  eerste plaats te staan.  
+
+================ STREAM 13 (length: 217) ================
+  17           Eventueel kun je dit verschijnsel   experimenteel aantonen door de   erlenmeyer en de  rondbodemkolf  in een schaaltje   met zand te zetten en de grootte   van de vervorming van het zand   te tonen.    
+
+================ STREAM 14 (length: 194) ================
+  18           Als je een plank met heel veel   spijkers hebt, kun je daar iemand   op laten staan om dit te tonen.   Test dit eerst uit en kies een   leerling met een eerder laag   gewicht.    
+
+================ STREAM 17 (length: 799) ================
+  20           Bij dit onderdeel is   herhaling van het  deeltjesmodel aangewezen. In  de eerste  graad leerden de leerlingen al hoe  deeltjes in de verschillende  aggregatietoestanden liggen en  tegenover elkaar bewegen.   Ook de  invloed van de temperatuur op de  beweging werd al behandeld.     Vaak wordt hier  foutief , naar   analogie   met de verklaring van   de druk in vloeistoffen, als   verklaring gegeven dat het   gewicht van de bovenliggende   luchtlagen de luchtdruk   veroorzaakt.   Mochten leerlingen hieraan   denken, kun je dit intu\357tief   ontkrachten door als volgt te   redeneren: als je uit een kamer   thuis met nauwelijks twee meter   lucht boven je hoofd naar buiten   stapt, waar vele kilometer lucht   boven je hoofd zijn, zou je plots   een heel grote druk voelen.    
+
+================ STREAM 18 (length: 361) ================
+  21           Wijs erop dat de ballon dichtgeknoopt is  en er dus geen deeltjes bij komen!   Laat dit proefje zeker door \351\351n of  meerdere leerlingen uitproberen met  een leeg flesje zonder dat ze op het flesje  knijpen.  Het verschijnsel is ook te zien  als er wel drank in het flesje zit en je de  drank eruit zuigt zonder lucht naar  binnen te laten.  
+
+================ STREAM 20 (length: 103) ================
+  22           Wijs erop dat de ballon over de fles  gespannen is en er dus geen deeltjes bij  komen!  
+
+================ STREAM 22 (length: 223) ================
+  23           Wijs erop dat de buitenste  schaalverdeling de druk in millimeter  kwikdruk \(mmHg\ weergeeft.    De leerlingen die de proef van Torricelli  gezien hebben, begrijpen waar deze  schaalverdeling vandaan komt.  
+
+================ STREAM 24 (length: 386) ================
+  24           Je kunt hier het verband met de biologie  aanduiden: de ademhaling werkt  volgens het principe van de onderdruk.  Door het omlaag bewegen van het  middenrif en het omhoogtrekken van de  ribben door de tussenribspieren,  vergroot de inhoud van de borstkas.  Hierdo or ontstaat er een onderdruk in de  borstkas en drukt de luchtdruk buiten de  borstkas lucht naar binnen.  
+
+================ STREAM 26 (length: 1378) ================
+  25           Je kunt hier het verband met de biologie  aanduiden: de werking van het hart, de  samentrekking van de hartspier,  veroorzaakt een druk in bloed, dat een  vloeistof is. De druk die de vloeistof op  de wanden van de bloedvaten uitoefent,  wordt de bloeddruk genoe md.   De bloeddruk bestaat uit twee waarden,  de bovendruk en de onderdruk. Bij de  bloeddruk bedoelt men niet de druk ten  opzichte van de normdruk, maar de druk  die het bloed op de wanden van de  bloedvaten uitoefent.  De bovendruk is  de hoogste waarde die de  bloe ddrukmeter aangeeft. Dit is de druk  in de vaten als het hart samentrekt. Op  dat moment perst het hart het bloed  krachtig door de slagaders. De druk op  de vaatwand is dan hoog.  De onderdruk  is de laagste waarde die de  bloeddrukmeter aangeeft. Dit is de dru k  in de vaten als het hart zich ontspant. Dit  gebeurt tussen twee hartslagen in. De  druk die er dan nog is, heet de  onderdruk.  De arts heeft het mogelijk  over:   -   hypertensie: hoge bloeddruk  -   hypotensie: lage bloeddruk  -   systole:  bovendruk   -   diastole: o nderdruk  Op de  bloeddrukmeter staat vaak:  -   Sys:  bovendruk \(systole\  -   Dia: onderdruk  \(diastole\  -   Pulse: hartslag  -   aantal slagen  per minuut  Een normale gezonde  bloeddruk situeert zich voor de  bovendruk tussen 120 - 130 mmHg en  voor de onderdruk tussen 80 - 85 mmHg.  
+
+================ STREAM 29 (length: 104) ================
+  27           Ook de traagheid van de lat en   de krant speelt een zekere rol bij   dit experiment.    
+
+================ STREAM 34 (length: 1489) ================
+  30           Herhaal de bouw van het oor \(biologie\.  De buis van Eustachius zorgt voor  drukregulering in het middenoor.  Wanneer de luchtdruk rondom ons  afneemt, drukt de lucht in het  middenoor het trommelvlies in eerste  instantie naar buiten. Dit komt doordat  de druk i n het middenoor op dat  moment groter is dan aan de buitenkant  van het trommelvlies. Hierdoor kan het  trommelvlies minder goed bewegen en  horen we alles wat doffer.   De buis van  Eustachius zorgt er, door heel even open  te gaan, voor dat de druk aan beide  z ijden van het trommelvlies weer gelijk  wordt. Dit kan door te geeuwen of te  slikken, maar waarschijnlijk opent de  buis ook vanzelf. Door het openen is er  even een open verbinding tussen de  holte in het middenoor en de  buitenlucht. Zo kan onderdruk en ook  o verdruk worden opgeheven.   Bij het duiken vergroot de druk op het  trommelvlies. De druk in het middenoor  is dan kleiner dan de buitendruk. De  duiker kan de druk terug gelijk maken  door te proberen met gesloten neus en  mond de lucht naar buiten te blazen. Er  stroomt dan langs de buis   van  Eustachius lucht bij in het middenoor  waardoor de druk gelijk wordt aan de  buitendruk.   Afhankelijk van de grootte van de te  meten druk kan de vloeistof in de U - vormige buis van de vloeistofmanometer  kwik, olie, gekleurd water of gekleurde  alcohol zijn. \(Kwik werd meestal gebruikt  voor grotere drukken, maar mag omwille  van haar giftigheid nie t meer gebruikt  worden.\  
+
+================ STREAM 36 (length: 520) ================
+  31           Om mooie horizontale straaltjes   te hebben, mag je enkel in de   perfect verticale delen van de fles   gaatjes prikken. \(Als je in de   ribbels of de schuine delen prikt,   heb je ook schuine waterstralen.\   Prik ook loodrecht in het plastic   en niet schuin. Je kunt met een in   een vlammetje verhitte dikke   naald gemakkelijk ronde gaatjes   in het plastic smelten.       Meestal brengt men de U - vormige buis  aan op of langs een meetlat om de  hoogteverschillen beter te kunnen  onderscheiden.  
+
+================ STREAM 39 (length: 213) ================
+  33           Laat de leerlingen even nadenken over  deze eigenschap. Indien de druk wel zou  afhangen van de hoeveelheid vloeistof  eromheen, dan zou het niet aan te raden  zijn om in de oceaan te gaan duiken.  
+
+================ STREAM 49 (length: 164) ================
+  40           De hydrauliek is de techniek die gebruik  maakt van een hydraulische vloeistof  onder hoge druk om een toestel aan te  drijven of te laten bewegen.  
+
+================ STREAM 60 (length: 74) ================
+  48           Hier zijn opzettelijk overbodige   gegevens toegevoegd.    
+
+================ STREAM 61 (length: 625) ================
+  49           Voor deze proef heb je   dynamometers nodig die de   geschikte nauwkeurigheid   hebben voor de gebruikte   voorwerpen.   Afhankelijk van wat er   beschikbaar is in het labo, kun je   in de plaats van kubusjes ook   balkjes of andere voorwerpen   gebruiken.   Als het volume niet te berekenen   is, kun je het bepalen met de   methode van de   onderdompeling in een   maatcilinder.   Bij regelmatige lichamen kun je   eventueel meten met een   schuifpasser die nauwkeuriger is   dan de meetlat. \(Uiteraard moet   je de leerlingen in dat geval het   gebr uik ervan uitleggen als ze   het nog niet kennen.\      
+
+================ STREAM 65 (length: 737) ================
+  51           De opwaartse gerichte stuwkracht op  een drijvend voorwerp grijpt aan in het  perspunt \(P\. Dit is het zwaartepunt van  het ondergedompelde deel van het  voorwerp.      Het gewicht van het voorwerp grijpt aan  in zijn zwaartepunt \(Z\ en is naar  beneden gericht. Een vaartuig is stabiel  \(en keert dus bij het uit evenwicht  brengen uit zichzelf terug naar de  evenwichtsstand\ als het zwaartepunt  lager ligt dan het perspunt. Het   krachtenkoppel van het gewicht en de  archimedeskracht doet het vaartuig dan  terug rechtdraaie n.       Bij een vaartuig worden de zwaardere  delen \(motoren, zware vracht, brandstof,  ballast, ...\ dus zo diep mogelijk in de kiel  aangebracht en de delen gevuld met                  
+
+================ STREAM 72 (length: 1065) ================
+  55           Als je aan het eurekamoment van  Archimedes denkt, denk je waarschijnlijk  aan dit verhaal. Misschien ging het  echter meer als volgt.      In de derde eeuw voor Christus koos  Hi\353ro, koning van de Siciliaanse stad  Syracuse, Archimedes voor de  begeleiding van een bouwproject van  ongekende schaal. Hi\353ro gaf de opdracht  een zeilschip te bouwen dat 50 keer  groter was dan de standaard  oorlogsschepe n uit die tijd. Het zou de  Syracusia heten, naar zijn stad. Hi\353ro  wilde het grootste schip aller tijden  bouwen, dat bedoel d was als cadeau  voor de heerser van Egypte, Ptolemaeus.  Maar zou een boot zo groot als een paleis  ooit kunnen blijven drijven?       Het zou dus wel eens kunnen dat  Archimedes, zoekend naar een oplossing  voor het reusachtige schip, ontdekte dat  een voorwerp een opwaartse stuwkracht  ondervindt die even groot is als het  gewicht van de verplaatste vloeistof. Als  het schip dus bijvoorbeeld  2 000 ton  zwaar was, dan moest hij er gewoon voor  zorgen dat door de afmetingen het schip                    
+
+================ STREAM 73 (length: 139) ================
+  56           Aangezien het systeem tijdens   heel de proef een afgesloten   geheel vormt, kan er geen massa   verdwijnen of bijkomen!    
+
+================ STREAM 88 (length: 78) ================
+  67           De leerlingen kunnen de begrippen  inoefenen met een quizlet.  
+
+================ STREAM 91 (length: 93) ================
+22   Wijs erop dat de ballon over de fles  gespannen is en er dus geen deeltjes bij  komen!  
+
+================ STREAM 92 (length: 93) ================
+22   Wijs erop dat de ballon over de fles  gespannen is en er dus geen deeltjes bij  komen!  

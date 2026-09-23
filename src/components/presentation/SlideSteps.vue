@@ -1,6 +1,7 @@
 <script setup>
-import { inject } from 'vue'
-import { PhArrowsOutSimple } from '@phosphor-icons/vue'
+import { inject, computed } from 'vue'
+import { PhArrowsOutSimple, PhCheck } from '@phosphor-icons/vue'
+import MathSlideWrapper from './shared/MathSlideWrapper.vue'
 
 const props = defineProps({
     slide: { type: Object, required: true },
@@ -9,32 +10,35 @@ const props = defineProps({
     currentMathConfigForAnalysis: { type: Object, default: null }
 })
 
-const emit = defineEmits(['revealNext', 'selectAnswer', 'checkAnswer', 'copyLink', 'showConfetti'])
+defineEmits(['revealNext', 'selectAnswer', 'checkAnswer', 'copyLink', 'showConfetti'])
 
-const resolveImageUrl = inject('resolveImageUrl')
 const iconMap = inject('iconMap', {})
+
+const visibleSteps = computed(() => {
+    if (!props.slide.steps) return []
+    return props.slide.steps.slice(0, props.revealedSteps)
+})
 </script>
 
 <template>
-<div class="w-full h-full flex flex-col items-center justify-center p-20 bg-white relative">
-    <div class="w-full max-w-7xl">
-        <div class="flex items-center gap-8 mb-20">
-            <div class="h-28 w-3 slide-anchor"></div>
-            <h3 class="text-slide-hero font-bold text-slate-900 tracking-tight" v-html="slide.title"></h3>
-        </div>
-        <div class="grid grid-cols-1 gap-8">
-            <div v-for="(step, idx) in slide.steps" :key="idx" 
-                 class="flex items-center gap-12 p-10 slide-panel-muted transition-all duration-700"
-                 :class="idx < revealedSteps ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'">
-                <div class="w-24 h-24 slide-number">
-                    <component :is="iconMap[step.icon] || PhArrowsOutSimple" class="text-slide-heading text-white" weight="bold" />
-                </div>
-                <p class="text-slide-heading font-medium text-slate-800" v-html="step.text || step.title"></p>
+<MathSlideWrapper :title="slide.title || 'Overzicht'">
+    <div class="flex flex-col gap-4 max-w-5xl mx-auto py-2">
+        <div v-for="(step, idx) in visibleSteps" :key="idx"
+             class="flex items-center gap-6 p-4 bg-white border border-slate-200 rounded-xl shadow-sm transition-all duration-300 animate-[fadeInUp_0.25s_ease-out]">
+            <div class="w-12 h-12 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-sm">
+                <component :is="iconMap[step.icon] || PhCheck" :size="28" weight="bold" />
             </div>
+            <p class="text-slide-body font-medium text-slate-800 leading-snug" v-html="step.text || step.title || step.content"></p>
+        </div>
+
+        <!-- Next step helper when not finished -->
+        <div v-if="revealedSteps < (slide.steps?.length || 0)" class="mt-2 flex justify-center">
+            <button @click="$emit('revealNext', slide.steps.length)"
+                    class="px-5 py-2.5 rounded-lg border border-dashed border-presentation text-presentation hover:bg-presentation-soft transition-colors flex items-center gap-2 text-slide-small font-bold cursor-pointer">
+                <span>Stap {{ revealedSteps + 1 }} onthullen<template v-if="slide.steps[revealedSteps]?.title">: {{ slide.steps[revealedSteps].title }}</template></span>
+                <span class="bg-presentation text-white px-1.5 py-0.5 rounded font-mono select-none text-slide-small">Spatie / →</span>
+            </button>
         </div>
     </div>
-</div>
+</MathSlideWrapper>
 </template>
-
-<style scoped>
-</style>

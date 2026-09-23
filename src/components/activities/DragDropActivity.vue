@@ -6,7 +6,7 @@ const props = defineProps({
   isOpen: Boolean,
   title: {
     type: String,
-    default: 'Drag & Drop Oefening'
+    default: 'Drag- en dropoefening'
   },
   instruction: {
     type: String,
@@ -224,9 +224,9 @@ onMounted(() => {
 
         <template v-else>
 
-          <!-- ① CHIP BANK — draggable terms as compact pills -->
+          <!-- ① CHIP BANK - draggable terms as compact pills -->
           <div class="shrink-0 px-6 pt-5 pb-4 border-b border-slate-200">
-            <p class="text-[0.6875rem] font-black uppercase tracking-widest text-slate-600 mb-3">Begrippen — sleep naar de juiste definitie</p>
+            <p class="text-[0.6875rem] font-black uppercase tracking-widest text-slate-600 mb-3">Begrippen - sleep naar de juiste definitie</p>
             <div class="flex flex-wrap gap-2">
               <div
                 v-for="termIndex in shuffledTerms"
@@ -245,7 +245,7 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- ② DEFINITION ROWS — one horizontal bar per definition -->
+          <!-- ② DEFINITION ROWS - one horizontal bar per definition -->
           <div class="flex-1 overflow-y-auto px-6 py-4 space-y-2">
             <div
               v-for="(pair, defIndex) in pairs"

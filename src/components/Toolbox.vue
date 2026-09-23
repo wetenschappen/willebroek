@@ -166,7 +166,7 @@ function openPdf() {
                 <div class="px-3 pt-3 pb-1">
                     <p class="text-[11px] font-bold text-slate-700 uppercase tracking-[0.12em] px-2 mb-1.5">Les</p>
 
-                    <!-- Correctiesleutel — top of list -->
+                    <!-- Correctiesleutel - top of list -->
                     <button @click="openTool('solutions')" class="tool-item w-full">
                         <div class="w-8 h-8 rounded-control bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
                             <PhLockKey weight="bold" class="text-base" />

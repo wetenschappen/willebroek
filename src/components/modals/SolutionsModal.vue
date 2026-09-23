@@ -19,14 +19,22 @@ const unlockedIndices = ref(new Set())
 const activeUnlockIndex = ref(null)
 
 const solutionLinks = computed(() => {
-  if (props.config?.oplossingen && Array.isArray(props.config.oplossingen)) {
-    return props.config.oplossingen
+  const configuredSolutions = props.config?.oplossingen
+  if (Array.isArray(configuredSolutions)) {
+    return configuredSolutions
+  }
+  if (configuredSolutions && typeof configuredSolutions === 'object' && configuredSolutions.url) {
+    return [{
+      label: configuredSolutions.title || 'Bekijk PDF Oplossingen',
+      url: configuredSolutions.url,
+      password: configuredSolutions.code ?? configuredSolutions.password
+    }]
   }
   if (props.config?.oplossingenLink) {
-    return [{ 
-        label: 'Bekijk PDF Oplossingen', 
-        url: props.config.oplossingenLink, 
-        password: props.config.groenAntwoord 
+    return [{
+      label: 'Bekijk PDF Oplossingen',
+      url: props.config.oplossingenLink,
+      password: props.config.groenAntwoord
     }]
   }
   return []

@@ -28,7 +28,7 @@ watch(() => route.params.id, async (id) => {
   <LessonContent v-if="lessonData" :lessonData="lessonData" :key="route.params.id" />
   
   <!-- Fout- en laadstatus: egaal paneel met zichtbare rand.
-       Geen blur en geen doorschijnendheid — op een beamer zijn vaste vlakken
+       Geen blur en geen doorschijnendheid - op een beamer zijn vaste vlakken
        voorspelbaarder. Rood blijft gereserveerd voor het presentatietype,
        dus de status leest via het woord 'Fout', niet via een kleur. -->
   <div v-else-if="error" class="min-h-screen flex items-center justify-center relative z-10 px-6">

@@ -1,6 +1,6 @@
 <script setup>
 /**
- * NAAMKIEZER — vraagt eerst een wachtwoord.
+ * NAAMKIEZER - vraagt eerst een wachtwoord.
  *
  * De namen staan in de publieke bundel; dit wachtwoord houdt leerlingen van de
  * knop, het beschermt de gegevens niet. Zie src/data/students.js.

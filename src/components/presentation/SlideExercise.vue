@@ -25,7 +25,7 @@ const hasVisualContent = computed(() => {
     
     <!-- Context block (No Left Border) -->
     <div v-if="slide.context && !hasVisualContent" class="mb-8 p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
-        <div class="text-slide-small font-bold text-slate-600 uppercase tracking-wider mb-2">Context</div>
+        <div class="text-slide-small font-bold text-slate-600 mb-2">Context</div>
         <p class="text-slide-body text-slate-700 leading-relaxed" v-html="slide.context"></p>
     </div>
 
@@ -50,7 +50,7 @@ const hasVisualContent = computed(() => {
                 <!-- Answer Area (Amber Highlight, No Left Border) -->
                 <div v-if="idx < revealedSteps" class="px-8 py-6 bg-presentation-soft text-slide-body text-slate-700 leading-relaxed animate-[fadeInUp_0.3s_ease-out]">
                      <div class="flex items-start gap-4">
-                         <span v-if="step.answer" class="text-presentation font-bold uppercase tracking-wider text-slide-small mt-1 shrink-0 bg-presentation-soft border border-presentation px-3 py-1 rounded-md">Antwoord</span>
+                         <span v-if="step.answer" class="text-presentation font-bold text-slide-small mt-1 shrink-0 bg-presentation-soft border border-presentation px-3 py-1 rounded-md">Antwoord</span>
                          <span v-html="step.answer || step.content" class="block pt-0.5"></span>
                      </div>
                 </div>
@@ -104,7 +104,7 @@ const hasVisualContent = computed(() => {
                 <div class="w-7 h-7 rounded-full bg-presentation-soft text-presentation border border-presentation flex items-center justify-center shadow-inner">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
-                <span class="text-slide-body font-bold text-presentation uppercase tracking-wider">Alle stappen voltooid</span>
+                <span class="text-slide-body font-bold text-presentation">Alle stappen voltooid</span>
             </div>
         </div>
     </div>

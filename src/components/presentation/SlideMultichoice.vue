@@ -13,21 +13,41 @@ const emit = defineEmits(['answer'])
 
 const selectedAnswer = ref(null)
 
+const isCorrect = (index) => {
+  const opt = props.slide.options[index]
+  if (typeof opt === 'object' && opt !== null && opt.correct !== undefined) {
+    return !!opt.correct
+  }
+  return props.slide.correct === index
+}
+
+const getOptionText = (option) => {
+  if (typeof option === 'string') return option
+  return option.text || option.label || ''
+}
+
+const getOptionLabel = (option, index) => {
+  if (typeof option === 'object' && option !== null && (option.id || option.label) && option.text) {
+    return option.id || option.label
+  }
+  return String.fromCharCode(65 + index)
+}
+
 const handleAnswer = (index) => {
-  if (selectedAnswer.value !== null) return;
-  selectedAnswer.value = index;
+  if (selectedAnswer.value !== null) return
+  selectedAnswer.value = index
   emit('answer', {
     selectedIndex: index,
-    isCorrect: props.slide.options[index].correct
-  });
+    isCorrect: isCorrect(index)
+  })
 }
 </script>
 
 <template>
-<MathSlideWrapper :title="slide.title || 'QUIZ'">
+<MathSlideWrapper :title="slide.title || 'Begripscheck'">
     
     <div class="flex flex-col items-center mt-4">
-        <!-- Question Box (No Gradients) -->
+        <!-- Question Box -->
         <div class="w-full max-w-4xl bg-white border border-slate-200 p-8 rounded-xl shadow-sm text-center mb-8">
             <div class="text-slide-heading text-slate-800 font-bold leading-relaxed" v-html="slide.question"></div>
         </div>
@@ -44,39 +64,39 @@ const handleAnswer = (index) => {
                 <div class="flex items-center gap-5 bg-white border rounded-xl p-5 transition-all duration-300 shadow-sm"
                      :class="[
                        selectedAnswer === null ? 'border-slate-200 hover:border-presentation hover:bg-slate-50/50' : '',
-                       selectedAnswer === index && option.correct ? 'border-workbook bg-workbook-soft scale-[1.01]' : '',
-                       selectedAnswer === index && !option.correct ? 'border-presentation bg-presentation-soft' : '',
-                       selectedAnswer !== null && selectedAnswer !== index && option.correct ? 'border-workbook bg-workbook-soft' : '',
-                       selectedAnswer !== null && selectedAnswer !== index && !option.correct ? 'border-slate-200 opacity-50 grayscale' : ''
+                       selectedAnswer === index && isCorrect(index) ? 'border-workbook bg-workbook-soft scale-[1.01]' : '',
+                       selectedAnswer === index && !isCorrect(index) ? 'border-presentation bg-presentation-soft' : '',
+                       selectedAnswer !== null && selectedAnswer !== index && isCorrect(index) ? 'border-workbook bg-workbook-soft' : '',
+                       selectedAnswer !== null && selectedAnswer !== index && !isCorrect(index) ? 'border-slate-200 opacity-50 grayscale' : ''
                      ]">
                     
                     <!-- Label Badge -->
                     <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-slide-body shrink-0 transition-colors shadow-sm"
                          :class="[
                             selectedAnswer === null ? 'bg-slate-100 text-slate-700' : '',
-                            selectedAnswer === index && option.correct ? 'bg-workbook text-white' : '',
-                            selectedAnswer === index && !option.correct ? 'bg-presentation text-white' : '',
-                            selectedAnswer !== null && selectedAnswer !== index && option.correct ? 'bg-workbook text-white' : '',
-                            selectedAnswer !== null && selectedAnswer !== index && !option.correct ? 'bg-slate-100 text-slate-600' : ''
+                            selectedAnswer === index && isCorrect(index) ? 'bg-workbook text-white' : '',
+                            selectedAnswer === index && !isCorrect(index) ? 'bg-presentation text-white' : '',
+                            selectedAnswer !== null && selectedAnswer !== index && isCorrect(index) ? 'bg-workbook text-white' : '',
+                            selectedAnswer !== null && selectedAnswer !== index && !isCorrect(index) ? 'bg-slate-100 text-slate-600' : ''
                          ]">
-                        {{ option.label || String.fromCharCode(65 + index) }}
+                        {{ getOptionLabel(option, index) }}
                     </div>
                     
-                    <div class="text-slide-body font-semibold text-slate-700 flex-1 leading-snug" v-html="option.text"></div>
+                    <div class="text-slide-body font-semibold text-slate-700 flex-1 leading-snug" v-html="getOptionText(option)"></div>
                     
                     <!-- Status Icon -->
                     <div v-if="selectedAnswer !== null" class="w-8 h-8 flex items-center justify-center shrink-0">
-                        <svg v-if="option.correct" class="w-6 h-6 text-workbook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <svg v-else-if="selectedAnswer === index && !option.correct" class="w-6 h-6 text-presentation" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <svg v-if="isCorrect(index)" class="w-6 h-6 text-workbook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <svg v-else-if="selectedAnswer === index && !isCorrect(index)" class="w-6 h-6 text-presentation" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </div>
                 </div>
             </button>
         </div>
         
-        <!-- Explanation Section (Amber Theme, No Left Border Strip) -->
+        <!-- Explanation Section -->
         <div v-if="selectedAnswer !== null && slide.explanation" class="w-full max-w-4xl mt-8 animate-[fadeInUp_0.3s_ease-out]">
             <div class="p-8 bg-presentation-soft border border-presentation rounded-xl">
-                <h4 class="text-slide-small font-bold uppercase tracking-wider text-presentation mb-2">Uitleg</h4>
+                <h4 class="text-slide-small font-bold text-presentation mb-2">Uitleg</h4>
                 <div class="text-slide-body text-ink-soft leading-relaxed font-semibold" v-html="slide.explanation"></div>
             </div>
         </div>

@@ -22,16 +22,16 @@ const iconMap = inject('iconMap', {})
         <!-- Left Panel (Slate Theme, No Left Border strip, No Glows) -->
         <div class="h-full flex flex-col bg-white border border-slate-200 rounded-xl p-8 shadow-sm relative overflow-hidden">
             <div class="flex items-center gap-4 mb-6 pb-4 border-b border-slate-100 shrink-0">
-                <div class="w-11 h-11 bg-slate-100 text-slate-800 rounded-lg flex items-center justify-center shrink-0 shadow-sm">
-                    <component v-if="iconMap[slide.left?.icon]" :is="iconMap[slide.left?.icon]" class="text-slide-body" weight="bold" />
+                <div v-if="slide.left?.icon && iconMap[slide.left?.icon]" class="w-11 h-11 bg-slate-100 text-slate-800 rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+                    <component :is="iconMap[slide.left?.icon]" class="text-slide-body" weight="bold" />
                 </div>
-                <h4 class="text-slide-heading font-bold text-slate-800 uppercase tracking-wider" v-html="slide.left?.title || slide.leftTitle"></h4>
+                <h4 class="text-slide-heading font-bold text-slate-800" v-html="slide.left?.title || slide.leftTitle"></h4>
             </div>
             
             <p class="text-slide-body leading-relaxed text-slate-600 mb-6 flex-shrink-0" v-html="slide.left?.content || slide.leftContent"></p>
             
             <div v-if="slide.left?.example || slide.leftExample" class="shrink-0 mt-auto bg-slate-50 p-5 rounded-lg border border-slate-200">
-                <p class="text-slide-small font-bold text-slate-700 uppercase tracking-wider mb-2">Voorbeeld</p>
+                <p class="text-slide-small font-bold text-slate-700 mb-2">Voorbeeld</p>
                 <div class="font-mono text-slide-body font-bold text-slate-900" v-html="slide.left?.example || slide.leftExample"></div>
             </div>
             
@@ -43,16 +43,16 @@ const iconMap = inject('iconMap', {})
         <!-- Right Panel (Amber Theme, No Right Border strip, No Glows) -->
         <div class="h-full flex flex-col bg-white border border-presentation rounded-xl p-8 shadow-sm relative overflow-hidden">
             <div class="flex items-center gap-4 mb-6 pb-4 border-b border-slate-100 shrink-0">
-                <div class="w-11 h-11 bg-presentation-soft text-presentation rounded-lg flex items-center justify-center shrink-0 shadow-sm">
-                    <component v-if="iconMap[slide.right?.icon]" :is="iconMap[slide.right?.icon]" class="text-slide-body" weight="bold" />
+                <div v-if="slide.right?.icon && iconMap[slide.right?.icon]" class="w-11 h-11 bg-presentation-soft text-presentation rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+                    <component :is="iconMap[slide.right?.icon]" class="text-slide-body" weight="bold" />
                 </div>
-                <h4 class="text-slide-heading font-bold text-slate-800 uppercase tracking-wider" v-html="slide.right?.title || slide.rightTitle"></h4>
+                <h4 class="text-slide-heading font-bold text-slate-800" v-html="slide.right?.title || slide.rightTitle"></h4>
             </div>
             
             <p class="text-slide-body leading-relaxed text-ink-soft mb-6 flex-shrink-0" v-html="slide.right?.content || slide.rightContent"></p>
             
             <div v-if="slide.right?.example || slide.rightExample" class="shrink-0 mt-auto bg-presentation-soft p-5 rounded-lg border border-presentation">
-                <p class="text-slide-small font-bold text-presentation uppercase tracking-wider mb-2">Voorbeeld</p>
+                <p class="text-slide-small font-bold text-presentation mb-2">Voorbeeld</p>
                 <div class="font-mono text-slide-body font-bold text-presentation" v-html="slide.right?.example || slide.rightExample"></div>
             </div>
             

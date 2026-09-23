@@ -46,8 +46,8 @@ const actionText = computed(() => ({
   >
     <span class="lesson-activity-copy">
       <span v-if="!hideMeta" class="activity-meta">{{ meta || badgeText }}</span>
-      <strong>{{ title }}</strong>
-      <span v-if="description" class="activity-description">{{ description }}</span>
+      <strong v-html="title"></strong>
+      <span v-if="description" class="activity-description" v-html="description"></span>
     </span>
     <span class="lesson-activity-action">
       <PhCheck v-if="isDone" weight="bold" aria-hidden="true" />

@@ -71,7 +71,7 @@ function toggleGoal(index) {
                 <span class="goal-check" :class="{ 'goal-check-done': completedGoals.includes(i) }">
                   <PhCheck v-if="completedGoals.includes(i)" weight="bold" aria-hidden="true" />
                 </span>
-                <span :class="{ 'goal-done': completedGoals.includes(i) }">{{ goal }}</span>
+                <span :class="{ 'goal-done': completedGoals.includes(i) }" v-html="goal"></span>
               </button>
             </li>
           </ul>

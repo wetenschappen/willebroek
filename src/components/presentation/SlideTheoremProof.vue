@@ -18,14 +18,14 @@ const emit = defineEmits(['revealNext'])
         
         <!-- Left: Statement (Given & To Prove) -->
         <div class="flex flex-col gap-6">
-            <PedagogyPanel variant="theory" title="Gegeven" icon="info">
+            <PedagogyPanel variant="theory" title="Gegeven">
                 <div class="text-slide-body text-slate-700 leading-relaxed font-medium" v-html="slide.given"></div>
                 <div v-if="slide.image" class="mt-6 flex justify-center">
                     <img :src="slide.image" class="max-w-full max-h-[240px] object-contain rounded-xl border border-slate-200 shadow-sm" />
                 </div>
             </PedagogyPanel>
             
-            <PedagogyPanel variant="formula" title="Te Bewijzen" icon="target">
+            <PedagogyPanel variant="formula" title="Te Bewijzen">
                 <div class="text-slide-heading text-presentation font-mono font-extrabold" v-html="slide.toProve"></div>
             </PedagogyPanel>
         </div>

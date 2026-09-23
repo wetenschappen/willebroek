@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
   <!-- Afsluitende slide: bewust gewoon. Geen confetti, geen sterren, geen
-       donkere achtergrond — de klas leest hier alleen dat de les klaar is. -->
+       donkere achtergrond - de klas leest hier alleen dat de les klaar is. -->
   <div class="bg-paper w-full h-full flex flex-col items-center justify-center p-16">
     <div class="w-full max-w-4xl flex flex-col items-center text-center">
 

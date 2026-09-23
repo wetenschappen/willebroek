@@ -19,7 +19,7 @@ const props = defineProps({ lessonData: { type: Object, required: true } })
 const router = useRouter()
 const lessonData = normalizeLesson(props.lessonData)
 
-// Vak van deze les — bepaalt het label in de header.
+// Vak van deze les - bepaalt het label in de header.
 const subject = computed(() => subjectById(lessonData.subject))
 // --- COMPONENTS ---
 import LessonHeader from '../components/LessonHeader.vue'
@@ -61,6 +61,7 @@ const activitySystem = useActivitySystem(lessonData, progress.markAsDone)
 const showPres = ref(false)
 const currentSlides = ref(lesson.slides)
 const showWork = ref(false)
+const currentWorkbookExercises = ref('')
 const showExit = ref(false)
 const currentExitTicket = ref(null)
 const currentTicketMode = ref('exit')
@@ -138,7 +139,10 @@ function handleCardAction(card) {
         showDiscipline.value = (card.id === firstPresCardId) || !!card.showDiscipline
         showPres.value = true
     }
-    else if (card.action === 'workbook') showWork.value = true
+    else if (card.action === 'workbook') {
+        currentWorkbookExercises.value = card.exercises || ''
+        showWork.value = true
+    }
     else if (card.action === 'exit-ticket') {
         const exitTicket = lessonData.exitTicket
         currentExitTicket.value = exitTicket?.questions || exitTicket
@@ -155,6 +159,9 @@ function handleCardAction(card) {
     else if (card.action === 'external-link' && card.url) {
         window.open(card.url, '_blank')
         progress.markAsDone(card.id)
+    }
+    else if (card.action === 'solutions') {
+        showSolutions.value = true
     }
     else if (card.action === 'activity' && card.activityId) activitySystem.handleOpenActivity(card.activityId)
     else if (card.action === 'custom') progress.markAsDone(card.id)
@@ -245,7 +252,7 @@ const isTimelineComplete = computed(() => {
     </nav>
 
   <main class="lesson-main">
-      <LessonHeader :title="lesson.config.title" :description="lesson.config.description" />
+      <LessonHeader :badge="lessonData.date || lesson.config.date" :title="lesson.config.title" :description="lesson.config.description" />
 
       <!-- DYNAMIC TIMELINE LOOP -->
       <template v-for="(step, index) in lesson.timeline.value" :key="step.id">
@@ -318,8 +325,10 @@ const isTimelineComplete = computed(() => {
   <WorkbookModal
     :isOpen="showWork"
     :workbook="lesson.workbook"
+    :cardExercises="currentWorkbookExercises"
     @close="showWork = false"
     @complete="progress.markAsDone(currentCardId || 'card-workbook')"
+    @open-solutions="() => { showWork = false; showSolutions = true; }"
   />
 
   <SolutionsModal

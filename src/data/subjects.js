@@ -1,5 +1,5 @@
 /**
- * SUBJECT REGISTRY — single source of truth for the Willebroek planner.
+ * SUBJECT REGISTRY - single source of truth for the Willebroek planner.
  * Deze schoolrepo is bewust beperkt tot fysica en biologie.
  */
 

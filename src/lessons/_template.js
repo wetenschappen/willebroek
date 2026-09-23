@@ -1,5 +1,5 @@
 /**
- * LESSON TEMPLATE — ABC Methode (v4.0, meerdere vakken)
+ * LESSON TEMPLATE - ABC Methode (v4.0, meerdere vakken)
  *
  * HOE GEBRUIKEN:
  *   cp src/lessons/_template.js src/lessons/fys3-mXX-lXX-onderwerp.js

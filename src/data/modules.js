@@ -12,15 +12,17 @@ export const modules = [
   // ══════════════════════════════════════════════════════════════════════════
 
   // ── 4de jaar (WACO 4 - Thema 1: Druk) ────────────────────────────────────────
+  // Les 1 volgt de gouden ABC-structuur; les 2-10 staan in archivedModules.
   {
     id: 'fys4-m01-druk-vaste-stoffen',
     subject: 'physics',
     year: 4,
     module: 1,
     topic: 'Druk',
-    title: 'Druk bij vaste stoffen',
+    title: 'Hydrostatische druk: druk bij vloeistoffen',
     date: '24/09/2026'
   }
+  // LOREM IPSUM
 
 ]
 

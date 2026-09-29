@@ -21,7 +21,7 @@ Het project **Willebroek** is een digitaal leerpad (Vue 3 + Vite) voor het Vlaam
    - Cesuurdoelen specifiek gedeelte Natuurwetenschappen (verdieping, afleidingen, kwantitatieve vraagstukken).
 3. **Didactisch model (strikt 50-minuten ABC-structuur):**
    - **A: Instap (15 min):** 
-     - `card-entry`: Formatief instapticket met **exact 4 diagnostische meerkeuzevragen** inclusief feedback en wetenschappelijke toelichting per antwoordoptie.
+     - `card-entry`: Formatief instapticket. In les 1 (`fys4-m01-druk-vaste-stoffen`) is dit een interactieve sorteeropdracht (`column-sort`, 9 kaarten over normdruk, onderdruk en overdruk) met directe visuele feedback en eerste-pogingmeting; in overige lessen 4 diagnostische meerkeuzevragen.
      - `card-pres-a`: Inleidende presentatie (`slidesA`, 3 slides) met doelen en een activerende onderzoeks-/verwondervraag.
    - **B: Verwerken (30 min) - Exact 3 canonieke kaarten:**
      - `card-pres-b`: Instructiepresentatie (`slidesB`, 5 à 6 slides) met formele definities, fysische modellen, stapsgewijs uitgewerkte rekenvoorbeelden (*Gegeven, Gevraagd, Formule, Berekening, Antwoord/Conclusie*), analyse van veelvoorkomende misconcepties, en interactieve begripschecks met distractor-analyse.
@@ -50,7 +50,7 @@ Gekoppelde klas: `4NAWE+4SPOWE` -> Jaar 4, Module 1 (`m01`).
 
 | # | Les-ID | Onderwerp & Inhoud | Didactische componenten (ABC) | Digitaal Lab (card-activity) & Extra Materiaal |
 |---|---|---|---|---|
-| 1 | `fys4-m01-l01-druk-vaste-stoffen` | Definitie $p = F / A$, eenheid pascal ($1\text{ N/m}^2$), bar, contactoppervlak en gewichtskracht. | Entry (4 vr), Slides (11 sl), Werkboek (4 opg), Exit (4 vr) | **PressureLab** (mode: vast) + `dragDrop` + `mixedRetrieval` |
+| 1 | `fys4-m01-druk-vaste-stoffen` | Definitie $p = F / A$, eenheid pascal ($1\text{ N/m}^2$), bar, contactoppervlak en gewichtskracht. | Entry (sort), Slides (11 sl), Werkboek (4 opg), Exit (4 vr) | **PressureLab** (mode: vast) + `dragDrop` + `mixedRetrieval` |
 | 2 | `fys4-m01-l02-toepassingen-druk-vaste-stoffen` | Drukvergroting vs. drukverkleining (sneeuwschoenen, spijkers, rupsbanden, naaldhakken), kubusschaalprobleem $2z$. | Entry (4 vr), Slides (11 sl), Werkboek (4 opg), Exit (4 vr) | **PressureLab** (mode: vast) + `dragDrop` + `mixedRetrieval` |
 | 3 | `fys4-m01-l03-gasdruk-atmosfeer` | Kinetisch deeltjesmodel, botsingen tegen wanden, atmosferische druk, proef van Torricelli ($760\text{ mm Hg}$), $1013\text{ hPa}$. | Entry (4 vr), Slides (11 sl), Werkboek (4 opg), Exit (4 vr) | **IdealGasLaw** + `dragDrop` + `mixedRetrieval` |
 | 4 | `fys4-m01-l04-meten-gasdruk-manometer` | Barometers (kwik/aneroïde), open/gesloten U-buismanometer, relatieve overdruk/onderdruk vs. absolute druk. | Entry (4 vr), Slides (11 sl), Werkboek (4 opg), Exit (4 vr) | **IdealGasLaw** + `dragDrop` + `mixedRetrieval` |

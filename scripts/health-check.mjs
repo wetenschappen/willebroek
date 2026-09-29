@@ -39,6 +39,71 @@ const lessonFiles = fs.readdirSync(lessonDir)
 const lessonIds = new Set()
 const activityTypes = new Set()
 
+// Vraagtypen die src/components/modals/TicketModal.vue kan renderen.
+const TICKET_QUESTION_TYPES = new Set(['mc', 'matching', 'open', 'graph-point', 'column-sort'])
+
+/**
+ * De gouden ABC-standaard (docs/EVALUATION-DOSSIER-THEMA1.md).
+ * Elke les in src/lessons/ moet deze vorm hebben; alleen _archive/ is vrij.
+ * Dit is een harde regel: een les die hiervan afwijkt komt de build niet in.
+ */
+const ABC_SHAPE = {
+  A: { title: 'Instap', time: '15 min', cards: ['card-entry', 'card-pres-a'] },
+  B: { title: 'Verwerken', time: '30 min', cards: ['card-activity', 'card-pres-b', 'card-workbook'] },
+  C: { title: 'Afsluiting', time: '5 min', cards: ['card-pres-c', 'card-exit'] }
+}
+const ABC_SLIDE_KEYS = { A: 'slidesA', B: 'slidesB', C: 'slidesC' }
+
+function checkAbcStructure(file, lesson) {
+  const timeline = lesson.timeline
+  if (!timeline || typeof timeline !== 'object') {
+    error(`${file}: geen timeline met stepA/stepB/stepC`)
+    return
+  }
+  if (Object.keys(timeline).join(',') !== 'stepA,stepB,stepC') {
+    error(`${file}: timeline moet exact stepA, stepB en stepC bevatten; gevonden ${Object.keys(timeline).join(', ') || 'niets'}`)
+    return
+  }
+
+  for (const [key, expected] of Object.entries(ABC_SHAPE)) {
+    const step = timeline[`step${key}`]
+    const cards = step.cards || []
+    const ids = cards.map(card => card.id)
+
+    if (step.step !== key) error(`${file}: step${key}.step moet '${key}' zijn`)
+    if (step.title !== expected.title) error(`${file}: step${key}.title moet '${expected.title}' zijn`)
+    if (step.time !== expected.time) error(`${file}: step${key}.time moet '${expected.time}' zijn`)
+    if (ids.join(',') !== expected.cards.join(',')) {
+      error(`${file}: step${key} moet exact de kaarten ${expected.cards.join(', ')} hebben; gevonden ${ids.join(', ') || 'niets'}`)
+    }
+
+    for (const card of cards) {
+      if (!card.title) error(`${file}: ${card.id} mist een titel`)
+      if (!card.description) error(`${file}: ${card.id} mist een beschrijving`)
+      if (card.action === 'presentation') {
+        const slideKey = card.slidesKey
+        if (slideKey !== ABC_SLIDE_KEYS[key]) {
+          error(`${file}: ${card.id} moet slidesKey '${ABC_SLIDE_KEYS[key]}' hebben; gevonden '${slideKey}'`)
+        }
+        if (!Array.isArray(lesson[slideKey]) || lesson[slideKey].length === 0) {
+          error(`${file}: ${slideKey} is leeg of ontbreekt`)
+        }
+      }
+      if (card.action === 'workbook' && !card.exercises) error(`${file}: ${card.id} mist exercises`)
+      if (card.action === 'activity' && !card.activityId) error(`${file}: ${card.id} mist activityId`)
+      if (card.action === 'activity' && !(lesson.activities || {})[card.activityId]) {
+        error(`${file}: ${card.id} verwijst naar activities.${card.activityId}, dat niet bestaat`)
+      }
+    }
+  }
+
+  if (!lesson.config?.title || !lesson.config?.description) {
+    error(`${file}: config mist title of description (de lesheader leest die daar)`)
+  }
+  if (!(lesson.entryTicket?.questions || []).length) error(`${file}: entryTicket mist vragen`)
+  if (!(lesson.exitTicket?.questions || []).length) error(`${file}: exitTicket mist vragen`)
+}
+
 for (const file of lessonFiles) {
   const lesson = (await import(pathToFileURL(path.join(lessonDir, file)).href)).default
   const expectedId = file.replace(/\.js$/, '')
@@ -51,6 +116,40 @@ for (const file of lessonFiles) {
   for (const activity of Object.values(activities)) {
     if (activity.type) activityTypes.add(activity.type)
   }
+
+  checkAbcStructure(file, lesson)
+
+  // Vraagtypen in de tickets moeten door TicketModal getekend kunnen worden.
+  // Een onbekend type levert een leeg scherm op zonder foutmelding.
+  for (const [ticketName, ticket] of [['entryTicket', lesson.entryTicket], ['exitTicket', lesson.exitTicket]]) {
+    for (const question of (ticket?.questions || [])) {
+      if (!TICKET_QUESTION_TYPES.has(question.type)) {
+        error(`${file}: ${ticketName} vraag '${question.id}' heeft onbekend type '${question.type}'`)
+      }
+      if (question.type === 'column-sort') {
+        const columns = question.columns || []
+        const items = columns.flatMap(column => column.items || [])
+        if (columns.length < 2) error(`${file}: ${question.id} heeft minder dan twee kolommen`)
+        if (!items.length) error(`${file}: ${question.id} heeft geen kaarten`)
+        for (const column of columns) {
+          if (!(column.items || []).length) error(`${file}: ${question.id} kolom '${column.id}' is leeg`)
+        }
+        // Elke kaart moet naar een bestaande kolom verwijzen, anders is de
+        // opdracht onmogelijk goed te maken.
+        for (const item of items) {
+          if (!columns.some(column => column.id === item.column)) {
+            error(`${file}: ${question.id} kaart '${item.id}' verwijst naar onbekende kolom '${item.column}'`)
+          }
+        }
+        const itemIds = items.map(item => item.id)
+        if (new Set(itemIds).size !== itemIds.length) error(`${file}: ${question.id} heeft dubbele kaart-ids`)
+      }
+    }
+  }
+}
+
+if (!fail.some(message => message.includes('step') || message.includes('slidesKey') || message.includes('mist'))) {
+  ok(`${lessonFiles.length} lessen volgen de ABC-structuur (kaarten, tijden en slidesleutels)`)
 }
 
 const missingFiles = modules

@@ -954,8 +954,6 @@ const getLabel = (q) => {
 </template>
 
 <style scoped>
-:root { font-family: 'Inter', sans-serif; }
-
 .pattern-grid {
     background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
     background-size: 24px 24px;
@@ -980,8 +978,10 @@ const getLabel = (q) => {
 @keyframes fadeInOpac { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideInBottom { from { transform: translateY(0.5rem); } to { transform: translateY(0); } }
 
-/* SVG Circuit Styles */
-.circuit-svg { font-family: 'Inter', sans-serif; overflow: visible; }
+/* SVG Circuit Styles. Geen eigen font-family: het systeem heeft één fontpaar
+   (IBM Plex Sans + Mono) en 'Inter' wordt nergens geladen, dus de labels
+   vielen stil terug op de browserdefault. */
+.circuit-svg { overflow: visible; }
 .circuit-component { stroke: #334155; stroke-linecap: round; stroke-linejoin: round; }
 
 .clickable-component { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; }

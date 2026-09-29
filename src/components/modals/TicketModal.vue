@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { PhX, PhCheckCircle, PhXCircle, PhSmiley, PhSmileyMeh, PhSmileySad, PhPaperPlaneRight, PhClipboardText, PhArrowRight } from '@phosphor-icons/vue'
 import MathGraphSvg from '../activities/MathGraphSvg.vue'
+import ColumnSortBoard from '../activities/ColumnSortBoard.vue'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -41,7 +42,11 @@ const parts = computed(() => {
         correct: q.correct,
         mathConfig: q.mathConfig,
         correctPoint: q.correctPoint,
-        tolerance: q.tolerance
+        tolerance: q.tolerance,
+        // column-sort: drie kolommen naast een kaartenbank. De juiste kolom van
+        // elke kaart staat in de vraagdata (`item.column`), niet in de code.
+        columns: q.columns,
+        revealAnswers: q.revealAnswers
     }))
 
     if (isEntry.value) {
@@ -103,6 +108,7 @@ function unpairMatching(partId, leftIdx) {
 const canProceed = computed(() => {
     const p = currentPart.value
     if (p.type === 'mc') return answers.value[p.id] !== undefined
+    if (p.type === 'column-sort') return isSortComplete(p)
     if (p.type === 'matching') {
         const userMatches = answers.value[p.id] || {}
         return p.pairs && Object.keys(userMatches).length === p.pairs.length
@@ -123,6 +129,90 @@ function selectOption(idx) {
     answers.value[currentPart.value.id] = idx
 }
 
+// ─── column-sort ───────────────────────────────────────────────────────────
+// `answers[id]` is hier een object { kaartId: kolomId }, net zoals bij matching.
+// De plaatsen zelf gebeurt in ColumnSortBoard; hier lezen we alleen de stand uit
+// voor de voortgang, de score en het eindscherm.
+const sortCards = part => (part.columns || []).flatMap(column => column.items || [])
+
+function sortPlacement(part) {
+    return answers.value[part.id] || {}
+}
+
+function isSortComplete(part) {
+    const cards = sortCards(part)
+    const placement = sortPlacement(part)
+    return cards.length > 0 && cards.every(card => placement[card.id] !== undefined)
+}
+
+/**
+ * Eerste poging per kaart, vastgelegd zodra een kaart voor het eerst in een
+ * kolom belandt.
+ *
+ * Dit is nodig omdat het instapticket meteen groen of rood toont: een leerling
+ * kan een rode kaart blijven verplaatsen tot ze groen is. De eindstand is dan
+ * altijd 9 op 9 en zegt niets meer. Wat wél diagnostische waarde heeft, is wat
+ * hij bij de eerste poging dacht. Daarom scoort de uitslag op deze eerste
+ * poging, en niet op de eindtoestand.
+ */
+const sortFirstAttempt = ref({})
+
+function firstAttemptFor(partId) {
+    return sortFirstAttempt.value[partId] || {}
+}
+
+function setSortPlacement(partId, placement) {
+    const part = parts.value.find(p => p.id === partId)
+    if (part && part.type === 'column-sort') {
+        const recorded = { ...firstAttemptFor(partId) }
+        for (const card of sortCards(part)) {
+            // Alleen de eerste keer vastleggen, en de kolom zelf in plaats van
+            // alleen goed/fout. De eindstand is na corrigeren altijd juist, dus
+            // voor de foutmelding op het eindscherm is de oorspronkelijke kolom
+            // nodig: anders leest die melding "Normdruk hoort bij Normdruk".
+            if (placement[card.id] !== undefined && recorded[card.id] === undefined) {
+                recorded[card.id] = placement[card.id]
+            }
+        }
+        sortFirstAttempt.value = { ...sortFirstAttempt.value, [partId]: recorded }
+    }
+    answers.value[partId] = placement
+}
+
+/**
+ * Is de opdracht in één keer goed gedaan? Voor de uitslag op het eindscherm:
+ * elke kaart moet bij de eerste poging in de juiste kolom zijn gelegd.
+ */
+function isSortCorrect(part) {
+    const recorded = firstAttemptFor(part.id)
+    const cards = sortCards(part)
+    return cards.length > 0 && cards.every(card => recorded[card.id] === card.column)
+}
+
+/** Aantal kaarten dat bij de eerste poging juist stond. */
+function sortCorrectCount(part) {
+    const recorded = firstAttemptFor(part.id)
+    return sortCards(part).filter(card => recorded[card.id] === card.column).length
+}
+
+/**
+ * Voor het eindscherm: welke kaarten gingen bij de eerste poging mis, en waar
+ * stonden ze toen? Zonder dit zegt een rood kruis alleen dat het fout was, niet
+ * wat de leerling moet bijsturen.
+ */
+function sortMistakes(part) {
+    const recorded = firstAttemptFor(part.id)
+    const labelFor = id => (part.columns || []).find(column => column.id === id)?.label || id
+    return sortCards(part)
+        .filter(card => recorded[card.id] !== card.column)
+        .map(card => ({
+            id: card.id,
+            text: card.text,
+            placedLabel: recorded[card.id] === undefined ? '' : labelFor(recorded[card.id]),
+            correctLabel: labelFor(card.column)
+        }))
+}
+
 function submit() {
     emit('complete')
     currentStepIndex.value++
@@ -139,6 +229,7 @@ function close() {
         selectedMood.value = null
         selectedLeftItem.value = null
         shuffledRightMap.value = {}
+        sortFirstAttempt.value = {}
     }, 500)
 }
 
@@ -172,11 +263,13 @@ function getMoodLabel(mood) {
 
 const questionResults = computed(() => {
     return parts.value
-        .filter(p => ['mc', 'graph-point', 'matching'].includes(p.type))
+        .filter(p => ['mc', 'graph-point', 'matching', 'column-sort'].includes(p.type))
         .map(p => {
             let isCorrect = false
             if (p.type === 'mc') {
                 isCorrect = answers.value[p.id] === p.correct
+            } else if (p.type === 'column-sort') {
+                isCorrect = isSortCorrect(p)
             } else if (p.type === 'graph-point' && p.correctPoint) {
                 const ans = answers.value[p.id]
                 if (ans) {
@@ -192,23 +285,36 @@ const questionResults = computed(() => {
                     return rIdx !== undefined && rightItems[rIdx]?.originalIndex === lIdx
                 }))
             }
-            return { id: p.id, question: p.question, isCorrect, answer: answers.value[p.id] }
+            return {
+                id: p.id,
+                question: p.question,
+                isCorrect,
+                answer: answers.value[p.id],
+                detail: p.type === 'column-sort' ? sortMistakes(p) : [],
+                // Eén vraag kan meer dan één punt tellen. Een sorteervraag levert
+                // een punt per kaart, zodat 8 van de 9 kaarten goed ook 8 van 9
+                // oplevert in plaats van alles-of-niets (0 van 1).
+                units: p.type === 'column-sort' ? sortCards(p).length : 1,
+                correctUnits: p.type === 'column-sort'
+                    ? sortCorrectCount(p)
+                    : (isCorrect ? 1 : 0)
+            }
         })
 })
 
-const scoredTotal = computed(() => questionResults.value.length)
-const scoredCorrect = computed(() => questionResults.value.filter(r => r.isCorrect).length)
+const scoredTotal = computed(() => questionResults.value.reduce((sum, r) => sum + r.units, 0))
+const scoredCorrect = computed(() => questionResults.value.reduce((sum, r) => sum + r.correctUnits, 0))
 
 const actualQuestionNumber = computed(() => {
     let count = 0
     for (let i = 0; i <= currentStepIndex.value; i++) {
-        if (['mc', 'open', 'graph-point', 'matching'].includes(parts.value[i].type)) count++
+        if (['mc', 'open', 'graph-point', 'matching', 'column-sort'].includes(parts.value[i].type)) count++
     }
     return count
 })
 
 const totalQuestions = computed(() => {
-    return parts.value.filter(p => ['mc', 'open', 'graph-point', 'matching'].includes(p.type)).length
+    return parts.value.filter(p => ['mc', 'open', 'graph-point', 'matching', 'column-sort'].includes(p.type)).length
 })
 
 function selectGraphPoint(id, pt) {
@@ -271,7 +377,7 @@ function optionLeave(event, selected) {
       <div class="min-w-0">
         <h2 class="fullscreen-title">{{ title }}</h2>
         <p class="fullscreen-label">
-          <template v-if="['mc', 'open', 'graph-point', 'matching'].includes(currentPart.type)">
+          <template v-if="['mc', 'open', 'graph-point', 'matching', 'column-sort'].includes(currentPart.type)">
             Vraag {{ actualQuestionNumber }} van {{ totalQuestions }}
           </template>
           <template v-else>{{ currentPart.type === 'mood' ? 'Reflectie' : 'Resultaat' }}</template>
@@ -312,6 +418,19 @@ function optionLeave(event, selected) {
               </div>
             </button>
           </div>
+        </div>
+
+        <!-- COLUMN SORT: kaarten in de juiste kolom plaatsen -->
+        <div v-else-if="currentPart.type === 'column-sort'" :key="'sort-'+currentPart.id" class="flex-1 flex flex-col w-full">
+          <h4 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2" v-html="currentPart.question"></h4>
+          <p class="text-slate-600 text-base mb-6" v-html="currentPart.description || 'Sleep elke kaart naar de kolom die erbij hoort.'"></p>
+
+          <ColumnSortBoard
+            :columns="currentPart.columns || []"
+            :modelValue="sortPlacement(currentPart)"
+            :revealAnswers="currentPart.revealAnswers === true"
+            @update:modelValue="setSortPlacement(currentPart.id, $event)"
+          />
         </div>
 
         <!-- MATCHING QUESTION -->
@@ -445,7 +564,25 @@ function optionLeave(event, selected) {
                 </div>
                 <div>
                   <p class="text-sm font-medium text-slate-800" v-html="r.question"></p>
-                  <p v-if="!r.isCorrect" class="text-sm mt-1 font-medium" style="color: var(--color-presentation);">Dit onderwerp vraagt nog aandacht.</p>
+                  <p v-if="r.units > 1" class="text-sm mt-1 font-bold" :style="{ color: r.correctUnits === r.units ? 'var(--color-workbook)' : 'var(--color-presentation)' }">
+                    {{ r.correctUnits }} van {{ r.units }} kaarten juist.
+                  </p>
+                  <p v-if="r.detail && r.detail.length" class="text-sm mt-1 text-slate-700">
+                    Deze kaarten stonden bij je eerste poging nog niet juist:
+                  </p>
+                  <ul v-if="r.detail && r.detail.length" class="mt-2 space-y-1">
+                    <li v-for="d in r.detail" :key="d.id" class="text-sm text-slate-700">
+                      <span v-html="d.text"></span>
+                      <br>
+                      <template v-if="d.placedLabel">
+                        <span class="font-bold" style="color: var(--color-presentation);">{{ d.placedLabel }}</span>
+                        hoort bij
+                      </template>
+                      <template v-else>Nog niet geplaatst. Hoort bij </template>
+                      <span class="font-bold" style="color: var(--color-workbook);">{{ d.correctLabel }}</span>.
+                    </li>
+                  </ul>
+                  <p v-else-if="!r.isCorrect" class="text-sm mt-1 font-medium" style="color: var(--color-presentation);">Dit onderwerp vraagt nog aandacht.</p>
                 </div>
               </div>
             </div>
@@ -477,7 +614,7 @@ function optionLeave(event, selected) {
             <!-- ENTRY: Summary line -->
             <div v-if="isEntry && scoredTotal > 0" class="pt-4 border-t-2" style="border-color: var(--color-line);">
               <p class="text-base text-slate-700">
-                Je hebt <span class="font-bold" :style="{ color: scoredCorrect >= scoredTotal ? 'var(--color-workbook)' : 'var(--color-presentation)' }">{{ scoredCorrect }} van {{ scoredTotal }}</span> vragen goed.
+                Je hebt <span class="font-bold" :style="{ color: scoredCorrect >= scoredTotal ? 'var(--color-workbook)' : 'var(--color-presentation)' }">{{ scoredCorrect }} van {{ scoredTotal }}</span> juist.
                 <template v-if="scoredCorrect < scoredTotal">
                   Kijk de theorie over deze onderwerpen nog eens na voor je verdergaat.
                 </template>
@@ -500,7 +637,12 @@ function optionLeave(event, selected) {
     <!-- Voetbalk met de navigatieacties -->
     <footer class="fullscreen-foot" v-if="currentPart.type !== 'finish'">
       <span class="fullscreen-label mr-auto">
-        {{ currentPart.type === 'mc' ? 'Meerkeuze' : currentPart.type === 'open' ? 'Reflectie' : currentPart.type === 'graph-point' ? 'Interactief' : 'Gevoel' }}
+        {{ currentPart.type === 'mc' ? 'Meerkeuze'
+          : currentPart.type === 'open' ? 'Reflectie'
+          : currentPart.type === 'graph-point' ? 'Interactief'
+          : currentPart.type === 'column-sort' ? 'Sorteren'
+          : currentPart.type === 'matching' ? 'Combineren'
+          : 'Gevoel' }}
       </span>
 
       <button

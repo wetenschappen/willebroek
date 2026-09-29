@@ -1,9 +1,20 @@
 /**
- * Druk bij vaste stoffen en gassen - Fysica 4
- * Vak: Fysica (2u) | Klas: 4NAWE+4SPOWE
+ * Druk bij vaste stoffen - Fysica 4
+ * Vak: Fysica (2u) | Klas: 4NAWE + 4SPOWE
  * Datum: 24/09/2026
- * Handboek: Plantyn WACO 4 Fysica (Thema 1, p. 18-29)
+ * Handboek: Plantyn WACO 4 Fysica (WACOF4DS2AL), Thema 1 Druk, hoofdstuk 1
  * Leerplan GO! D-finaliteit: BV2_06.50, BV2_06.51, BV2_06.40, WD2_11.01.04.01
+ *
+ * GOUDEN STANDAARD. Deze les volgt de ABC-structuur uit
+ * docs/EVALUATION-DOSSIER-THEMA1.md en src/lessons/_template.js exact:
+ *
+ *   A  Instap        card-entry + card-pres-a       15 min
+ *   B  Verwerken     card-pres-b + card-workbook
+ *                    + card-activity               30 min
+ *   C  Afsluiting    card-pres-c + card-exit         5 min
+ *
+ * Contentregel: elke stelling, waarde en opgave is rechtstreeks uit het
+ * handboek overgenomen. De bladzijde staat in de commentaar bij elk blok.
  */
 
 export default {
@@ -11,429 +22,483 @@ export default {
     subject: 'physics',
     className: '4NAWE + 4SPOWE',
     date: '24/09/2026',
-    title: 'Druk: vaste stoffen en gassen',
-    description: 'Afronding van druk bij vaste stoffen (p. 18-19) en verkenning van gasdruk, het deeltjesmodel, atmosferische druk en overdruk/onderdruk met toepassingen (p. 20-29).',
+    title: 'Hydrostatische druk: druk bij vloeistoffen',
+    description: 'Onderzoek hoe druk in vloeistoffen ontstaat: van de mensenpiramide naar de formule p = ρ · g · h en de hydrostatische paradox.',
 
     config: {
+        // LessonHeader leest config.title en config.description; LessonView laadt
+        // alleen het lesbestand, dus de titel staat hier, niet in modules.js.
+        title: 'Hydrostatische druk: druk bij vloeistoffen',
+        description: 'Onderzoek hoe druk in vloeistoffen ontstaat: van de mensenpiramide naar de formule p = ρ · g · h en de hydrostatische paradox.',
+
         groenCode: 'F4M01',
         groenAntwoord: 'fysica',
         masterCode: 'wetenschappen',
         classId: '4NAWE+4SPOWE',
         date: '24/09/2026',
-        textbook: 'WACO 4 Fysica 2u (Thema 1 Druk, p. 18-29)',
+        textbook: 'WACO 4 Fysica 2u (Thema 1 Druk, hoofdstuk 3)',
         oplossingen: {
             url: 'https://wetenschappen.github.io/verbeteren/f4t1.pdf',
             code: 'donderdag',
-            title: 'Correctiesleutel thema 1 (p. 18-29)'
+            title: 'Correctiesleutel thema 1'
         }
     },
 
     goals: [
-        'Ik kan met behulp van het kinetisch deeltjesmodel verklaren hoe gasdruk ontstaat door botsingen van deeltjes tegen de wanden van een vat.',
-        'Ik kan beredeneren welk effect een verandering van temperatuur, volume of aantal deeltjes heeft op de gasdruk in een afgesloten ruimte.',
-        'Ik kan met de formule \\( F = p \\cdot A \\) de uitgeoefende kracht van de atmosferische druk op een oppervlak berekenen in de correcte SI-eenheid (N) en wetenschappelijke notatie.',
-        'Ik kan het onderscheid tussen overdruk en onderdruk toelichten aan de hand van alledaagse toepassingen (zoals een fietsband, een zuignap en een vacuumpak koffie).',
-        'Ik kan de waarde van de normdruk op zeeniveau geven in pascal, hectopascal en bar (\\( 1013\\text{ hPa} = 1,013\\text{ bar} = 101\\,300\\text{ Pa} \\)) en verklaren waarom de luchtdruk daalt met de hoogte.'
+        'Ik kan met de analogie van een mensenpiramide verklaren waarom de druk in een vloeistof toeneemt met de diepte.',
+        'Ik kan de formule voor hydrostatische druk (\\( p_{\\text{hydr}} = \\rho \\cdot g \\cdot h \\)) toepassen in berekeningen met correcte SI-eenheden.',
+        'Ik kan beredeneren waarom de bodemdruk in een vloeistof enkel afhangt van de diepte en de vloeistofdichtheid, en niet van de vorm van het vat.',
+        'Ik kan de praktische vuistregel hanteren dat in water elke 10 meter diepte ongeveer \\( 100\\,000\\text{ Pa} = 1\\text{ bar} \\) extra druk oplevert.'
     ],
 
     workbook: {
         title: 'Leerwerkboek WACO 4 (Thema 1 Druk)',
-        subtitle: 'Hoofdstuk 1 (p. 18-19) en hoofdstuk 2 (p. 20-29)',
-        instruction: '<p>Werk zelfstandig de opdrachten af in je schrift en leerwerkboek. Start bij de afronding van vaste stoffen (p. 18-19) en ga vervolgens door naar de opdrachten van druk bij gassen (p. 26-29). Gebruik de digitale tussenstappen op je scherm als hulpmiddel.</p>',
-        formulaHint: 'Basisformules: \\( p = \\frac{F}{A} \\) \\(\\Leftrightarrow\\) \\( F = p \\cdot A \\). Normdruk: \\( p_{\\text{atm}} = 101\\,300\\text{ Pa} = 1013\\text{ hPa} = 1,013\\text{ bar} \\). Let op eenheden: \\( 1\\text{ cm}^2 = 10^{-4}\\text{ m}^2 \\).'
+        subtitle: 'Hoofdstuk 3: Druk bij vloeistoffen (p. 32-35)',
+        instruction: '<p>Werk zelfstandig aan de opdrachten in je schrift en leerwerkboek. Gebruik het stappenplan (Gegeven, Gevraagd, Formule, Berekening, Antwoord) voor kwantitatieve vraagstukken.</p>',
+        formulaHint: 'Hydrostatische druk: \\( p_{\\text{hydr}} = \\rho \\cdot g \\cdot h \\). Totale druk: \\( p_{\\text{tot}} = p_{\\text{atm}} + \\rho \\cdot g \\cdot h \\). Let op eenheden: \\( \\rho \\) in \\( \\text{kg/m}^3 \\), \\( h \\) in \\( \\text{m} \\), \\( g = 9{,}81\\text{ N/kg} \\), \\( p_{\\text{atm}} = 101\\,300\\text{ Pa} \\).'
     },
 
     timeline: {
+
+        // ── STAP A: Instap (15 min) ───────────────────────────────────────────
         stepA: {
-            step: 'A',
-            title: 'Instap en afronding van vaste stoffen',
-            time: '10 min',
+            step: 'A', title: 'Instap', time: '15 min',
             cards: [
                 {
-                    id: 'card-hook',
-                    type: 'class',
-                    title: 'De afgesloten spuit en de zuignap',
-                    description: 'Sluit een lege injectiespuit af met je duim en trek aan de zuiger. Wat voel je en waarom? Zuigt het vacuüm, of duwt de buitenlucht?',
-                    action: 'presentation',
-                    slidesKey: 'hook_slides'
+                    id: 'card-entry',
+                    type: 'digital',
+                    title: 'Wat weet je nog?',
+                    description: 'Herinner je je het verschil tussen normdruk, onderdruk en overdruk uit de vorige les?',
+                    action: 'entry-ticket',
+                    icon: 'PhQuestion'
                 },
                 {
-                    id: 'card-fixed-support',
-                    type: 'digital',
-                    title: 'Oplossingshulp vaste stoffen (p. 18-19)',
-                    description: 'Voorbeeldopgave Oef 7 (kast op 4 poten) met stapsgewijze uitwerking en zelfcheck.',
+                    id: 'card-pres-a',
+                    type: 'class',
+                    title: 'Druk in lagen: de mensenpiramide',
+                    description: 'Van de belasting in een acrobatische toren naar de druk op diepte in water.',
                     action: 'presentation',
-                    slidesKey: 'fixed_support_slides'
+                    slidesKey: 'slidesA'
                 }
             ]
         },
 
+        // ── STAP B: Verwerken (30 min) ────────────────────────────────────────
         stepB: {
-            step: 'B',
-            title: 'Verwerken: druk bij gassen',
-            time: '30 min',
+            step: 'B', title: 'Verwerken', time: '30 min',
             cards: [
                 {
-                    id: 'card-gas-theory',
-                    type: 'class',
-                    title: 'Theorieverkenner: druk bij gassen',
-                    description: 'Van botsende gasdeeltjes en de 3 parameters tot atmosferische druk, vacuümproeven en overdruk versus onderdruk.',
-                    action: 'presentation',
-                    slidesKey: 'gas_theory_slides'
+                    id: 'card-activity',
+                    type: 'digital',
+                    title: 'Afleiding van de formule',
+                    description: 'Bouw in 4 denkstappen de formule voor hydrostatische druk op.',
+                    action: 'activity',
+                    activityId: 'main',
+                    icon: 'PhShapes'
                 },
                 {
-                    id: 'card-calculations',
-                    type: 'digital',
-                    title: 'Vraagstukhulp: oefeningen p. 26-29',
-                    description: 'Voorbeeldoefeningen per type: handpalm (p. 28 oef 8) en het ISS Cupola-raam (p. 29 oef 11).',
+                    id: 'card-pres-b',
+                    type: 'class',
+                    title: 'Hydrostatische druk',
+                    description: 'De formule p = ρ · g · h, de eenheden en de hydrostatische paradox.',
                     action: 'presentation',
-                    slidesKey: 'calculation_slides'
+                    slidesKey: 'slidesB'
                 },
                 {
                     id: 'card-workbook',
                     type: 'paper',
-                    title: 'Werkboek WACO: alle opdrachten p. 18-29',
-                    description: 'Volledig overzicht van alle opdrachten uit WACO 4 met paginanummers en hints.',
+                    title: 'Boekopdrachten WACO',
+                    description: 'Maak oefening 5, 9 en 3 in je leerwerkboek over vloeistofdruk.',
                     action: 'workbook',
-                    exercises: 'Opdracht 7 (p. 18): kast van 50 kg op 4 poten (druk per poot)\n' +
-                               'Opdracht 8 (p. 18): duim met 20 N op tafel (oppervlakte in cm²)\n' +
-                               'Opdracht 9 (p. 19): stapels stenen en drukevenredigheid\n' +
-                               'Opdracht 10 (p. 19): kubus 2z schaalprobleem (druk verdubbelt)\n' +
-                               'Opdracht 11 (p. 19): Yusuf op schaatsen (maximaal toelaatbare massa)\n' +
-                               'Opdracht 1 (p. 26): meettoestel kiezen (barometer en manometer)\n' +
-                               'Opdracht 2 (p. 26): definitie van overdruk en onderdruk\n' +
-                               'Opdracht 3 (p. 26): kracht van de luchtdruk op een raam van 1,50 m²\n' +
-                               'Opdracht 4 (p. 27): waarde van de normdruk op zeeniveau\n' +
-                               'Opdracht 5 (p. 27): luchtdruk op een berg en in het dal\n' +
-                               'Opdracht 6 (p. 27): gasfles (overdruk) en zuignappen (onderdruk)\n' +
-                               'Opdracht 7 (p. 27): latje breken met krant en luchtdruk\n' +
-                               'Opdracht 8 (p. 28): kracht en equivalente massa op een handpalm van 165 cm²\n' +
-                               'Opdracht 9 (p. 28): situaties classificeren als over- of onderdruk\n' +
-                               'Opdracht 10 (p. 28): drie manieren om gasdruk in een vat te verhogen\n' +
-                               'Opdracht 11 (p. 29): kracht op het Cupola-raam van het ISS\n' +
-                               'Opdracht 12 (p. 29): schietschijfpijlen met zuignapjes verklaren'
+                    icon: 'PhBookOpen',
+                    exercises: 'Opdracht 5 (p. 33): Twee duikers op 10,0 m diepte in meer vs. Noordzee (invloed van dichtheid en diepte)\n' +
+                               'Opdracht 9 (p. 35): Stuwdam met 5,00 · 10⁵ Pa waterdruk (bereken stuwmeerdiepte h)\n' +
+                               'Opdracht 3 (p. 32): Totale druk in de Noordzee op 20,00 m diepte (inclusief normdruk)'
+                }
+            ],
+            extraActivities: [
+                {
+                    id: 'extra-begrippen',
+                    title: 'Grootheden en eenheden koppelen',
+                    category: 'Begripsvorming',
+                    icon: 'PhArrowsDownUp'
+                },
+                {
+                    id: 'extra-olympiade',
+                    title: 'Olympiade: bodemdruk vergelijken',
+                    category: 'Inzicht en verdieping',
+                    icon: 'PhLightbulb'
                 }
             ]
         },
 
+        // ── STAP C: Afsluiting (5 min) ────────────────────────────────────────
         stepC: {
-            step: 'C',
-            title: 'Afsluiting en synthese',
-            time: '10 min',
+            step: 'C', title: 'Afsluiting', time: '5 min',
             cards: [
                 {
-                    id: 'card-summary',
+                    id: 'card-pres-c',
                     type: 'class',
-                    title: 'Samenvatting: druk bij gassen',
-                    description: 'Synthese van het deeltjesmodel, normdruk, overdruk versus onderdruk en de krachtformule F = p · A.',
+                    title: 'Samenvatting',
+                    description: 'De kerninzichten en vuistregels over vloeistofdruk op een rij.',
                     action: 'presentation',
-                    slidesKey: 'summary_slides'
+                    slidesKey: 'slidesC'
                 },
                 {
                     id: 'card-exit',
                     type: 'digital',
-                    title: 'Formatief afsluitend ticket',
-                    description: 'Drie meerkeuzevragen en een koppelopdracht om je inzicht in gasdruk en atmosferische druk te testen.',
-                    action: 'exit-ticket'
+                    title: 'Exit ticket',
+                    description: 'Vier snelle denkvragen om te controleren of je de essentie mee hebt.',
+                    action: 'exit-ticket',
+                    icon: 'PhTarget'
                 }
             ]
         }
     },
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // SLIDE DECKS
-    // ══════════════════════════════════════════════════════════════════════════
+    // ── ACTIVITIES ────────────────────────────────────────────────────────────
+    activities: {
+        main: {
+            type: 'pressureLab',
+            title: 'Afleiding van de formule'
+        },
+        'extra-begrippen': {
+            type: 'dragDrop',
+            title: 'Koppel grootheid en eenheid bij vloeistofdruk',
+            instruction: 'Sleep elke fysische grootheid naar de juiste definitie of eenheid.',
+            pairs: [
+                { term: 'Hydrostatische druk (p_hydr)', definition: 'Druk door het eigen gewicht van de bovenliggende vloeistofkolom (Pa)' },
+                { term: 'Massadichtheid (ρ)', definition: 'Massa per volume vloeistof in kg/m³ (zoet water = 1 000 kg/m³)' },
+                { term: 'Diepte (h)', definition: 'Verticale afstand onder het vloeistofoppervlak in meter (m)' },
+                { term: 'Totale druk (p_tot)', definition: 'Som van atmosferische luchtdruk en hydrostatische druk (p_atm + p_hydr)' }
+            ]
+        },
+        'extra-olympiade': {
+            type: 'mixedRetrieval',
+            title: 'Vlaamse Fysica Olympiade: hydrostatische paradox',
+            questions: [
+                {
+                    q: 'Vier vaten A, B, C en D hebben verschillende vormen. In vat A (hoogte h, water ρ), vat B (hoogte h, zout water 2ρ), vat C (hoogte 2h, water ρ) en vat D (hoogte 2h, zout water 2ρ). In welk vat is de bodemdruk maximaal? (Olympiade 2009 / WACO p. 34)',
+                    a: [
+                        'Vat D: p = 2ρ · g · 2h = 4 · ρ · g · h',
+                        'Vat C: p = ρ · g · 2h = 2 · ρ · g · h',
+                        'Vat B: p = 2ρ · g · h = 2 · ρ · g · h',
+                        'In alle vier de vaten is de druk gelijk'
+                    ],
+                    c: 0
+                },
+                {
+                    q: 'Waarom heeft een stuwdam onderaan altijd een veel dikkere betonnen wand dan bovenaan?',
+                    a: [
+                        'Omdat de hydrostatische druk p = ρ · g · h evenredig toeneemt met de diepte, waardoor de uitgeoefende kracht onderaan het grootst is.',
+                        'Omdat de watertemperatuur op de bodem van het meer veel lager is.',
+                        'Omdat het stuwmeer onderaan breder is dan bovenaan.'
+                    ],
+                    c: 0
+                },
+                {
+                    q: 'In de hydrostatische paradox hebben twee vaten met dezelfde bodemoppervlakte en waterhoogte exact dezelfde bodemdruk, ook al bevat vat 1 drie keer zoveel watermassa als vat 2. Waarom?',
+                    a: [
+                        'Omdat bodemdruk enkel afhangt van de verticale waterkolomhoogte h en massadichtheid ρ, niet van de vatvorm.',
+                        'Omdat het extra water in vat 1 geen gewicht heeft.',
+                        'Omdat de luchtdruk het verschil compenseert.'
+                    ],
+                    c: 0
+                }
+            ]
+        }
+    },
 
-    hook_slides: [
+    // ─── SLIDES ───────────────────────────────────────────────────────────────
+
+    slidesA: [
         {
-            layout: 'predict',
-            title: 'De afgesloten spuit en de zuignap',
-            question: 'Je sluit een lege injectiespuit luchtdicht af met je duim en trekt met kracht aan de zuiger. Wat gebeurt er als je de zuiger loslaat, en waarom is het zo moeilijk om hem uitgetrokken te houden?',
-            context: 'Denk na over de krachten: trekt het vacuüm aan de binnenzijde, of gebeurt er iets anders aan de buitenkant?',
-            hint: 'Klik om de fysische verklaring te onthullen',
-            revealText: 'De zuiger schiet met kracht terug naar binnen. Het is niet het vacuüm binnenin dat zuigt (een vacuüm bevat immers geen materie en kan geen trekkracht uitoefenen). Het is de buitenlucht die met de volle atmosferische druk (\\( 1013\\text{ hPa} \\)) krachtig tegen de zuiger duwt. Binnen heerst onderdruk, buiten heerst de volle normdruk.'
+            layout: 'title',
+            title: 'Hydrostatische druk',
+            subtitle: 'Thema 1: Druk in vloeistoffen',
+            badge: 'Theorie',
+            icon: 'atom'
+        },
+        {
+            layout: 'hero',
+            title: 'De mensenpiramide',
+            subtitle: 'We zagen al druk in gassen. Hoe zit het bij vloeistoffen?<br><br>Denk aan een mensenpiramide: hoe lager je staat, hoe meer gewicht er op je rust.',
+            image: '/assets/castellers_piramide.jpg',
+            credit: 'Gewichtsverdeling in lagen'
+        },
+        {
+            layout: 'comparison',
+            title: 'Van atleten naar water',
+            left: {
+                title: 'Net onder water',
+                content: '<span style="color: var(--color-digital); font-weight: bold; font-size: 1.2em;">h = 0,2 m</span><br><br>Er ligt nauwelijks water op je. De neerwaartse druk is minimaal.'
+            },
+            right: {
+                title: 'Diep in de zee',
+                content: '<span style="color: var(--color-presentation); font-weight: bold; font-size: 1.2em;">h = 5,0 m</span><br><br>Een massieve kolom water rust op je. Het totale gewicht duwt hard naar beneden.'
+            }
         }
     ],
 
-    fixed_support_slides: [
+    slidesB: [
         {
             layout: 'title',
-            title: 'Afronding druk bij vaste stoffen',
-            subtitle: 'Uitgewerkt voorbeeld opgave 7 (p. 18)'
+            title: 'Hydrostatische Druk',
+            subtitle: 'Formalisatie van de formule',
+            badge: 'Theorie',
+            icon: 'calculator'
         },
         {
-            layout: 'worked-example',
-            title: 'Opgave 7 (p. 18): kast op vier poten',
-            problem: 'Een kast heeft een massa van 50 kg en staat op vier poten die elk een oppervlakte van 100 cm² hebben. Bereken de grootte van de druk die elke poot op de grond uitoefent.',
-            steps: [
-                {
-                    label: 'Gegeven',
-                    result: '\\( m = 50\\text{ kg} \\), \\( \\text{aantal poten} = 4 \\), \\( A_{\\text{poot}} = 100\\text{ cm}^2 = 0{,}0100\\text{ m}^2 \\), \\( \\text{gevraagd: } p = ? \\)'
-                },
-                {
-                    label: 'Totale zwaartekracht',
-                    result: '\\( F = F_G = m \\cdot g = 50\\text{ kg} \\cdot 9{,}81\\text{ N/kg} = 490{,}5\\text{ N} \\)'
-                },
-                {
-                    label: 'Totaal contactoppervlak',
-                    result: '\\( A = 4 \\cdot A_{\\text{poot}} = 4 \\cdot 0{,}0100\\text{ m}^2 = 0{,}0400\\text{ m}^2 \\)'
-                },
-                {
-                    label: 'Druk per poot berekenen',
-                    result: '\\( p = \\frac{F}{A} = \\frac{490{,}5\\text{ N}}{0{,}0400\\text{ m}^2} = 12\\,262{,}5\\text{ Pa} = 1{,}2 \\cdot 10^4\\text{ Pa} \\)'
-                }
-            ],
-            answer: 'De poten oefenen een druk uit van \\( 1{,}2 \\cdot 10^4\\text{ Pa} \\) uit op de grond.'
-        }
-    ],
-
-    gas_theory_slides: [
-        {
-            layout: 'title',
-            title: 'Theorieverkenner: druk bij gassen',
-            subtitle: 'Kinetisch deeltjesmodel, atmosferische normdruk, meettoestellen en overdruk/onderdruk (WACO Thema 1, p. 20-25)'
-        },
-        {
-            layout: 'definition',
-            title: 'Groen kader (p. 20): druk in een gas',
-            term: 'Kinetisch deeltjesmodel van gasdruk',
-            formula: '\\( p = \\frac{F}{A} \\)',
-            explanation: 'In een gas bewegen de deeltjes (moleculen) voortdurend met hoge snelheden kriskras door elkaar. Bij elke botsing tegen de wand oefenen de gasdeeltjes een kleine stootkracht uit.<br><br>De <strong>gasdruk</strong> is de totale kracht die al deze ontelbare botsende deeltjes samen per oppervlakte-eenheid uitoefenen op de wanden van het vat.<br><br><em>Onthoud:</em> Gasdruk ontstaat <strong>niet</strong> door het gewicht van de gasdeeltjes, maar door hun voortdurende botsingen tegen de wanden.',
-            conditions: [
-                'Gasdeeltjes bewegen ordeloos en met grote snelheden',
-                'Elke botsing levert een loodrechte stootkracht op de wand',
-                'Gasdruk is de som van alle botsingskrachten gedeeld door het wandoppervlak'
-            ]
-        },
-        {
-            layout: 'steps',
-            title: 'Groen kader (p. 21): drie parameters die gasdruk bepalen',
-            steps: [
-                {
-                    title: '1. Aantal deeltjes (N) vergroten',
-                    content: 'Pomp je meer gasdeeltjes in hetzelfde volume? Dan zijn er meer botsingen per seconde per vierkante meter tegen de wanden: <strong>de druk stijgt</strong>.'
-                },
-                {
-                    title: '2. Temperatuur (T) verhogen',
-                    content: 'Bij verwarming bewegen de gasdeeltjes sneller. Ze botsen vaker én met een grotere stootkracht tegen de wanden: <strong>de druk stijgt</strong>.'
-                },
-                {
-                    title: '3. Volume (V) verkleinen',
-                    content: 'Druk je de zuiger in en maak je het vat kleiner? De deeltjes zitten dichter bijeen en botsen vaker per oppervlakte-eenheid tegen de wand: <strong>de druk stijgt</strong>.'
-                }
-            ]
-        },
-        {
-            layout: 'multichoice',
-            title: 'Begripscheck: invloed van temperatuur (p. 21)',
-            question: 'Wat gebeurt er met de gasdruk in een afgesloten aerosol spuitbus als je deze in de hete zon laat liggen?',
-            options: [
-                'De druk daalt, want het gas zet uit.',
-                'De druk stijgt, want de deeltjes bewegen sneller en botsen heviger en vaker tegen de wanden.',
-                'De druk blijft exact gelijk, want er kunnen geen deeltjes ontsnappen.',
-                'De druk verdwijnt volledig.'
-            ],
-            correct: 1,
-            explanation: 'Correct! Temperatuurstijging verhoogt de snelheid van de gasdeeltjes. Ze botsen met meer impuls en een hogere frequentie tegen de stalen wand, waardoor de druk gevaarlijk hoog kan oplopen.'
+            layout: 'big',
+            title: 'De afleiding samengevat',
+            content: 'Zojuist zagen we dat het <strong>grondvlak A wegberekenbaar is</strong>.<br><br>De druk wordt dus uitsluitend veroorzaakt door de <span style="color: var(--color-digital); font-weight: bold;">diepte</span> en de <span style="color: var(--color-digital); font-weight: bold;">dichtheid</span> van de vloeistof.'
         },
         {
             layout: 'equation',
-            title: 'Groen kader (p. 23): atmosferische normdruk',
-            equation: '\\( p_{\\text{atm}} = 101\\,300\\text{ Pa} = 1013\\text{ hPa} = 1{,}013\\text{ bar} \\)',
-            subtitle: 'Gemiddelde luchtdruk op zeeniveau bij 0 °C. Op grotere hoogte daalt de luchtdruk omdat de lucht ijler is (minder deeltjes en minder botsingen).',
+            title: 'Hydrostatische druk',
+            equation: '\\( p_{\\text{hydr}} = \\rho \\cdot g \\cdot h \\)',
             variables: [
-                { symbol: '\\( 101\\,300\\text{ Pa} \\)', meaning: 'SI-basiseenheid', unit: 'N/m²' },
-                { symbol: '\\( 1013\\text{ hPa} \\)', meaning: 'Meteorologische eenheid', unit: 'Hectopascal' },
-                { symbol: '\\( 1{,}013\\text{ bar} \\)', meaning: 'Technische eenheid', unit: 'Bar (100 000 Pa)' },
-                { symbol: '\\( 760\\text{ mm Hg} \\)', meaning: 'Kwikbarometer Torricelli', unit: 'Kwikhoogte' }
+                { symbol: '\\( p_{\\text{hydr}} \\)', meaning: 'Hydrostatische druk', unit: 'Pa' },
+                { symbol: '\\( \\rho \\)', meaning: 'Massadichtheid van de vloeistof', unit: 'kg/m³' },
+                { symbol: '\\( g \\)', meaning: 'Zwaarteveldsterkte', unit: 'N/kg' },
+                { symbol: '\\( h \\)', meaning: 'Diepte', unit: 'm' }
             ]
         },
         {
             layout: 'comparison',
-            title: 'Groen kader (p. 24): meten van druk',
+            title: 'De hydrostatische paradox',
             left: {
-                title: 'Barometer (atmosferische druk)',
-                content: 'Meettoestel om de <strong>buitenluchtdruk</strong> van de open dampkring te meten.<br><br>• Kwikbarometer van Torricelli (760 mm Hg)<br>• Metaalbarometer (aneroïde doos van Vidi)<br>• Gebruikt in weerstations'
+                title: 'De misvatting',
+                content: '<span style="color: var(--color-presentation); font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 0.5rem;">[FOUT]</span>"Meer water betekent altijd meer druk op de bodem."<br><br>Men denkt ten onrechte dat een grote bak water harder drukt dan een smalle buis.'
             },
             right: {
-                title: 'Manometer (gasdruk in een vat)',
-                content: 'Meettoestel om de <strong>gasdruk in een afgesloten ruimte</strong> te meten.<br><br>• Vloeistofmanometer (U-buis met vloeistofverschil)<br>• Metaalmanometer (bourdonbuis)<br>• Gebruikt op fietspomp, compressor, duikfles'
+                title: 'De werkelijkheid',
+                content: '<span style="color: var(--color-workbook); font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 0.5rem;">[JUIST]</span>In \\( p = \\rho \\cdot g \\cdot h \\) staat geen volume of vorm.<br><br>Twee vaten met <strong>hetzelfde vloeistofpeil</strong> hebben op de bodem <strong>exact dezelfde druk</strong>.'
             }
         },
         {
             layout: 'comparison',
-            title: 'Groen kader (p. 25): overdruk en onderdruk',
+            title: 'Vuistregel voor duikers',
             left: {
-                title: 'Overdruk (\\( p_{\\text{gas}} > p_{\\text{atm}} \\))',
-                content: 'De gasdruk in de ruimte is <strong>hoger dan de atmosferische druk</strong>.<br><br>Voorbeelden:<br>• Opgepompte fietsband (4 bar)<br>• Duikfles (200 bar)<br>• Spuitbus deodorant'
+                title: 'Water',
+                content: '1 meter diepte levert in zoet water ongeveer \\( 10\\,000\\text{ Pa} \\) extra druk op.'
             },
             right: {
-                title: 'Onderdruk (\\( p_{\\text{gas}} < p_{\\text{atm}} \\))',
-                content: 'De gasdruk in de ruimte is <strong>lager dan de atmosferische druk</strong>.<br><br>Voorbeelden:<br>• Vacuümpak koffie<br>• Zuignap tegen het raam<br>• Inademen via de longen'
+                title: 'Diepzee',
+                content: '<span style="color: var(--color-workbook); font-size: 1.5em; font-weight: bold;">+ 1 bar per 10m</span><br><br>Elke 10 meter dalen verhoogt de hydrostatische druk met afgerond 1 bar.'
             }
         },
         {
-            layout: 'multichoice',
-            title: 'Begripscheck: vliegtuig op 10 km hoogte (p. 28 Oef 9e)',
-            question: 'Op 10 km hoogte bedraagt de buitendruk amper 264 hPa. In de passagierscabine houdt men de druk op 800 hPa. Welke toestand heerst er in de cabine ten opzichte van de omringende buitenlucht?',
-            options: [
-                'Onderdruk, want 800 hPa is minder dan de zeeniveau-normdruk van 1013 hPa.',
-                'Overdruk, want de druk in de cabine (800 hPa) is aanzienlijk hoger dan de omringende buitenlucht (264 hPa).',
-                'Er is geen drukverschil tussen cabine en buitenlucht.',
-                'De cabine is vacuüm gezogen.'
+            layout: 'worked-example',
+            title: 'Uitgewerkt: Totale druk',
+            method: 'Vergeet de atmosfeer niet (101 300 Pa) die bovenop het water drukt!',
+            problem: 'Bereken de totale druk in de Noordzee op een diepte van 20,00 m (\\( \\rho = 1\\,025\\text{ kg/m}^3 \\)).',
+            steps: [
+                { label: 'Gegeven', content: '\\( h = 20{,}00\\text{ m} \\), \\( \\rho = 1\\,025\\text{ kg/m}^3 \\), \\( p_{\\text{atm}} = 101\\,300\\text{ Pa} \\)' },
+                { label: 'Gevraagd', content: '\\( p_{\\text{tot}} = ? \\)' },
+                { label: 'Formule', content: '\\( p_{\\text{tot}} = p_{\\text{atm}} + \\rho \\cdot g \\cdot h \\)' },
+                { label: 'Berekening', content: '\\( p_{\\text{tot}} = 101\\,300 + (1\\,025 \\cdot 9{,}81 \\cdot 20{,}00) = 302\\,405\\text{ Pa} \\)' }
             ],
-            correct: 1,
-            explanation: 'Correct! Overdruk en onderdruk worden altijd beoordeeld ten opzichte van de directe omgeving. Omdat 800 hPa > 264 hPa heerst er in het vliegtuig een stevige overdruk naar buiten toe.'
+            answer: 'De totale druk is \\( 3{,}02 \\cdot 10^5\\text{ Pa} \\).'
         }
     ],
 
-    calculation_slides: [
+    slidesC: [
         {
             layout: 'title',
-            title: 'Vraagstukhulp: kracht van luchtdruk',
-            subtitle: 'Stap-voor-stap oplossen met F = p · A'
+            title: 'Samenvatting',
+            subtitle: 'Hydrostatische druk',
+            badge: 'Samenvatting',
+            icon: 'check'
         },
         {
-            layout: 'worked-example',
-            title: 'Opgave 8 (p. 28): kracht op je handpalm',
-            problem: 'a) Hoe groot is de kracht die de luchtdruk uitoefent op je handpalm met een oppervlakte van 165 cm²? b) Met welke massa komt deze kracht overeen?',
-            steps: [
-                {
-                    label: 'Oppervlakte omzetten naar m²',
-                    result: '\\( A_{\\text{hand}} = 165\\text{ cm}^2 = 0{,}0165\\text{ m}^2 \\)'
-                },
-                {
-                    label: 'Luchtkracht berekenen',
-                    result: '\\( p_{\\text{atm}} = 1\\,013\\text{ hPa} = 101\\,300\\text{ Pa} \\), \\( F_{\\text{hand}} = p_{\\text{atm}} \\cdot A_{\\text{hand}} = 101\\,300\\text{ Pa} \\cdot 0{,}0165\\text{ m}^2 = 1\\,671{,}45\\text{ N} = 1{,}67 \\cdot 10^3\\text{ N} \\)'
-                },
-                {
-                    label: 'Equivalente massa berekenen',
-                    result: '\\( F_{G,\\text{hand}} = m_{\\text{hand}} \\cdot g \\), \\( m_{\\text{hand}} = \\frac{F_{G,\\text{hand}}}{g} = \\frac{1{,}67 \\cdot 10^3\\text{ N}}{9{,}81\\text{ N/kg}} = 0{,}170 \\cdot 10^3\\text{ kg} = 1{,}70 \\cdot 10^2\\text{ kg} \\)'
-                }
-            ],
-            answer: 'a) De kracht van de luchtdruk op de handpalm is \\( 1{,}67 \\cdot 10^3\\text{ N} \\).<br>b) Dit komt overeen met een massa van \\( 1{,}70 \\cdot 10^2\\text{ kg} \\) of \\( 170\\text{ kg} \\).'
-        },
-        {
-            layout: 'worked-example',
-            title: 'Opgave 11 (p. 29): het Cupola-raam van het ISS',
-            problem: 'Het ronde raam van de Cupola in het ISS heeft een diameter van 80 cm. Binnen heerst de normdruk (101 300 Pa), buiten is het vacuüm (0 Pa). Bereken de kracht op het raam.',
-            steps: [
-                {
-                    label: 'Gegeven',
-                    result: '\\( d = 80\\text{ cm} = 0{,}80\\text{ m} \\Rightarrow r = 0{,}40\\text{ m} \\), \\( p_{\\text{binnen}} = 1\\,013\\text{ hPa} = 101\\,300\\text{ Pa} \\), \\( \\text{gevraagd: } F = ? \\)'
-                },
-                {
-                    label: 'Oplossing',
-                    result: '\\( F = p \\cdot A = p \\cdot \\pi \\cdot r^2 = 101\\,300\\text{ Pa} \\cdot 3{,}14 \\cdot (0{,}40\\text{ m})^2 = 318\\,082\\text{ Pa} \\cdot 0{,}16\\text{ m}^2 = 50\\,893{,}12\\text{ N} = 5{,}1 \\cdot 10^4\\text{ N} \\)'
-                }
-            ],
-            answer: 'Het ronde raam moet een kracht van \\( 5{,}1 \\cdot 10^4\\text{ N} \\) kunnen weerstaan.'
-        }
-    ],
-
-    summary_slides: [
-        {
-            layout: 'title',
-            title: 'Samenvatting: druk bij gassen',
-            subtitle: 'De essentie van hoofdstuk 2'
-        },
-        {
-            layout: 'steps',
-            title: 'Vier fysische pijlers',
-            steps: [
-                {
-                    title: '1. Oorsprong van gasdruk',
-                    content: 'Gasdruk ontstaat door elastische botsingen van chaotisch bewegende deeltjes tegen de wanden.'
-                },
-                {
-                    title: '2. De 3 parameters',
-                    content: 'Druk stijgt wanneer: temperatuur stijgt (snellere deeltjes), volume daalt (dichter bijeen), of aantal deeltjes toeneemt.'
-                },
-                {
-                    title: '3. Atmosferische normdruk',
-                    content: '\\( 1013\\text{ hPa} = 1{,}013\\text{ bar} = 101\\,300\\text{ Pa} \\). De luchtdruk neemt af met de hoogte.'
-                },
-                {
-                    title: '4. Overdruk en onderdruk',
-                    content: 'Overdruk: druk is hoger dan omgevingsdruk. Onderdruk: druk is lager dan omgevingsdruk (vacuüm zuigt niet, buitenlucht duwt!).'
-                }
-            ]
-        },
-        {
-            layout: 'split',
-            title: 'Overdruk versus onderdruk in de praktijk',
+            layout: 'comparison',
+            title: 'Wat bepaalt de druk?',
             left: {
-                title: 'Overdruk',
-                content: '<strong>\\( p_{\\text{gas}} > p_{\\text{atm}} \\)</strong><br><br>• Fietsband, autoband<br>• Spuitbus deodorant<br>• Duikfles (200 bar)<br>• Gemeten met manometer'
+                title: 'Wél invloed',
+                content: '<span style="color: var(--color-digital); font-size: 1.2em; font-weight: bold;">Diepte (h) & Dichtheid (ρ)</span><br><br>Hoe dieper, of hoe zwaarder de vloeistof, hoe groter de druk.'
             },
             right: {
-                title: 'Onderdruk',
-                content: '<strong>\\( p_{\\text{gas}} < p_{\\text{atm}} \\)</strong><br><br>• Zuignap tegen gladde wand<br>• Vacuümpak koffie<br>• Drinken met een rietje<br>• Buitenlucht zorgt voor de kracht'
+                title: 'Géén invloed (Paradox)',
+                content: '<span style="color: var(--color-presentation); font-size: 1.2em; font-weight: bold;">Vorm & Volume</span><br><br>De totale hoeveelheid water en de breedte van het vat maken wiskundig geen enkel verschil.'
             }
+        },
+        {
+            layout: 'standard',
+            title: 'Klaar voor het exit ticket?',
+            content: 'Neem je laptop erbij en test jezelf met 4 snelle diagnostische vragen. Succes!'
         }
     ],
 
+    // ─── TICKETS ──────────────────────────────────────────────────────────────
+
+    /**
+     * Instapticket: sorteren in drie kolommen.
+     *
+     * Elke kaart draagt zijn juiste kolom in de data (`item.column`), dus de
+     * oplossing staat in het lesbestand en niet in de component.
+     *
+     * BRONNEN (Handleiding WACO 4 Fysica, Thema 1):
+     *   p. 18 = handboek p. 26, samenvatting hoofdstuk 2:
+     *     "De normdruk is 1 013 hPa (of 1 013 mbar) groot."
+     *     "Bij overdruk is de druk in een vat hoger dan de atmosferische druk,
+     *      bij onderdruk lager."
+     *     oefening 3: "... de normale luchtdruk van 101 300 Pa ..."
+     *   p. 20 = handboek p. 28, oefening 9: "Noteer of het in de volgende
+     *     situaties om een onderdruk of een overdruk gaat." met situaties a-e.
+     *   p. 21 = handboek p. 29: "In het ISS heerst de normdruk en de druk aan de
+     *     buitenkant is te verwaarlozen."
+     *   p. 16 = handboek p. 24: ademhaling "werkt volgens het principe van de
+     *     onderdruk": de borstkas wordt groter en de buitenlucht stroomt naar
+     *     binnen.
+     *
+     * LET OP bij het verbeteren: dit is exact de indeling van de officiële
+     * correctiesleutel (OSPLKITWACOF4DS2 p. 9): de fietsband, de ballon en het
+     * vliegtuig zijn OVERdruk, de koffie en het flesje zijn ONDERdruk. De
+     * fietsband is dus geen onderdruk: er stroomt lucht uit omdat de druk in de
+     * band hoger is dan de atmosferische druk.
+     */
+    entryTicket: {
+        questions: [
+            {
+                id: 'entry-sort',
+                type: 'column-sort',
+                // Meteen groen of rood per kaart. Dit is een diagnostisch
+                // instapticket: de leerling moet meteen zien wat al zit en
+                // wat nog niet, zodat hij weet waar hij moet opletten.
+                revealAnswers: true,
+                question: 'Sorteer: normdruk, onderdruk of overdruk?',
+                description: 'Sleep elke kaart naar de kolom die erbij hoort. Je ziet meteen of je goed zit.',
+                columns: [
+                    {
+                        id: 'normdruk',
+                        label: 'Normdruk',
+                        hint: 'De standaarddruk waarop we alles vergelijken.',
+                        items: [
+                            {
+                                id: 'norm-1',
+                                column: 'normdruk',
+                                text: 'De gemiddelde luchtdruk op zeeniveau is afgerond \\( 101\\,300\\text{ Pa} \\).'
+                            },
+                            {
+                                id: 'norm-2',
+                                column: 'normdruk',
+                                text: 'Die standaarddruk schrijf je ook als \\( 1\\,013\\text{ hPa} \\), of als \\( 1\\,013\\text{ mbar} \\).'
+                            },
+                            {
+                                id: 'norm-3',
+                                column: 'normdruk',
+                                text: 'In het ISS heerst de normdruk, terwijl de druk aan de buitenkant bijna nul is.'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'onderdruk',
+                        label: 'Onderdruk',
+                        hint: 'De druk is lager dan de atmosferische druk.',
+                        items: [
+                            {
+                                id: 'onder-1',
+                                column: 'onderdruk',
+                                text: 'Je knipt een vacuümverpakking gemalen koffie open en hoort de lucht naar binnen stromen.'
+                            },
+                            {
+                                id: 'onder-2',
+                                column: 'onderdruk',
+                                text: 'Je zuigt lucht uit een plastic flesje, waardoor de luchtdruk het flesje samendrukt.'
+                            },
+                            {
+                                id: 'onder-3',
+                                column: 'onderdruk',
+                                text: 'Bij het inademen wordt de borstkas groter, ontstaat er een onderdruk en stroomt de buitenlucht naar binnen.'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'overdruk',
+                        label: 'Overdruk',
+                        hint: 'De druk is hoger dan de atmosferische druk.',
+                        items: [
+                            {
+                                id: 'over-1',
+                                column: 'overdruk',
+                                text: 'Je laat de lucht uit een opgepompte fietsband ontsnappen door het ventiel in te drukken.'
+                            },
+                            {
+                                id: 'over-2',
+                                column: 'overdruk',
+                                text: 'Je blaast een ballon op, knijpt hem dicht en laat hem los: hij vliegt weg.'
+                            },
+                            {
+                                id: 'over-3',
+                                column: 'overdruk',
+                                text: 'Op 10 km hoogte houdt men de druk in het vliegtuig op \\( 800\\text{ hPa} \\), terwijl het buiten \\( 264\\text{ hPa} \\) is.'
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+
+    /**
+     * Exitticket: 4 snelle diagnostische denkvragen (conceptueel, geen berekeningen).
+     *
+     * BRONNEN (Handleiding WACO 4 Fysica, Thema 1, Hoofdstuk 3):
+     *   p. 24 = handboek p. 32, theorie p = ρ · g · h en p_tot = p_atm + p_hydr
+     *   p. 25 = handboek p. 33, oefening 5 (Thomas in zoet water vs Sarah in zeewater)
+     *   p. 25 = handboek p. 33, oefening 6 (de hydrostatische paradox)
+     *   p. 24 = handboek p. 32, vuistregel 10 m water = 1 bar
+     */
     exitTicket: {
         questions: [
             {
-                id: 'q1',
+                id: 'ex1-diepte',
                 type: 'mc',
-                question: 'Hoe ontstaat de druk die een gas uitoefent op de wanden van een afgesloten vat volgens het deeltjesmodel?',
+                question: 'Wat gebeurt er met de hydrostatische druk als een duiker twee keer zo diep onder water afdaalt?',
                 options: [
-                    'Door de zwaartekracht van de deeltjes die op de bodem rusten.',
-                    'Door de ontelbare botsingen van de bewegende gasdeeltjes tegen de wanden.',
-                    'Door de aantrekkingskrachten tussen de gasdeeltjes onderling.',
-                    'Omdat de deeltjes stilstaan en ruimte innemen.'
+                    'De hydrostatische druk verdubbelt (recht evenredig met de diepte).',
+                    'De hydrostatische druk blijft gelijk, want het watervolume verandert niet.',
+                    'De hydrostatische druk verviervoudigt (kwadratisch verband met de diepte).',
+                    'De hydrostatische druk halveert, omdat dieper water meer tegendruk biedt.'
+                ],
+                correct: 0
+            },
+            {
+                id: 'ex2-dichtheid',
+                type: 'mc',
+                question: 'Twee duikers zwemmen op exact dezelfde diepte van 10,0 meter: de ene in zoet water en de andere in de zoute Noordzee. Wie ondervindt de grootste vloeistofdruk?',
+                options: [
+                    'De duiker in zoet water, omdat zoet water zuiverder is.',
+                    'De duiker in de Noordzee, omdat zout water een grotere massadichtheid heeft.',
+                    'Beiden ondervinden exact dezelfde druk, omdat enkel de diepte telt.',
+                    'Dat hangt af van het lichaamsoppervlak van de duiker.'
                 ],
                 correct: 1
             },
             {
-                id: 'q2',
+                id: 'ex3-paradox',
                 type: 'mc',
-                question: 'Welke van onderstaande waarden komt exact overeen met de gemiddelde atmosferische normdruk op zeeniveau?',
+                question: 'Een smalle proefbuis en een breed aquarium zijn beide gevuld met water tot een vloeistofhoogte van 40 cm. Wat geldt voor de hydrostatische druk op de bodem van beide vaten?',
                 options: [
-                    '1013 Pa',
-                    '101 300 hPa',
-                    '1,013 bar (of 1013 hPa)',
-                    '10,13 bar'
+                    'In het brede aquarium is de bodemdruk veel groter omdat er veel meer water in zit.',
+                    'In de smalle proefbuis is de bodemdruk groter omdat het water samengeperst wordt.',
+                    'De bodemdruk is in beide vaten exact even groot (hydrostatische paradox).',
+                    'De bodemdruk is nul omdat het water niet stroomt.'
                 ],
                 correct: 2
             },
             {
-                id: 'q3',
+                id: 'ex4-vuistregel',
                 type: 'mc',
-                question: 'Waarom blijft een rubberen zuignap stevig tegen een glazen raam zitten als je hem ertegenaan drukt?',
+                question: 'Met hoeveel stijgt de vloeistofdruk in water bij benadering per 10 meter diepte?',
                 options: [
-                    'De lucht onder de zuignap trekt de zuignap vast naar binnen.',
-                    'De moleculen van het rubber smelten samen met het glas.',
-                    'Door het indrukken ontstaat onderdruk binnenin, waardoor de atmosferische buitenlucht de zuignap krachtig tegen het glas duwt.',
-                    'Door de magnetische lading van het glas.'
+                    'Met ongeveer 0,01 bar (1 000 Pa)',
+                    'Met ongeveer 0,1 bar (10 000 Pa)',
+                    'Met ongeveer 1 bar (100 000 Pa)',
+                    'Met ongeveer 10 bar (1 000 000 Pa)'
                 ],
                 correct: 2
-            },
-            {
-                id: 'q4',
-                type: 'matching',
-                question: 'Verbind elk verschijnsel met de juiste fysische verklaring.',
-                description: 'Klik eerst op een situatie aan de linkerkant en kies vervolgens de passende fysische verklaring aan de rechterkant.',
-                pairs: [
-                    {
-                        left: 'Rubberen zuignap blijft tegen een raam plakken',
-                        right: 'Onderdruk binnenin; de atmosferische buitenlucht duwt de nap met volle kracht tegen het glas.'
-                    },
-                    {
-                        left: 'Afgesloten injectiespuit uittrekken voelt zwaar',
-                        right: 'In de cilinder daalt de druk; de buitenlucht duwt met atmosferische normdruk tegen de zuiger.'
-                    },
-                    {
-                        left: 'Sneeuwschoenen voorkomen dat je in diepe sneeuw wegzakt',
-                        right: 'Groter contactoppervlak verlaagt de uitgeoefende druk bij een gelijkblijvende zwaartekracht.'
-                    },
-                    {
-                        left: 'Een hard opgepompte fietsband voelt stevig aan',
-                        right: 'Overdruk in de band door een groot aantal gasdeeltjes die intensief tegen de binnenwand botsen.'
-                    }
-                ]
             }
         ]
     }

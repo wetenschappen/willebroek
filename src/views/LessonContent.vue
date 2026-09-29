@@ -188,10 +188,6 @@ function getBranchLabel(step) {
     return 'Extra Materiaal'
 }
 
-function isTicket(card) {
-    return card.action === 'entry-ticket' || card.action === 'exit-ticket'
-}
-
 function getCardMeta(card) {
     if (card.meta) return card.meta
 
@@ -272,7 +268,6 @@ const isTimelineComplete = computed(() => {
                 :key="card.id"
                 :type="card.action === 'entry-ticket' || card.action === 'exit-ticket' ? 'digital' : card.type"
                 :meta="getCardMeta(card)"
-                :hideMeta="isTicket(card)"
                 :title="card.title"
                 :description="card.description"
                 :isDone="progress.isDone(card.id)"

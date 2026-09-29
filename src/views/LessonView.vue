@@ -8,13 +8,27 @@ const route = useRoute()
 const lessonData = shallowRef(null)
 const error = shallowRef(null)
 
+// Expliciete glob op alleen de lessen in src/lessons/. Vite bouwt hieruit een
+// map van bestandsnaam naar loader. Drie redenen voor deze vorm:
+//   1. `../lessons/${id}.js` als template literal levert een gammapatroon op
+//      dat Vite maar gedeeltelijk invult; een nieuw lesbestand ontbrak daardoor
+//      stilzwijgend in de map en de les gaf "Fout".
+//   2. `*.js` raakt _archive/ niet, dus gearchiveerde lessen blijven buiten.
+//   3. Een onbekend id levert nu een leesbare melding op in plaats van een
+//      ongehandelde importfout.
+const LESSON_MODULES = import.meta.glob('../lessons/*.js')
+
 watch(() => route.params.id, async (id) => {
   if (id) {
     lessonData.value = null
     error.value = null
+    const load = LESSON_MODULES[`../lessons/${id}.js`]
+    if (!load) {
+      error.value = `Onbekende les: ${id}`
+      return
+    }
     try {
-      // Dynamic import
-      const module = await import(`../lessons/${id}.js`)
+      const module = await load()
       lessonData.value = module.default
     } catch(e) {
       console.error(e)

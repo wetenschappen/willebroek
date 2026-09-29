@@ -20,5 +20,10 @@
   "emoji": [
     "s-activities/SpringForceLabActivity.vue"
   ],
+  "foreign-font": [],
+  "presentation-app-scale": [],
+  "presentation-badge": [],
+  "presentation-legacy-palette": [],
+  "presentation-invalid-shade": [],
   "dark": []
 }

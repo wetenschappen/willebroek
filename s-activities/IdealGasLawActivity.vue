@@ -302,14 +302,14 @@
                           <line :x1="GRAPH_PAD_L - 4" :x2="GRAPH_W - GRAPH_PAD_R" :y1="tick.pos" :y2="tick.pos"
                                 stroke="#334155" stroke-width="1" stroke-dasharray="3,4"/>
                           <text :x="GRAPH_PAD_L - 7" :y="tick.pos + 3.5"
-                                text-anchor="end" fill="#64748b" font-size="8" font-family="monospace">{{ formatTickLabel(tick.val) }}</text>
+                                text-anchor="end" fill="#64748b" font-size="8" font-family="IBM Plex Mono, monospace">{{ formatTickLabel(tick.val) }}</text>
                         </g>
                         <!-- X ticks -->
                         <g v-for="tick in graphTicks.x" :key="'gx'+tick.val">
                           <line :x1="tick.pos" :x2="tick.pos" :y1="GRAPH_PAD_T" :y2="GRAPH_H - GRAPH_PAD_B + 4"
                                 stroke="#334155" stroke-width="1" stroke-dasharray="3,4"/>
                           <text :x="tick.pos" :y="GRAPH_H - GRAPH_PAD_B + 13"
-                                text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">{{ formatTickLabel(tick.val) }}</text>
+                                text-anchor="middle" fill="#64748b" font-size="8" font-family="IBM Plex Mono, monospace">{{ formatTickLabel(tick.val) }}</text>
                         </g>
                       </g>
 

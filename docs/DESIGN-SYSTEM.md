@@ -101,11 +101,35 @@ In een geopende activiteit is die oriëntatie al gegeven door de tijdlijnkaart
 de modalheader of in een ticketvenster wanneer de titel (bijvoorbeeld
 `Meerkeuze` of `Exitticket`) de activiteit al duidelijk benoemt. Functionele
 voortganglabels zoals `Vraag 1 van 5` blijven uiteraard behouden.
+
+**Op de tijdlijn zelf blijft het label altijd staan**, ook op `card-entry` en
+`card-exit`. Het label hoort bij de kaart en is daar de enige plek waar de
+kleur betekenis krijgt; zonder label is de blauwe ankerbalk van een ticket niet
+te onderscheiden van die van een andere digitale activiteit. Wat wegvalt is de
+herhaling *binnen* de geopende modal, niet het label op de kaart.
 3. voldoende contrast voor titel, beschrijving en actie;
 4. geen extra vierde kleur voor een technische status zoals `check`.
 
 Kleur is nooit de enige informatiedrager. Combineer kleur met label, tekst,
 positie en waar nuttig een functioneel icoon.
+
+### Directe feedback in een ticket
+
+Een diagnostisch instapticket (`card-entry`) mag meteen feedback geven: een
+juist geplaatst antwoord wordt groen met `PhCheckCircle`, een fout antwoord rood
+met `PhXCircle`, in dezelfde tokens als de rest (`--color-workbook` en
+`--color-presentation`). Dat is geen vierde activiteitskleur maar een
+*toestand*, en het icoon is er zodat kleur nooit de enige drager is.
+
+Twee regels horen daarbij:
+
+- een **juist** antwoord gaat op slot. Anders kan een leerling een goed
+  antwoord per ongeluk weer omgooien.
+- het eindresultaat meet de **eerste poging** per vraag, niet de eindstand.
+  Met directe feedback kan iemand een rood antwoord blijven verplaatsen tot het
+  groen is; de eindstand is dan altijd perfect en zegt niets meer over wat de
+  leerling werkelijk dacht. `card-exit` (`exit-ticket`) houdt de neutrale
+  variant zonder directe feedback.
 
 ## 4. Typografie
 
@@ -591,6 +615,14 @@ bounce              3      ping                2
 shadow-2xl         13      emoji               10
 donkere leesvlakken  7      ink-muted           0  ← moet 0 blijven
 ```
+
+Sinds de gouden standaard staan `ink-muted` en `foreign-font` op 0 en blijven
+ze daar. `foreign-font` vangt elke eigen `font-family` die niet met IBM Plex
+begint, in CSS én in SVG-attributen. Die regel bestaat omdat een *ongescoped*
+`<style>`-blok in een activiteit de hele app raakte: ongelaagde CSS wint van
+`@layer utilities`, dus één `.font-sans { font-family: system-ui; }` zette het
+lettertype van elk scherm op de browserdefault. Commentaar telt niet mee bij
+deze meting; alleen code die echt rendert.
 
 `scripts/design-baseline-files.json` onthoudt wélke bestanden al bekend zijn,
 zodat een nieuwe overtreding het juiste bestand aanwijst in plaats van de

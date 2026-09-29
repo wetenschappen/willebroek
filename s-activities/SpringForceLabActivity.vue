@@ -1002,10 +1002,10 @@ onUnmounted(() => {
 </template>
 
 <style>
-/* ─── FONT ────────────────────────────────────────────────── */
-.font-sans {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-}
+/* Geen eigen lettertype. Dit blok is niet scoped, dus een .font-sans hier
+   overschrijft de Tailwind-utility voor de hele app: ongelaagde CSS wint van
+   @layer utilities. Het systeem heeft één fontpaar (IBM Plex Sans + Mono) uit
+   src/style.css; laat de utility dus met rust. */
 
 /* ─── ANIMATIONS ──────────────────────────────────────────── */
 @keyframes fadeIn {

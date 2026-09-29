@@ -32,7 +32,15 @@ export const RULES = [
   { id: 'bounce', label: 'bounce-animatie — geen bounce in de lesinterface', pattern: /animate-bounce|animate-\[bounce/g },
   { id: 'ping', label: 'ping-animatie — geen ping in de lesinterface', pattern: /animate-ping|animate-\[ping/g },
   { id: 'shadow-2xl', label: 'shadow-2xl — gebruik --shadow-dialog', pattern: /shadow-2xl/g },
-  { id: 'emoji', label: 'emoji als UI-element', pattern: /[\u{1F000}-\u{1F0FF}\u{1F300}-\u{1FAFF}\u{2700}-\u{27BF}\u{2600}-\u{26FF}\u{25A0}-\u{25FF}\u{2B00}-\u{2BFF}\u{FE0F}]/gu }
+  { id: 'emoji', label: 'emoji als UI-element', pattern: /[\u{1F000}-\u{1F0FF}\u{1F300}-\u{1FAFF}\u{2700}-\u{27BF}\u{2600}-\u{26FF}\u{25A0}-\u{25FF}\u{2B00}-\u{2BFF}\u{FE0F}]/gu },
+  {
+    id: 'foreign-font',
+    label: 'eigen font-family — het systeem heeft één fontpaar (IBM Plex Sans + Mono)',
+    // Elke font-family die niet met IBM Plex begint. Dekt zowel CSS-regels als
+    // SVG-attributen zoals font-family="monospace". Een theme-token of var()
+    // valt hier bewust buiten: dat is doorverwijzing, geen eigen lettertype.
+    pattern: /font-family(?::\s*|=\s*["'])(?!\s*["']?(?:IBM Plex|var\(|inherit|theme\())[^;}"']*/g
+  }
 ]
 
 /**
@@ -78,6 +86,59 @@ function walk(directory, files = []) {
   return files
 }
 
+/**
+ * Haalt commentaar uit broncode voordat een regel matcht.
+ *
+ * Zonder dit telt een regel die in een *commentaar* wordt genoemd mee als
+ * overtreding: een uitleg als "geen eigen font-family meer" laat de check dan
+ * zakken. Een commentaar rendert niets, dus het is geen overtreding.
+ *
+ * Strings blijven intact, zodat een URL als 'https://...' niet als
+ * regelcommentaar wordt weggeknipt.
+ */
+function stripComments(source) {
+  let out = ''
+  let i = 0
+  let quote = null
+  while (i < source.length) {
+    const ch = source[i]
+    const next = source[i + 1]
+
+    if (quote) {
+      if (ch === '\\') { out += ch + (next ?? ''); i += 2; continue }
+      if (ch === quote) quote = null
+      out += ch
+      i++
+      continue
+    }
+
+    if (ch === '"' || ch === "'" || ch === '`') { quote = ch; out += ch; i++; continue }
+
+    // HTML-commentaar <!-- ... -->
+    if (ch === '<' && source.startsWith('<!--', i)) {
+      const end = source.indexOf('-->', i + 4)
+      i = end === -1 ? source.length : end + 3
+      continue
+    }
+    // Blokcommentaar /* ... */
+    if (ch === '/' && next === '*') {
+      const end = source.indexOf('*/', i + 2)
+      i = end === -1 ? source.length : end + 2
+      continue
+    }
+    // Regelcommentaar // ... (niet in een string, zie hierboven)
+    if (ch === '/' && next === '/') {
+      const end = source.indexOf('\n', i)
+      i = end === -1 ? source.length : end
+      continue
+    }
+
+    out += ch
+    i++
+  }
+  return out
+}
+
 /** Vindt donkere schermvullende leesvlakken. */
 function findDarkSurfaces(file, source) {
   const hits = []
@@ -119,9 +180,11 @@ export function runDesignCheck(saveBaselineFiles = false) {
 
   for (const file of files) {
     const source = fs.readFileSync(path.join(root, file), 'utf8')
+    // Commentaar telt niet mee: het rendert niet.
+    const code = stripComments(source)
     for (const rule of RULES) {
       rule.pattern.lastIndex = 0
-      const found = source.match(rule.pattern)
+      const found = code.match(rule.pattern)
       if (found) {
         counts[rule.id] += found.length
         locations[rule.id].add(file)

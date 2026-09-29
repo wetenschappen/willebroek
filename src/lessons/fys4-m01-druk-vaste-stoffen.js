@@ -259,7 +259,7 @@ export default {
             equation: '\\( p_{\\text{hydr}} = \\rho \\cdot g \\cdot h \\)',
             variables: [
                 { symbol: '\\( p_{\\text{hydr}} \\)', meaning: 'Hydrostatische druk', unit: 'Pa' },
-                { symbol: '\\( \\rho \\)', meaning: 'Massadichtheid van de vloeistof', unit: 'kg/m³' },
+                { symbol: '\\( \\rho \\)', meaning: 'Massadichtheid', unit: 'kg/m³' },
                 { symbol: '\\( g \\)', meaning: 'Zwaarteveldsterkte', unit: 'N/kg' },
                 { symbol: '\\( h \\)', meaning: 'Diepte', unit: 'm' }
             ]

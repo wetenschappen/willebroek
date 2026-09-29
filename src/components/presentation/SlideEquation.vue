@@ -49,7 +49,7 @@ const displayItems = computed(() => {
 
         <!-- Variables / Parts Grid -->
         <div v-if="displayItems.length" class="w-full grid gap-6 text-left max-w-6xl mt-2"
-             :class="displayItems.length > 3 ? 'grid-cols-4' : (displayItems.length === 3 ? 'grid-cols-3' : 'grid-cols-2')">
+             :class="displayItems.length === 4 ? 'grid-cols-2' : (displayItems.length >= 3 ? 'grid-cols-3' : 'grid-cols-2')">
             <div v-for="(item, idx) in displayItems" :key="idx" 
                  class="p-6 slide-panel text-left flex flex-col"
                  style="border: 2px solid var(--color-line); background: var(--color-panel); border-radius: var(--radius-card);">

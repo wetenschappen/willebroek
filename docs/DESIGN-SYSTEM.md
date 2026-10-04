@@ -367,6 +367,49 @@ combinaties.
 | `.card-paper` | ankerbalk groen |
 | `.card-class` | ankerbalk rood |
 
+### Meerkeuze in instap- en exittickets
+
+Antwoordopties zijn volledige klikbare rijen met de native radioknop links van
+de antwoordtekst. Gebruik echte radio-inputs binnen labels, niet een los
+cirkelicoon aan de rechterkant; de rij krijgt een geselecteerde zachte tint en
+`focus-within`-focusring.
+
+### Werkboekmodal
+
+De werkboekmodal is een **schermvullende activiteitenshell** met een groen
+anker (`fullscreen-bar-paper`): één oefeninhoudstabel met oefeningnummer, titel,
+pagina en een afzonderlijke afvinkkolom. De tabel staat op een gecentreerd
+werkblad van maximaal 720px. Instructie- en formuleblokken horen niet in deze
+modal; de primaire donkere knop “Klaar met de opdrachten” en de link naar de
+beveiligde correctiesleutel blijven in de voetbalk staan.
+
+### Elke kaart opent schermvullend en sluit met Escape of de X
+
+Elke actie op de ABC-kaart opent een `modal-fullscreen`-oppervlak: presentatie,
+werkboek, correctiesleutel, instap- en exitticket, check-up, naamkiezer en elke
+activiteit uit `useActivitySystem`. Twee sluitwegen zijn verplicht en doen exact
+hetzelfde:
+
+1. de `btn-close` (X) rechts in de kopbalk;
+2. de **Escape**-toets.
+
+Een nieuw scherm dat een kaart opent, voegt dus een `keydown`-listener toe die
+op Escape `emit('close')` doet, net als de X. Is er binnen het scherm een
+tussenstap (zoals het codeveld van de correctiesleutel), dan sluit Escape eerst
+die tussenstap. Alleen `PresentationModal` vraagt daarnaast de
+**Fullscreen API** (`requestFullscreen`); de andere schermen zijn volledig
+beeldvullende overlays zonder de API aan te raken, zodat een browser die de API
+weigert nooit een leeg scherm oplevert.
+
+### Module- en lessenoverzicht
+
+De modulekeuzepagina gebruikt dezelfde taal als het ABC-lesbord: elke module is
+één paneel met afgeronde bovenhoeken, vierkante onderhoeken en aaneengesloten,
+vierkante lessenrijen. De rij-indeling is type-label boven de titel links, met
+chevron rechts; even rijen gebruiken `--color-panel-muted`, terwijl hover een
+vakgerichte zachte tint gebruikt. Fysica gebruikt `--color-physics(-soft)` en
+biologie `--color-biology(-soft)`. Focus blijft zichtbaar met een binnenring.
+
 ### Activiteit in de ABC-tijdlijn
 
 Het werkblad bestaat uit drie fasepanelen (`.lesson-board` met
@@ -499,7 +542,7 @@ en `ActivityCard.vue`.
 | `card-exit` | `exit-ticket` / `digital` | `TicketModal` | blauw `--color-digital`, label `DIGITAAL` |
 | `card-pres-*` | `presentation` / `class` | `PresentationModal` | rood `--color-presentation`, label `PRESENTATIE` |
 | `card-workbook` | `workbook` / `paper` | `WorkbookModal` | groen `--color-workbook`, label `BOEK / BUNDEL` |
-| `card-activity` | `activity` / `digital` | `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw` | blauw `--color-digital`, label `DIGITAAL` |
+| `card-activity` | `activity` / `digital` | `DragDrop`, `MixedRetrieval`, `Circuits`, `ForcesLab`, `SpringForceLab`, `IdealGasLaw`, `PressureLab`, `OpticsLab`, `PhagocytosisLab` | blauw `--color-digital`, label `DIGITAAL` |
 
 Concreet voor de entry- en exittickets: die kaarten staan in alle lessen als
 `type: 'digital'`, en `LessonContent.vue` geeft ze allebei het label `DIGITAAL`.
@@ -591,8 +634,8 @@ voeg hier niets toe zonder het eerst in de code te zien.
 
 | Klasse | Status | Actie |
 | --- | --- | --- |
-| `.modal-fullscreen` | **in gebruik** door ticket, naamkiezer en alle activiteiten | klaar |
-| `.fullscreen-bar/-body/-foot/-progress` | **in gebruik** door ticket, dragdrop, gemengde herhaling, gaswetten, krachtenlab en circuits | klaar |
+| `.modal-fullscreen` | **in gebruik** door werkboek, correctiesleutel, check-up, ticket, naamkiezer en alle activiteiten | klaar |
+| `.fullscreen-bar/-body/-foot/-progress` | **in gebruik** door werkboek, correctiesleutel, check-up, ticket, dragdrop, gemengde herhaling, gaswetten, krachtenlab en circuits | klaar |
 | `.btn-primary`, `.btn-ghost` | **in gebruik** in alle omgezette activiteiten | klaar |
 | `.badge` en `.badge-*` | in gebruik in app-activiteiten; **niet** in student-facing presentation slides | presentaties gebruiken `slide-*`-primitives zonder generieke categorie-badges |
 | `.card` als losse klasse | **0 keer gebruikt**; alleen via `ActivityCard.vue` | rechtstreeks gebruik vermijden, anders verliest de kaart zijn ankerbalk |
@@ -602,11 +645,14 @@ voeg hier niets toe zonder het eerst in de code te zien.
 | `font-serif` | **verwijderd** uit alle slides | klaar |
 | `Open Sans` | **verwijderd** uit alle slides | klaar |
 | `MathSlideWrapper.vue` | **omgezet**: rode ankerbalk + één titel, zonder generieke categorie-badge | klaar |
-| `Circuits`, `ForcesLab`, `IdealGasLaw` | **omgezet** naar de fullscreen-shell | klaar |
-| `SpringForceLab` | prototype — bewust overgeslagen | vervangen door een nieuwe activiteit op de shell |
+| `Circuits`, `ForcesLab`, `IdealGasLaw`, `PressureLab`, `OpticsLab` | **omgezet** naar de fullscreen-shell | klaar |
+| `PhagocytosisLab` | **omgezet** naar de fullscreen-shell (was niet schermvullend) | klaar |
+| `WorkbookModal`, `SolutionsModal`, `SpotCheckModal` | **omgezet** naar de fullscreen-shell met Escape-sluiten | klaar |
+| `SpringForceLab` | omgezet naar fullscreen, maar houdt nog een eigen amberen kopbalk | kopbalk naar `fullscreen-bar-digital` bij de volgende revisie |
 | `DragDrop`, `MixedRetrieval` | **omgezet** naar de fullscreen-shell | klaar |
 | `NamePickerOverlay.vue` | **omgezet** naar lichte fullscreen | klaar |
 | `Toolbox.vue` | **omgezet** naar tokens en systeemklassen | klaar |
+| `.modal-backdrop` / `.modal-content` | sinds de fullscreen-omzetting van werkboek, correctiesleutel en check-up **nergens meer gebruikt** | laten staan als systeemklasse, of opruimen zodra zeker is dat geen enkel scherm terug wil naar een klein dialoogvenster |
 | `text-slate-400` / `text-slate-300` | 50 + 10 → **4 + 1** (alleen nog in `SpringForceLab`) | vervangen zodra die activiteit vervangen wordt |
 | `tailwind.config.js` — `surface`, `chrome` | 0 echte gebruikssites | opruimen; `surface.50/100/200/300` dupliceert `slate.50/100/200/300` |
 | `tailwind.config.js` — `brand`, `ink` | `text-brand-orange` (1×) en `text-ink-dark` (1×), beide een duplicaat van een token | vervangen door `text-action` en `text-ink`, daarna opruimen |
@@ -649,6 +695,10 @@ deze meting; alleen code die echt rendert.
 `scripts/design-baseline-files.json` onthoudt wélke bestanden al bekend zijn,
 zodat een nieuwe overtreding het juiste bestand aanwijst in plaats van de
 alfabetische top.
+
+Een aparte, niet-geautomatiseerde regel is de Escape-toets: die is niet te
+meten met een patroon en staat daarom in sectie 14 als afspraak. Controleer bij
+elk nieuw scherm dat Escape en de X allebei sluiten.
 
 Een losse meting:
 

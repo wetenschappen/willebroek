@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" class="modal-fullscreen" @keydown.escape="handleClose">
+  <div v-if="isOpen" class="modal-fullscreen">
     <div class="w-full h-full flex flex-col overflow-hidden bg-paper">
       <!-- Kopbalk: blauw anker, digitale activiteit -->
       <header class="fullscreen-bar fullscreen-bar-digital">
@@ -239,7 +239,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { PhCalculator, PhX, PhCheckCircle, PhCheck, PhArrowRight, PhArrowCounterClockwise } from '@phosphor-icons/vue'
 import { processMathText } from '../src/composables/useMathEngine.js'
 
@@ -445,6 +445,17 @@ function getOptionStyle(optIdx) {
 function handleClose() {
   emit('close')
 }
+
+// Escape sluit net als de X. @keydown.escape op de root werkt niet: die div
+// krijgt nooit focus, dus de listener moet op window staan.
+function handleKeydown(e) {
+  if (e.key !== 'Escape' || !props.isOpen) return
+  e.preventDefault()
+  handleClose()
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 
 function handleComplete() {
   emit('complete')

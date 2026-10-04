@@ -439,7 +439,7 @@ const getLabel = (q) => {
           <span class="font-mono text-sm font-semibold text-slate-700">Experiment {{ localStep }} / {{ totalStepsLocal }}</span>
           <button @click="navigateStep(1)" class="btn-close" aria-label="Volgende stap"><PhCaretRight weight="bold"/></button>
         </div>
-        <button @click="emit('close')" class="btn-close shrink-0" aria-label="Sluiten">
+        <button @click="emit('close')" class="btn-close ml-auto shrink-0" aria-label="Sluiten">
           <PhX class="w-6 h-6" weight="bold" />
         </button>
       </header>

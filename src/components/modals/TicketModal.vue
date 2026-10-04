@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { PhX, PhCheckCircle, PhXCircle, PhSmiley, PhSmileyMeh, PhSmileySad, PhPaperPlaneRight, PhClipboardText, PhArrowRight } from '@phosphor-icons/vue'
 import MathGraphSvg from '../activities/MathGraphSvg.vue'
 import ColumnSortBoard from '../activities/ColumnSortBoard.vue'
@@ -232,6 +232,17 @@ function close() {
         sortFirstAttempt.value = {}
     }, 500)
 }
+
+// Escape sluit net als de X in de kopbalk. De tussentijdse antwoorden worden
+// niet bewaard; het ticket begint bij de volgende opening weer bij vraag 1.
+function handleKeydown(e) {
+    if (e.key !== 'Escape' || !props.isOpen) return
+    e.preventDefault()
+    close()
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 
 const mcScore = computed(() => {
     let correct = 0

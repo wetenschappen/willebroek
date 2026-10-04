@@ -355,6 +355,147 @@
         transform: translateY(0);
     }
 
+    .workbook-sheet {
+        width: 100%;
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    .workbook-table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-control);
+    }
+
+    .workbook-exercise-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .workbook-exercise-table th {
+        padding: 12px 16px;
+        color: var(--color-ink-soft);
+        background: var(--color-panel-muted);
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .workbook-exercise-table td {
+        padding: 14px 16px;
+        color: var(--color-ink);
+        border-top: 1px solid var(--color-line);
+        font-size: 0.9375rem;
+        line-height: 1.4;
+    }
+
+    .workbook-exercise-table tbody tr:nth-child(even) {
+        background: var(--color-panel-muted);
+    }
+
+    .workbook-number-cell {
+        width: 1%;
+        font-family: 'IBM Plex Mono', monospace;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .workbook-exercise-title {
+        width: 100%;
+        font-weight: 600;
+    }
+
+    .workbook-page-cell,
+    .workbook-done-cell {
+        width: 1%;
+        text-align: center !important;
+        white-space: nowrap;
+    }
+
+    /* Het werkboek is een schermvullend werkblad: de voetbalk volgt de
+       fullscreen-shell, maar stapelt de twee acties gecentreerd. */
+    .fullscreen-foot.workbook-modal-footer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px 24px 20px;
+    }
+
+    .workbook-exercise-table input[type='checkbox'] {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        accent-color: var(--color-workbook);
+        cursor: pointer;
+    }
+
+    .workbook-exercise-table input[type='checkbox']:focus-visible {
+        outline: 3px solid var(--color-action);
+        outline-offset: 3px;
+    }
+
+    .workbook-empty {
+        margin: 0;
+        padding: 20px;
+        color: var(--color-ink-soft);
+        text-align: center;
+        background: var(--color-panel-muted);
+        border-radius: var(--radius-control);
+    }
+
+    .workbook-complete-button {
+        width: 100%;
+        min-height: 48px;
+    }
+
+    .workbook-solutions-link {
+        padding: 8px 12px;
+        color: var(--color-ink-soft);
+        background: transparent;
+        border: 0;
+        border-radius: var(--radius-control);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        cursor: pointer;
+    }
+
+    .workbook-solutions-link:hover {
+        color: var(--color-ink);
+        background: var(--color-panel-muted);
+    }
+
+    .workbook-solutions-link:focus-visible {
+        outline: 3px solid var(--color-action);
+        outline-offset: 2px;
+    }
+
+    @media (max-width: 640px) {
+        .fullscreen-foot.workbook-modal-footer {
+            padding: 14px 16px 16px;
+        }
+
+        .workbook-exercise-table th,
+        .workbook-exercise-table td {
+            padding: 12px 10px;
+        }
+
+        .workbook-exercise-table td {
+            font-size: 0.875rem;
+        }
+
+        .workbook-solutions-link {
+            font-size: 0.75rem;
+        }
+    }
+
     .modal-fullscreen {
         @apply fixed inset-0 z-[9999] flex flex-col overflow-hidden;
         width: 100vw;
@@ -378,6 +519,36 @@
     .fullscreen-body {
         @apply flex-1 overflow-y-auto;
         padding: 32px 24px;
+    }
+
+    .ticket-option {
+        color: var(--color-ink-soft);
+        background: var(--color-panel);
+        border-color: var(--color-line-strong);
+        transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .ticket-option:hover {
+        border-color: var(--color-digital);
+        background: var(--color-panel-muted);
+    }
+
+    .ticket-option.ticket-option-selected {
+        color: var(--color-ink);
+        background: var(--color-digital-soft);
+        border-color: var(--color-digital);
+    }
+
+    .ticket-option:has(.ticket-option-radio:focus-visible) {
+        outline: 3px solid var(--color-action);
+        outline-offset: 3px;
+    }
+
+    .ticket-option-radio {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--color-digital);
+        cursor: pointer;
     }
 
     @media (min-width: 768px) {
@@ -1462,7 +1633,7 @@
         display: flex;
         align-items: flex-start;
         gap: 24px;
-        margin-bottom: 64px;
+        margin-bottom: 48px;
     }
 
     .content-header .context-mark {
@@ -1473,64 +1644,154 @@
     .module-index {
         display: flex;
         flex-direction: column;
-        gap: 56px;
+        gap: 28px;
+    }
+
+    /* Modulepanelen hergebruiken het rustige werkvlak van de ABC-fasen:
+       een duidelijke kop en daaronder rechte, aaneengesloten rijen. */
+    .module-section {
+        overflow: hidden;
+        background: var(--color-panel);
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-card) var(--radius-card) 0 0;
+        box-shadow: var(--shadow-rest);
     }
 
     .module-heading {
         display: flex;
-        align-items: baseline;
+        min-height: 76px;
+        align-items: center;
         gap: 16px;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
+        margin: 0;
+        padding: 16px 20px;
         border-bottom: 2px solid var(--color-line-strong);
     }
 
     .module-heading h2 {
         margin: 0;
+        color: var(--color-ink);
         font-size: 1.25rem;
-        letter-spacing: 0;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
         text-transform: none;
     }
 
     .module-number {
+        display: inline-flex;
         flex: 0 0 auto;
-        color: var(--color-ink);
-        font-size: 1rem;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        min-height: 36px;
+        padding: 0 8px;
+        color: var(--color-panel);
+        background: var(--color-ink);
+        border-radius: var(--radius-control);
+        font-size: 0.9375rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.04em;
     }
 
-    .lesson-row {
-        min-height: 72px;
+    .module-heading .section-meta {
+        margin-left: auto;
+        font-size: 0.75rem;
     }
 
-    /* Lessenlijst (ModuleSelection): losse rijen zodat de zwarte
-       aanloopbalken niet één doorlopende balk vormen. Alleen tellen
-       vanaf afstand wordt zo makkelijker. De ABC-kaarten in de les
-       (ActivityCard) blijven bewust aaneengesloten. */
     .lesson-list {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+    }
+
+    .module-index-physics .lesson-row {
+        --lesson-accent: var(--color-physics);
+        --lesson-accent-soft: var(--color-physics-soft);
+    }
+
+    .module-index-biology .lesson-row {
+        --lesson-accent: var(--color-biology);
+        --lesson-accent-soft: var(--color-biology-soft);
+    }
+
+    .module-index-physics .module-number {
+        background: var(--color-physics);
+    }
+
+    .module-index-biology .module-number {
+        background: var(--color-biology);
     }
 
     .lesson-list .lesson-row {
-        border-bottom: 2px solid var(--color-line);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 20px;
+        row-gap: 4px;
+        min-height: 88px;
+        padding: 18px 24px 18px 30px;
+        background: transparent;
+        border: 0;
+        border-left: 10px solid var(--lesson-accent, var(--color-ink));
+        border-radius: 0;
+        text-align: left;
+        transition: background-color 160ms ease;
     }
 
-    .lesson-list .lesson-row:last-child {
-        border-bottom: 2px solid var(--color-line);
+    .lesson-list .lesson-row:nth-child(even) {
+        background: var(--color-panel-muted);
+    }
+
+    .lesson-list .lesson-row:hover {
+        background: var(--lesson-accent-soft, var(--color-panel-muted));
+    }
+
+    .lesson-list .lesson-row:focus-visible {
+        z-index: 1;
+        outline: 3px solid var(--color-action);
+        outline-offset: -3px;
+        box-shadow: none;
+    }
+
+    .lesson-copy {
+        display: contents;
     }
 
     .lesson-meta {
-        display: none;
+        grid-column: 1;
+        grid-row: 1;
+        color: var(--color-ink-soft);
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        line-height: 1.4;
+        text-transform: uppercase;
     }
 
     .lesson-copy strong {
+        grid-column: 1;
+        grid-row: 2;
         overflow: hidden;
-        font-size: 1rem;
+        color: var(--color-ink);
+        font-size: 1.125rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    .lesson-list .lesson-arrow {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: center;
+        margin-left: 0;
+        color: var(--color-ink-soft);
+        transition: color 160ms ease;
+    }
+
+    .lesson-list .lesson-row:hover .lesson-arrow {
+        color: var(--lesson-accent, var(--color-ink));
     }
 
     /* --- GOALS --- */
@@ -1766,6 +2027,11 @@
         padding: 18px 20px 18px 26px;
     }
 
+    .lesson-list .lesson-row {
+        padding-right: 20px;
+        padding-left: 26px;
+    }
+
     .extra-branch-toggle,
     .branch-activity {
         padding-right: 20px;
@@ -1959,9 +2225,28 @@
 
     .subject-row,
     .index-row,
-    .lesson-row {
-        min-height: 76px;
-        padding: 16px 0;
+    .lesson-list .lesson-row {
+        min-height: 80px;
+        padding: 16px 16px 16px 20px;
+    }
+
+    .module-heading {
+        min-height: 68px;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+
+    .module-heading h2 {
+        font-size: 1.125rem;
+    }
+
+    .module-number {
+        min-width: 42px;
+        min-height: 32px;
+    }
+
+    .lesson-copy strong {
+        font-size: 1.0625rem;
     }
 
     .subject-row-icon {
@@ -1998,7 +2283,7 @@
     }
 
     .module-index {
-        gap: 40px;
+        gap: 28px;
     }
 
     .module-heading {

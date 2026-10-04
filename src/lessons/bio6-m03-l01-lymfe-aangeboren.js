@@ -27,8 +27,10 @@ export default {
     workbook: {
         title: 'Oefeningen Aangeboren Afweer',
         subtitle: 'Thema 3: Immuniteit',
-        instruction: '<p>Maak de aangeduide oefeningen over de eerste en tweede afweerlinie in je WACO 6 werkboek (p. 143-145).</p>',
-        formulaHint: 'Vergeet de rol van histamine niet bij een ontsteking!'
+        exercises: [
+            { id: '1', number: '1', title: 'Het lymfestelsel', page: '143' },
+            { id: '2', number: '2', title: 'Bloedcellen', page: '144' }
+        ]
     },
 
     // ─── 5. TIMELINE ────────────────────────────────────────────────────────────
@@ -83,8 +85,8 @@ export default {
                     action: 'workbook',
                     icon: 'PhBookOpen',
                     exercises: [
-                        { id: '1', text: 'Opdracht 1: Het lymfestelsel (p. 143)' },
-                        { id: '2', text: 'Opdracht 2: Bloedcellen (p. 144)' }
+                        { id: '1', number: '1', title: 'Het lymfestelsel', page: '143' },
+                        { id: '2', number: '2', title: 'Bloedcellen', page: '144' }
                     ]
                 }
             ]

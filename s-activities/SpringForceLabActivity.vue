@@ -534,7 +534,8 @@ onUnmounted(() => {
             </div>
             </div>
             <button @click="handleClose" 
-                    class="text-white/70 hover:text-white p-2 rounded-full transition-all relative group">
+                    class="btn-close"
+                    aria-label="Sluiten">
                 <span v-if="showPulse" class="animate-pulse-once absolute inset-0 rounded-full bg-white/25"></span>
                 <PhX class="text-2xl relative" />
             </button>

@@ -475,6 +475,7 @@ function handleOriginClick(forceId, originStr) {
             </div>
             <button @click="$emit('close')" 
                     class="btn-close relative"
+                    aria-label="Sluiten"
                     :class="{ 'ring-pulse-red': shouldPulse }">
                 <PhX class="text-xl font-bold" />
             </button>

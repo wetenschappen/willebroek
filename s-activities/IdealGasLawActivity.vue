@@ -1,7 +1,7 @@
 <template>
   <!-- Fullscreen-activiteitenshell: licht. De simulatie erbinnen mag
        vakkleuren gebruiken, maar het leesvlak blijft papier. -->
-  <div v-if="isOpen" class="modal-fullscreen" @keydown.escape="handleClose">
+  <div v-if="isOpen" class="modal-fullscreen">
     <div class="w-full h-full flex flex-col overflow-hidden">
       <!-- Kopbalk: blauw anker, dit is een digitale activiteit -->
       <header class="fullscreen-bar fullscreen-bar-digital">
@@ -424,6 +424,14 @@ let collisionInterval = null;
 
 const handleClose = () => emit('close');
 
+// Escape sluit net als de X. @keydown.escape op de root werkt niet: die div
+// krijgt nooit focus, dus de listener moet op window staan.
+function handleKeydown(e) {
+    if (e.key !== 'Escape' || !props.isOpen) return;
+    e.preventDefault();
+    handleClose();
+}
+
 watch(() => props.isOpen, (isOpen) => {
     if (isOpen) nextTick(() => {
         setActiveLaw(activeLaw.value);
@@ -582,10 +590,12 @@ function setMoleChange(delta) {
 }
 
 onMounted(() => {
+    window.addEventListener('keydown', handleKeydown);
     window.addEventListener('mousemove', doDrag, { passive: false }); window.addEventListener('mouseup', endDrag);
     window.addEventListener('touchmove', doDrag, { passive: false }); window.addEventListener('touchend', endDrag);
 });
 onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeydown);
     window.removeEventListener('mousemove', doDrag); window.removeEventListener('mouseup', endDrag);
     window.removeEventListener('touchmove', doDrag); window.removeEventListener('touchend', endDrag);
 });

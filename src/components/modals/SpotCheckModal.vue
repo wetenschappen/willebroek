@@ -22,6 +22,13 @@ const revealedIndices = ref(new Set())
 function handleKeydown(e) {
   if (!props.isOpen) return
 
+  // Escape sluit net als de X rechtsboven.
+  if (e.key === 'Escape') {
+    e.preventDefault()
+    close()
+    return
+  }
+
   // 'S' for Solution/Secret reveal - Toggles visibility
   if (e.key.toLowerCase() === 's' && selectedIndex.value !== null) {
     if (revealedIndices.value.has(selectedIndex.value)) {
@@ -48,74 +55,123 @@ function close() {
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-backdrop open" @click="close">
-    <div class="modal-content max-w-xl" @click.stop>
-      <!-- Header -->
-      <div class="bg-rose-600 px-6 py-5 flex justify-between items-center text-white">
-        <div class="flex items-center gap-3">
-          <div class="bg-white/20 p-2 rounded-control">
-            <PhChatTeardropDots weight="fill" class="text-2xl text-white"/>
-          </div>
-          <div>
-            <h3 class="text-lg font-bold m-0 leading-tight">{{ title }}</h3>
-            <p class="text-xs text-rose-100 m-0 opacity-80 uppercase tracking-widest font-medium">Klassikale Begripscheck</p>
-          </div>
-        </div>
-        <button @click="close" class="btn-close-dark">
-          <PhX class="text-2xl" />
-        </button>
+  <!-- Fullscreen-activiteitenshell: licht, blauw anker (digitale begripscheck). -->
+  <div v-if="isOpen" class="modal-fullscreen">
+
+    <header class="fullscreen-bar fullscreen-bar-digital">
+      <div class="p-2 rounded-control shrink-0" style="background: var(--color-digital-soft); color: var(--color-digital);">
+        <PhChatTeardropDots weight="fill" class="text-xl" />
       </div>
+      <div class="min-w-0">
+        <h2 class="fullscreen-title">{{ title }}</h2>
+        <p class="fullscreen-label">Klassikale begripscheck</p>
+      </div>
+      <button type="button" @click="close" class="btn-close ml-auto" aria-label="Sluiten">
+        <PhX class="text-2xl" />
+      </button>
+    </header>
 
-      <!-- Body -->
-      <div class="p-8 bg-slate-50 min-h-[400px]">
-        <div class="space-y-4">
-          <div v-for="(q, idx) in questions" :key="idx"
-               @click="selectedIndex = idx"
-               :class="[
-                 'bg-white p-5 rounded-2xl border transition-all cursor-pointer group relative',
-                 selectedIndex === idx
-                   ? 'border-rose-500 shadow-md ring-2 ring-rose-500/20 translate-x-1'
-                   : 'border-slate-200 hover:border-rose-300 shadow-sm'
-               ]">
+    <div class="fullscreen-body">
+      <div class="spotcheck-list">
+        <div v-for="(q, idx) in questions" :key="idx"
+             @click="selectedIndex = idx"
+             class="spotcheck-row"
+             :class="selectedIndex === idx ? 'spotcheck-row-selected' : ''">
 
-            <!-- Selection indicator -->
-            <div v-if="selectedIndex === idx" class="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-8 bg-rose-500 rounded-full"></div>
+          <span class="spotcheck-number" :class="selectedIndex === idx ? 'spotcheck-number-selected' : ''">{{ idx + 1 }}</span>
 
-            <div class="flex gap-4">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 border transition-colors duration-300"
-                   :class="selectedIndex === idx ? 'bg-rose-600 text-white border-rose-600' : 'bg-rose-50 text-rose-600 border-rose-100'">
-                {{ idx + 1 }}
+          <div class="min-w-0 flex-1">
+            <p class="spotcheck-question" v-html="q.question"></p>
+
+            <Transition name="fade">
+              <div v-if="revealedIndices.has(idx)" class="spotcheck-answer">
+                <span class="activity-meta">Antwoord</span>
+                <span v-html="q.answer"></span>
               </div>
-              <div class="flex-1">
-                <p class="text-slate-800 font-bold text-lg mb-0 leading-tight" v-html="q.question"></p>
-
-                <Transition name="fade">
-                  <div v-if="revealedIndices.has(idx)" class="text-rose-700 text-sm font-medium py-2.5 px-4 bg-rose-50 border-l-4 border-rose-400 rounded-r-lg mt-3 animate-in fade-in slide-in-from-top-1">
-                     <span class="text-[10px] font-black uppercase tracking-wider block mb-1 opacity-60">Antwoord</span>
-                     <span v-html="q.answer"></span>
-                  </div>
-                </Transition>
-              </div>
-            </div>
+            </Transition>
           </div>
-        </div>
-
-        <div class="mt-10 text-center">
-          <button
-            @click="$emit('complete'); close()"
-            class="px-10 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-xl transition-all shadow-lg hover:shadow-rose-200 active:scale-95 uppercase tracking-widest text-xs"
-          >
-            Sessie Afronden
-          </button>
         </div>
       </div>
     </div>
+
+    <footer class="fullscreen-foot">
+      <button
+        @click="$emit('complete'); close()"
+        class="btn btn-primary" style="min-height: 48px;"
+      >
+        Sessie afronden
+      </button>
+    </footer>
   </div>
 </template>
 
 <style scoped>
+.spotcheck-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.spotcheck-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  color: var(--color-ink);
+  background: var(--color-panel);
+  border: 2px solid var(--color-line-strong);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.spotcheck-row:hover,
+.spotcheck-row-selected {
+  border-color: var(--color-digital);
+  background: var(--color-digital-soft);
+}
+
+.spotcheck-number {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  color: var(--color-ink-soft);
+  background: var(--color-panel-muted);
+  border-radius: var(--radius-control);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+}
+
+.spotcheck-number-selected {
+  color: #ffffff;
+  background: var(--color-digital);
+}
+
+.spotcheck-question {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.spotcheck-answer {
+  display: block;
+  margin-top: 10px;
+  padding: 10px 14px;
+  color: var(--color-ink);
+  background: var(--color-panel);
+  border-left: 4px solid var(--color-digital);
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  font-weight: 600;
+}
+
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;

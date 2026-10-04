@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { PhX, PhCheckCircle, PhFilePdf, PhLockKey, PhWarning, PhArrowRight } from '@phosphor-icons/vue'
 
 const props = defineProps({
@@ -47,7 +47,7 @@ function tryUnlock(index) {
     window.open(link.url, '_blank')
     return
   }
-  
+
   // Toon wachtwoord veld voor dit item
   activeUnlockIndex.value = index
   inputCode.value = ''
@@ -78,121 +78,251 @@ function close() {
     activeUnlockIndex.value = null
     inputCode.value = ''
 }
+
+// Escape sluit net als de X. Staat er nog een wachtwoordveld open, dan sluit
+// Escape eerst dat veld en blijft het venster staan.
+function handleKeydown(e) {
+    if (e.key !== 'Escape' || !props.isOpen) return
+    e.preventDefault()
+    if (activeUnlockIndex.value !== null) {
+        cancelUnlock()
+        return
+    }
+    close()
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-backdrop open" @click="close">
-    <div class="modal-content max-w-xl" @click.stop>
-       <!-- Header -->
-       <div class="sticky top-0 bg-white border-b border-slate-100 px-8 py-5 flex justify-between items-center z-10">
-            <div class="flex items-center gap-3">
-                <div class="bg-amber-100 text-amber-600 p-2 rounded-lg"><PhCheckCircle weight="fill" class="text-xl"/></div>
-                <div>
-                    <h3 class="text-lg font-bold text-slate-900 m-0">Correctiesleutels</h3>
-                    <p class="text-xs text-slate-500 m-0">{{ workbook.title || 'Werkboek' }}</p>
-                </div>
-            </div>
-             <button @click="close" class="btn-close">
-                 <PhX class="text-2xl" />
-             </button>
-       </div>
+  <!-- Fullscreen-activiteitenshell: licht, groen anker (boek / bundel). -->
+  <div v-if="isOpen" class="modal-fullscreen">
 
-       <div class="p-8 prose max-w-none">
-            
-            <div v-if="solutionLinks.length > 0" class="space-y-4">
-                <div v-for="(link, idx) in solutionLinks" :key="idx" class="relative">
-                    
-                    <!-- ITEM CARD -->
-                    <div 
-                        class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between group transition-all shadow-sm"
-                        :class="[
-                            unlockedIndices.has(idx) ? 'border-emerald-200 bg-emerald-50/30' : 'hover:border-amber-400 hover:bg-slate-50',
-                            activeUnlockIndex === idx ? 'ring-2 ring-amber-500 border-amber-500' : ''
-                        ]"
-                    >
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
-                                :class="unlockedIndices.has(idx) ? 'bg-slate-100 text-slate-700' : 'bg-slate-100 text-slate-600'"
-                            >
-                                <PhCheckCircle v-if="unlockedIndices.has(idx)" weight="fill" class="text-2xl" />
-                                <PhFilePdf v-else weight="bold" class="text-2xl" />
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-900 m-0 leading-tight">{{ link.label }}</h4>
-                                <p class="text-[11px] text-slate-600 m-0 uppercase font-bold tracking-wider mt-0.5">
-                                    {{ unlockedIndices.has(idx) ? 'Ontgrendeld' : (link.password ? 'Beveiligd met code' : 'Vrij toegankelijk') }}
-                                </p>
-                            </div>
-                        </div>
+    <header class="fullscreen-bar fullscreen-bar-paper">
+      <div class="p-2 rounded-control shrink-0" style="background: var(--color-workbook-soft); color: var(--color-workbook);">
+        <PhCheckCircle weight="fill" class="text-xl" />
+      </div>
+      <div class="min-w-0">
+        <h2 class="fullscreen-title">Correctiesleutels</h2>
+        <p class="fullscreen-label">{{ workbook.title || 'Werkboek' }}</p>
+      </div>
+      <button type="button" @click="close" class="btn-close ml-auto" aria-label="Sluiten">
+        <PhX class="text-2xl" />
+      </button>
+    </header>
 
-                        <button 
-                            @click="tryUnlock(idx)"
-                            class="px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all"
-                            :class="unlockedIndices.has(idx) 
-                                ? 'bg-emerald-500 text-white hover:bg-emerald-600' 
-                                : 'bg-slate-900 text-white hover:bg-amber-500' "
-                        >
-                            {{ unlockedIndices.has(idx) ? 'Openen' : 'Inzien' }}
-                        </button>
-                    </div>
+    <div class="fullscreen-body">
+      <div class="solutions-sheet">
 
-                    <!-- PASSWORD PROMPT INLINE -->
-                    <transition name="fade">
-                        <div v-if="activeUnlockIndex === idx" class="mt-3 bg-amber-50 border border-amber-200 rounded-2xl p-5 shadow-inner">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
-                                    <PhLockKey weight="fill" /> Voer de code in voor deze sleutel:
-                                </span>
-                                <button @click="cancelUnlock" class="text-amber-400 hover:text-amber-600">
-                                    <PhX weight="bold" />
-                                </button>
-                            </div>
-                            
-                            <div class="relative">
-                                <input 
-                                    type="password" 
-                                    v-model="inputCode" 
-                                    @keydown.enter="checkCode(idx)"
-                                    class="w-full pl-4 pr-12 py-2.5 bg-white border border-amber-200 rounded-xl text-sm font-medium text-slate-900 placeholder-amber-300 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all"
-                                    placeholder="Wachtwoord..."
-                                    autofocus
-                                >
-                                <button 
-                                    @click="checkCode(idx)"
-                                    class="absolute right-1.5 top-1.5 bottom-1.5 w-10 bg-amber-500 hover:bg-amber-600 text-white rounded-lg flex items-center justify-center transition-all"
-                                >
-                                    <PhArrowRight weight="bold" />
-                                </button>
-                            </div>
+        <div v-if="solutionLinks.length > 0" class="space-y-4">
+          <div v-for="(link, idx) in solutionLinks" :key="idx">
 
-                            <p v-if="errorIndex === idx" class="text-red-500 text-[11px] font-bold mt-2 flex items-center gap-1">
-                                <PhWarning weight="bold" /> Wachtwoord onjuist. Probeer het opnieuw.
-                            </p>
-                        </div>
-                    </transition>
-                </div>
+            <!-- ITEM CARD -->
+            <div
+              class="solutions-item"
+              :class="{
+                'solutions-item-unlocked': unlockedIndices.has(idx),
+                'solutions-item-active': activeUnlockIndex === idx
+              }"
+            >
+              <span class="solutions-item-icon">
+                <PhCheckCircle v-if="unlockedIndices.has(idx)" weight="fill" />
+                <PhFilePdf v-else weight="bold" />
+              </span>
+              <div class="min-w-0 flex-1">
+                <h3 class="solutions-item-title">{{ link.label }}</h3>
+                <p class="activity-meta">
+                  {{ unlockedIndices.has(idx) ? 'Ontgrendeld' : (link.password ? 'Beveiligd met code' : 'Vrij toegankelijk') }}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                @click="tryUnlock(idx)"
+                class="btn"
+                :style="unlockedIndices.has(idx)
+                  ? { background: 'var(--color-workbook)', color: '#ffffff' }
+                  : { background: 'var(--color-ink)', color: '#ffffff' }"
+              >
+                {{ unlockedIndices.has(idx) ? 'Openen' : 'Inzien' }}
+              </button>
             </div>
 
-            <!-- NO LINKS STATE -->
-            <div v-else class="bg-slate-50 border border-slate-200 shadow-sm rounded-2xl p-8 text-center">
-                <div class="w-16 h-16 bg-slate-100 text-slate-600 rounded-control flex items-center justify-center mx-auto mb-4">
-                    <PhWarning weight="fill" class="text-3xl"/>
+            <!-- PASSWORD PROMPT INLINE -->
+            <transition name="fade">
+              <div v-if="activeUnlockIndex === idx" class="solutions-code">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="activity-meta">
+                    <PhLockKey weight="fill" /> Code voor deze sleutel
+                  </span>
+                  <button type="button" @click="cancelUnlock" class="btn-close" aria-label="Codeveld sluiten">
+                    <PhX weight="bold" />
+                  </button>
                 </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Niet Beschikbaar</h3>
-                <p class="text-slate-500 text-sm mb-0">Er zijn momenteel geen PDF correctiesleutels geüpload voor deze les.</p>
-            </div>
-            
-       </div>
+
+                <div class="relative">
+                  <input
+                    type="password"
+                    v-model="inputCode"
+                    @keydown.enter="checkCode(idx)"
+                    class="solutions-code-input"
+                    placeholder="Wachtwoord..."
+                    autofocus
+                  >
+                  <button
+                    type="button"
+                    @click="checkCode(idx)"
+                    class="solutions-code-submit"
+                    aria-label="Code controleren"
+                  >
+                    <PhArrowRight weight="bold" />
+                  </button>
+                </div>
+
+                <p v-if="errorIndex === idx" class="solutions-code-error">
+                  <PhWarning weight="bold" /> Wachtwoord onjuist. Probeer het opnieuw.
+                </p>
+              </div>
+            </transition>
+          </div>
+        </div>
+
+        <!-- NO LINKS STATE -->
+        <div v-else class="solutions-empty">
+          <div class="solutions-empty-icon"><PhWarning weight="fill" /></div>
+          <h3 class="solutions-item-title">Niet beschikbaar</h3>
+          <p class="solutions-empty-text">Er zijn momenteel geen PDF-correctiesleutels geüpload voor deze les.</p>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.solutions-sheet {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.solutions-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--color-panel);
+  border: 2px solid var(--color-line-strong);
+  border-radius: var(--radius-card);
+}
+
+.solutions-item-unlocked,
+.solutions-item-active {
+  border-color: var(--color-workbook);
+  background: var(--color-workbook-soft);
+}
+
+.solutions-item-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  color: var(--color-workbook);
+  background: var(--color-workbook-soft);
+  border-radius: var(--radius-control);
+  font-size: 1.25rem;
+}
+
+.solutions-item-title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.solutions-code {
+  margin-top: 12px;
+  padding: 16px;
+  background: var(--color-panel);
+  border: 2px solid var(--color-line-strong);
+  border-radius: var(--radius-card);
+}
+
+.solutions-code-input {
+  width: 100%;
+  padding: 10px 52px 10px 14px;
+  color: var(--color-ink);
+  background: var(--color-panel);
+  border: 2px solid var(--color-line-strong);
+  border-radius: var(--radius-control);
+  font-size: 0.9375rem;
+  outline: none;
+}
+
+.solutions-code-input:focus-visible {
+  border-color: var(--color-digital);
+  outline: 3px solid var(--color-action);
+  outline-offset: 2px;
+}
+
+.solutions-code-submit {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  display: grid;
+  width: 44px;
+  place-items: center;
+  color: #ffffff;
+  background: var(--color-ink);
+  border: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+
+.solutions-code-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  color: var(--color-presentation);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.solutions-empty {
+  padding: 40px 24px;
+  background: var(--color-panel);
+  border: 2px solid var(--color-line-strong);
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+
+.solutions-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  color: var(--color-ink-soft);
+  background: var(--color-panel-muted);
+  border-radius: var(--radius-control);
+  font-size: 1.75rem;
+}
+
+.solutions-empty-text {
+  margin: 8px 0 0;
+  color: var(--color-ink-soft);
+}
+
 .fade-enter-active, .fade-leave-active {
-  transition: all 0.3s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-6px);
 }
 </style>

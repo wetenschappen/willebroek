@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { PhActivity, PhX, PhArrowLeft, PhArrowRight } from '@phosphor-icons/vue'
 
 const props = defineProps({
   id: { type: String, required: true }
@@ -30,31 +31,48 @@ function nextStep() {
 function prevStep() {
     if (currentStep.value > 0) currentStep.value--
 }
+
+// Escape sluit net als de X in de kopbalk.
+function handleKeydown(e) {
+    if (e.key === 'Escape') {
+        e.preventDefault()
+        emit('close')
+    }
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 </script>
 
 <template>
-<div class="activity-container flex flex-col h-full bg-paper relative text-slate-900 select-none">
-    
-    <!-- Header -->
-    <div class="px-8 py-6 border-b border-slate-200 flex justify-between items-center bg-white shrink-0 shadow-sm z-10">
-        <div>
-            <h2 class="text-xl font-bold text-slate-800 tracking-tight">Labo: Ontstekingsreactie & Fagocytose</h2>
-            <p class="text-sm font-medium text-slate-500 mt-1">Ontdek de 2de afweerlinie stap voor stap</p>
-        </div>
-        <button @click="$emit('close')" class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200 transition-colors">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
+  <!-- Fullscreen-activiteitenshell: licht, blauw anker (digitale activiteit). -->
+  <div class="modal-fullscreen">
+
+    <!-- Kopbalk -->
+    <header class="fullscreen-bar fullscreen-bar-digital">
+      <div class="p-2 rounded-control shrink-0" style="background: var(--color-digital-soft); color: var(--color-digital);">
+        <PhActivity weight="fill" class="text-xl" />
+      </div>
+      <div class="min-w-0">
+        <h2 class="fullscreen-title">Labo: ontstekingsreactie en fagocytose</h2>
+        <p class="fullscreen-label">{{ currentStepData.label }} — stap {{ currentStep + 1 }} van 5</p>
+      </div>
+      <button type="button" @click="emit('close')" class="btn-close ml-auto" aria-label="Sluiten">
+        <PhX class="text-2xl" />
+      </button>
+    </header>
+
+    <!-- Voortgangsbalk -->
+    <div class="fullscreen-progress">
+      <span :style="{ width: ((currentStep + 1) / 5) * 100 + '%' }"></span>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 flex overflow-hidden">
-        
-        <!-- Left Panel: Simulation -->
-        <div class="flex-[2] relative p-8 flex items-center justify-center bg-slate-50">
-            <div class="w-full max-w-2xl aspect-video bg-white rounded-xl border border-slate-200 shadow-sm relative overflow-hidden flex items-center justify-center">
-                
-                <!-- SVG Canvas -->
-                <svg width="100%" height="100%" viewBox="0 0 800 450" class="absolute inset-0">
+    <!-- Midden: simulatie links, uitleg rechts -->
+    <div class="fullscreen-body phagocytosis-body">
+
+        <!-- Simulatie -->
+        <div class="phagocytosis-canvas">
+            <svg width="100%" height="100%" viewBox="0 0 800 450" class="select-none">
                     <defs>
                         <!-- Styles and Filters -->
                         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -118,7 +136,7 @@ function prevStep() {
                         <!-- Vessel walls: expand at step 2 -->
                         <path :d="currentStep >= 2 ? 'M0,300 L800,300' : 'M0,350 L800,350'" stroke="#ef4444" stroke-width="6" stroke-dasharray="20,10" style="transition: all 0.5s ease-in-out;" />
                         <path :d="currentStep >= 2 ? 'M0,450 L800,450' : 'M0,420 L800,420'" stroke="#ef4444" stroke-width="6" stroke-dasharray="20,10" style="transition: all 0.5s ease-in-out;" />
-                        
+
                         <!-- Blood plasma -->
                         <rect x="0" :y="currentStep >= 2 ? 300 : 350" width="800" :height="currentStep >= 2 ? 150 : 70" fill="#fee2e2" opacity="0.6" style="transition: all 0.5s ease-in-out;" />
 
@@ -126,7 +144,7 @@ function prevStep() {
                         <circle cx="100" cy="385" r="15" fill="#ef4444" />
                         <circle cx="300" cy="385" r="15" fill="#ef4444" />
                         <circle cx="700" cy="385" r="15" fill="#ef4444" />
-                        
+
                         <text x="50" y="415" font-size="12" fill="#b91c1c" font-weight="bold">Rode bloedcellen</text>
 
                         <!-- White blood cells (Macrophages inside vessel) -->
@@ -155,51 +173,163 @@ function prevStep() {
                         </g>
                     </g>
                 </svg>
-            </div>
         </div>
 
-        <!-- Right Panel: Controls -->
-        <div class="w-80 bg-white border-l border-slate-200 flex flex-col relative z-10 shrink-0 shadow-[-4px_0_15px_rgba(0,0,0,0.02)]">
-            <div class="flex-1 p-8 flex flex-col justify-center">
-                <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-digital-soft text-digital mb-6 font-bold text-xl">
-                    {{ currentStep + 1 }}
-                </div>
-                <h3 class="text-2xl font-bold text-slate-800 mb-4 tracking-tight">{{ currentStepData.label }}</h3>
-                <p class="text-slide-body text-slate-600 leading-relaxed font-medium">
-                    {{ currentStepData.desc }}
-                </p>
-                
-                <div class="mt-8 flex gap-2 w-full">
-                    <button @click="prevStep" 
-                            :disabled="currentStep === 0"
-                            class="flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-colors border border-slate-200"
-                            :class="currentStep === 0 ? 'text-slate-500 bg-slate-50 cursor-not-allowed' : 'text-slate-700 bg-white hover:bg-slate-50 cursor-pointer'">
-                        Vorige
-                    </button>
-                    <button @click="nextStep"
-                            class="flex-[2] py-3 px-4 rounded-lg font-bold text-sm transition-colors cursor-pointer"
-                            :class="currentStep === 4 ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-digital hover:bg-digital-strong text-white'">
-                        {{ currentStep === 4 ? 'Afronden' : 'Volgende' }}
-                    </button>
-                </div>
-            </div>
+        <!-- Stappenplan -->
+        <aside class="phagocytosis-panel">
+            <span class="phagocytosis-step">{{ currentStep + 1 }}</span>
+            <h3 class="phagocytosis-step-title">{{ currentStepData.label }}</h3>
+            <p class="phagocytosis-step-text">{{ currentStepData.desc }}</p>
 
-            <!-- Progress Track -->
-            <div class="h-2 bg-slate-100 flex w-full">
-                <div class="h-full bg-digital transition-all duration-300" :style="{ width: ((currentStep + 1) / 5) * 100 + '%' }"></div>
+            <ol class="phagocytosis-track">
+                <li
+                    v-for="(step, idx) in steps"
+                    :key="step.label"
+                    class="phagocytosis-track-item"
+                    :class="idx === currentStep ? 'phagocytosis-track-item-active' : ''"
+                >
+                    <span class="phagocytosis-track-dot">{{ idx + 1 }}</span>
+                    {{ step.label }}
+                </li>
+            </ol>
+
+            <div class="phagocytosis-actions">
+                <button
+                    type="button"
+                    @click="prevStep"
+                    :disabled="currentStep === 0"
+                    class="btn"
+                    style="border: 2px solid var(--color-line-strong);"
+                >
+                    <PhArrowLeft weight="bold" /> Vorige
+                </button>
+                <button type="button" @click="nextStep" class="btn btn-primary">
+                    {{ currentStep === 4 ? 'Afronden' : 'Volgende' }} <PhArrowRight weight="bold" />
+                </button>
             </div>
-        </div>
+        </aside>
 
     </div>
-</div>
+  </div>
 </template>
 
 <style scoped>
-.activity-container {
-    animation: fadeIn 0.3s ease-out;
+.phagocytosis-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
 }
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+
+.phagocytosis-canvas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    background: var(--color-panel);
+    border: 2px solid var(--color-line-strong);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+}
+
+.phagocytosis-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.phagocytosis-step {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    color: var(--color-digital);
+    background: var(--color-digital-soft);
+    border-radius: var(--radius-control);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.phagocytosis-step-title {
+    margin: 0 0 8px;
+    color: var(--color-ink);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.phagocytosis-step-text {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+}
+
+.phagocytosis-track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.phagocytosis-track-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    color: var(--color-ink-soft);
+    background: var(--color-panel);
+    border: 2px solid var(--color-line-strong);
+    border-radius: var(--radius-control);
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.phagocytosis-track-dot {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    color: var(--color-ink-soft);
+    background: var(--color-panel-muted);
+    border-radius: var(--radius-control);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+}
+
+.phagocytosis-track-item-active {
+    color: var(--color-ink);
+    background: var(--color-digital-soft);
+    border-color: var(--color-digital);
+}
+
+.phagocytosis-track-item-active .phagocytosis-track-dot {
+    color: #ffffff;
+    background: var(--color-digital);
+}
+
+.phagocytosis-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+@media (min-width: 1024px) {
+    .phagocytosis-body {
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        align-items: start;
+    }
+
+    .phagocytosis-canvas,
+    .phagocytosis-panel {
+        max-width: none;
+        margin: 0;
+    }
 }
 </style>

@@ -301,6 +301,15 @@ watch(() => props.isOpen, (val) => {
 // Keyboard navigation
 function handleKeydown(e) {
     if (!props.isOpen) return
+
+    // Sluiten met Escape, net als de X rechtsboven. In native fullscreen pakt de
+    // browser Escape soms zelf; dan sluit handleFullscreenChange de presentatie.
+    if (e.key === 'Escape') {
+        e.preventDefault()
+        emit('close')
+        return
+    }
+
     if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
 
     if (e.key === 's' || e.key === 'S') {

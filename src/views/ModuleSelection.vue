@@ -67,7 +67,7 @@ function goBack() {
       <p>De lessen voor {{ classDisplay }} worden later toegevoegd. Gebruik de knop Klassen hierboven om terug te keren naar de selectie.</p>
     </div>
 
-    <div v-else class="module-index">
+    <div v-else class="module-index" :class="`module-index-${subject?.id}`">
       <section v-for="group in groupedModules" :key="group.moduleNum" class="module-section">
         <header class="module-heading">
           <span class="module-number">M{{ group.moduleNum }}</span>
@@ -83,8 +83,8 @@ function goBack() {
             class="lesson-row"
             @click="openLesson(lesson.id)"
           >
-            <span class="lesson-copy flex items-center gap-3">
-              <span v-if="lesson.date" class="badge badge-neutral font-mono font-bold">{{ lesson.date }}</span>
+            <span class="lesson-copy">
+              <span class="lesson-meta">{{ lesson.date || 'LEERPAD' }}</span>
               <strong v-html="lesson.title"></strong>
             </span>
             <PhArrowRight weight="regular" class="lesson-arrow" aria-hidden="true" />

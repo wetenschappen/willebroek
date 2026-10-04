@@ -203,27 +203,26 @@ function enforceTwoDigits(type) {
       </Teleport>
 
       <!-- INLINE TIMER (No Teleport - renders where placed) -->
-      <div class="relative">
-           <!-- The Pill - Compact for thin header -->
-          <div class="flex items-center gap-4 h-full">
-              <!-- Timer Display - Bigger & integrated -->
+      <div class="lesson-timer relative">
+          <div class="lesson-timer-inner">
               <div
-                  class="font-mono font-bold text-2xl tracking-widest tabular-nums leading-none"
-                  :class="{'text-slate-500': timeLeft === 0 && initialTime === 0, 'text-emerald-400': isRunning && timeLeft > 0, 'text-red-100 font-black': timeLeft === 0 && initialTime > 0}"
+                  class="lesson-timer-display"
+                  :class="{
+                    'is-running': isRunning && timeLeft > 0,
+                    'is-expired': timeLeft === 0 && initialTime > 0
+                  }"
               >
                   {{ formattedTime }}
               </div>
 
-              <!-- Divider -->
-              <div class="h-6 w-px bg-slate-700/50"></div>
+              <div class="lesson-timer-divider" aria-hidden="true"></div>
 
-              <!-- Controls -->
-              <div class="flex items-center gap-1">
+              <div class="lesson-timer-controls">
                   <!-- 1. Play/Pause -->
                   <button
                       @click="togglePlayPause"
-                      class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-800 transition-colors"
-                      :class="(!isRunning && timeLeft > 0) ? 'text-emerald-600 hover:text-emerald-700' : 'text-slate-500 hover:text-white'"
+                      class="lesson-timer-control"
+                      :class="{ 'is-resume': !isRunning && timeLeft > 0 }"
                       :disabled="timeLeft === 0 && !isRunning"
                       :title="(!isRunning && timeLeft > 0) ? 'Hervat' : 'Pauze'"
                   >
@@ -233,7 +232,7 @@ function enforceTwoDigits(type) {
                   <!-- 2. Stop -->
                   <button
                       @click="stopTimer"
-                      class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-800 text-slate-600 hover:text-red-500 transition-colors"
+                      class="lesson-timer-control"
                       title="Stop"
                   >
                       <PhStop weight="fill" class="text-sm" />
@@ -242,8 +241,8 @@ function enforceTwoDigits(type) {
                   <!-- 3. Edit (Pencil) -->
                   <button
                       @click="isExpanded = !isExpanded"
-                      class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-800 text-slate-600 hover:text-white transition-colors"
-                      :class="{'bg-slate-800 text-white': isExpanded}"
+                      class="lesson-timer-control"
+                      :class="{ 'is-open': isExpanded }"
                       title="Instellingen"
                   >
                       <PhPencilSimple weight="bold" class="text-sm" />

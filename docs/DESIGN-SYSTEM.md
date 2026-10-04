@@ -278,7 +278,7 @@ Deze variabelen staan in `:root` in `src/style.css`.
 | --- | --- | --- |
 | `--color-physics` / `--color-physics-soft` | `#176b87` / `#e3f1f5` | watermerk en eyebrow van het vak Fysica |
 | `--color-biology` / `--color-biology-soft` | `#397553` / `#e7f2ea` | watermerk en eyebrow van het vak Biologie |
-| `--color-action` / `--color-action-soft` | `#b65b2d` / `#fbede5` | het interactieaccent: actieve tijdlijnmarker en -lijn, hover op rijen, links, `.fab-btn` en `.goals-trigger`, en gemarkeerde woorden in de afsprakenpresentatie |
+| `--color-action` / `--color-action-soft` | `#b65b2d` / `#fbede5` | het interactieaccent: actieve tijdlijnmarker en -lijn, links, `.fab-btn`, `.goals-trigger` en gemarkeerde woorden in de afsprakenpresentatie; ABC-activiteiten gebruiken hun typekleur voor hover |
 
 > **Let op — token-schuld, nog niet opgelost.** In de praktijk zijn er te veel
 > bijna-gelijke kleuren:
@@ -366,16 +366,37 @@ combinaties.
 | `.card-digital` / `.card-check` | ankerbalk blauw |
 | `.card-paper` | ankerbalk groen |
 | `.card-class` | ankerbalk rood |
-| `.card-done` | afgeronde kaart; kleurt `.lesson-activity-action` terug naar `--color-ink` |
 
 ### Activiteit in de ABC-tijdlijn
 
+Het werkblad bestaat uit drie fasepanelen (`.lesson-board` met
+`.timeline-line`). Elk paneel heeft een `1px --color-line` rand en
+`--shadow-rest`; de bovenhoeken gebruiken `--radius-card`, de onderhoeken zijn
+vierkant zodat de paneelrand aansluit op de rechte activiteitenrijen. De
+fasekop is een band met een `2px --color-line-strong` scheiding. De rijen lopen
+rand tot rand, hebben vierkante hoeken en een 10px type-ankerbalk. Elke tweede
+activiteit krijgt `--color-panel-muted` als band; hover gebruikt het bijbehorende
+zachte typevlak (`--color-digital-soft`, `--color-presentation-soft` of
+`--color-workbook-soft`). De panelen volgen hun inhoud, zodat een korte fase (C)
+geen leeg vlak onderaan krijgt.
+
 | Klasse | Functie |
 | --- | --- |
-| `.lesson-activity` | rij met 10px linkerbalk en 2px onderrand |
+| `.lesson-board` | raster met de drie fasepanelen; `align-items: start` |
+| `.timeline-line` | fasepaneel: witte achtergrond, `--radius-card` boven, vierkante onderhoeken, rand en `--shadow-rest` |
+| `.timeline-heading` | faseband: marker, titel en tijd, met `2px` scheiding eronder |
+| `.timeline-letter` | donkere vierkante ABC-marker op `--radius-control` |
+| `.timeline-phase-title` | fasenaam in `--color-ink`; voltooiing krijgt geen vinkje in het faseoverzicht |
+| `.timeline-time` | timercontrole op `--color-panel-muted` met rand en `--radius-control` |
+| `.lesson-nav` | lichte, sticky lesnavigatie met vakaccent; timerdisplay en knoppen delen dezelfde tokens |
+| `.lesson-activity` | vierkante, rand-tot-rand rij met 10px type-ankerbalk; elke tweede rij krijgt `--color-panel-muted`, hover het zachte vlak van het activiteitstype |
 | `.lesson-activity-copy`, `.activity-meta`, `.activity-description` | tekstblok; `strong` is `--color-ink` |
-| `.lesson-activity-action` | rechter actie, krijgt de kleur van het activiteitstype |
-| `.extra-branch`, `.branch-activity` | extra materiaal onder de hoofdkaart |
+| `.lesson-activity-action` | rechter actie, op dezelfde hoogte als de titel |
+| `.extra-branch`, `.branch-activity` | extra materiaal als rechte rij op dezelfde rail als de activiteiten, met neutrale balk en plus/min-indicator |
+
+> `.lesson-activity`, `.extra-branch-toggle` en `.branch-activity` gebruiken
+> hetzelfde tweekolomsraster: type-label en titel links, actie of uitklapindicator
+> rechts; alleen gewone activiteiten tonen een beschrijving.
 
 ### Badge
 
@@ -436,7 +457,7 @@ Eigenschappen van de shell, in volgorde van belangrijkheid:
 1. **Altijd licht.** Zie sectie 15. Geen `bg-black`, `bg-slate-900` of
    `bg-slate-950` op een schermvullend leesvlak.
 2. **Het activiteitstype zit in de kopbalk**, niet in een eigen palet.
-3. **Eén radius:** `0` voor de shell, `--radius-card` voor panelen erbinnen.
+3. **Eén radius:** `0` voor de shell, `--radius-card` voor panelen erbinnen. De ABC-fasepanelen zijn een gerichte uitzondering: alleen de bovenhoeken zijn afgerond, de onderhoeken zijn vierkant om aan te sluiten op de rechte rijen.
 4. **Eén schaduw:** `--shadow-dialog` voor overlays, `--shadow-rest` voor
    panelen. Geen `shadow-2xl`.
 5. **Geen blur, glow, pulse of bounce.** Actieve toestand is statisch en
@@ -444,9 +465,10 @@ Eigenschappen van de shell, in volgorde van belangrijkheid:
 6. **Knoppen komen uit `.btn`**, niet uit losse `bg-slate-900 text-white`-
    combinaties.
 
-> Een klein donker element is toegestaan en soms gewenst: de navigatiebalk
-> (`.lesson-nav`), `.btn-primary`, `.timeline-icon` en `.fab-btn` zijn donker en
-> dat is een bewuste keuze. Verboden is een **groot donker leesvlak**.
+> Kleine donkere elementen zijn toegestaan en soms gewenst: `.btn-primary`,
+> `.timeline-letter` en `.fab-btn` zijn donker. De lesnavigatie (`.lesson-nav`)
+> gebruikt een licht oppervlak met vakaccent; een **groot donker leesvlak** is
+> niet toegestaan.
 
 `.modal-fullscreen` was donker (`--color-ink` met witte tekst) en is op
 projectorverzoek omgezet naar licht. Gebruik het als lichte basis voor **elke**
@@ -457,7 +479,7 @@ de afwijking die `DESIGN-REVIEW-LIVE.md` §4 beschrijft.
 ### Shell en presentatie
 
 `.lesson-nav`, `.lesson-main`, `.lesson-intro`, `.timeline-heading`,
-`.timeline-time`, `.timeline-icon`, `.timeline-line`, `.goals-*`, `.fab-btn`,
+`.timeline-time`, `.timeline-letter`, `.timeline-line`, `.goals-*`, `.fab-btn`,
 `.tool-item`, `.selection-page`, `.content-page`, `.subject-row`, `.index-row`,
 `.lesson-row`, `.class-choice`, `.empty-state`, `.slide-viewport`, `.ppt-stage`.
 
@@ -503,7 +525,7 @@ activiteiten, presentaties:
   lichte tekstplaat over het leesbare deel ligt.
 
 Kleine donkere elementen blijven toegestaan: `.lesson-nav`, `.btn-primary`,
-`.timeline-icon`, `.fab-btn`. Die zijn een accent, geen leesvlak.
+`.timeline-letter`, `.fab-btn`. Die zijn een accent, geen leesvlak.
 
 De presentatielaag is omgezet: alle slides zijn licht.
 

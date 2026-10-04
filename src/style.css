@@ -157,69 +157,120 @@
     .card-class:hover { border-color: var(--color-presentation); }
     .card-check:hover { border-color: var(--color-digital); }
 
-    .card-done .status-icon {
-        opacity: 1;
-        transform: scale(1);
+    /* --- ABC LESWERKBORD ---
+       Elke fase is één werkvlak met de paneelstijl uit het designsysteem:
+       1px rand, --radius-card en --shadow-rest. De fasekop is een band met een
+       2px scheiding; de activiteiten vormen daarbinnen een rustige indexlijst
+       met een sterke kleurankerbalk. Een paneel volgt zijn eigen inhoud, zodat
+       een korte fase geen leeg vlak van 300px onderaan krijgt. */
+    .lesson-board {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: start;
+        gap: clamp(24px, 2.4vw, 40px);
     }
 
-    /* --- TIJDLIJN --- */
-    .timeline-icon {
-        position: absolute;
-        z-index: 20;
-        top: 0;
-        left: -24px;
+    /* De fasepanelen zijn boven afgerond en onder vierkant. Zo sluit het
+       paneel aan op de vierkante activiteitenrijen erbinnen: de verticale
+       ankerbalken en banden lopen door tot de onderrand zonder dat er een
+       afgeronde hoek tegen een rechte balk botst. Er is geen onderpadding,
+       zodat de laatste rij de onderrand zelf raakt. */
+    .timeline-line {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 0;
+        background: var(--color-panel);
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-card) var(--radius-card) 0 0;
+        box-shadow: var(--shadow-rest);
+    }
+
+    /* De fasekop is de band van het werkvlak: marker, titel en tijd op één
+       lijn, afgesloten met een 2px scheiding. Zo leest de lijst eronder als
+       inhoud van deze fase en niet als een stapel losse kaarten. */
+    .timeline-heading {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px 16px;
+        border-bottom: 2px solid var(--color-line-strong);
+    }
+
+    .timeline-phase {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Een klein donker element is toegestaan (§14); de marker hoort bij de
+       ABC-structuur en maakt de fase in één oogopslag herkenbaar. */
+    .timeline-letter {
+        display: inline-flex;
+        align-items: center;
         justify-content: center;
-        flex-shrink: 0;
-        width: 48px;
-        height: 48px;
+        flex: 0 0 auto;
+        width: 34px;
+        height: 34px;
         color: var(--color-panel);
         background: var(--color-ink);
-        border: 4px solid var(--color-paper);
         border-radius: var(--radius-control);
-        font-size: 1.125rem;
-        font-weight: 700;
-        transition: background-color 160ms ease, color 160ms ease;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        line-height: 1;
     }
 
-    .timeline-icon.active {
-        color: var(--color-panel);
-        background: var(--color-action);
-        box-shadow: none;
-        text-shadow: none;
-    }
-
-    .timeline-line {
-        position: relative;
-        margin-left: 24px;
-        padding-bottom: 32px;
-        padding-left: 40px;
-        transition: none;
-    }
-
-    .timeline-line > .timeline-icon + .timeline-heading {
-        min-height: 40px;
+    .timeline-phase-title {
+        display: flex;
+        min-width: 0;
         align-items: center;
+        gap: 10px;
+        margin: 0;
+        color: var(--color-ink);
+        font-size: 1.4375rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
     }
 
-    .timeline-line::before {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: -2px;
-        width: 2px;
-        content: '';
-        background: var(--color-line);
+    /* De tijd is een echte control, geen badge: rustvlak, rand en radius uit
+       het systeem, met hover naar het paneelvlak. */
+    .timeline-time {
+        display: inline-flex;
+        flex-shrink: 0;
+        align-items: center;
+        gap: 8px;
+        min-height: 38px;
+        padding: 0 12px;
+        color: var(--color-ink);
+        background: var(--color-panel-muted);
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-control);
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 160ms ease, border-color 160ms ease;
     }
 
-    .timeline-line.active::before {
-        background: var(--color-action);
-        box-shadow: none;
+    .timeline-time:hover {
+        background: var(--color-panel);
+        border-color: var(--color-line-strong);
     }
 
-    .timeline-line.active::after {
-        display: none;
+    .timeline-time svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .timeline-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
     }
 
     /* --- UI ELEMENTS --- */
@@ -379,13 +430,39 @@
         position: sticky;
         top: 0;
         z-index: 40;
-        background: var(--color-ink);
-        border-bottom: 1px solid #34474e;
+        background: var(--color-panel);
+        border-bottom: 1px solid var(--color-line);
+        box-shadow: 0 4px 16px rgb(23 37 43 / 0.06);
     }
 
-    .lesson-nav-inner,
+    .lesson-nav::after {
+        position: absolute;
+        right: 0;
+        bottom: -1px;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(
+            90deg,
+            var(--color-digital) 0 34%,
+            var(--color-presentation) 34% 67%,
+            var(--color-workbook) 67% 100%
+        );
+        content: '';
+        opacity: 0.9;
+    }
+
+    .lesson-nav--physics::after {
+        background: var(--color-physics);
+    }
+
+    .lesson-nav--biology::after {
+        background: var(--color-biology);
+    }
+
+    /* De lichte navigatiebalk loopt over de volle breedte mee met het
+       werkblad, zodat vak, klas en klok met de les zelf uitlijnen. */
     .lesson-main {
-        width: min(100% - 48px, 768px);
+        width: min(100% - 48px, 1280px);
         margin: 0 auto;
     }
 
@@ -393,15 +470,18 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 56px;
+        width: min(100% - 48px, 1280px);
+        min-height: 64px;
+        margin: 0 auto;
     }
 
     .lesson-nav-back {
         display: inline-flex;
+        min-width: 0;
         align-items: center;
         gap: 12px;
-        min-height: 56px;
-        color: #ffffff;
+        min-height: 64px;
+        color: var(--color-ink-soft);
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.75rem;
         font-weight: 500;
@@ -412,23 +492,116 @@
     }
 
     .lesson-nav-back:hover {
-        color: white;
+        color: var(--color-ink);
+    }
+
+    /* Vak en biologie/fysica blijven visueel neutraal (§3): het onderscheid
+       komt van dit functionele icoon en van de tekst, niet van een eigen
+       vakkleur. */
+    .lesson-nav-mark {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        place-items: center;
+        color: var(--color-biology);
+        background: var(--color-biology-soft);
+        border: 1px solid color-mix(in srgb, var(--color-biology) 24%, transparent);
+        border-radius: var(--radius-control);
+    }
+
+    .lesson-nav--physics .lesson-nav-mark {
+        color: var(--color-physics);
+        background: var(--color-physics-soft);
+        border-color: color-mix(in srgb, var(--color-physics) 24%, transparent);
+    }
+
+    .lesson-nav-icon {
+        width: 20px;
+        height: 20px;
     }
 
     .lesson-nav-subject {
-        color: #f59e0b;
-        font-size: 1.75rem;
+        color: var(--color-ink);
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 1.25rem;
         font-weight: 700;
         letter-spacing: -0.02em;
         line-height: 1;
     }
 
     .lesson-nav-class {
-        color: #ffffff;
-        font-size: 1.5rem;
+        padding-left: 12px;
+        color: var(--color-ink-soft);
+        border-left: 1px solid var(--color-line);
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        line-height: 1.4;
+        white-space: nowrap;
+    }
+
+    .lesson-timer-inner {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .lesson-timer-display {
+        padding: 7px 10px;
+        color: var(--color-ink);
+        background: var(--color-panel-muted);
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-control);
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 1.125rem;
         font-weight: 600;
-        letter-spacing: -0.02em;
+        letter-spacing: 0.08em;
         line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .lesson-timer-display.is-running {
+        color: var(--color-workbook);
+    }
+
+    .lesson-timer-display.is-expired {
+        color: var(--color-presentation);
+    }
+
+    .lesson-timer-divider {
+        width: 1px;
+        height: 28px;
+        background: var(--color-line);
+        opacity: 0.55;
+    }
+
+    .lesson-timer-controls {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .lesson-timer-control {
+        display: grid;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        color: var(--color-ink-soft);
+        background: transparent;
+        border-radius: var(--radius-control);
+        transition: color 160ms ease, background-color 160ms ease;
+    }
+
+    .lesson-timer-control:hover:not(:disabled),
+    .lesson-timer-control.is-open {
+        color: var(--color-ink);
+        background: var(--color-panel-muted);
+    }
+
+    .lesson-timer-control.is-resume {
+        color: var(--color-workbook);
     }
 
     .lesson-main {
@@ -438,89 +611,82 @@
         padding-bottom: 128px;
     }
 
+    /* Het lesblad is een rustig kopblad: datum, titel, dan de beschrijving
+       op dezelfde manierbreedte. Geen vreemd uitgelijnd blok rechts. */
     .lesson-intro {
-        margin-bottom: 64px;
-        padding-bottom: 32px;
-        border-bottom: 2px solid var(--color-line-strong);
+        margin-bottom: clamp(40px, 4.5vw, 64px);
+    }
+
+    .lesson-intro .eyebrow {
+        margin: 0 0 20px;
     }
 
     .lesson-intro h1 {
-        max-width: 720px;
-        margin: 8px 0 16px;
+        max-width: 18ch;
+        margin: 0;
         color: var(--color-ink);
-        font-size: clamp(2rem, 5vw, 3rem);
+        font-size: clamp(2.25rem, 4.4vw, 3.5rem);
         font-weight: 600;
         letter-spacing: -0.045em;
-        line-height: 1.08;
+        line-height: 1.05;
     }
 
     .lesson-description {
-        max-width: 640px;
-        margin: 0;
+        max-width: 56ch;
+        margin: 20px 0 0;
         color: var(--color-ink-soft);
-        font-size: 1.0625rem;
+        font-size: 1.125rem;
         line-height: 1.6;
     }
 
-    .timeline-heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 20px;
-    }
+    /* Een activiteit is een regel in de indexlijst van het werkvlak: titel
+       links, actie rechts op dezelfde lijn, uitleg eronder. De rij loopt van
+       rand tot rand, zodat de ankerbalk een echte verticale streep wordt in
+       plaats van een afgeronde knop. Er is geen radius: alleen het paneel is
+       afgerond.
 
-    .timeline-heading h2 {
-        margin: 0;
-        color: var(--color-ink);
-        font-size: 1.25rem;
-        font-weight: 600;
-        letter-spacing: -0.02em;
-    }
-
-    .timeline-time {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 0;
-        color: var(--color-ink);
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.75rem;
-        cursor: pointer;
-        transition: color 160ms ease;
-    }
-
-    .timeline-time:hover {
-        color: var(--color-action);
-    }
-
-    .timeline-time svg {
-        width: 15px;
-        height: 15px;
-    }
-
+       Om en om krijgt een rij het rustvlak, zoals een bandenlijst in Word:
+       dat groepeert de activiteiten zonder ze losse kaarten te maken. */
     .lesson-activity {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        column-gap: 20px;
+        row-gap: 4px;
         width: 100%;
-        min-height: 96px;
-        gap: 24px;
-        padding: 20px 16px 20px 24px;
+        min-width: 0;
+        padding: 22px 24px 22px 30px;
         text-align: left;
+        background: transparent;
         border: 0;
         border-left: 10px solid var(--color-line-strong);
-        border-bottom: 2px solid var(--color-line);
+        border-radius: 0;
+        box-shadow: none;
         cursor: pointer;
-        transition: background-color 160ms ease, border-color 160ms ease;
+        transition: background-color 160ms ease;
     }
 
-    .lesson-activity:first-of-type {
-        border-top: 2px solid var(--color-line);
+    /* Banding houdt de lijst scanbaar; hover volgt de typekleur zodat de
+       interactie past bij de gekleurde ankerbalk. */
+    .lesson-activity:nth-of-type(even) {
+        background: var(--color-panel-muted);
     }
 
-    .lesson-activity:hover {
+    .lesson-activity:not(.card-locked).card-digital:hover,
+    .lesson-activity:not(.card-locked).card-check:hover {
+        background: var(--color-digital-soft);
+    }
+
+    .lesson-activity:not(.card-locked).card-class:hover {
+        background: var(--color-presentation-soft);
+    }
+
+    .lesson-activity:not(.card-locked).card-paper:hover {
+        background: var(--color-workbook-soft);
+    }
+
+    .lesson-activity.card-locked:hover {
         background: var(--color-panel-muted);
     }
 
@@ -537,34 +703,78 @@
         border-left-color: var(--color-workbook);
     }
 
+    /* De activiteit opent de tekstwrapper naar rastercellen. Branch-rijen
+       gebruiken dezelfde label-/titel-/actiekolommen zonder beschrijving. */
+    .lesson-activity > .lesson-activity-copy {
+        display: contents;
+    }
+
+    .lesson-activity .activity-meta {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: end;
+        margin-bottom: 2px;
+    }
+
+    .lesson-activity strong {
+        grid-column: 1;
+        grid-row: 2;
+        color: var(--color-ink);
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
+    }
+
+    .lesson-activity .activity-description {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        margin-top: 6px;
+    }
+
+    /* Deze klasse wordt ook door BranchActivityButton gebruikt. */
     .lesson-activity-copy {
         display: flex;
         min-width: 0;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
     }
 
     .lesson-activity-copy strong {
         color: var(--color-ink);
-        font-size: 1rem;
-        font-weight: 600;
-        line-height: 1.35;
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
     }
 
+    /* Het typelabel draagt de betekenis van de kleur, dus het kleurt mee. */
     .activity-meta {
-        color: var(--color-ink);
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.8125rem;
         font-weight: 600;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
+        line-height: 1.4;
         text-transform: uppercase;
     }
 
+    .card-paper .activity-meta { color: var(--color-workbook); }
+    .card-digital .activity-meta,
+    .card-check .activity-meta { color: var(--color-digital); }
+    .card-class .activity-meta { color: var(--color-presentation); }
+
     .activity-description {
-        max-width: 560px;
-        color: var(--color-ink);
-        font-size: 1rem;
-        line-height: 1.5;
+        max-width: 46ch;
+        color: var(--color-ink-soft);
+        font-size: 1.0625rem;
+        line-height: 1.55;
+    }
+
+    /* De actie staat rechts, op dezelfde hoogte als de titel. */
+    .lesson-activity .lesson-activity-action {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: center;
     }
 
     .lesson-activity-action {
@@ -575,6 +785,7 @@
         color: var(--color-ink);
         font-size: 0.9375rem;
         font-weight: 700;
+        white-space: nowrap;
     }
 
     .card-paper .lesson-activity-action { color: var(--color-workbook); }
@@ -582,59 +793,135 @@
     .card-check .lesson-activity-action { color: var(--color-digital); }
     .card-class .lesson-activity-action { color: var(--color-presentation); }
 
-    .lesson-activity.card-done .lesson-activity-action,
     .lesson-activity.card-locked .lesson-activity-action {
         color: var(--color-ink);
     }
 
+    .timeline-time:focus-visible {
+        outline: 3px solid var(--color-action);
+        outline-offset: 3px;
+    }
+
+    /* De rijen lopen van rand tot rand. Een buitenring zou door het paneel
+       worden afgeknipt; gebruik daarom een zichtbare binnenring en vervang
+       de globale focus-schaduw. */
+    .lesson-activity:focus-visible,
+    .extra-branch-toggle:focus-visible,
+    .branch-activity:focus-visible {
+        z-index: 1;
+        outline: 3px solid var(--color-action);
+        outline-offset: -3px;
+        box-shadow: none;
+    }
+
+    /* Extra materiaal gebruikt dezelfde rijopbouw als activiteiten, maar met
+       een neutrale balk en een uitklapindicator in de actiekolom. */
     .extra-branch {
-        margin-top: 24px;
-        padding-top: 16px;
-        border-top: 2px solid var(--color-line);
+        margin-top: 0;
     }
 
     .extra-branch-toggle {
-        display: inline-flex;
+        display: grid;
+        width: 100%;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
-        gap: 8px;
-        padding: 0;
+        column-gap: 20px;
+        row-gap: 4px;
+        padding: 18px 24px 18px 30px;
         color: var(--color-ink);
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.6875rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        text-align: left;
+        background: transparent;
+        border: 0;
+        border-left: 10px solid var(--color-line-strong);
+        border-radius: 0;
         cursor: pointer;
-        transition: color 160ms ease;
+        transition: background-color 160ms ease;
+    }
+
+    .extra-branch-toggle .activity-meta {
+        grid-column: 1;
+        grid-row: 1;
+        color: var(--color-ink-soft);
+    }
+
+    .extra-branch-toggle strong {
+        grid-column: 1;
+        grid-row: 2;
+        color: var(--color-ink);
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
+    }
+
+    .extra-branch-indicator {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: center;
+        color: var(--color-ink-soft);
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 1;
     }
 
     .extra-branch-toggle:hover,
     .extra-branch-toggle.open {
-        color: var(--color-action);
+        background: var(--color-panel-muted);
     }
 
     .extra-branch-content {
-        margin-top: 16px;
-        padding-left: 16px;
-        border-left: 2px solid var(--color-line);
+        display: flex;
+        flex-direction: column;
+        margin-top: 0;
     }
 
     .branch-activity {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: grid;
         width: 100%;
-        gap: 16px;
-        padding: 12px 0;
-        color: var(--color-ink-soft);
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 20px;
+        row-gap: 4px;
+        padding: 18px 24px 18px 30px;
+        color: var(--color-ink);
         text-align: left;
+        background: transparent;
         border: 0;
-        border-bottom: 2px solid var(--color-line);
+        border-left: 10px solid var(--color-line-strong);
+        border-radius: 0;
         cursor: pointer;
+        transition: background-color 160ms ease;
     }
 
-    .branch-activity:last-child { border-bottom: 0; }
-    .branch-activity:hover { color: var(--color-action); }
+    .branch-activity .lesson-activity-copy {
+        display: contents;
+    }
+
+    .branch-activity .activity-meta {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .branch-activity strong {
+        grid-column: 1;
+        grid-row: 2;
+        color: var(--color-ink);
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
+    }
+
+    .branch-activity .lesson-activity-action {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: center;
+    }
+
+    .branch-activity:hover {
+        color: var(--color-ink);
+        background: var(--color-panel-muted);
+    }
 
     /* --- TYPOGRAPHY & PRESENTATIONS --- */
     .prose h3 {
@@ -1457,7 +1744,184 @@
     will-change: transform;
 }
 
+@media (max-width: 960px) {
+    .lesson-intro h1 {
+        font-size: clamp(2.25rem, 5vw, 3rem);
+    }
+
+    .lesson-description {
+        max-width: 60ch;
+    }
+
+    .lesson-board {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    .lesson-board > .timeline-line:last-child:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+
+    .lesson-activity {
+        padding: 18px 20px 18px 26px;
+    }
+
+    .extra-branch-toggle,
+    .branch-activity {
+        padding-right: 20px;
+        padding-left: 26px;
+    }
+}
+
 @media (max-width: 640px) {
+    .lesson-intro {
+        margin-bottom: 32px;
+    }
+
+    .lesson-intro h1 {
+        max-width: 18ch;
+        font-size: clamp(2rem, 9vw, 2.75rem);
+    }
+
+    .lesson-description {
+        max-width: 100%;
+        margin-top: 16px;
+        font-size: 1.0625rem;
+    }
+
+    .lesson-board {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .lesson-board > .timeline-line:last-child:nth-child(3) {
+        grid-column: auto;
+    }
+
+    .timeline-heading {
+        padding: 14px 14px 14px 16px;
+    }
+
+    .timeline-phase {
+        gap: 10px;
+    }
+
+    .timeline-letter {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .lesson-nav-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .timeline-phase-title {
+        font-size: 1.25rem;
+    }
+
+    .timeline-time {
+        min-height: 34px;
+        padding: 0 10px;
+        font-size: 0.75rem;
+    }
+
+    .timeline-content {
+        padding: 0;
+    }
+
+    .lesson-activity {
+        padding: 16px 16px 16px 20px;
+    }
+
+    .extra-branch-toggle,
+    .branch-activity {
+        padding: 16px 16px 16px 20px;
+    }
+
+    .branch-activity .lesson-activity-action {
+        grid-column: 1;
+        grid-row: 3;
+        align-self: start;
+        margin-top: 4px;
+    }
+
+    .extra-branch-indicator {
+        font-size: 1.375rem;
+    }
+
+    .lesson-activity-copy strong {
+        font-size: 1.0625rem;
+    }
+
+    .activity-description {
+        font-size: 1rem;
+    }
+
+    /* De actie zakt onder de titel: op een smal scherm past het label niet
+       meer naast de kop zonder de titel te verdringen. */
+    .lesson-activity .lesson-activity-action {
+        grid-column: 1;
+        grid-row: 4;
+        align-self: start;
+        margin-top: 4px;
+        font-size: 0.9375rem;
+    }
+
+    /* De lichte leskop moet op een telefoon passen: vak, klas en klok delen
+       de breedte en de naam krimpt mee in plaats van buiten het scherm. */
+    .lesson-nav-inner {
+        width: min(100% - 24px, 1280px);
+        gap: 8px;
+    }
+
+    .lesson-nav-back {
+        min-width: 0;
+        gap: 8px;
+    }
+
+    .lesson-nav-mark {
+        width: 30px;
+        height: 30px;
+    }
+
+    .lesson-nav-icon {
+        width: 17px;
+        height: 17px;
+    }
+
+    .lesson-nav-subject {
+        font-size: 1.0625rem;
+    }
+
+    .lesson-nav-class {
+        max-width: 5ch;
+        overflow: hidden;
+        padding-left: 8px;
+        font-size: 0.6875rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .lesson-timer-inner {
+        gap: 6px;
+    }
+
+    .lesson-timer-display {
+        padding: 6px 7px;
+        font-size: 0.875rem;
+    }
+
+    .lesson-timer-divider {
+        height: 24px;
+    }
+
+    .lesson-timer-control {
+        width: 26px;
+        height: 28px;
+    }
+
     .selection-page,
     .content-page {
         width: min(100% - 32px, 960px);

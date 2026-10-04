@@ -1,33 +1,24 @@
 <script setup>
-import { computed } from 'vue'
-import { PhCheck, PhClock } from '@phosphor-icons/vue'
+import { PhClock } from '@phosphor-icons/vue'
 
-const props = defineProps({
+defineProps({
   step: String,
   title: String,
-  subtitle: String,
-  time: String,
-  isLast: Boolean,
-  status: {
-    type: String,
-    default: 'pending'
-  }
+  time: String
 })
 
 defineEmits(['start-timer'])
-const isDone = computed(() => props.status === 'done')
-const isActive = computed(() => props.status === 'active' || isDone.value)
 </script>
 
 <template>
-  <section :class="['timeline-line', { active: isActive, 'pb-12': !isLast, 'pb-0': isLast }]">
-    <div :class="['timeline-icon absolute -left-[23px] top-0', { active: isActive }]" aria-hidden="true">
-      <PhCheck v-if="isDone" weight="bold" />
-      <span v-else>{{ step }}</span>
-    </div>
-
-    <div class="timeline-heading">
-      <h2>{{ title }}</h2>
+  <section class="timeline-line">
+    <header class="timeline-heading">
+      <div class="timeline-phase">
+        <span class="timeline-letter" aria-hidden="true">{{ step }}</span>
+        <h2 class="timeline-phase-title">
+          <span>{{ title }}</span>
+          </h2>
+      </div>
       <button
         v-if="time"
         type="button"
@@ -38,8 +29,10 @@ const isActive = computed(() => props.status === 'active' || isDone.value)
         <PhClock aria-hidden="true" />
         {{ time }}
       </button>
-    </div>
+    </header>
 
-    <slot></slot>
+    <div class="timeline-content">
+      <slot></slot>
+    </div>
   </section>
 </template>

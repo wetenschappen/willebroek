@@ -167,21 +167,6 @@ function handleCardAction(card) {
     else if (card.action === 'custom') progress.markAsDone(card.id)
 }
 
-function isStepDone(step) {
-    if (!step.cards) return false
-    return step.cards.every(card => progress.isDone(card.id))
-}
-
-function getStepStatus(step, index) {
-    if (isStepDone(step)) return 'done'
-    if (index === 0) return 'active'
-
-    const prevStep = lesson.timeline.value[index - 1]
-    if (prevStep && isStepDone(prevStep)) return 'active'
-
-    return 'pending'
-}
-
 function getBranchLabel(step) {
     if (step.isDefaultRoute) return 'Extra Ondersteuning'
     if (step.isAdvancedRoute) return 'Extra Uitdaging'
@@ -237,9 +222,12 @@ const isTimelineComplete = computed(() => {
     <!-- BACKGROUND REMOVED (Handled in App.vue) -->
 
     <!-- LESSON HEADER -->
-    <nav class="lesson-nav">
+    <nav class="lesson-nav" :class="`lesson-nav--${subject.id}`">
         <div class="lesson-nav-inner">
             <button type="button" class="lesson-nav-back" @click="router.push('/')">
+                <span class="lesson-nav-mark">
+                    <component :is="subject.icon" class="lesson-nav-icon" weight="fill" aria-hidden="true" />
+                </span>
                 <span class="lesson-nav-subject">{{ subject.label }}</span>
                 <span class="lesson-nav-class">{{ lesson.config.classId }}</span>
             </button>
@@ -250,18 +238,15 @@ const isTimelineComplete = computed(() => {
   <main class="lesson-main">
       <LessonHeader :badge="lessonData.date || lesson.config.date" :title="lesson.config.title" :description="lesson.config.description" />
 
-      <!-- DYNAMIC TIMELINE LOOP -->
-      <template v-for="(step, index) in lesson.timeline.value" :key="step.id">
-
-        <!-- STANDARD TIMELINE STEP -->
-        <TimelineItem
-            :step="step.step"
-            :title="step.title"
-            :time="step.time"
-            :status="getStepStatus(step, index)"
-            :isLast="index === lesson.timeline.value.length - 1"
-            @start-timer="handleStartTimer"
-        >
+      <!-- ABC LESWERKBORD: drie fasen naast elkaar -->
+      <div class="lesson-board">
+        <template v-for="(step, index) in lesson.timeline.value" :key="step.id">
+          <TimelineItem
+              :step="step.step"
+              :title="step.title"
+              :time="step.time"
+              @start-timer="handleStartTimer"
+          >
             <!-- ACTIVITY CARDS -->
             <ActivityCard
                 v-for="card in step.cards"
@@ -270,7 +255,6 @@ const isTimelineComplete = computed(() => {
                 :meta="getCardMeta(card)"
                 :title="card.title"
                 :description="card.description"
-                :isDone="progress.isDone(card.id)"
                 @click="handleCardAction(card)"
             >
                 <template #action>{{ getActionText(card) }}</template>
@@ -291,7 +275,6 @@ const isTimelineComplete = computed(() => {
                             :title="act.title"
                             :category="act.category"
                             :icon="iconMap[act.icon]"
-                            :isDone="progress.isDone('card-' + act.id.toLowerCase())"
                             @click="activitySystem.handleOpenActivity(act.id.toLowerCase())"
                         />
                     </template>
@@ -300,9 +283,9 @@ const isTimelineComplete = computed(() => {
                     </p>
                 </div>
             </ExtraChallengeBranch>
-        </TimelineItem>
-
-      </template>
+          </TimelineItem>
+        </template>
+      </div>
 
   </main>
 

@@ -9,6 +9,7 @@ const CircuitsActivity = defineAsyncComponent(() => import('../../s-activities/C
 const IdealGasLawActivity = defineAsyncComponent(() => import('../../s-activities/IdealGasLawActivity.vue'))
 const PressureLabActivity = defineAsyncComponent(() => import('../../s-activities/PressureLabActivity.vue'))
 const OpticsLabActivity = defineAsyncComponent(() => import('../../s-activities/OpticsLabActivity.vue'))
+const PhagocytosisLabActivity = defineAsyncComponent(() => import('../../s-activities/PhagocytosisLabActivity.vue'))
 
 const COMPONENT_MAP = {
   dragDrop: DragDropActivity,
@@ -18,7 +19,8 @@ const COMPONENT_MAP = {
   circuits: CircuitsActivity,
   idealGasLaw: IdealGasLawActivity,
   pressureLab: PressureLabActivity,
-  opticsLab: OpticsLabActivity
+  opticsLab: OpticsLabActivity,
+  phagocytosisLab: PhagocytosisLabActivity
 }
 
 export function useActivitySystem(lessonData, markAsDoneCallback) {

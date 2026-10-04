@@ -1,6 +1,4 @@
 <script setup>
-import { PhPlus, PhMinus } from '@phosphor-icons/vue'
-
 const props = defineProps({
   isOpen: Boolean,
   label: { type: String, default: 'Extra materiaal' }
@@ -19,9 +17,9 @@ function toggle() { emit('update:isOpen', !props.isOpen) }
       :aria-expanded="isOpen"
       @click="toggle"
     >
-      <PhMinus v-if="isOpen" weight="bold" aria-hidden="true" />
-      <PhPlus v-else weight="bold" aria-hidden="true" />
-      {{ label }}
+      <span class="activity-meta">EXTRA</span>
+      <strong>{{ label }}</strong>
+      <span class="extra-branch-indicator" aria-hidden="true">{{ isOpen ? '−' : '+' }}</span>
     </button>
 
     <div v-if="isOpen" class="extra-branch-content">

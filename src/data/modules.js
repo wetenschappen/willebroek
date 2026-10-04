@@ -21,6 +21,19 @@ export const modules = [
     topic: 'Druk',
     title: 'Hydrostatische druk: druk bij vloeistoffen',
     date: '24/09/2026'
+  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // BIOLOGIE
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'bio6-m03-l01-lymfe-aangeboren',
+    subject: 'biology',
+    year: 6,
+    module: 3,
+    topic: 'Immuniteit',
+    title: 'Lymfe en Aangeboren Afweer',
+    date: '05/10/2026'
   }
   // LOREM IPSUM
 

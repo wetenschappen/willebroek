@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { PhCheck, PhCaretRight } from '@phosphor-icons/vue'
+import { PhCaretRight } from '@phosphor-icons/vue'
 
 const props = defineProps({
   type: { type: String, default: 'digital' },
@@ -8,7 +8,6 @@ const props = defineProps({
   title: String,
   description: String,
   time: String,
-  isDone: Boolean,
   locked: Boolean
 })
 
@@ -40,7 +39,7 @@ const actionText = computed(() => ({
   <button
     type="button"
     @click="!locked && $emit('click')"
-    :class="['lesson-activity', typeClasses, { 'card-interactive': !locked, 'card-locked': locked, 'card-done': isDone }]"
+    :class="['lesson-activity', typeClasses, { 'card-interactive': !locked, 'card-locked': locked }]"
     :disabled="locked"
   >
     <span class="lesson-activity-copy">
@@ -49,9 +48,8 @@ const actionText = computed(() => ({
       <span v-if="description" class="activity-description" v-html="description"></span>
     </span>
     <span class="lesson-activity-action">
-      <PhCheck v-if="isDone" weight="bold" aria-hidden="true" />
-      <span v-else>{{ actionText }}</span>
-      <PhCaretRight v-if="!isDone" weight="regular" aria-hidden="true" />
+      <span>{{ actionText }}</span>
+      <PhCaretRight weight="regular" aria-hidden="true" />
     </span>
   </button>
 </template>

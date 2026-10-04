@@ -1,11 +1,10 @@
 <script setup>
-import { PhCaretRight, PhCheck } from '@phosphor-icons/vue'
+import { PhCaretRight } from '@phosphor-icons/vue'
 
 defineProps({
   title: String,
   category: String,
-  icon: Object,
-  isDone: Boolean
+  icon: Object
 })
 
 defineEmits(['click'])
@@ -18,8 +17,7 @@ defineEmits(['click'])
       <strong>{{ title }}</strong>
     </span>
     <span class="lesson-activity-action">
-      <PhCheck v-if="isDone" weight="bold" aria-hidden="true" />
-      <PhCaretRight v-else weight="regular" aria-hidden="true" />
+      <PhCaretRight weight="regular" aria-hidden="true" />
     </span>
   </button>
 </template>

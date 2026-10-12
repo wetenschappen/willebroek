@@ -70,7 +70,7 @@ function goBack() {
     <div v-else class="module-index" :class="`module-index-${subject?.id}`">
       <section v-for="group in groupedModules" :key="group.moduleNum" class="module-section">
         <header class="module-heading">
-          <span class="module-number">M{{ group.moduleNum }}</span>
+          <span class="module-number">T{{ group.moduleNum }}</span>
           <h2>{{ group.topic }}</h2>
           <span class="section-meta">{{ group.lessons.length }} {{ group.lessons.length === 1 ? 'les' : 'lessen' }}</span>
         </header>

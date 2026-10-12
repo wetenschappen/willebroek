@@ -195,7 +195,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        padding: 18px 20px 16px;
+        padding: 16px 20px;
         border-bottom: 2px solid var(--color-line-strong);
     }
 
@@ -203,7 +203,7 @@
         display: flex;
         min-width: 0;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
     }
 
     /* Een klein donker element is toegestaan (§14); de marker hoort bij de
@@ -231,35 +231,39 @@
         gap: 10px;
         margin: 0;
         color: var(--color-ink);
-        font-size: 1.4375rem;
+        font-size: 1.3125rem;
         font-weight: 700;
         letter-spacing: -0.025em;
-        line-height: 1.15;
+        line-height: 34px;
     }
 
-    /* De tijd is een echte control, geen badge: rustvlak, rand en radius uit
-       het systeem, met hover naar het paneelvlak. */
+    /* De tijd is een rustige tekstinfo in dezelfde mono-stem als de
+       type-labels van de rijen eronder. De klikbare chip verschijnt alleen
+       bij hover of focus, zodat de band één stuk blijft in rusttoestand. */
     .timeline-time {
         display: inline-flex;
         flex-shrink: 0;
         align-items: center;
         gap: 8px;
-        min-height: 38px;
-        padding: 0 12px;
-        color: var(--color-ink);
-        background: var(--color-panel-muted);
-        border: 1px solid var(--color-line);
+        min-height: 34px;
+        padding: 0 10px;
+        margin-right: -10px;
+        color: var(--color-ink-soft);
+        background: transparent;
+        border: 1px solid transparent;
         border-radius: var(--radius-control);
         font-family: 'IBM Plex Mono', monospace;
         font-size: 0.8125rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background-color 160ms ease, border-color 160ms ease;
+        transition: background-color 160ms ease, border-color 160ms ease,
+            color 160ms ease;
     }
 
     .timeline-time:hover {
-        background: var(--color-panel);
-        border-color: var(--color-line-strong);
+        color: var(--color-ink);
+        background: var(--color-panel-muted);
+        border-color: var(--color-line);
     }
 
     .timeline-time svg {
@@ -1698,6 +1702,11 @@
         font-size: 0.75rem;
     }
 
+    /* De lessenrijen lopen aaneengesloten, net als de activiteitenrijen op
+       het ABC-lesbord: de banding (om en om rustvlak) draagt het ritme en
+       de 2px sterke scheiding onder de themaband is de enige scheiding.
+       Er is geen ankerbalk en geen tussenruimte; de vakkleur hoort bij het
+       thema-chip en de hover. */
     .lesson-list {
         display: flex;
         flex-direction: column;
@@ -1728,10 +1737,10 @@
         column-gap: 20px;
         row-gap: 4px;
         min-height: 88px;
-        padding: 18px 24px 18px 30px;
+        padding: 18px 24px;
         background: transparent;
         border: 0;
-        border-left: 10px solid var(--lesson-accent, var(--color-ink));
+        border-left: 0; /* de basis-.lesson-row heeft een 10px donkere balk; hier geldt alleen banding */
         border-radius: 0;
         text-align: left;
         transition: background-color 160ms ease;
@@ -2029,7 +2038,7 @@
 
     .lesson-list .lesson-row {
         padding-right: 20px;
-        padding-left: 26px;
+        padding-left: 20px;
     }
 
     .extra-branch-toggle,
@@ -2085,11 +2094,10 @@
 
     .timeline-phase-title {
         font-size: 1.25rem;
+        line-height: 30px;
     }
 
     .timeline-time {
-        min-height: 34px;
-        padding: 0 10px;
         font-size: 0.75rem;
     }
 
@@ -2227,7 +2235,7 @@
     .index-row,
     .lesson-list .lesson-row {
         min-height: 80px;
-        padding: 16px 16px 16px 20px;
+        padding: 16px 20px;
     }
 
     .module-heading {

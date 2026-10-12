@@ -42,6 +42,19 @@ export const studentLists = {
         'Amy',
         'Esmée',
         'Zoë'
+    ],
+    '3NAWE+3SPOWE': [
+        'Lina', 'Nisrine', 'Salih', 'Gabriel-Denis', 'Lenn', 'Samouka'
+    ],
+    '4NAWE+4SPOWE': [
+        'Amira', 'Ikram', 'Serhat', 'Tugche', 'Sandybel', 'Bas',
+        'Yara', 'Ayoub', 'Nada', 'Elhama', 'Raghd', 'Lina',
+        'Safiyya', 'Salma', 'Niloufar', 'Wosqa', 'Ajna', 'Hava',
+        'Nesrin', 'Riad', 'Amal'
+    ],
+    '6MOWE+6SPOWE': [
+        'Malak', 'Benedicte', 'Louisa', 'Mohammed', 'Dounia',
+        'Sude', 'Reda', 'Mouna'
     ]
 }
 

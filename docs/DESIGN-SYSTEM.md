@@ -403,12 +403,16 @@ weigert nooit een leeg scherm oplevert.
 
 ### Module- en lessenoverzicht
 
-De modulekeuzepagina gebruikt dezelfde taal als het ABC-lesbord: elke module is
-één paneel met afgeronde bovenhoeken, vierkante onderhoeken en aaneengesloten,
-vierkante lessenrijen. De rij-indeling is type-label boven de titel links, met
-chevron rechts; even rijen gebruiken `--color-panel-muted`, terwijl hover een
+De modulekeuzepagina gebruikt dezelfde taal als het ABC-lesbord: elke thema is
+één paneel met afgeronde bovenhoeken, vierkante onderhoeken en vierkante
+lessenrijen. De rij-indeling is type-label boven de titel links, met chevron
+rechts; even rijen gebruiken `--color-panel-muted`, terwijl hover een
 vakgerichte zachte tint gebruikt. Fysica gebruikt `--color-physics(-soft)` en
 biologie `--color-biology(-soft)`. Focus blijft zichtbaar met een binnenring.
+Lessenrijen lopen aaneengesloten, zoals de activiteitenrijen op het
+ABC-lesbord: de banding draagt het ritme, er is geen ankerbalk en geen
+ tussenruimte. Het themachip draagt de vakkleur en toont `T` plus themanummer
+(WACO werkt met thema's, niet met modules).
 
 ### Activiteit in de ABC-tijdlijn
 
@@ -430,7 +434,7 @@ geen leeg vlak onderaan krijgt.
 | `.timeline-heading` | faseband: marker, titel en tijd, met `2px` scheiding eronder |
 | `.timeline-letter` | donkere vierkante ABC-marker op `--radius-control` |
 | `.timeline-phase-title` | fasenaam in `--color-ink`; voltooiing krijgt geen vinkje in het faseoverzicht |
-| `.timeline-time` | timercontrole op `--color-panel-muted` met rand en `--radius-control` |
+| `.timeline-time` | timercontrole: mono-tekst in rusttoestand, chip bij hover/focus |
 | `.lesson-nav` | lichte, sticky lesnavigatie met vakaccent; timerdisplay en knoppen delen dezelfde tokens |
 | `.lesson-activity` | vierkante, rand-tot-rand rij met 10px type-ankerbalk; elke tweede rij krijgt `--color-panel-muted`, hover het zachte vlak van het activiteitstype |
 | `.lesson-activity-copy`, `.activity-meta`, `.activity-description` | tekstblok; `strong` is `--color-ink` |

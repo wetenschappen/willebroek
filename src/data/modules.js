@@ -12,7 +12,8 @@ export const modules = [
   // ══════════════════════════════════════════════════════════════════════════
 
   // ── 4de jaar (WACO 4 - Thema 1: Druk) ────────────────────────────────────────
-  // Les 1 volgt de gouden ABC-structuur; les 2-10 staan in archivedModules.
+  // Les 1 volgt de gouden ABC-structuur; les 2 is een plaatsvervanger om de
+  // moduleweergave met meerdere lessen te bekijken.
   {
     id: 'fys4-m01-druk-vaste-stoffen',
     subject: 'physics',
@@ -21,6 +22,15 @@ export const modules = [
     topic: 'Druk',
     title: 'Hydrostatische druk: druk bij vloeistoffen',
     date: '24/09/2026'
+  },
+  {
+    id: 'fys4-m01-l02-voorbeeld',
+    subject: 'physics',
+    year: 4,
+    module: 1,
+    topic: 'Druk',
+    title: 'Communicerende vaten',
+    date: '01/10/2026'
   },
 
   // ══════════════════════════════════════════════════════════════════════════

@@ -6,7 +6,7 @@ import {
     PhArrowsDownUp, PhThumbsUp, PhListBullets, PhDiamondsFour, PhTrophy, PhTarget,
     PhAtom, PhWrench, PhFilePdf, PhUsers, PhLightbulb, PhScales, PhChartLine, PhMathOperations, PhQuestion
 } from '@phosphor-icons/vue'
-import { namesForClass } from '../data/students.js'
+import { namesForClass, classLabel } from '../data/students.js'
 import { subjectById } from '../data/subjects.js'
 
 // --- COMPOSABLES ---
@@ -229,7 +229,7 @@ const isTimelineComplete = computed(() => {
                     <component :is="subject.icon" class="lesson-nav-icon" weight="fill" aria-hidden="true" />
                 </span>
                 <span class="lesson-nav-subject">{{ subject.label }}</span>
-                <span class="lesson-nav-class">{{ lesson.config.classId }}</span>
+                <span class="lesson-nav-class">{{ classLabel(lesson.config.classId) }}</span>
             </button>
             <TimerWidget :isOpen="showTimer" :start-duration="timerStartDuration" @close="showTimer = false" />
         </div>

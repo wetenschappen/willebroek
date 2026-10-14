@@ -158,6 +158,7 @@ Activiteiten worden geregistreerd in
 | `springForceLab` | `SpringForceLabActivity.vue` | Fysica | Card activity |
 | `circuits` | `CircuitsActivity.vue` | Fysica | Card activity |
 | `idealGasLaw` | `IdealGasLawActivity.vue` | Fysica | Card activity |
+| `cellDivisionLab` | `CellDivisionLabActivity.vue` | Biologie | Card activity (3 sims: celcyclus, mitose, meiose) |
 
 Vakspecifieke activiteiten horen op de digitale `card-activity` in stap B.
 Generieke activiteiten horen in `extraActivities`, niet op de hoofdkaart.

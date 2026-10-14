@@ -96,8 +96,8 @@ export function classesForSubject(subjectId) {
 /** Toon de klascode zoals die op school gebruikt wordt. */
 export function classLabel(classId) {
     if (!classId) return classId
-    // Verenigde klassen tonen als één groep: '4NAWE+4SPOWE' → '4NAWE + 4SPOWE'.
-    if (classId.includes('+')) return classId.split('+').join(' + ')
+    // Verenigde klassen tonen als één groep: '4NAWE+4SPOWE' → '4NAWE • 4SPOWE'.
+    if (classId.includes('+')) return classId.split('+').join(' • ')
     if (classId === '6D-A') return '6D/A'
     return classId
 }

@@ -44,6 +44,15 @@ export const modules = [
     topic: 'Immuniteit',
     title: 'Lymfe en Aangeboren Afweer',
     date: '05/10/2026'
+  },
+  {
+    id: 'bio6-m04-l01-celdeling',
+    subject: 'biology',
+    year: 6,
+    module: 4,
+    topic: 'Celdeling',
+    title: 'Celcyclus, mitose en meiose',
+    date: '12/10/2026'
   }
   // LOREM IPSUM
 

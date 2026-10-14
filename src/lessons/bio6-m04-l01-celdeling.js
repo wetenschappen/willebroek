@@ -156,13 +156,13 @@ export default {
             { icon: 'function', text: '<strong>G₁:</strong> celgroei en aanmaak van celbestanddelen; de cel beslist of ze verder deelt of naar G₀ gaat.' },
             { icon: 'book-open', text: '<strong>S:</strong> DNA-replicatie. Het chromosomenaantal blijft gelijk; elk chromosoom krijgt twee zusterchromatiden.' },
             { icon: 'check', text: '<strong>G₂:</strong> controle en herstel van DNA; voorbereiding op deling. Te grote schade kan apoptose veroorzaken.' },
-            { icon: 'users', text: '<strong>M-fase:</strong> mitose of meiose, gevolgd door cytokinese.' }
+            { icon: 'users', text: '<strong>Celdeling:</strong> mitose (PMAT) of meiose, met cytokinese voor de deling van het cytoplasma. De celcyclus-simulatie volgt een lichaamscel die mitose ondergaat.' }
         ]},
         { layout: 'steps', title: 'Mitose: wat gebeurt er?', steps: [
             { icon: 'brain', text: '<strong>Profase:</strong> chromosomen condenseren; de spoelfiguur wordt opgebouwd.' },
             { icon: 'check', text: '<strong>Metafase:</strong> chromosomen liggen afzonderlijk op het evenaarsvlak.' },
             { icon: 'users', text: '<strong>Anafase:</strong> zusterchromatiden scheiden en gaan naar tegenovergestelde polen.' },
-            { icon: 'function', text: '<strong>Telofase en cytokinese:</strong> twee kernen en daarna twee identieke dochtercellen.' }
+            { icon: 'function', text: '<strong>Telofase:</strong> twee nieuwe kernen. Cytokinese deelt het cytoplasma en kan al tijdens de mitose beginnen; ze is geen vijfde mitosefase.' }
         ]},
         { layout: 'steps', title: 'Meiose I: homologe chromosomen', steps: [
             { icon: 'users', text: '<strong>Profase I:</strong> homologe chromosomen vormen tetrades; crossing-over wisselt DNA-segmenten uit tussen niet-zusterchromatiden.' },

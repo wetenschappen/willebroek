@@ -3,6 +3,8 @@ import { computed, ref } from 'vue'
 import { PhArrowLeft, PhArrowRight, PhCheckCircle, PhWarningCircle } from '@phosphor-icons/vue'
 import CentriolePair from './CentriolePair.vue'
 import ChromosomeGlyph from './ChromosomeGlyph.vue'
+import CellCycleRing from './CellCycleRing.vue'
+import { metaphaseRotation } from './spindleGeometry.js'
 
 const emit = defineEmits(['complete'])
 
@@ -17,7 +19,7 @@ const phases = [
   { key: 's', label: 'S-fase', title: 'DNA-replicatie', description: 'In de S-fase wordt het DNA gekopieerd. Het aantal chromosomen blijft 2n, maar elk chromosoom bestaat na replicatie uit twee zusterchromatiden.' },
   { key: 'g2', label: 'G₂-fase', title: 'Laatste voorbereiding', description: 'De cel controleert en herstelt het DNA. Ze maakt onder meer histonen en membraanmateriaal aan; het centriolenpaar is verdubbeld.' },
   { key: 'g2-check', label: 'Controlepunt', title: 'Is het DNA veilig om te verdelen?', description: 'Bij beperkte schade proberen herstelproteïnen het DNA te herstellen. Bij onherstelbare schade kan apoptose voorkomen dat een beschadigde cel zich verder deelt.' },
-  { key: 'm', label: 'M-fase', title: 'Mitose en cytokinese', description: 'De cel verdeelt de gekopieerde chromosomen en splitst daarna haar cytoplasma. De details van de mitose zie je in de tweede simulatie.' },
+  { key: 'm', label: 'Celdeling', title: 'Mitose: profase, metafase, anafase en telofase', description: 'Na de interfase volgt de celdeling. Bij mitose wordt het erfelijk materiaal verdeeld in vier fasen: profase, metafase, anafase en telofase (PMAT). Cytokinese deelt het cytoplasma en kan al tijdens de mitose beginnen. De tweede simulatie toont PMAT in detail.' },
   { key: 'result', label: 'Resultaat', title: 'Twee dochtercellen', description: 'Na de cytokinese zijn er twee genetisch identieke diploïde dochtercellen. Beide kunnen opnieuw groeien en eventueel een celcyclus doorlopen.' },
   { key: 'g0', label: 'G₀-fase', title: 'De celcyclus verlaten', description: 'In G₀ voert de cel haar gespecialiseerde functie uit en deelt ze niet. Zenuwcellen blijven meestal definitief in G₀; sommige witte bloedcellen kunnen later terugkeren.' },
   { key: 'repair', label: 'DNA-controle', title: 'Herstelpoging', description: 'Herstelproteïnen proberen de DNA-schade te herstellen. Als dat lukt, kan de cel de celdeling hervatten; als dat niet lukt, volgt normaal apoptose.' },
@@ -70,61 +72,41 @@ function markComplete() {
   emit('complete')
 }
 
-const phaseCircle = (key) => {
-  if (key === 'g1') return [400, 62]
-  if (key === 's') return [567, 225]
-  if (key === 'g2') return [400, 388]
-  return [233, 225]
-}
-
-function isActiveRing(key) {
-  if (step.value === 7) return false
-  const activeKey = phases[step.value]?.key
-  if (key === 'g1') return activeKey === 'g1' || activeKey === 'g1-check'
-  if (key === 's') return activeKey === 's'
-  if (key === 'g2') return activeKey === 'g2' || activeKey === 'g2-check' || activeKey === 'repair' || activeKey === 'apoptosis' || activeKey === 'cancer'
-  return activeKey === 'm' || activeKey === 'result' || activeKey === 'spindle-check'
-}
+const ringStage = computed(() => {
+  if ([0, 1, 7].includes(step.value)) return 'g1'
+  if (step.value === 2) return 's'
+  if ([3, 4, 8, 9, 10].includes(step.value)) return 'g2'
+  if (step.value === 11) return 'spindle'
+  return 'division'
+})
+const cyclePart = computed(() => {
+  if (step.value === 7) return 'Buiten de celcyclus: G₀'
+  if (step.value === 9 || step.value === 10) return 'Mogelijke uitkomst bij DNA-schade'
+  if (step.value === 6) return 'Resultaat van de celdeling'
+  return [5, 11].includes(step.value) ? 'Celdeling: mitose en cytokinese' : 'Interfase: G₁, S en G₂'
+})
+const interphaseStages = [
+  { key: 'g1', label: 'G₁-fase' },
+  { key: 's', label: 'S-fase' },
+  { key: 'g2', label: 'G₂-fase' }
+]
+const mitosisStages = [
+  { letter: 'P', label: 'Profase' },
+  { letter: 'M', label: 'Metafase' },
+  { letter: 'A', label: 'Anafase' },
+  { letter: 'T', label: 'Telofase' }
+]
 </script>
 
 <template>
   <div class="fullscreen-body cycle-body">
     <section class="cycle-canvas" aria-label="Interactief schema van de celcyclus">
       <svg viewBox="0 0 800 450" role="img" aria-labelledby="cycle-svg-title cycle-svg-desc">
-        <title id="cycle-svg-title">Celcyclus met de fasen G1, S, G2 en M</title>
-        <desc id="cycle-svg-desc">Een schematische cel toont groei, DNA-replicatie, controle en celdeling. G0 en apoptose zijn mogelijke uitkomsten.</desc>
+        <title id="cycle-svg-title">Celcyclus: interfase en celdeling</title>
+        <desc id="cycle-svg-desc">De interfase omvat G1, S en G2. Daarna volgt de celdeling: mitose met profase, metafase, anafase en telofase, en cytokinese. G0 is een mogelijke afslag uit de cyclus.</desc>
         <rect x="0" y="0" width="800" height="450" rx="14" fill="var(--color-paper)" />
 
-        <text x="400" y="28" text-anchor="middle" class="svg-heading">Interfase: G₁, S en G₂</text>
-        <path d="M 432 58 C 500 62 548 107 562 169" fill="none" stroke="#52636a" stroke-width="5" />
-        <path d="M 565 179 L 556 160 L 576 164 Z" fill="#52636a" />
-        <path d="M 568 270 C 552 336 503 372 430 389" fill="none" stroke="#52636a" stroke-width="5" />
-        <path d="M 420 389 L 440 379 L 440 399 Z" fill="#52636a" />
-        <path d="M 370 389 C 297 373 249 336 232 270" fill="none" stroke="#52636a" stroke-width="5" />
-        <path d="M 231 258 L 222 279 L 242 275 Z" fill="#52636a" />
-        <path d="M 232 179 C 249 110 298 69 369 59" fill="none" stroke="#52636a" stroke-width="5" />
-        <path d="M 380 58 L 360 49 L 360 69 Z" fill="#52636a" />
-
-        <g v-for="phase in [{ key: 'g1', label: 'G₁', sub: 'groei' }, { key: 's', label: 'S', sub: 'DNA-replicatie' }, { key: 'g2', label: 'G₂', sub: 'groei en controle' }, { key: 'm', label: 'M', sub: 'deling' }]" :key="phase.key">
-          <rect
-            :x="phaseCircle(phase.key)[0] - (phase.key === 's' ? 80 : 76)"
-            :y="phaseCircle(phase.key)[1] - 27"
-            :width="phase.key === 's' ? 160 : 152"
-            height="54"
-            rx="12"
-            :fill="isActiveRing(phase.key) ? 'var(--color-digital-soft)' : 'var(--color-panel)'"
-            :stroke="isActiveRing(phase.key) ? 'var(--color-digital)' : 'var(--color-line-strong)'"
-            stroke-width="3"
-          />
-          <text :x="phaseCircle(phase.key)[0]" :y="phaseCircle(phase.key)[1] - 3" text-anchor="middle" class="ring-phase">{{ phase.label }}</text>
-          <text :x="phaseCircle(phase.key)[0]" :y="phaseCircle(phase.key)[1] + 17" text-anchor="middle" class="ring-sub">{{ phase.sub }}</text>
-        </g>
-
-        <path d="M 323 62 H 185" fill="none" stroke="var(--color-line)" stroke-width="3" stroke-dasharray="7 5" />
-        <path d="M 177 62 L 193 55 L 193 69 Z" fill="var(--color-line)" />
-        <rect x="40" y="37" width="136" height="54" rx="8" :fill="isG0 ? 'var(--color-digital-soft)' : 'var(--color-panel)'" :stroke="isG0 ? 'var(--color-digital)' : 'var(--color-line-strong)'" stroke-width="2" />
-        <text x="108" y="60" text-anchor="middle" class="ring-phase">G₀</text>
-        <text x="108" y="79" text-anchor="middle" class="ring-sub">buiten de celcyclus</text>
+        <CellCycleRing :active="ringStage" :outside-cycle="isG0" />
 
         <!-- Cell rendering changes with the selected phase. -->
         <g v-if="!isApoptosis && !isCancer && step !== 6 && step !== 5 && step !== 11" class="cell-visual">
@@ -148,13 +130,14 @@ function isActiveRing(key) {
 
         <g v-else-if="step === 5 || step === 11" aria-label="Mitose met controle van de spoelfiguur">
           <ellipse cx="400" cy="225" rx="78" ry="76" fill="var(--color-digital-soft)" stroke="var(--color-digital)" stroke-width="3" />
-          <g v-for="x in [370, 390, 410, 430]" :key="x">
+          <g v-for="x in [364, 388, 412, 436]" :key="x">
             <path :d="`M 400 163 L ${x} 225 L 400 287`" fill="none" stroke="var(--color-line)" stroke-width="1.5" />
-            <ChromosomeGlyph :x="x" :y="225" :length="27" color="#b4232f" />
+            <ChromosomeGlyph :x="x" :y="225" :length="20" :rotation="metaphaseRotation('vertical')" color="#b4232f" />
           </g>
           <CentriolePair :x="400" :y="163" />
           <CentriolePair :x="400" :y="287" :rotation="180" />
-          <text x="400" y="322" text-anchor="middle" class="cell-label">controle van de spoelfiguur</text>
+          <text x="400" y="310" text-anchor="middle" class="cell-label">{{ step === 11 ? 'controle van' : 'mitose' }}</text>
+          <text v-if="step === 11" x="400" y="328" text-anchor="middle" class="cell-label">de spoelfiguur</text>
         </g>
 
         <g v-else-if="step === 6" aria-label="Twee dochtercellen">
@@ -163,7 +146,8 @@ function isActiveRing(key) {
           <circle cx="354" cy="225" r="17" fill="#ffffff" stroke="#52636a" stroke-width="2" />
           <circle cx="446" cy="225" r="17" fill="#ffffff" stroke="#52636a" stroke-width="2" />
           <path d="M 344 223 C 349 211 355 235 362 219 M 436 223 C 441 211 447 235 454 219" fill="none" stroke="#b4232f" stroke-width="3" />
-          <text x="400" y="300" text-anchor="middle" class="cell-label">2 genetisch identieke dochtercellen</text>
+          <text x="400" y="299" text-anchor="middle" class="cell-label">twee dochtercellen</text>
+          <text x="400" y="318" text-anchor="middle" class="cell-label">genetisch identiek</text>
         </g>
 
         <g v-else-if="isApoptosis" aria-label="Cel ondergaat apoptose">
@@ -185,7 +169,8 @@ function isActiveRing(key) {
             <circle cx="438" cy="180" r="9" /><circle cx="365" cy="252" r="9" />
             <circle cx="439" cy="254" r="9" />
           </g>
-          <text x="400" y="314" text-anchor="middle" class="cell-label">tumor: ongecontroleerde delingen</text>
+          <text x="400" y="309" text-anchor="middle" class="cell-label">tumor</text>
+          <text x="400" y="327" text-anchor="middle" class="cell-label">ongeremde delingen</text>
         </g>
 
         <g v-if="!isCancer" class="diagram-legend">
@@ -204,6 +189,7 @@ function isActiveRing(key) {
     </section>
 
     <aside class="cycle-panel">
+      <p class="cycle-part-label">{{ cyclePart }}</p>
       <div class="cycle-panel-topline">
         <span class="cycle-step-number">{{ step === 7 ? 'G₀' : step === 8 ? 'G₂' : step === 9 ? '!' : step === 10 ? '!' : step === 11 ? 'M' : String(step + 1).padStart(2, '0') }}</span>
         <span class="cycle-progress-label">{{ current.label }}</span>
@@ -255,11 +241,23 @@ function isActiveRing(key) {
         <span>DNA-schade (bijvoorbeeld door uv-straling, alcohol of teer) of een erfelijke afwijking kan de controle verstoren. Kankercellen kunnen omliggend weefsel verdringen, hun specialisatie verliezen, veel zuurstof en voedingsstoffen verbruiken en uitzaaien via bloed of lymfe.</span>
       </div>
 
-      <ol class="cycle-track" aria-label="Celcyclusfasen">
-        <li v-for="(phase, index) in phases.slice(0, 7)" :key="phase.key" :class="{ 'cycle-track-active': index === step, 'cycle-track-done': index < step && step < 7 }">
-          <span><PhCheckCircle v-if="index === 6" weight="bold" /><template v-else>{{ index < 5 ? index + 1 : 'M' }}</template></span>{{ phase.label }}
-        </li>
-      </ol>
+      <div class="cycle-hierarchy" aria-label="Indeling van de celcyclus zoals in het boek">
+        <section class="cycle-group" :class="{ 'cycle-group-current': ['g1', 's', 'g2'].includes(ringStage) && !isG0 && !isApoptosis && !isCancer }">
+          <h4>Interfase</h4>
+          <ol class="cycle-track">
+            <li v-for="stage in interphaseStages" :key="stage.key" :class="{ 'cycle-track-active': ringStage === stage.key && !isG0 && !isApoptosis && !isCancer }">{{ stage.label }}</li>
+          </ol>
+        </section>
+        <section class="cycle-group cycle-group-division" :class="{ 'cycle-group-current': ['division', 'spindle'].includes(ringStage) && step !== 6 }">
+          <h4>Celdeling</h4>
+          <p>Mitose: PMAT</p>
+          <ol class="cycle-track cycle-pmat">
+            <li v-for="stage in mitosisStages" :key="stage.letter" :class="{ 'cycle-track-active': step === 11 && stage.letter === 'M' }"><span>{{ stage.letter }}</span>{{ stage.label }}</li>
+          </ol>
+          <p class="cycle-cytokinesis">Cytokinese: deling van het cytoplasma</p>
+        </section>
+        <p class="cycle-small-note">Controlepunten bewaken de cyclus; ze zijn geen extra fasen.</p>
+      </div>
 
       <div class="cycle-actions">
         <button type="button" class="btn cycle-secondary" @click="previous" :disabled="step === 0" aria-label="Vorige fase">
@@ -284,9 +282,6 @@ function isActiveRing(key) {
 .cycle-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
 .cycle-canvas { min-width: 0; padding: 12px; background: var(--color-panel); border: 2px solid var(--color-line-strong); border-radius: var(--radius-card); }
 .cycle-canvas svg { display: block; width: 100%; height: auto; }
-.svg-heading { fill: var(--color-ink); font-size: 18px; font-weight: 700; letter-spacing: 0; }
-.ring-phase { fill: var(--color-ink); font-size: 20px; font-weight: 700; }
-.ring-sub { fill: var(--color-ink-soft); font-size: 12px; font-weight: 600; }
 .cell-label { fill: var(--color-ink); font-size: 14px; font-weight: 700; }
 .legend-label { fill: var(--color-ink); font-size: 12px; font-weight: 700; }
 .cycle-readouts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
@@ -307,12 +302,20 @@ function isActiveRing(key) {
 .cycle-callout { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; padding: 12px; color: #7f1d1d; background: #fde8e9; border: 2px solid #b4232f; border-radius: var(--radius-control); line-height: 1.45; }
 .cycle-cancer-note { font-size: 0.9rem; }
 .cycle-callout svg { flex: none; font-size: 1.35rem; }
-.cycle-track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin: 20px 0 0; padding: 0; list-style: none; }
+.cycle-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
 .cycle-track li { display: flex; gap: 8px; align-items: center; min-height: 36px; padding: 5px 8px; color: var(--color-ink-soft); background: var(--color-panel); border: 1px solid var(--color-line-strong); border-radius: var(--radius-control); font-size: 0.84rem; font-weight: 600; }
 .cycle-track li span { display: grid; width: 22px; height: 22px; flex: none; place-items: center; color: var(--color-ink); background: var(--color-panel-muted); border-radius: 50%; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; }
 .cycle-track li.cycle-track-active { color: var(--color-ink); background: var(--color-digital-soft); border: 2px solid var(--color-digital); }
 .cycle-track li.cycle-track-active span { color: #ffffff; background: var(--color-digital); }
-.cycle-track li.cycle-track-done span { color: #ffffff; background: var(--color-workbook); }
+.cycle-part-label { margin: 0 0 16px; color: var(--color-ink); font-size: 1rem; font-weight: 600; }
+.cycle-hierarchy { display: grid; gap: 12px; margin-top: 20px; }
+.cycle-group { padding-left: 12px; border-left: 4px solid var(--color-workbook); }
+.cycle-group-division { border-left-color: var(--color-presentation); }
+.cycle-group h4 { margin: 0; color: var(--color-ink); font-size: 1rem; font-weight: 700; }
+.cycle-group p { margin: 4px 0 0; color: var(--color-ink-soft); font-size: 0.9rem; }
+.cycle-group-current h4 { text-decoration: underline; text-underline-offset: 4px; }
+.cycle-pmat { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cycle-group .cycle-cytokinesis { margin-top: 8px; }
 .cycle-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
 .cycle-actions .btn { min-height: 44px; }
 .cycle-actions .btn:disabled { opacity: 0.5; cursor: not-allowed; }

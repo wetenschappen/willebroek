@@ -4,6 +4,7 @@ import { PhArrowLeft, PhArrowRight, PhCheckCircle } from '@phosphor-icons/vue'
 import ChromosomeGlyph from './ChromosomeGlyph.vue'
 import CentriolePair from './CentriolePair.vue'
 import DivisionLegend from './DivisionLegend.vue'
+import { metaphaseRotation, anaphaseRotation } from './spindleGeometry.js'
 
 const emit = defineEmits(['complete'])
 const phase = ref(0)
@@ -20,14 +21,25 @@ const chromosomeSet = [
 ]
 
 const phases = [
-  { label: 'Start na interfase', title: 'DNA is al gekopieerd', description: 'De cel staat aan het einde van de interfase (G₂). Het DNA is in de S-fase verdubbeld: er zijn 4 chromosomen, elk opgebouwd uit 2 zusterchromatiden.' },
+  { label: 'Einde van de interfase', title: 'DNA is al gekopieerd', description: 'De cel staat aan het einde van de interfase (G₂). Het DNA is in de S-fase verdubbeld: er zijn 4 chromosomen, elk opgebouwd uit 2 zusterchromatiden.' },
   { label: 'Profase', title: 'Chromosomen worden zichtbaar', description: 'Het chromatine condenseert tot delingschromosomen. De kernmembraan verdwijnt en de spoelfiguur wordt opgebouwd uit microtubuli. In diercellen bewegen de twee centriolenparen naar de tegenovergestelde polen; plantencellen hebben geen centriolen.' },
   { label: 'Metafase', title: 'Opstelling aan het evenaarsvlak', description: 'De 4 delingschromosomen liggen afzonderlijk en in willekeurige volgorde op het evenaarsvlak. Trekdraden hechten aan de centromeren; steundraden helpen de spoelfiguur vorm te geven. Chromosomen zijn in deze fase goed zichtbaar.' },
   { label: 'Anafase', title: 'Zusterchromatiden scheiden', description: 'De verbinding tussen de zusterchromatiden wordt verbroken ter hoogte van het centromeer. De trekdraden verkorten en trekken de zusterchromatiden uit elkaar. Elke pool krijgt één kopie van elk chromosoom.' },
-  { label: 'Telofase en cytokinese', title: 'Twee kernen en twee cellen', description: 'De spoelfiguur verdwijnt; microtubuli kunnen opnieuw gebruikt worden. Rond elke set ontstaat een kernmembraan en het DNA decondenseert. Het cytoplasma en de celorganellen worden verdeeld: diercellen snoeren in; plantencellen bouwen een celplaat op.' },
+  { label: 'Telofase', title: 'Twee kernen en twee cellen', description: 'De spoelfiguur verdwijnt; microtubuli kunnen opnieuw gebruikt worden. Rond elke set ontstaat een kernmembraan en het DNA decondenseert. Tijdens de cytokinese worden het cytoplasma en de celorganellen verdeeld: diercellen snoeren in; plantencellen bouwen een celplaat op. Cytokinese kan overlappen met de mitose en is geen vijfde mitosefase.' },
   { label: 'Resultaat', title: 'Twee identieke dochtercellen', description: 'Er ontstaan 2 diploïde dochtercellen. Elke cel heeft 2n = 4 chromosomen en hetzelfde erfelijk materiaal als de moedercel.' }
 ]
 const current = computed(() => phases[phase.value])
+const pmat = ['P', 'M', 'A', 'T']
+const phaseGroups = [
+  { title: 'Interfase', indices: [0], kind: 'interphase' },
+  { title: 'Celdeling: mitose (PMAT)', indices: [1, 2, 3, 4], kind: 'division' },
+  { title: 'Na de celdeling', indices: [5], kind: 'result' }
+]
+const phaseContext = computed(() => {
+  if (phase.value === 0) return 'Interfase: einde van G₂, vóór de mitose'
+  if (phase.value === 5) return 'Resultaat na mitose en cytokinese'
+  return `Mitose: ${phases[phase.value].label.toLowerCase()} (${pmat[phase.value - 1]})`
+})
 const counterText = computed(() => {
   if (phase.value <= 2) return '4 chromosomen · 8 chromatiden'
   if (phase.value === 3) return '8 dochterchromosomen in de cel · 4 per pool'
@@ -36,15 +48,16 @@ const counterText = computed(() => {
 
 const visibleChromosomes = computed(() => {
   const result = []
-  const xs = [292, 365, 438, 511]
+  // Leave enough space for the full length of the horizontal chromosomes.
+  const xs = [265, 355, 445, 535]
   chromosomeSet.forEach((chrom, i) => {
     if (phase.value === 0 || phase.value === 1) {
       result.push({ ...chrom, x: [365, 435, 360, 438][i], y: [208, 211, 286, 281][i], rotation: [-18, 15, 15, -12][i], shape: phase.value === 0 ? 'chromatin' : 'double', label: `${chrom.origin} chromosoom ${chrom.pair}` })
       if (phase.value === 0) result.push({ ...chrom, id: `${chrom.id}-copy`, x: [372, 442, 367, 445][i], y: [213, 216, 291, 286][i], rotation: [-18, 15, 15, -12][i], shape: 'chromatin', label: `Kopie van ${chrom.origin} chromosoom ${chrom.pair}` })
     } else if (phase.value === 2) {
-      result.push({ ...chrom, x: xs[i], y: 245, rotation: 0, shape: 'double', label: `${chrom.origin} chromosoom ${chrom.pair} op het evenaarsvlak` })
+      result.push({ ...chrom, x: xs[i], y: 245, rotation: metaphaseRotation('vertical'), shape: 'double', label: `${chrom.origin} chromosoom ${chrom.pair} op het evenaarsvlak` })
     } else if (phase.value === 3) {
-      for (const pole of [0, 1]) result.push({ ...chrom, id: `${chrom.id}-${pole}`, x: xs[i], y: pole === 0 ? 164 : 326, rotation: pole === 0 ? -90 : 90, shape: 'single', label: `Dochterchromosoom naar pool ${pole + 1}: ${chrom.origin} ${chrom.pair}` })
+      for (const pole of [0, 1]) result.push({ ...chrom, id: `${chrom.id}-${pole}`, x: xs[i], y: pole === 0 ? 164 : 326, rotation: anaphaseRotation('vertical', pole), shape: 'single', label: `Dochterchromosoom naar pool ${pole + 1}: ${chrom.origin} ${chrom.pair}` })
     } else {
       for (const pole of [0, 1]) result.push({ ...chrom, id: `${chrom.id}-${pole}`, x: [376, 422, 376, 422][i], y: (pole === 0 ? 146 : 334) + (i < 2 ? -16 : 17), length: i < 2 ? 48 : 36, rotation: [-12, 12, 10, -10][i], shape: 'chromatin', label: `${chrom.origin} chromosoom ${chrom.pair} in dochterkern ${pole + 1}` })
     }
@@ -135,7 +148,7 @@ function finish() {
           </template>
           <template v-if="phase === 2">
             <path d="M 645 245 H 584" /><text x="649" y="240">evenaarsvlak</text>
-            <path d="M 150 274 H 262 L 365 245" /><text x="28" y="269">centromeer</text>
+            <path d="M 150 274 H 262 L 355 245" /><text x="28" y="269">centromeer</text>
             <path d="M 150 124 H 350 L 400 98" /><text x="28" y="119">celpool</text>
           </template>
           <template v-if="phase === 3">
@@ -164,15 +177,16 @@ function finish() {
 
     <aside class="mitosis-panel">
       <div class="mitosis-panel-topline">
-        <span class="mitosis-step-number">{{ String(phase + 1).padStart(2, '0') }}</span>
-        <span class="mitosis-phase-label">Fase {{ phase + 1 }} van {{ phases.length }}</span>
+        <span class="mitosis-step-number"><PhCheckCircle v-if="phase === 5" weight="bold" /><template v-else>{{ phase === 0 ? 'G₂' : pmat[phase - 1] }}</template></span>
+        <span class="mitosis-phase-label">{{ phaseContext }}</span>
       </div>
       <h3 class="mitosis-step-title">{{ current.title }}</h3>
       <p class="mitosis-step-text">{{ current.description }}</p>
 
       <div class="mitosis-key-fact">
-        <strong>Onthoud:</strong>
-        <span v-if="phase < 3">Homologe chromosomen paren niet tijdens de mitose. Elk chromosoom wordt afzonderlijk verdeeld.</span>
+        <strong>{{ phase === 0 ? 'Voorbereiding, nog geen mitose:' : 'Onthoud:' }}</strong>
+        <span v-if="phase === 0">De interfase bestaat uit G₁, S en G₂. Ze hoort bij de celcyclus, maar niet bij de vier mitosefasen PMAT.</span>
+        <span v-else-if="phase < 3">Homologe chromosomen paren niet tijdens de mitose. Elk chromosoom wordt afzonderlijk verdeeld.</span>
         <span v-else-if="phase === 3">Na de scheiding telt elke voormalige zusterchromatide als een zelfstandig dochterchromosoom.</span>
         <span v-else>De dochtercellen zijn genetisch identiek en blijven diploïd (2n).</span>
       </div>
@@ -184,11 +198,17 @@ function finish() {
       </div>
       <p class="mitosis-small-note">{{ plantCell ? 'Golgi-blaasjes versmelten tot een celplaat. Cellulose verstevigt die tot een nieuwe celwand. Plantencellen hebben geen centriolen.' : 'De diercel snoert in; centriolen helpen de spoelfiguur organiseren.' }}</p>
 
-      <ol class="mitosis-track" aria-label="Mitosefasen">
-        <li v-for="(item, index) in phases" :key="item.label" :class="{ 'mitosis-track-active': index === phase, 'mitosis-track-done': index < phase }">
-          <span><PhCheckCircle v-if="index < phase" weight="bold" aria-label="Doorlopen" /><template v-else>{{ index + 1 }}</template></span>{{ item.label }}
-        </li>
-      </ol>
+      <div class="mitosis-phase-groups" aria-label="Interfase, vier mitosefasen en resultaat">
+        <section v-for="group in phaseGroups" :key="group.kind" class="mitosis-phase-group" :class="`mitosis-phase-group-${group.kind}`">
+          <h4>{{ group.title }}</h4>
+          <ol class="mitosis-track" :class="{ 'mitosis-track-single': group.indices.length === 1 }">
+            <li v-for="index in group.indices" :key="phases[index].label" :class="{ 'mitosis-track-active': index === phase, 'mitosis-track-done': index < phase }" :aria-current="index === phase ? 'step' : undefined">
+              <span><PhCheckCircle v-if="index < phase || index === 5" weight="bold" /><template v-else>{{ index === 0 ? 'G₂' : pmat[index - 1] }}</template></span>{{ phases[index].label }}
+            </li>
+          </ol>
+          <p v-if="group.kind === 'division'" class="mitosis-cytokinesis-note">Cytokinese deelt het cytoplasma en kan tijdens de mitose beginnen.</p>
+        </section>
+      </div>
 
       <div class="mitosis-actions">
         <button type="button" class="btn mitosis-secondary" @click="previous" :disabled="phase === 0" aria-label="Vorige mitosefase"><PhArrowLeft weight="bold" /> Vorige</button>
@@ -223,12 +243,19 @@ function finish() {
 .mitosis-toggle, .mitosis-secondary { color: var(--color-ink); background: var(--color-panel); border: 2px solid var(--color-line-strong); }
 .mitosis-toggle-active { color: var(--color-digital); background: var(--color-digital-soft); border-color: var(--color-digital); }
 .mitosis-small-note { margin: 8px 0 0; color: var(--color-ink-soft); font-size: 0.92rem; line-height: 1.45; }
-.mitosis-track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin: 18px 0 0; padding: 0; list-style: none; }
+.mitosis-track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
 .mitosis-track li { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 5px 8px; color: var(--color-ink-soft); background: var(--color-panel); border: 1px solid var(--color-line-strong); border-radius: var(--radius-control); font-size: 0.82rem; font-weight: 600; }
 .mitosis-track li span { display: grid; width: 22px; height: 22px; flex: none; place-items: center; color: var(--color-ink); background: var(--color-panel-muted); border-radius: 50%; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; }
 .mitosis-track li.mitosis-track-active { color: var(--color-ink); background: var(--color-digital-soft); border: 2px solid var(--color-digital); }
 .mitosis-track li.mitosis-track-active span { color: #ffffff; background: var(--color-digital); }
 .mitosis-track li.mitosis-track-done span { color: #ffffff; background: var(--color-workbook); }
+.mitosis-phase-groups { display: grid; gap: 12px; margin-top: 20px; }
+.mitosis-phase-group { padding-left: 12px; border-left: 4px solid var(--color-workbook); }
+.mitosis-phase-group-division { border-left-color: var(--color-presentation); }
+.mitosis-phase-group-result { border-left-color: var(--color-line); }
+.mitosis-phase-group h4 { margin: 0; color: var(--color-ink); font-size: 0.95rem; font-weight: 700; }
+.mitosis-track-single { grid-template-columns: 1fr; }
+.mitosis-cytokinesis-note { margin: 8px 0 0; color: var(--color-ink-soft); font-size: 0.9rem; line-height: 1.4; }
 .mitosis-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
 .mitosis-actions .btn { min-height: 44px; }
 .mitosis-actions .btn:disabled { opacity: 0.5; cursor: not-allowed; }

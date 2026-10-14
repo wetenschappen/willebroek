@@ -14,7 +14,7 @@ const emit = defineEmits(['close', 'complete'])
 const activeTab = ref('cycle')
 const visited = reactive({ cycle: false, mitosis: false, meiosis: false })
 const tabs = [
-  { id: 'cycle', number: '01', label: 'Celcyclus', short: 'G₁ · S · G₂ · M' },
+  { id: 'cycle', number: '01', label: 'Celcyclus', short: 'Interfase · celdeling' },
   { id: 'mitosis', number: '02', label: 'Mitose', short: '2 identieke cellen' },
   { id: 'meiosis', number: '03', label: 'Meiose', short: '4 haploïde cellen' }
 ]

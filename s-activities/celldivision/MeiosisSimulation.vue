@@ -4,6 +4,7 @@ import { PhArrowLeft, PhArrowRight, PhCheckCircle, PhDiceFive, PhArrowsClockwise
 import ChromosomeGlyph from './ChromosomeGlyph.vue'
 import CentriolePair from './CentriolePair.vue'
 import DivisionLegend from './DivisionLegend.vue'
+import { metaphaseRotation, anaphaseRotation, recombinantSisterIndex } from './spindleGeometry.js'
 
 const emit = defineEmits(['complete'])
 const phase = ref(0)
@@ -63,8 +64,8 @@ const singleCellChromosomes = computed(() => {
       const y = pair === 0 ? 192 : 304
       const first = maternalLeft ? 'M' : 'P'
       const second = maternalLeft ? 'P' : 'M'
-      result.push({ id: `p${pair}-left`, x: 420, y, length: pair === 0 ? 78 : 58, rotation: 90, origin: first, pair: pair + 1, color: first === 'M' ? maternal : paternal, shape: 'double', accentColor: crossingOver.value && pair === 0 ? (first === 'M' ? paternal : maternal) : '', accentSide: first === 'M' ? 'right' : 'left', label: `${first === 'M' ? 'maternaal' : 'paternaal'} chromosoom ${pair + 1}, links van het evenaarsvlak` })
-      result.push({ id: `p${pair}-right`, x: 480, y, length: pair === 0 ? 78 : 58, rotation: 90, origin: second, pair: pair + 1, color: second === 'M' ? maternal : paternal, shape: 'double', accentColor: crossingOver.value && pair === 0 ? (second === 'M' ? paternal : maternal) : '', accentSide: second === 'M' ? 'right' : 'left', label: `${second === 'M' ? 'maternaal' : 'paternaal'} chromosoom ${pair + 1}, rechts van het evenaarsvlak` })
+      result.push({ id: `p${pair}-left`, x: 420, y, length: pair === 0 ? 78 : 58, rotation: metaphaseRotation('horizontal'), origin: first, pair: pair + 1, color: first === 'M' ? maternal : paternal, shape: 'double', accentColor: crossingOver.value && pair === 0 ? (first === 'M' ? paternal : maternal) : '', accentSide: first === 'M' ? 'right' : 'left', label: `${first === 'M' ? 'maternaal' : 'paternaal'} chromosoom ${pair + 1}, links van het evenaarsvlak` })
+      result.push({ id: `p${pair}-right`, x: 480, y, length: pair === 0 ? 78 : 58, rotation: metaphaseRotation('horizontal'), origin: second, pair: pair + 1, color: second === 'M' ? maternal : paternal, shape: 'double', accentColor: crossingOver.value && pair === 0 ? (second === 'M' ? paternal : maternal) : '', accentSide: second === 'M' ? 'right' : 'left', label: `${second === 'M' ? 'maternaal' : 'paternaal'} chromosoom ${pair + 1}, rechts van het evenaarsvlak` })
     }
   } else if (phase.value === 3) {
     for (let pair = 0; pair < 2; pair += 1) {
@@ -85,8 +86,8 @@ const daughterCellChromosomes = computed(() => {
         const origin = homologOrigin(pair, cell)
         const cx = cell === 0 ? 240 : 660
         const x = phase.value === 4 ? cx + (pair === 0 ? -27 : 27) : phase.value === 5 ? cx + (pair === 0 ? -25 : 25) : cx
-        const y = phase.value === 4 ? 245 : (pair === 0 ? 224 : 286)
-        const rotation = phase.value === 4 ? (pair === 0 ? -8 : 8) : phase.value === 5 ? (pair === 0 ? -16 : 16) : 90
+        const y = phase.value === 4 ? 245 : (pair === 0 ? 214 : 306)
+        const rotation = phase.value === 4 ? (pair === 0 ? -8 : 8) : phase.value === 5 ? (pair === 0 ? -16 : 16) : metaphaseRotation('horizontal')
         result.push({ id: `meiosis2-${cell}-${pair}`, x, y, length: pair === 0 ? 68 : 50, rotation, origin, pair: pair + 1, color: origin === 'M' ? maternal : paternal, shape: 'double', accentColor: crossingOver.value && pair === 0 ? (origin === 'M' ? paternal : maternal) : '', accentSide: origin === 'M' ? 'right' : 'left', label: `${origin === 'M' ? 'maternaal' : 'paternaal'} chromosoom ${pair + 1} in cel ${cell + 1}` })
       }
     }
@@ -96,13 +97,13 @@ const daughterCellChromosomes = computed(() => {
       for (let pair = 0; pair < 2; pair += 1) {
         const origin = homologOrigin(pair, cell)
         for (let pole = 0; pole < 2; pole += 1) {
-          const isRecombinant = crossingOver.value && pair === 0 && pole === 1
+          const isRecombinant = crossingOver.value && pair === 0 && pole === recombinantSisterIndex(origin)
           result.push({
             id: `a2-${cell}-${pair}-${pole}`,
             x: cx + (pole === 0 ? -63 : 63),
-            y: pair === 0 ? 220 : 290,
+            y: pair === 0 ? 214 : 306,
             length: pair === 0 ? 68 : 50,
-            rotation: pole === 0 ? 180 : 0,
+            rotation: anaphaseRotation('horizontal', pole),
             origin,
             pair: pair + 1,
             color: origin === 'M' ? maternal : paternal,
@@ -131,7 +132,7 @@ const gametes = computed(() => {
         pair1: {
           origin: p1Origin,
           color: p1Origin === 'M' ? maternal : paternal,
-          accentColor: crossingOver.value && chromatid === 1 ? (p1Origin === 'M' ? paternal : maternal) : ''
+          accentColor: crossingOver.value && chromatid === recombinantSisterIndex(p1Origin) ? (p1Origin === 'M' ? paternal : maternal) : ''
         },
         pair2: {
           origin: p2Origin,

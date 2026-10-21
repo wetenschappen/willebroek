@@ -9,7 +9,9 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['answer'])
+// De modal luistert naar 'selectAnswer' met { id, correct } voor de
+// Juist-melding; 'answer' met de volledige keuze blijft voor compatibiliteit.
+const emit = defineEmits(['answer', 'selectAnswer'])
 
 const selectedAnswer = ref(null)
 
@@ -36,71 +38,62 @@ const getOptionLabel = (option, index) => {
 const handleAnswer = (index) => {
   if (selectedAnswer.value !== null) return
   selectedAnswer.value = index
-  emit('answer', {
-    selectedIndex: index,
-    isCorrect: isCorrect(index)
-  })
+  const correct = isCorrect(index)
+  emit('selectAnswer', { id: getOptionLabel(props.slide.options[index], index), correct })
+  emit('answer', { selectedIndex: index, isCorrect: correct })
 }
 </script>
 
 <template>
 <MathSlideWrapper :title="slide.title || 'Begripscheck'">
-    
-    <div class="flex flex-col items-center mt-4">
-        <!-- Question Box -->
-        <div class="w-full max-w-4xl bg-white border border-slate-200 p-8 rounded-xl shadow-sm text-center mb-8">
-            <div class="text-slide-heading text-slate-800 font-bold leading-relaxed" v-html="slide.question"></div>
-        </div>
-        
-        <!-- Options Grid -->
-        <div class="grid grid-cols-2 gap-6 w-full max-w-4xl">
+    <!-- Meerkeuze als tekstlijst met letters, zoals een vraag in een
+         proefwerk - geen raster van vier kaartjes. -->
+    <div class="pb-2 max-w-[1500px]">
+        <p class="text-slide-heading text-slide-ink font-bold leading-snug mb-10" v-html="slide.question"></p>
+
+        <div style="border-top: 2px solid var(--color-slide-line);">
             <button
                 v-for="(option, index) in slide.options"
                 :key="index"
                 @click="handleAnswer(index)"
                 :disabled="selectedAnswer !== null"
-                class="text-left w-full cursor-pointer focus:outline-none"
+                class="mc-row w-full text-left cursor-pointer focus:outline-none flex items-center gap-8 px-4 py-5 transition-colors duration-200"
+                :style="{
+                    borderBottom: '2px solid var(--color-slide-line)',
+                    background: selectedAnswer !== null && isCorrect(index) ? 'var(--color-workbook-soft)'
+                              : (selectedAnswer === index && !isCorrect(index) ? 'var(--color-slide-red-soft)' : 'transparent'),
+                    opacity: selectedAnswer !== null && selectedAnswer !== index && !isCorrect(index) ? 0.45 : 1
+                }"
             >
-                <div class="flex items-center gap-5 bg-white border rounded-xl p-5 transition-all duration-300 shadow-sm"
-                     :class="[
-                       selectedAnswer === null ? 'border-slate-200 hover:border-presentation hover:bg-slate-50/50' : '',
-                       selectedAnswer === index && isCorrect(index) ? 'border-workbook bg-workbook-soft scale-[1.01]' : '',
-                       selectedAnswer === index && !isCorrect(index) ? 'border-presentation bg-presentation-soft' : '',
-                       selectedAnswer !== null && selectedAnswer !== index && isCorrect(index) ? 'border-workbook bg-workbook-soft' : '',
-                       selectedAnswer !== null && selectedAnswer !== index && !isCorrect(index) ? 'border-slate-200 opacity-50 grayscale' : ''
-                     ]">
-                    
-                    <!-- Label Badge -->
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-slide-body shrink-0 transition-colors shadow-sm"
-                         :class="[
-                            selectedAnswer === null ? 'bg-slate-100 text-slate-700' : '',
-                            selectedAnswer === index && isCorrect(index) ? 'bg-workbook text-white' : '',
-                            selectedAnswer === index && !isCorrect(index) ? 'bg-presentation text-white' : '',
-                            selectedAnswer !== null && selectedAnswer !== index && isCorrect(index) ? 'bg-workbook text-white' : '',
-                            selectedAnswer !== null && selectedAnswer !== index && !isCorrect(index) ? 'bg-slate-100 text-slate-600' : ''
-                         ]">
-                        {{ getOptionLabel(option, index) }}
-                    </div>
-                    
-                    <div class="text-slide-body font-semibold text-slate-700 flex-1 leading-snug" v-html="getOptionText(option)"></div>
-                    
-                    <!-- Status Icon -->
-                    <div v-if="selectedAnswer !== null" class="w-8 h-8 flex items-center justify-center shrink-0">
-                        <svg v-if="isCorrect(index)" class="w-6 h-6 text-workbook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <svg v-else-if="selectedAnswer === index && !isCorrect(index)" class="w-6 h-6 text-presentation" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </div>
-                </div>
+                <!-- Letter in mono, zoals antwoordopties in een cursus -->
+                <span class="font-mono font-bold text-slide-heading w-14 shrink-0"
+                      :style="{ color: selectedAnswer !== null && isCorrect(index) ? 'var(--color-workbook)' : 'var(--color-slide-red)' }">
+                    {{ getOptionLabel(option, index) }}.
+                </span>
+
+                <span class="text-slide-body font-semibold text-slide-ink flex-1 leading-snug" v-html="getOptionText(option)"></span>
+
+                <!-- Statusicoon: kleur is nooit de enige drager -->
+                <svg v-if="selectedAnswer !== null && isCorrect(index)" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--color-workbook)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg v-else-if="selectedAnswer === index && !isCorrect(index)" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--color-slide-red)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
-        
-        <!-- Explanation Section -->
-        <div v-if="selectedAnswer !== null && slide.explanation" class="w-full max-w-4xl mt-8 animate-[fadeInUp_0.3s_ease-out]">
-            <div class="p-8 bg-presentation-soft border border-presentation rounded-xl">
-                <h4 class="text-slide-small font-bold text-presentation mb-2">Uitleg</h4>
-                <div class="text-slide-body text-ink-soft leading-relaxed font-semibold" v-html="slide.explanation"></div>
-            </div>
+
+        <!-- Uitleg als gevolglijn in één accentvlak -->
+        <div v-if="selectedAnswer !== null && slide.explanation" class="mt-8 slide-panel-answer p-8 animate-[fadeInUp_0.3s_ease-out]">
+            <div class="slide-meta mb-3" style="color: var(--color-slide-red);">Uitleg</div>
+            <div class="text-slide-body text-slide-ink leading-relaxed font-semibold" v-html="slide.explanation"></div>
         </div>
-        
     </div>
 </MathSlideWrapper>
 </template>
+
+<style scoped>
+.mc-row:not(:disabled):hover {
+    background: var(--color-slide-soft) !important;
+}
+.mc-row:focus-visible {
+    outline: none;
+    box-shadow: inset var(--focus-ring);
+}
+</style>

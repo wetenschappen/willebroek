@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import MathSlideWrapper from './shared/MathSlideWrapper.vue'
 
 const props = defineProps({
     slide: { type: Object, required: true },
@@ -34,38 +35,31 @@ const displayItems = computed(() => {
 </script>
 
 <template>
-<div class="w-full h-full flex flex-col items-center justify-center p-16 bg-paper relative">
-    <div class="w-full max-w-7xl text-center flex flex-col items-center">
-        <h3 class="text-slide-heading text-ink-soft mb-8 font-bold" v-html="slide.title"></h3>
-        
-        <!-- Equation Box with Dedicated KaTeX Styling -->
-        <div class="equation-formula slide-panel p-8 mb-6 inline-block font-mono max-w-4xl w-full text-center"
-             style="border: 2px solid var(--color-line-strong); background: var(--color-panel); box-shadow: var(--shadow-rest);">
-            <div class="font-mono font-bold text-slate-900" v-html="slide.equation"></div>
+<MathSlideWrapper :title="slide.title || 'Formule'">
+    <!-- Formule centraal zoals in een cursus, met de grootheden eronder als
+         label-waarderijen - geen vier reuzeboxen. -->
+    <div class="pb-2">
+        <div class="equation-formula text-center py-6 mb-4">
+            <span class="font-mono font-bold text-slide-ink" v-html="slide.equation"></span>
         </div>
-        
-        <!-- Subtitle under the equation -->
-        <p v-if="slide.subtitle" class="text-slide-heading text-slate-700 mb-8 max-w-3xl" v-html="slide.subtitle"></p>
 
-        <!-- Variables / Parts Grid -->
-        <div v-if="displayItems.length" class="w-full grid gap-6 text-left max-w-6xl mt-2"
-             :class="displayItems.length === 4 ? 'grid-cols-2' : (displayItems.length >= 3 ? 'grid-cols-3' : 'grid-cols-2')">
-            <div v-for="(item, idx) in displayItems" :key="idx" 
-                 class="p-6 slide-panel text-left flex flex-col"
-                 style="border: 2px solid var(--color-line); background: var(--color-panel); border-radius: var(--radius-card);">
-                <h4 class="text-slide-heading font-bold mb-3 text-presentation" v-html="item.title"></h4>
-                <ul class="space-y-2 mt-auto">
-                     <li v-for="(detail, dIdx) in item.details" :key="dIdx" class="text-slide-body text-slate-700 font-medium" v-html="detail"></li>
-                </ul>
-             </div>
+        <p v-if="slide.subtitle" class="text-slide-body text-slide-ink text-center mb-10 max-w-4xl mx-auto leading-relaxed" v-html="slide.subtitle"></p>
+
+        <div v-if="displayItems.length" class="slide-rows text-slide-body max-w-[1500px] mx-auto">
+            <div v-for="(item, idx) in displayItems" :key="idx" class="slide-row">
+                <div class="slide-row-label text-slide-heading font-mono" v-html="item.title"></div>
+                <div class="slide-row-value leading-relaxed">
+                    <span v-for="(detail, dIdx) in item.details" :key="dIdx" v-html="detail + (dIdx < item.details.length - 1 ? ' — ' : '')"></span>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</MathSlideWrapper>
 </template>
 
 <style scoped>
 .equation-formula :deep(.katex) {
-    font-size: 3rem;
+    font-size: 3.4rem;
     line-height: 1.2;
 }
 .equation-formula :deep(.katex-display) {

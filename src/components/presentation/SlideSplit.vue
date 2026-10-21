@@ -16,18 +16,19 @@ const resolveImageUrl = inject('resolveImageUrl')
 
 <template>
   <MathSlideWrapper :title="slide.title || 'Uitleg'">
-    <div class="grid grid-cols-2 gap-8 h-full flex-1 min-h-[400px]">
-      <!-- Text Side -->
-      <div class="flex flex-col h-full" :class="{ 'order-first': slide.imagePosition === 'right', 'order-last': slide.imagePosition === 'left' }">
-        <div class="flex-1 bg-white rounded-xl border border-slate-200 p-8 overflow-y-auto exercise-scroll shadow-sm">
-          <div class="text-slide-body leading-relaxed text-slate-700 font-medium" v-html="slide.content || slide.text"></div>
+    <!-- Tekst rechtstreeks op het papier naast de figuur - geen tekstkader
+         binnen de slide. -->
+    <div class="grid grid-cols-2 gap-12 h-full flex-1 min-h-0">
+      <div class="flex flex-col h-full min-h-0" :class="{ 'order-first': slide.imagePosition === 'right', 'order-last': slide.imagePosition === 'left' }">
+        <div class="flex-1 overflow-y-auto exercise-scroll pr-4">
+          <div class="text-slide-body leading-relaxed text-slide-ink" v-html="slide.content || slide.text"></div>
         </div>
       </div>
-      
-      <!-- Image Side -->
-      <div class="relative h-full rounded-xl overflow-hidden border border-slate-200 shadow-sm"
+
+      <div class="relative h-full min-h-0"
            :class="{ 'order-last': slide.imagePosition === 'right' || !slide.imagePosition, 'order-first': slide.imagePosition === 'left' }">
-        <img :src="resolveImageUrl(slide.image)" class="w-full h-full object-cover">
+        <img :src="resolveImageUrl(slide.image)" class="w-full h-full object-cover rounded-card"
+             style="border: 2px solid var(--color-slide-ink);">
       </div>
     </div>
   </MathSlideWrapper>

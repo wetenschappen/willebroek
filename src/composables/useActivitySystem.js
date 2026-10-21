@@ -11,6 +11,7 @@ const PressureLabActivity = defineAsyncComponent(() => import('../../s-activitie
 const OpticsLabActivity = defineAsyncComponent(() => import('../../s-activities/OpticsLabActivity.vue'))
 const PhagocytosisLabActivity = defineAsyncComponent(() => import('../../s-activities/PhagocytosisLabActivity.vue'))
 const CellDivisionLabActivity = defineAsyncComponent(() => import('../../s-activities/CellDivisionLabActivity.vue'))
+const MendelLabActivity = defineAsyncComponent(() => import('../../s-activities/MendelLabActivity.vue'))
 
 const COMPONENT_MAP = {
   dragDrop: DragDropActivity,
@@ -22,7 +23,8 @@ const COMPONENT_MAP = {
   pressureLab: PressureLabActivity,
   opticsLab: OpticsLabActivity,
   phagocytosisLab: PhagocytosisLabActivity,
-  cellDivisionLab: CellDivisionLabActivity
+  cellDivisionLab: CellDivisionLabActivity,
+  mendelLab: MendelLabActivity
 }
 
 export function useActivitySystem(lessonData, markAsDoneCallback) {

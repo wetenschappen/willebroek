@@ -26,6 +26,15 @@ export default {
         /* Ontbrekende systeemkleuren als Tailwind-utilities.
            Zonder deze groep bestaat bg-paper, text-digital, border-line enz.
            niet en valt een klasse stil weg. Zie docs/DESIGN-SYSTEM.md §9. */
+        // Presentation canvas only; changing these never recolors app screens.
+        slide: {
+          paper: 'var(--color-slide-paper)',
+          ink: 'var(--color-slide-ink)',
+          red: 'var(--color-slide-red)',
+          'red-soft': 'var(--color-slide-red-soft)',
+          soft: 'var(--color-slide-soft)',
+          line: 'var(--color-slide-line)',
+        },
         paper: '#f5f7f6',
         panel: {
           DEFAULT: '#ffffff',

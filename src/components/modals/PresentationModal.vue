@@ -90,7 +90,6 @@ const props = defineProps({
 const emit = defineEmits(['close', 'complete'])
 
 const currentSlide = ref(0)
-const answerRevealed = ref(false)
 const revealedSteps = ref(0)
 const selectedAnswer = ref(null)
 const showCorrectPopup = ref(false)
@@ -136,10 +135,10 @@ const disciplineSlide = computed(() => ({
     layout: 'discipline',
     cursusLink: props.config?.cursusLink || '',
     rules: props.config?.disciplineRules || [
-        { text: 'In <span class="text-math-orange">stilte</span> binnenkomen en plaatsnemen.' },
-        { text: '<span class="text-math-orange">Jassen uit</span>, cursus op de bank klaarleggen.' },
-        { text: '<span class="text-math-orange">Rust</span> bewaren: praten enkel na hand opsteken en toestemming.' },
-        { text: 'Samen werken van de eerste tot de <span class="text-math-orange">laatste minuut</span>.' }
+        { text: 'In <span class="text-slide-red">stilte</span> binnenkomen en plaatsnemen.' },
+        { text: '<span class="text-slide-red">Jassen uit</span>, cursus op de bank klaarleggen.' },
+        { text: '<span class="text-slide-red">Rust</span> bewaren: praten enkel na hand opsteken en toestemming.' },
+        { text: 'Samen werken van de eerste tot de <span class="text-slide-red">laatste minuut</span>.' }
     ]
 }))
 
@@ -188,44 +187,48 @@ function nextSlide() {
   if (currentSlide.value < totalSlides.value - 1) {
     transitionName.value = 'slide'
     currentSlide.value++
-    answerRevealed.value = false
     revealedSteps.value = 0
     selectedAnswer.value = null
   }
 }
 
-function advancePresentation() {
-    const slide = slides.value[currentSlide.value]
-    if (slide && slide.layout === 'math-graph' && slide.steps && revealedSteps.value < slide.steps.length - 1) {
-        revealNextStep(slide.steps.length - 1)
-    } else if (slide && (slide.layout === 'steps' || slide.layout === 'recap' || slide.layout === 'worked-example')) {
-        const maxSteps = slide.steps ? slide.steps.length : (slide.questions ? slide.questions.length : 0)
-        if (maxSteps && revealedSteps.value < maxSteps) {
-            revealNextStep(maxSteps)
-        } else {
-            nextSlide()
-        }
-    } else if (slide && slide.layout === 'predict' && slide.revealText && !answerRevealed.value) {
-        answerRevealed.value = true
-    } else {
-        nextSlide()
+// A single reveal count drives arrows, Space, Back and the disabled state.
+// Worked examples may consume their first step as the problem statement.
+function revealLimit(slide) {
+    if (!slide) return 0
+    if (slide.layout === 'predict') return (slide.revealText || slide.answer) ? 1 : 0
+    if (slide.layout === 'recap') return slide.questions?.length || 0
+    if (slide.layout === 'math-graph' || slide.layout === 'equation-solver') {
+        return Math.max(0, (slide.steps?.length || 0) - 1)
     }
+    if (slide.layout === 'worked-example') {
+        const first = slide.steps?.[0]
+        const consumesProblem = !slide.problem && ['Situatie', 'Opgave'].includes(first?.label)
+        return Math.max(0, (slide.steps?.length || 0) - (consumesProblem ? 1 : 0))
+    }
+    if (['steps', 'theorem-proof', 'exercise'].includes(slide.layout)) return slide.steps?.length || 0
+    return 0
+}
+
+const hasNextReveal = computed(() => {
+    const slide = slides.value[currentSlide.value]
+    // Exercise answers retain the separate teacher-unlock shortcut.
+    return slide?.layout !== 'exercise' && revealedSteps.value < revealLimit(slide)
+})
+const canAdvance = computed(() => hasNextReveal.value || currentSlide.value < totalSlides.value - 1)
+const canGoBack = computed(() => currentSlide.value > 0 || revealedSteps.value > 0)
+
+function advancePresentation() {
+    if (hasNextReveal.value) revealNextStep(revealLimit(slides.value[currentSlide.value]))
+    else nextSlide()
 }
 
 function prevSlide() {
-    const slide = slides.value[currentSlide.value]
-    const hasSteps = slide && (
-        (slide.layout === 'math-graph' && slide.steps) ||
-        (slide.layout === 'steps' && slide.steps) ||
-        (slide.layout === 'recap' && slide.questions) ||
-        (slide.layout === 'worked-example' && slide.steps)
-    )
-    if (revealedSteps.value > 0 && hasSteps) {
+    if (revealedSteps.value > 0 && revealLimit(slides.value[currentSlide.value]) > 0) {
         reverseStep()
     } else if (currentSlide.value > 0) {
         transitionName.value = 'slide-back'
         currentSlide.value--
-        answerRevealed.value = false
         revealedSteps.value = 0
         selectedAnswer.value = null
     }
@@ -277,7 +280,6 @@ watch(() => props.isOpen, (val) => {
         if (document.fullscreenElement) document.exitFullscreen().catch(e => {})
         setTimeout(() => {
             currentSlide.value = 0
-            answerRevealed.value = false
             revealedSteps.value = 0
             selectedAnswer.value = null
             linkCopied.value = false
@@ -317,8 +319,14 @@ function handleKeydown(e) {
         const slide = slides.value[currentSlide.value]
         if (!slide) return
         
-        const isStepsLayout = (slide.layout === 'steps' || slide.layout === 'exercise' || slide.layout === 'worked-example' || slide.layout === 'recap')
-        const maxSteps = slide.steps ? slide.steps.length : (slide.questions ? slide.questions.length : 0)
+        const isStepsLayout = ['steps', 'exercise', 'worked-example', 'recap', 'equation-solver', 'theorem-proof'].includes(slide.layout)
+        const maxSteps = revealLimit(slide)
+
+        // The displayed S hint on a thinking question must match Space/click.
+        if (slide.layout === 'predict') {
+            revealNextStep(maxSteps)
+            return
+        }
 
         if (isStepsLayout && maxSteps && revealedSteps.value < maxSteps) {
             if (localStorage.getItem('teacher_unlocked') !== 'true') {
@@ -430,10 +438,10 @@ function resolveImageUrl(url) {
 <template>
 <Teleport to="body">
     <Transition name="fade">
-        <div v-if="isOpen" class="fixed inset-0 z-[9999] bg-paper text-slate-900 flex flex-col font-sans overflow-hidden w-screen h-screen">
+        <div v-if="isOpen" class="fixed inset-0 z-[9999] bg-slide-paper text-slate-900 flex flex-col font-sans overflow-hidden w-screen h-screen">
             
             <!-- Voortgangsbalk: rood anker, want dit is een presentatie -->
-            <div class="absolute top-0 left-0 right-0 h-3 z-[70]" style="background: var(--color-panel-muted);">
+            <div class="absolute top-0 left-0 right-0 h-3 z-[70]" style="background: var(--color-slide-soft);">
                 <div class="h-full slide-anchor" :style="{ width: progressPercentage + '%' }"></div>
             </div>
 
@@ -493,15 +501,15 @@ function resolveImageUrl(url) {
                 <!-- Voetnavigatie: bediening voor de leerkracht, dus echte
                      schermpunten. Groot genoeg om te raken, klein genoeg om
                      niet met de slide te wedijveren. -->
-                <div class="absolute bottom-6 left-6 flex items-center gap-2 z-[80] bg-white rounded-control" style="border: 2px solid var(--color-line-strong);">
-                    <button @click.stop="prevSlide" class="btn-close" :disabled="currentSlide === 0" aria-label="Vorige slide">
+                <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-[80] bg-white rounded-control" style="border: 2px solid var(--color-line-strong);">
+                    <button @click.stop="prevSlide" class="btn-close" :disabled="!canGoBack" aria-label="Vorige slide">
                         <PhCaretLeft class="text-xl" />
                     </button>
                     
                     <span class="font-mono text-base font-semibold tracking-[0.08em] text-slate-800 min-w-[4.5rem] text-center select-none">{{ currentSlide + 1 }} / {{ totalSlides }}</span>
 
                     <button @click.stop="advancePresentation" class="btn-close" aria-label="Volgende slide"
-                            :disabled="currentSlide === totalSlides - 1 && (!slides[currentSlide]?.steps || slides[currentSlide].layout === 'exercise' || revealedSteps === slides[currentSlide].steps.length) && (!slides[currentSlide]?.revealText || answerRevealed)">
+                            :disabled="!canAdvance">
                         <PhCaretRight class="text-xl" />
                     </button>
                 </div>

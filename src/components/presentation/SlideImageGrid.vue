@@ -16,21 +16,23 @@ const resolveImageUrl = inject('resolveImageUrl')
 
 <template>
   <MathSlideWrapper :title="slide.title || 'Afbeeldingen'">
-    <div class="grid gap-6 h-full flex-1"
+    <!-- Beelden met een bijschrift onder een dunne regel, zoals figuren in een
+         cursus - zonder kaartjes rond elke afbeelding. -->
+    <div class="grid gap-10 h-full flex-1 min-h-0"
          :class="{
            'grid-cols-2': !slide.columns || slide.columns === 2,
            'grid-cols-3': slide.columns === 3,
            'grid-cols-4': slide.columns === 4,
          }">
-      <div v-for="(img, idx) in slide.images" :key="idx" class="flex flex-col h-full bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-        <div class="flex-1 overflow-hidden flex items-center justify-center p-2 min-h-[220px]">
+      <figure v-for="(img, idx) in slide.images" :key="idx" class="flex flex-col h-full min-h-0 m-0">
+        <div class="flex-1 min-h-[220px] overflow-hidden flex items-center justify-center">
           <img :src="resolveImageUrl(img.src)" class="max-w-full max-h-full object-contain">
         </div>
-        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col gap-1 text-center">
-          <p class="text-slide-body text-slate-800 font-semibold" v-html="img.caption"></p>
-          <p v-if="img.title" class="text-slide-small text-slate-600 font-medium" v-html="img.title"></p>
-        </div>
-      </div>
+        <figcaption class="mt-4 pt-3 text-center" style="border-top: 2px solid var(--color-slide-line);">
+          <p class="text-slide-body text-slide-ink font-semibold" v-html="img.caption"></p>
+          <p v-if="img.title" class="text-slide-small text-slide-ink font-medium" v-html="img.title"></p>
+        </figcaption>
+      </figure>
     </div>
   </MathSlideWrapper>
 </template>

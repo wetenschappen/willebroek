@@ -21,12 +21,12 @@ const hasVisualContent = computed(() => {
 </script>
 
 <template>
-<MathSlideWrapper :title="slide.imageTitle || slide.title || slide.headerLabel || 'Oefening'">
+<MathSlideWrapper solution :title="slide.imageTitle || slide.title || slide.headerLabel || 'Oefening'">
     
     <!-- Context block (No Left Border) -->
-    <div v-if="slide.context && !hasVisualContent" class="mb-8 p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
-        <div class="text-slide-small font-bold text-slate-600 mb-2">Context</div>
-        <p class="text-slide-body text-slate-700 leading-relaxed" v-html="slide.context"></p>
+    <div v-if="slide.context && !hasVisualContent" class="mb-8 p-6 bg-white border border-slide-line rounded-xl shadow-sm">
+        <div class="text-slide-small font-bold text-slide-ink mb-2">Context</div>
+        <p class="text-slide-body text-slide-ink leading-relaxed" v-html="slide.context"></p>
     </div>
 
     <!-- Simple Layout (no visual) -->
@@ -36,21 +36,21 @@ const hasVisualContent = computed(() => {
              :class="idx < revealedSteps ? 'opacity-100' : 'opacity-40 scale-[0.98] grayscale-[0.3]'">
                  
             <div class="relative bg-white rounded-xl border overflow-hidden transition-all duration-300 shadow-sm"
-                 :class="idx < revealedSteps ? 'border-presentation bg-presentation-soft' : 'border-slate-200'">
+                 :class="idx < revealedSteps ? 'border-slide-red bg-slide-red-soft' : 'border-slide-line'">
                 
                 <!-- Question Area -->
-                <div class="px-8 py-5 flex items-center gap-4" :class="idx < revealedSteps ? 'border-b border-slate-100' : ''">
+                <div class="px-8 py-5 flex items-center gap-4" :class="idx < revealedSteps ? 'border-b border-slide-line' : ''">
                      <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-slide-body shadow-sm shrink-0"
-                          :class="idx < revealedSteps ? 'bg-slate-900 text-white border border-line-strong' : 'bg-slate-100 text-slate-500'">
+                          :class="idx < revealedSteps ? 'bg-slide-ink text-white border border-line-strong' : 'bg-slide-soft text-slide-ink'">
                           {{ idx + 1 }}
                      </div>
-                     <div class="text-slide-body font-bold text-slate-800 leading-snug" v-html="step.question || step.title"></div>
+                     <div class="text-slide-body font-bold text-slide-ink leading-snug" v-html="step.question || step.title"></div>
                 </div>
                 
                 <!-- Answer Area (Amber Highlight, No Left Border) -->
-                <div v-if="idx < revealedSteps" class="px-8 py-6 bg-presentation-soft text-slide-body text-slate-700 leading-relaxed animate-[fadeInUp_0.3s_ease-out]">
+                <div v-if="idx < revealedSteps" class="px-8 py-6 bg-slide-red-soft text-slide-body text-slide-ink leading-relaxed animate-[fadeInUp_0.3s_ease-out]">
                      <div class="flex items-start gap-4">
-                         <span v-if="step.answer" class="text-presentation font-bold text-slide-small mt-1 shrink-0 bg-presentation-soft border border-presentation px-3 py-1 rounded-md">Antwoord</span>
+                         <span v-if="step.answer" class="text-slide-red font-bold text-slide-small mt-1 shrink-0 bg-slide-red-soft border border-slide-red px-3 py-1 rounded-md">Antwoord</span>
                          <span v-html="step.answer || step.content" class="block pt-0.5"></span>
                      </div>
                 </div>
@@ -61,7 +61,7 @@ const hasVisualContent = computed(() => {
     <!-- Visual Layout (with image/graph) -->
     <div v-else class="grid grid-cols-[1fr_520px] gap-8 pb-4 h-full min-h-[500px]">
         <!-- Visual Content Left Side -->
-        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center p-8 relative shadow-sm">
+        <div class="bg-white rounded-xl border border-slide-line overflow-hidden flex items-center justify-center p-8 relative shadow-sm">
             <!-- Grid pattern -->
             <div class="absolute inset-0 pointer-events-none opacity-[0.02]" 
                  style="background-image: radial-gradient(#0f172a 2px, transparent 2px); background-size: 24px 24px;">
@@ -83,28 +83,28 @@ const hasVisualContent = computed(() => {
         <div class="flex flex-col gap-5">
             <div v-for="(step, idx) in slide.steps" :key="idx"
                  class="relative bg-white rounded-xl border overflow-hidden transition-all duration-300"
-                 :class="idx < revealedSteps ? 'border-presentation bg-presentation-soft shadow-sm' : 'border-slate-200 shadow-sm opacity-50 scale-[0.98]'">
+                 :class="idx < revealedSteps ? 'border-slide-red bg-slide-red-soft shadow-sm' : 'border-slide-line shadow-sm opacity-50 scale-[0.98]'">
                 
                 <!-- Step Header -->
-                <div class="px-6 py-4 flex items-center gap-4" :class="idx < revealedSteps ? 'bg-presentation-soft border-b border-presentation' : 'bg-slate-50/50'">
+                <div class="px-6 py-4 flex items-center gap-4" :class="idx < revealedSteps ? 'bg-slide-red-soft border-b border-slide-red' : 'bg-slide-soft/50'">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-slide-small shrink-0 shadow-sm"
-                         :class="idx < revealedSteps ? 'bg-slate-900 text-white' : 'bg-panel-muted text-slate-500'">
+                         :class="idx < revealedSteps ? 'bg-slide-ink text-white' : 'bg-panel-muted text-slide-ink'">
                         {{ idx + 1 }}
                     </div>
-                    <h4 class="text-slide-body font-bold text-slate-800" v-html="step.title || step.question"></h4>
+                    <h4 class="text-slide-body font-bold text-slide-ink" v-html="step.title || step.question"></h4>
                 </div>
                 
                 <!-- Step Content -->
-                <div v-if="idx < revealedSteps" class="px-6 py-5 bg-white text-slide-body leading-relaxed text-ink-soft animate-[fadeInUp_0.3s_ease-out]">
+                <div v-if="idx < revealedSteps" class="px-6 py-5 bg-white text-slide-body leading-relaxed text-slide-ink animate-[fadeInUp_0.3s_ease-out]">
                     <div v-html="step.content || step.answer"></div>
                 </div>
             </div>
             
-            <div v-if="revealedSteps >= slide.steps.length" class="mt-2 p-4 rounded-xl bg-presentation-soft border border-presentation flex items-center justify-center gap-3 animate-[fadeIn_0.4s_ease-out]">
-                <div class="w-7 h-7 rounded-full bg-presentation-soft text-presentation border border-presentation flex items-center justify-center shadow-inner">
+            <div v-if="revealedSteps >= slide.steps.length" class="mt-2 p-4 rounded-xl bg-slide-red-soft border border-slide-red flex items-center justify-center gap-3 animate-[fadeIn_0.4s_ease-out]">
+                <div class="w-7 h-7 rounded-full bg-slide-red-soft text-slide-red border border-slide-red flex items-center justify-center shadow-inner">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
-                <span class="text-slide-body font-bold text-presentation">Alle stappen voltooid</span>
+                <span class="text-slide-body font-bold text-slide-red">Alle stappen voltooid</span>
             </div>
         </div>
     </div>

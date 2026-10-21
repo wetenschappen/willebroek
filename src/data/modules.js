@@ -53,8 +53,15 @@ export const modules = [
     topic: 'Celdeling',
     title: 'Celcyclus, mitose en meiose',
     date: '12/10/2026'
+  },
+  {
+    id: 'bio6-m02-l01-mendel',
+    subject: 'biology',
+    year: 6,
+    module: 2,
+    topic: 'Chromosomale erfelijkheid',
+    title: 'Mendel: mono- en dihybride kruisingen'
   }
-  // LOREM IPSUM
 
 ]
 

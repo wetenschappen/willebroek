@@ -37,7 +37,17 @@ activiteiten op de ABC-kaart. Gebruik de systeemklassen uit `src/style.css`
 kleurtype van de kaart waarop ze staat: `card-entry` en `card-exit` zijn
 `digital`, dus hun modals zijn blauw met het label `DIGITAAL`.
 
-**Geen donkere leesvlakken.** De projector staat tegen een witte muur, dus een
+**Presentatie-uitzondering:** alleen slidecanvassen volgen de rood-witte en
+marineblauwe stijl van `docs/lesson material/Hoofdstuk 5.pdf` (zie §15 van het
+designsysteem). Grote rode inhoudstitels op wit; title/big/closing mogen een
+rood statementvlak met witte grote tekst tonen. Gebruik `--color-slide-*` en
+`text-slide-*` / `bg-slide-*`, geen appkleur-combinaties. Geen footer, logo,
+schoolnaam of paginanummer op de slides; de leerkrachtbediening blijft buiten
+het canvas. IBM Plex blijft. De stapsgewijze onthullayouts blijven behouden.
+Deze uitzondering geldt **niet** voor tickets, simulaties of de appschil.
+
+**Geen donkere leesvlakken** (behoudens het rode statementvlak hierboven).
+De projector staat tegen een witte muur, dus een
 donker scherm is onleesbaar. Achtergrond is `--color-paper` of `--color-panel`,
 tekst is `--color-ink` of `--color-ink-soft`. Geen `bg-black`, `bg-slate-900` of
 `--color-ink` als schermvullend vlak. Kleine donkere elementen (`.lesson-nav`,
@@ -158,7 +168,11 @@ Activiteiten worden geregistreerd in
 | `springForceLab` | `SpringForceLabActivity.vue` | Fysica | Card activity |
 | `circuits` | `CircuitsActivity.vue` | Fysica | Card activity |
 | `idealGasLaw` | `IdealGasLawActivity.vue` | Fysica | Card activity |
+| `pressureLab` | `PressureLabActivity.vue` | Fysica | Card activity |
+| `opticsLab` | `OpticsLabActivity.vue` | Fysica | Card activity |
+| `phagocytosisLab` | `PhagocytosisLabActivity.vue` | Biologie | Card activity |
 | `cellDivisionLab` | `CellDivisionLabActivity.vue` | Biologie | Card activity (3 sims: celcyclus, mitose, meiose) |
+| `mendelLab` | `MendelLabActivity.vue` | Biologie | Card activity (10 oefenroutes, vrij kruisingslab en begripsvragen) |
 
 Vakspecifieke activiteiten horen op de digitale `card-activity` in stap B.
 Generieke activiteiten horen in `extraActivities`, niet op de hoofdkaart.

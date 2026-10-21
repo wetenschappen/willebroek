@@ -48,6 +48,11 @@ de achterste rij zit:
 
 De kern is: **helderheid boven sfeer, structuur boven effect, inhoud boven decoratie**.
 
+De presentaties hebben een expliciet goedgekeurde stijluitzondering: de
+rood-witte en marineblauwe slidedecktaal uit `lesson material/Hoofdstuk 5.pdf`.
+Die geldt alleen in het slidecanvas; zie sectie 15. App en activiteiten houden
+de gewone huisstijl.
+
 ## 2. Projectorregel: geen zwakke signalen
 
 Fletse grijze tekst, dunne grijze lijnen en informatie die alleen via hover
@@ -272,6 +277,35 @@ Deze variabelen staan in `:root` in `src/style.css`.
 | `--color-presentation` / `--color-presentation-soft` | `#b4232f` / `#fde8e9` | presentatie | `PRESENTATIE` |
 | `--color-workbook` / `--color-workbook-soft` | `#237a4b` / `#e7f2ea` | fysiek werk | `BOEK / BUNDEL` |
 
+### Presentatiecanvas — goedgekeurde uitzondering
+
+Alleen binnen een slidedeck worden deze tokens gebruikt. De kleuren zijn een
+benadering van het PDF-voorbeeld, geen officiële UA-huisstijlspecificatie.
+Het lettertype blijft IBM Plex Sans + Mono; we kopiëren geen logo of merknaam.
+
+| Token | Waarde | Gebruik |
+| --- | --- | --- |
+| `--color-slide-paper` | `#ffffff` | wit canvas en witte letters op rode statementslides |
+| `--color-slide-ink` | `#0b3267` | marineblauwe leestekst en compacte controls |
+| `--color-slide-red` | `#ea2d3b` | grote/vette titels, kernbegrippen, bullets en statementvlak |
+| `--color-slide-red-soft` | `#fff0f1` | onthuld antwoord |
+| `--color-slide-soft` | `#f2f5f9` | ingesloten rustvlak |
+| `--color-slide-line` | `#526b89` | zichtbare scheidingslijnen |
+
+Tailwind: `text-slide-ink`, `text-slide-red`, `bg-slide-paper`, `bg-slide-red`,
+`bg-slide-red-soft`, `bg-slide-soft` en `border-slide-line`. De app-utilities
+blijven hun oorspronkelijke kleuren houden. Binnen `.ppt-stage` verwijzen
+legacy ink/presentation/digital/action-variabelen uit les-HTML lokaal naar het
+deckpalet; buiten dat canvas verandert niets. Het rode statementvlak geeft
+legacy tekstaccenten lokaal wit zodat ook inline les-HTML leesbaar blijft.
+Groen/rood met icoon of tekstlabel mag nog steeds een antwoordtoestand aanduiden.
+
+**Contrast:** marineblauw op wit is circa 12,6:1; het heldere rood op wit
+(en wit op rood) circa 4,25:1. Rood is dus alleen voor grote of vette canvastekst,
+niet voor kleine gewone leestekst. Wit op rood is een bewuste uitzondering voor
+korte titels en statements; controleer die ook op de echte projector. Kleine
+bediening gebruikt marineblauw op wit of wit op marineblauw.
+
 ### Vak- en actiekleur
 
 | Token | Waarde | Gebruik |
@@ -303,7 +337,8 @@ Deze variabelen staan in `:root` in `src/style.css`.
 
 Daarnaast heeft `.badge` een vaste `6px` en gebruikt `.fab-btn` een cirkel.
 
-Dit is de volledige, toegestane radiuslijst voor de schil van een scherm:
+Dit is de volledige, toegestane radiuslijst voor de schil van een scherm
+(buiten het presentatiecanvas):
 
 ```text
 0px        fullscreen werkbladen
@@ -312,6 +347,9 @@ Dit is de volledige, toegestane radiuslijst voor de schil van een scherm:
 12px       kaarten, panelen, dialoogvensters
 50%        uitsluitend .fab-btn
 ```
+
+Alleen `.slide-statement-field` heeft een bewuste uitzondering: een afgeronde
+linkeronderhoek van 40 canvas-px, zoals in het PDF-voorbeeld.
 
 Losse Tailwind-radii zijn niet verboden voor *binnen*elementen van een
 simulatie, maar de schil volgt bovenstaande lijst.
@@ -451,9 +489,8 @@ geen leeg vlak onderaan krijgt.
 `.badge-class`, `.badge-check` (identiek aan `digital`) of `.badge-neutral`.
 De badge is de **tekstlabel-drager** uit sectie 3.
 
-> Deze klassen zijn gedefinieerd maar worden nog nergens gebruikt. De tijdlijn
-> zet het label nu via `.activity-meta` (`ActivityCard.vue`) en de
-> presentatieslides via `MathSlideWrapper`. Zet nieuwe labels op `.badge`.
+> De tijdlijn zet het label via `.activity-meta` (`ActivityCard.vue`).
+> Presentatieslides tonen geen generieke categorie-badges; zie sectie 15.
 
 ### Knop
 
@@ -501,7 +538,8 @@ De verplichte opbouw:
 
 Eigenschappen van de shell, in volgorde van belangrijkheid:
 
-1. **Altijd licht.** Zie sectie 15. Geen `bg-black`, `bg-slate-900` of
+1. **Altijd licht.** Alleen rode statementslides hebben de uitzondering uit
+   sectie 15; dat is geen uitzondering voor tickets of activiteiten. Geen `bg-black`, `bg-slate-900` of
    `bg-slate-950` op een schermvullend leesvlak.
 2. **Het activiteitstype zit in de kopbalk**, niet in een eigen palet.
 3. **Eén radius:** `0` voor de shell, `--radius-card` voor panelen erbinnen. De ABC-fasepanelen zijn een gerichte uitzondering: alleen de bovenhoeken zijn afgerond, de onderhoeken zijn vierkant om aan te sluiten op de rechte rijen.
@@ -562,7 +600,7 @@ grijze waas in plaats van tekst. Dit is geen smaakvoorkeur maar een gemeten
 klacht uit de praktijk.
 
 Daarom geldt voor élk scherm dat een leerling leest — slides, tickets,
-activiteiten, presentaties:
+activiteiten, presentaties — behoudens de expliciete canvasuitzondering hieronder:
 
 - achtergrond is `--color-paper` of `--color-panel`;
 - tekst is `--color-ink` of `--color-ink-soft`;
@@ -574,50 +612,53 @@ activiteiten, presentaties:
 Kleine donkere elementen blijven toegestaan: `.lesson-nav`, `.btn-primary`,
 `.timeline-letter`, `.fab-btn`. Die zijn een accent, geen leesvlak.
 
-De presentatielaag is omgezet: alle slides zijn licht.
+### Presentatie-uitzondering — stijl van het UA-voorbeeld
 
-### De presentatielaag volgt dezelfde taal
+**Expliciet gekozen:** de slidedecks volgen de visuele stijl van
+`docs/lesson material/Hoofdstuk 5.pdf`, in plaats van de gewone app-kopbalk en
+het petrolpalet. Dit is een lokale uitzondering, niet een nieuwe app-huisstijl.
+De ABC-kaart blijft rood met `PRESENTATIE`; de modalbediening blijft normale
+app-bediening. Simulaties, tickets, boek en de andere schermen veranderen niet.
 
-De slides zijn geen apart systeem meer. Ze gebruiken dezelfde tokens, dezelfde
-kopbalklogica en dezelfde activiteitskleur (rood `PRESENTATIE`, want een slide
-hoort bij een `card-pres-*`).
+- **Inhoudsslide:** zuiver wit papier, grote rode titel linksboven,
+  marineblauwe leestekst. De rode titel is het anker: **geen extra ankerbalk**.
+- **Titel / grote uitspraak / afsluiting:** rood vlak in een brede witte marge,
+  één afgeronde linkeronderhoek, grote witte tekst. Dit is de bewuste
+  uitzondering op de regel tegen grote gekleurde leesvlakken. Geen volle pagina
+  kleine tekst op rood; langere uitleg krijgt een witte inhoudsslide.
+- **Geen footer:** geen logo, universiteitsnaam, schoollabel, voettekst,
+  paginanummer of footerregel in de slides. De teller bij de leerkrachtknoppen
+  is bediening buiten het canvas, geen slidefooter.
+- IBM Plex Sans + Mono blijft het enige fontpaar. We nemen stijlkenmerken over,
+  niet de universiteitsbranding of een exact gelicentieerd PowerPoint-template.
+- Rood benoemt inhoudelijke nadruk binnen de presentatie, niet een nieuw vak.
+  Feedback kan groen/rood gebruiken, altijd met tekst of een icoon.
 
-De presentatie gebruikt een vaste canvasmaat van `1920×1080` en schaalt die
-proportioneel naar het beschikbare scherm. Daarom zijn gewone app-maten zoals
-`.badge`, `.fullscreen-label`, `text-sm` en `text-lg` in het canvas verboden:
-na het schalen worden ze te klein of ogen ze als extra, dubbele metadata. Een
-slide krijgt één duidelijke titelankerbalk en één betekenisvolle inhoudskop;
-generieke categorielabels zoals `VOORBEELD`, `OEFENING` en `WAARDETABEL` worden
-niet als decoratieve pill/badge gerenderd. Het label mag wel in de slide-data
-blijven voor compatibiliteit met lesregistraties.
+De presentatie gebruikt een vast **1920×1080**-canvas dat proportioneel schaalt.
+Gebruik alleen de `slide-*` tekstschaal uit `tailwind.config.js`, geen `text-sm`,
+`text-lg`, `.badge` of `.fullscreen-label`. Generieke categorieën zoals
+`VOORBEELD`, `OEFENING` en `WAARDETABEL` worden niet als pillen gerenderd; de
+keys mogen voor compatibiliteit in lesdata blijven.
 
-De gedeelde `MathSlideWrapper` levert hiervoor de enige slidekop. Slide-inhoud
-gebruikt de `slide-*` schaal uit `tailwind.config.js` en de primitives in
-`src/style.css` (`slide-label`, `slide-panel`, `slide-btn`, `slide-hint`).
-De discipline-slide is de uitzondering voor context: de rode ankerbalk, titel en
-het compacte label `AFSPRAKEN` staan in één lage kopregel; die kop mag niet
-uitgroeien tot een hoge badgekolom.
+`MathSlideWrapper` levert de rode titel en witte pagina (`.slide-page`), zonder
+footer. `SlideStatement` levert het rode statementvlak. `SlideDiscipline`
+gebruikt dezelfde inhoudskop en een gewone lijst afspraken, **geen vier boxen**.
 
-Wat is verwijderd:
+**Inhoud is tekst, geen kaartjes.** Een inhoudsslide leest als een cursuspagina:
+vierkante bullets (rood op niveau 1, marineblauw op niveau 2), vette rode
+kernbegrippen, centraal geplaatste formules, een onderstreepte aanloop
+*Voorbeeld:*, gevolglijnen met `➔`, grote figuren en bijschriften. Gebruik
+`.slide-list` en `.slide-arrow`, of `.slide-rows` / `.slide-row` /
+`.slide-row-label` / `.slide-row-value` voor grootheden en eigenschappen.
+Geen raster van vier reuzeboxen. De stapsgewijze layouts (`steps`,
+`worked-example`, `exercise`, `equation-solver`, `theorem-proof`) behouden hun
+stapstructuur en onthulmechaniek, maar gebruiken hetzelfde rood/marinepalet.
+Panelen blijven toegestaan voor figuren en onthulde antwoorden.
 
-- `bg-slate-900`/`bg-black` slides → `--color-paper`;
-- `font-serif` (`SlideHero`, `SlideTitle`, `SlideStandard`) → het fontpaar is
-  IBM Plex Sans + Mono;
-- `font-family: 'Open Sans'` in 8 slides → **nooit geladen**, viel stil terug op
-  de browserdefault;
-- de `amber-500` ankerbalk in `MathSlideWrapper` → de rode activiteitskleur;
-- `text-slate-500`/`text-slate-400` labels → `--color-ink-soft`;
-- de zwarte letterbox in `.slide-viewport` → `--color-paper`.
-
-De afsluitende slide heette `SlideCelebration` en toonde confetti, een ster en
-"Klaar!". Feestelijke afsluitingen horen niet in een werkblad: de slide heet nu
-`SlideClosing`, de layoutkey is `closing`, en de tekst is `Einde van de les` /
-`Je hebt deze les afgerond.` zonder decoratie.
-
-Alle 26 slides blijven bestaan. Dat sommige layouts nu niet in een les gebruikt
-worden, betekent niet dat ze weg mogen: ze demonstreren de volledige
-presentatiecapaciteit en moeten dus dezelfde taal spreken. Er is geen "dode"
-slide die mag verouderen.
+Alle bestaande slidelayouts blijven beschikbaar en volgen deze uitzondering,
+ook wanneer een layout nu niet in een actieve les gebruikt wordt. Geen
+confetti, siericonen, blur, glow of donkere leesachtergrond. `SlideClosing`
+blijft de neutrale afsluiting, zonder dubbele eindlabels of statistiekkaartjes.
 
 Voor de laboratoriumsimulaties (`Circuits`, `ForcesLab`, `SpringForceLab`,
 `IdealGasLaw`) geldt een dubbele afspraak:
@@ -645,10 +686,10 @@ voeg hier niets toe zonder het eerst in de code te zien.
 | `.card` als losse klasse | **0 keer gebruikt**; alleen via `ActivityCard.vue` | rechtstreeks gebruik vermijden, anders verliest de kaart zijn ankerbalk |
 | `TicketModal.vue` | **omgezet**: fullscreen-shell, blauw `DIGITAAL` | klaar |
 | `PresentationModal.vue` | **omgezet** naar lichte shell met rode voortgangsbalk | klaar |
-| `SlideHero`, `SlideTitle`, `SlideBig`, `SlideClosing` | **omgezet** naar `--color-paper` | klaar |
+| `SlideHero`, `SlideTitle`, `SlideBig`, `SlideClosing` | **omgezet** naar het deckpalet; title/big/closing delen `SlideStatement` | klaar |
 | `font-serif` | **verwijderd** uit alle slides | klaar |
 | `Open Sans` | **verwijderd** uit alle slides | klaar |
-| `MathSlideWrapper.vue` | **omgezet**: rode ankerbalk + één titel, zonder generieke categorie-badge | klaar |
+| `MathSlideWrapper.vue` | **omgezet**: rode titel op wit, marineblauwe tekst, geen footer of badge | klaar |
 | `Circuits`, `ForcesLab`, `IdealGasLaw`, `PressureLab`, `OpticsLab` | **omgezet** naar de fullscreen-shell | klaar |
 | `PhagocytosisLab` | **omgezet** naar de fullscreen-shell (was niet schermvullend) | klaar |
 | `WorkbookModal`, `SolutionsModal`, `SpotCheckModal` | **omgezet** naar de fullscreen-shell met Escape-sluiten | klaar |

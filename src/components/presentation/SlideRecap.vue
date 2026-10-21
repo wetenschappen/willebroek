@@ -14,35 +14,27 @@ const props = defineProps({
 </script>
 
 <template>
+  <!-- Herhaling als genummerde vragenlijst; het onthulde antwoord staat
+       ingesprongen onder de vraag met een tekstlabel - geen vraagkaartjes. -->
   <MathSlideWrapper :title="slide.title || 'Herhaling'">
-    <div class="flex flex-col gap-6">
-      <!-- Intro text -->
-      <div v-if="slide.intro" 
-           class="p-6 bg-white border border-slate-200 rounded-xl text-slide-body text-slate-700 leading-relaxed shadow-sm"
-           v-html="slide.intro">
-      </div>
-      
-      <!-- Questions List -->
-      <div class="flex flex-col gap-6">
+    <div class="pb-2 max-w-[1500px]">
+      <p v-if="slide.intro" class="text-slide-body text-slide-ink leading-relaxed mb-8" v-html="slide.intro"></p>
+
+      <div style="border-top: 2px solid var(--color-slide-line);">
         <div v-for="(question, index) in slide.questions"
              :key="index"
-             class="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
-          
-          <div class="flex items-start gap-4">
-            <!-- Question Number -->
-            <div class="flex-shrink-0 w-11 h-11 bg-slate-900 text-white rounded-full flex items-center justify-center text-slide-body font-bold">
-              {{ index + 1 }}
-            </div>
-            <!-- Question Text -->
-            <div class="text-slide-heading font-bold text-slate-800 leading-snug pt-1" v-html="question.question"></div>
+             class="py-6 px-2"
+             style="border-bottom: 2px solid var(--color-slide-line);">
+
+          <div class="flex items-baseline gap-6">
+            <span class="font-mono font-bold text-slide-heading text-slide-red w-14 shrink-0">{{ index + 1 }}.</span>
+            <div class="text-slide-heading font-bold text-slide-ink leading-snug" v-html="question.question"></div>
           </div>
-          
-          <!-- Answer Box (Amber Highlight, No Left Border) -->
-          <div v-if="index < revealedSteps" class="mt-5 ml-15 p-6 bg-presentation-soft border border-presentation rounded-xl animate-[fadeInUp_0.3s_ease-out]">
-            <div class="text-slide-small font-bold text-presentation uppercase tracking-wider mb-2">Antwoord</div>
-            <div class="text-slide-body text-slate-700 leading-relaxed" v-html="question.answer"></div>
+
+          <div v-if="index < revealedSteps" class="mt-4 ml-20 animate-[fadeInUp_0.3s_ease-out]">
+            <span class="font-bold text-slide-body" style="color: var(--color-slide-red);">Antwoord:&nbsp;</span>
+            <span class="text-slide-body text-slide-ink leading-relaxed" v-html="question.answer"></span>
           </div>
-          
         </div>
       </div>
     </div>

@@ -1,6 +1,5 @@
 <script setup>
 import MathSlideWrapper from './shared/MathSlideWrapper.vue'
-import PedagogyPanel from './shared/PedagogyPanel.vue'
 
 const props = defineProps({
     slide: { type: Object, required: true },
@@ -12,37 +11,27 @@ const emit = defineEmits(['revealNext'])
 
 <template>
 <MathSlideWrapper :title="slide.title || 'Denkvraag'">
-    <PedagogyPanel variant="formula" title="Denkvraag">
-        <div class="text-slide-heading font-bold text-slate-800 leading-relaxed mb-6" v-html="slide.question"></div>
-        
-        <!-- Button (Flat Border, No Gradients/Glows) -->
-        <div v-if="revealedSteps === 0" class="flex justify-center mt-8 mb-4">
-            <button @click="$emit('revealNext', 1)" 
-                    class="px-8 py-4 bg-presentation text-white rounded-xl font-bold text-slide-body shadow-sm hover:bg-presentation transition-colors flex items-center gap-3 cursor-pointer border border-presentation">
-                <span class="font-bold">Toon antwoord</span>
-                <div class="text-presentation text-slide-small px-2 py-0.5 bg-presentation-soft rounded border border-presentation font-mono font-bold">
-                    S
-                </div>
+    <!-- Denkvraag als grote leestekst, niet als stapel geneste kaders. -->
+    <div class="flex flex-col h-full pb-2">
+        <p class="text-slide-heading font-bold text-slide-ink leading-snug max-w-[1500px]" v-html="slide.question"></p>
+
+        <p v-if="slide.hint && revealedSteps === 0" class="slide-hint mt-8">
+            <span v-html="slide.hint"></span>
+        </p>
+
+        <!-- Onthulknop in de slideknoppen-taal -->
+        <div v-if="revealedSteps === 0" class="mt-12">
+            <button @click="$emit('revealNext', 1)" class="slide-btn slide-btn-primary">
+                <span>Toon antwoord</span>
+                <span class="slide-key" style="background: transparent; color: inherit; border-color: currentColor;">S</span>
             </button>
         </div>
-        
-        <!-- Answer Reveal (No Glows/Gradients) -->
-        <div v-else class="mt-8 animate-[fadeInUp_0.3s_ease-out]">
-            <div class="relative py-4">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-presentation"></div>
-                </div>
-                <div class="relative flex justify-center">
-                    <span class="bg-presentation-soft px-4 py-1.5 text-presentation font-bold text-slide-small rounded-lg border border-presentation shadow-sm">
-                        Antwoord
-                    </span>
-                </div>
-            </div>
-            
-            <div class="text-slide-heading text-slate-700 font-medium leading-relaxed bg-presentation-soft p-8 rounded-xl border border-presentation mt-4">
-                <span v-html="slide.revealText || slide.answer" class="block"></span>
-            </div>
+
+        <!-- Onthuld antwoord: één accentvlak met tekstlabel -->
+        <div v-else class="mt-10 slide-panel-answer p-8 animate-[fadeInUp_0.3s_ease-out] max-w-[1500px]">
+            <div class="slide-meta mb-3" style="color: var(--color-slide-red);">Antwoord</div>
+            <div class="text-slide-heading text-slide-ink font-medium leading-relaxed" v-html="slide.revealText || slide.answer"></div>
         </div>
-    </PedagogyPanel>
+    </div>
 </MathSlideWrapper>
 </template>

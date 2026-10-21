@@ -26,6 +26,14 @@
     --color-biology-soft: #e7f2ea;
     --color-action: #b65b2d;
     --color-action-soft: #fbede5;
+    /* Deck-only exception: inspired by the reference UA slides, not app UI.
+       Red is for large/bold emphasis only (4.25:1 on white); navy for reading. */
+    --color-slide-paper: #ffffff;
+    --color-slide-ink: #0b3267;
+    --color-slide-red: #ea2d3b;
+    --color-slide-red-soft: #fff0f1;
+    --color-slide-soft: #f2f5f9;
+    --color-slide-line: #526b89;
     --radius-control: 8px;
     --radius-card: 12px;
     --shadow-rest: 0 1px 2px rgb(23 37 43 / 0.06), 0 8px 24px rgb(23 37 43 / 0.04);
@@ -1119,7 +1127,7 @@
         flex: 1;
         /* Licht, niet zwart: een donkere letterbox is onleesbaar tegen een
            witte muur en geeft een zwarte band rond elke slide. */
-        background: var(--color-paper);
+        background: var(--color-slide-paper);
     }
 
     /* --- Presentatielaag ---------------------------------------------------
@@ -1141,12 +1149,9 @@
         border: 2px solid;
     }
 
-    /* Een presentatiekop is één lijn: accentbalk en titel. Een categorie- of
-       badge-rij is geen extra informatie en zou alleen headroom kosten. */
+    /* Red headline replaces the old accent bar. No category labels or footer. */
     .slide-header-compact {
-        @apply flex items-center gap-8;
-        min-height: 64px;
-        margin-bottom: 28px;
+        margin-bottom: 64px;
     }
 
     .slide-kicker {
@@ -1155,24 +1160,24 @@
         font-weight: 600;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--color-presentation);
+        color: var(--color-slide-red);
     }
 
     /* Rood: de presentatie is het enige activiteitstype in deze laag. */
     .slide-label {
-        background: var(--color-presentation-soft);
-        color: var(--color-presentation);
-        border-color: var(--color-presentation);
+        background: var(--color-slide-red-soft);
+        color: var(--color-slide-red);
+        border-color: var(--color-slide-red);
     }
 
     /* Kleurloze variant voor een neutrale vermelding zoals 'Einde van de les'. */
     .slide-label-neutral {
-        background: var(--color-panel-muted);
-        color: var(--color-ink-soft);
-        border-color: var(--color-line);
+        background: var(--color-slide-soft);
+        color: var(--color-slide-ink);
+        border-color: var(--color-slide-line);
     }
 
-    /* Klein monodetail binnen een slide: paginanummer, 'SPATIE', contextlabel.
+    /* Klein monodetail binnen een slide: 'SPATIE' of contextlabel.
        Blijft bewust groot genoeg om te lezen (21px op een 14" laptop). */
     .slide-meta {
         font-family: 'IBM Plex Mono', monospace;
@@ -1180,38 +1185,37 @@
         font-weight: 600;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--color-ink-soft);
+        color: var(--color-slide-ink);
     }
 
     /* Ankerbalk van het presentatietype, in canvas-px. */
     .slide-anchor {
-        background: var(--color-presentation);
+        background: var(--color-slide-red);
     }
 
-    /* Paneel op een slide. Zelfde taal als .card buiten de presentatie, maar
-       met maten die bij het 1920x1080-canvas horen. */
+    /* Panels remain for figures, revealed answers and step-by-step solutions. */
     .slide-panel {
-        background: var(--color-panel);
-        border: 2px solid var(--color-line);
+        background: var(--color-slide-paper);
+        border: 2px solid var(--color-slide-line);
         border-radius: var(--radius-card);
     }
 
     .slide-panel-muted {
-        background: var(--color-panel-muted);
-        border: 2px solid var(--color-line);
+        background: var(--color-slide-soft);
+        border: 2px solid var(--color-slide-line);
         border-radius: var(--radius-card);
     }
 
     /* Toegestane nadrukrand, bijvoorbeeld het opvallendste paneel van de slide. */
     .slide-panel-strong {
-        border-color: var(--color-line-strong);
+        border-color: var(--color-slide-ink);
     }
 
     /* Onthuld antwoord: het presentatietype in zijn eigen kleur, altijd met een
        tekstlabel erbij zodat kleur nooit de enige betekenis draagt. */
     .slide-panel-answer {
-        background: var(--color-presentation-soft);
-        border: 2px solid var(--color-presentation);
+        background: var(--color-slide-red-soft);
+        border: 2px solid var(--color-slide-red);
         border-radius: var(--radius-card);
     }
 
@@ -1221,7 +1225,7 @@
         width: 76px;
         height: 76px;
         border-radius: var(--radius-control);
-        background: var(--color-ink);
+        background: var(--color-slide-ink);
         color: #ffffff;
         font-family: 'IBM Plex Mono', monospace;
         font-size: 34px;
@@ -1234,26 +1238,26 @@
         padding: 20px 36px;
         font-size: 30px;
         border-radius: var(--radius-control);
-        border: 2px solid var(--color-line-strong);
-        background: var(--color-panel);
-        color: var(--color-ink);
+        border: 2px solid var(--color-slide-ink);
+        background: var(--color-slide-paper);
+        color: var(--color-slide-ink);
         cursor: pointer;
         transition: background-color 160ms ease, color 160ms ease;
     }
 
     .slide-btn:hover {
-        background: var(--color-panel-muted);
+        background: var(--color-slide-soft);
     }
 
-    /* Enige donkere knop, gelijk aan .btn-primary buiten de presentatie. */
+    /* Navy controls, not white-on-red small reading text. */
     .slide-btn-primary {
-        background: var(--color-ink);
-        border-color: var(--color-ink);
+        background: var(--color-slide-ink);
+        border-color: var(--color-slide-ink);
         color: #ffffff;
     }
 
     .slide-btn-primary:hover {
-        background: var(--color-ink-soft);
+        background: var(--color-slide-ink);
         color: #ffffff;
     }
 
@@ -1268,7 +1272,7 @@
     .slide-hint {
         @apply inline-flex items-center gap-4;
         font-size: 30px;
-        color: var(--color-ink-soft);
+        color: var(--color-slide-ink);
     }
 
     .slide-key {
@@ -1278,9 +1282,92 @@
         letter-spacing: 0.08em;
         padding: 6px 14px;
         border-radius: var(--radius-control);
-        border: 2px solid var(--color-line-strong);
-        background: var(--color-panel);
-        color: var(--color-ink);
+        border: 2px solid var(--color-slide-ink);
+        background: var(--color-slide-paper);
+        color: var(--color-slide-ink);
+    }
+
+    /* --- Tekst-eerst slideprimitieven --------------------------------------
+       Een inhoudsslide is een cursuspagina, geen dashboard: vloeiende tekst,
+       echte opsommingstekens en regelscheidingen in plaats van losse kaartjes.
+       Vier reuzeboxen op een slide leveren alleen visuele ruis op. */
+
+    /* Reference-style square bullets: red first level, navy second level.
+       Consequences use an arrow. Also supports nested lists in lesson HTML. */
+    .slide-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .slide-list > li {
+        position: relative;
+        padding-left: 46px;
+        margin-bottom: 26px;
+    }
+
+    .slide-list > li::before {
+        content: '\25AA';
+        position: absolute;
+        left: 4px;
+        top: -0.08em;
+        font-weight: 700;
+        color: var(--color-slide-red);
+    }
+
+    .slide-list > li.slide-arrow::before {
+        content: '\2794';
+    }
+
+    .slide-list > li > ul,
+    .slide-list ul {
+        list-style: none;
+        margin-top: 14px;
+        padding: 0;
+    }
+
+    .slide-list > li > ul > li,
+    .slide-list ul > li {
+        position: relative;
+        padding-left: 40px;
+        margin-bottom: 14px;
+    }
+
+    .slide-list > li > ul > li::before,
+    .slide-list ul > li::before {
+        content: '\25AA';
+        position: absolute;
+        left: 4px;
+        font-weight: 700;
+        color: var(--color-slide-ink);
+    }
+
+    /* Label-waarderijen: vervangt het kaartjesraster voor eigenschappen en
+       formulegrootheden. Label in de presentatiekleur, waarde in inkt, met
+       een zichtbare regelscheiding zoals in een cursustabel. */
+    .slide-rows {
+        border-top: 2px solid var(--color-slide-line);
+    }
+
+    .slide-row {
+        display: flex;
+        gap: 56px;
+        align-items: baseline;
+        padding: 22px 8px;
+        border-bottom: 2px solid var(--color-slide-line);
+    }
+
+    .slide-row-label {
+        flex-shrink: 0;
+        width: 380px;
+        font-weight: 700;
+        color: var(--color-slide-red);
+    }
+
+    .slide-row-value {
+        flex: 1;
+        min-width: 0;
+        color: var(--color-slide-ink);
     }
 
     .ppt-stage {
@@ -1288,7 +1375,73 @@
         width: 1920px;
         height: 1080px;
         overflow: hidden;
-        box-shadow: 0 20px 60px rgb(0 0 0 / 0.3);
+        color: var(--color-slide-ink);
+        /* Compatibility for inline lesson HTML; overrides stay inside canvas. */
+        --color-ink: var(--color-slide-ink);
+        --color-ink-soft: var(--color-slide-ink);
+        --color-presentation: var(--color-slide-red);
+        --color-presentation-soft: var(--color-slide-red-soft);
+        --color-digital: var(--color-slide-ink);
+        --color-action: var(--color-slide-red);
+    }
+
+    /* Content slide: reference-like white margins and red headline. Controls
+       live outside the canvas; bottom space keeps them clear of the text. */
+    .slide-page {
+        padding: 96px 100px 128px;
+        background: var(--color-slide-paper);
+        color: var(--color-slide-ink);
+    }
+
+    /* Preserve working space for the step-by-step layouts. */
+    .slide-page-solution {
+        padding-top: 64px;
+        padding-bottom: 96px;
+    }
+
+    .slide-page-solution .slide-header-compact {
+        margin-bottom: 40px;
+    }
+
+    .slide-copy :where(strong, b) {
+        color: var(--color-slide-red);
+    }
+
+    .slide-copy :where(ul:not([class])) {
+        list-style-type: square;
+        padding-left: 46px;
+    }
+
+    /* Title/statement exception: a red field in a white margin, with one
+       rounded lower-left corner, like the reference. No institution branding. */
+    .slide-statement {
+        padding: 100px;
+        background: var(--color-slide-paper);
+    }
+
+    .slide-statement-field {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 80px;
+        border-bottom-left-radius: 40px;
+        background: var(--color-slide-red);
+        color: var(--color-slide-paper);
+        text-align: center;
+        /* Existing inline lesson emphasis must also stay white on red. */
+        --color-ink: var(--color-slide-paper);
+        --color-ink-soft: var(--color-slide-paper);
+        --color-digital: var(--color-slide-paper);
+        --color-presentation: var(--color-slide-paper);
+        --color-workbook: var(--color-slide-paper);
+        --color-action: var(--color-slide-paper);
+    }
+
+    .slide-statement-field :where(strong, b, .katex) {
+        color: inherit;
     }
 
     .slide-enter-active,

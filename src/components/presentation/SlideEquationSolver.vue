@@ -11,11 +11,11 @@ const emit = defineEmits(['revealNext'])
 </script>
 
 <template>
-<MathSlideWrapper :title="slide.title || 'Vergelijking Oplossen'">
+<MathSlideWrapper solution :title="slide.title || 'Vergelijking Oplossen'">
     
     <div class="flex flex-col items-center mt-6 w-full">
         <!-- Main Math Box (No Left Border, No Gradients) -->
-        <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-xl p-10 shadow-sm relative overflow-hidden">
+        <div class="w-full max-w-4xl bg-white border border-slide-line rounded-xl p-10 shadow-sm relative overflow-hidden">
             <!-- Grid Background -->
             <div class="absolute inset-0 pointer-events-none opacity-[0.01]" 
                  style="background-image: radial-gradient(#0f172a 2px, transparent 2px); background-size: 20px 20px;">
@@ -28,21 +28,21 @@ const emit = defineEmits(['revealNext'])
                     
                     <!-- Left Side of Equation -->
                     <div class="flex-1 flex justify-end">
-                        <span class="text-slide-heading font-bold text-slate-800 font-mono" v-html="step.left"></span>
+                        <span class="text-slide-heading font-bold text-slide-ink font-mono" v-html="step.left"></span>
                     </div>
                     
                     <!-- Operator (=, <, >, etc) -->
                     <div class="w-16 flex justify-center shrink-0">
-                        <span class="text-slide-heading font-bold text-presentation font-mono" v-html="step.operator || '='"></span>
+                        <span class="text-slide-heading font-bold text-slide-red font-mono" v-html="step.operator || '='"></span>
                     </div>
                     
                     <!-- Right Side of Equation -->
                     <div class="flex-1 flex justify-start items-center gap-8">
-                        <span class="text-slide-heading font-bold text-slate-800 font-mono" v-html="step.right"></span>
+                        <span class="text-slide-heading font-bold text-slide-ink font-mono" v-html="step.right"></span>
                         
                         <!-- Annotation (e.g. "+ 4 aan beide kanten") -->
                         <div v-if="step.annotation" class="opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                            <span class="px-3.5 py-1 bg-slate-50 border border-slate-300 rounded-lg text-slate-500 text-slide-body font-extrabold uppercase tracking-wide">
+                            <span class="px-3.5 py-1 bg-slide-soft border border-slide-line rounded-lg text-slide-ink text-slide-body font-extrabold uppercase tracking-wide">
                                 | {{ step.annotation }}
                             </span>
                         </div>
@@ -54,9 +54,9 @@ const emit = defineEmits(['revealNext'])
         
         <!-- Next Step Prompt -->
         <div class="mt-8 h-10 flex justify-center">
-            <div v-if="revealedSteps < slide.steps.length - 1" class="flex items-center gap-2 text-slate-600 font-bold text-slide-small uppercase tracking-wide">
+            <div v-if="revealedSteps < slide.steps.length - 1" class="flex items-center gap-2 text-slide-ink font-bold text-slide-small uppercase tracking-wide">
                 <span>Druk op</span>
-                <span class="px-2.5 py-1 bg-white border border-slate-200 shadow-sm rounded-md font-mono text-slide-small text-slate-600 font-extrabold select-none">SPATIE</span>
+                <span class="px-2.5 py-1 bg-white border border-slide-line shadow-sm rounded-md font-mono text-slide-small text-slide-ink font-extrabold select-none">SPATIE</span>
                 <span>voor de volgende stap</span>
             </div>
             <div v-else class="flex items-center gap-3 text-workbook font-bold bg-workbook-soft px-6 py-2.5 rounded-xl border border-workbook shadow-sm animate-[fadeInUp_0.4s_ease-out]">

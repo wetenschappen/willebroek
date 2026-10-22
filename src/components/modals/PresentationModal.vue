@@ -23,6 +23,7 @@ import SlideImageHero from '../presentation/SlideImageHero.vue'
 import SlideClosing from '../presentation/SlideClosing.vue'
 import SlideDefinition from '../presentation/SlideDefinition.vue'
 import SlideWorkedExample from '../presentation/SlideWorkedExample.vue'
+import SlideBookExample from '../presentation/SlideBookExample.vue'
 import SlideValueTable from '../presentation/SlideValueTable.vue'
 import SlideProperties from '../presentation/SlideProperties.vue'
 import SlideEquationSolver from '../presentation/SlideEquationSolver.vue'
@@ -50,6 +51,7 @@ const layoutComponentMap = {
     'closing': SlideClosing,
     'definition': SlideDefinition,
     'worked-example': SlideWorkedExample,
+    'book-example': SlideBookExample,
     'value-table': SlideValueTable,
     'properties': SlideProperties,
     'equation-solver': SlideEquationSolver,
@@ -176,6 +178,19 @@ const slidesCopy = computed(() => {
 const slides = computed(() => slidesCopy.value)
 const totalSlides = computed(() => slides.value.length)
 const progressPercentage = computed(() => ((currentSlide.value + 1) / totalSlides.value) * 100)
+// Optional authored contents list, outside the slide canvas. Large book decks
+// remain usable without clicking through every preceding solution.
+const sections = computed(() => slides.value.flatMap((slide, index) => slide.section ? [{ index, label: slide.section }] : []))
+const activeSection = computed(() => sections.value.filter(section => section.index <= currentSlide.value).at(-1)?.index ?? '')
+function jumpToSection(event) {
+    const index = Number(event.target.value)
+    if (!Number.isInteger(index) || index < 0 || index >= totalSlides.value) return
+    transitionName.value = index < currentSlide.value ? 'slide-back' : 'slide'
+    currentSlide.value = index
+    revealedSteps.value = 0
+    selectedAnswer.value = null
+    showCorrectPopup.value = false
+}
 
 const currentMathConfigForAnalysis = computed(() => {
     const slide = slides.value[currentSlide.value];
@@ -206,7 +221,7 @@ function revealLimit(slide) {
         const consumesProblem = !slide.problem && ['Situatie', 'Opgave'].includes(first?.label)
         return Math.max(0, (slide.steps?.length || 0) - (consumesProblem ? 1 : 0))
     }
-    if (['steps', 'theorem-proof', 'exercise'].includes(slide.layout)) return slide.steps?.length || 0
+    if (['steps', 'theorem-proof', 'exercise', 'book-example'].includes(slide.layout)) return slide.steps?.length || 0
     return 0
 }
 
@@ -312,14 +327,14 @@ function handleKeydown(e) {
         return
     }
 
-    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return
 
     if (e.key === 's' || e.key === 'S') {
         e.preventDefault()
         const slide = slides.value[currentSlide.value]
         if (!slide) return
         
-        const isStepsLayout = ['steps', 'exercise', 'worked-example', 'recap', 'equation-solver', 'theorem-proof'].includes(slide.layout)
+        const isStepsLayout = ['steps', 'exercise', 'worked-example', 'recap', 'equation-solver', 'theorem-proof', 'book-example'].includes(slide.layout)
         const maxSteps = revealLimit(slide)
 
         // The displayed S hint on a thinking question must match Space/click.
@@ -445,6 +460,14 @@ function resolveImageUrl(url) {
                 <div class="h-full slide-anchor" :style="{ width: progressPercentage + '%' }"></div>
             </div>
 
+            <label v-if="sections.length" class="presentation-contents">
+                <span>Ga naar</span>
+                <select aria-label="Kies een onderdeel of boekopgave" :value="activeSection" @change="jumpToSection">
+                    <option v-if="activeSection === ''" value="" disabled>Kies een onderdeel</option>
+                    <option v-for="section in sections" :key="section.index" :value="section.index">{{ section.label }}</option>
+                </select>
+            </label>
+
             <!-- Sluiten: buiten het 1920x1080-canvas, dus echte schermpunten.
                  Blijft bewust klein: dit is bediening voor de leerkracht, geen
                  leesvlak voor de klas. -->
@@ -520,6 +543,9 @@ function resolveImageUrl(url) {
 </template>
 
 <style scoped>
+.presentation-contents { position: absolute; top: 20px; left: 20px; z-index: 80; display: flex; align-items: center; gap: 8px; max-width: calc(100vw - 104px); background: var(--color-panel); color: var(--color-ink); padding: 4px 8px; border: 2px solid var(--color-line-strong); border-radius: var(--radius-control); }
+.presentation-contents select { min-width: 0; max-width: 360px; padding: 4px; color: var(--color-ink); background: var(--color-panel); }
+@media (max-width: 600px) { .presentation-contents span { display: none; } .presentation-contents select { max-width: 220px; } }
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }

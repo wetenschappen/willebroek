@@ -12,6 +12,7 @@ const OpticsLabActivity = defineAsyncComponent(() => import('../../s-activities/
 const PhagocytosisLabActivity = defineAsyncComponent(() => import('../../s-activities/PhagocytosisLabActivity.vue'))
 const CellDivisionLabActivity = defineAsyncComponent(() => import('../../s-activities/CellDivisionLabActivity.vue'))
 const MendelLabActivity = defineAsyncComponent(() => import('../../s-activities/MendelLabActivity.vue'))
+const ArchimedesLabActivity = defineAsyncComponent(() => import('../../s-activities/ArchimedesLabActivity.vue'))
 
 const COMPONENT_MAP = {
   dragDrop: DragDropActivity,
@@ -24,7 +25,8 @@ const COMPONENT_MAP = {
   opticsLab: OpticsLabActivity,
   phagocytosisLab: PhagocytosisLabActivity,
   cellDivisionLab: CellDivisionLabActivity,
-  mendelLab: MendelLabActivity
+  mendelLab: MendelLabActivity,
+  archimedesLab: ArchimedesLabActivity
 }
 
 export function useActivitySystem(lessonData, markAsDoneCallback) {

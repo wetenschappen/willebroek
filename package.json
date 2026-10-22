@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "check": "node scripts/health-check.mjs && node --test scripts/mendel.test.mjs",
+    "check": "node scripts/health-check.mjs && node --test scripts/mendel.test.mjs scripts/archimedes.test.mjs",
     "smoke": "node scripts/smoke-check.mjs",
     "build": "vite build",
     "preview": "vite preview"

@@ -169,6 +169,7 @@ Activiteiten worden geregistreerd in
 | `circuits` | `CircuitsActivity.vue` | Fysica | Card activity |
 | `idealGasLaw` | `IdealGasLawActivity.vue` | Fysica | Card activity |
 | `pressureLab` | `PressureLabActivity.vue` | Fysica | Card activity |
+| `archimedesLab` | `ArchimedesLabActivity.vue` | Fysica | Card activity (volumes, afleidingbouwer, 5 parameterproeven, drijven en gassen) |
 | `opticsLab` | `OpticsLabActivity.vue` | Fysica | Card activity |
 | `phagocytosisLab` | `PhagocytosisLabActivity.vue` | Biologie | Card activity |
 | `cellDivisionLab` | `CellDivisionLabActivity.vue` | Biologie | Card activity (3 sims: celcyclus, mitose, meiose) |

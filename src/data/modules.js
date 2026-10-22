@@ -32,6 +32,16 @@ export const modules = [
     title: 'Communicerende vaten',
     date: '01/10/2026'
   },
+  {
+    id: 'fys4-m01-l09-archimedeskracht-vloeistoffen',
+    subject: 'physics', year: 4, module: 1, topic: 'Druk',
+    title: 'Archimedes: afleiding en parameteronderzoek'
+  },
+  {
+    id: 'fys4-m01-l10-archimedeskracht-gassen',
+    subject: 'physics', year: 4, module: 1, topic: 'Druk',
+    title: 'Archimedes: drijven, gassen en boekvraagstukken'
+  },
 
   // ══════════════════════════════════════════════════════════════════════════
   // BIOLOGIE
@@ -69,7 +79,7 @@ export const modules = [
  * Gearchiveerde lessen (ter referentie bewaard in src/lessons/_archive/)
  */
 export const archivedModules = [
-  // WACO 4 Thema 1 (Druk) lessen 2-10
+  // WACO 4 Thema 1 (Druk) lessen 2-8. Archimedes 9-10 is opnieuw uitgewerkt en actief.
   { id: 'fys4-m01-l02-toepassingen-druk-vaste-stoffen', subject: 'physics', year: 4, title: 'Druk: Toepassingen & Vraagstukken' },
   { id: 'fys4-m01-l03-gasdruk-atmosfeer', subject: 'physics', year: 4, title: 'Druk: Gasdruk & Atmosferische Druk' },
   { id: 'fys4-m01-l04-meten-gasdruk-manometer', subject: 'physics', year: 4, title: 'Druk: Meten van Druk, Over- & Onderdruk' },
@@ -77,8 +87,6 @@ export const archivedModules = [
   { id: 'fys4-m01-l06-totale-vloeistofdruk-vaten', subject: 'physics', year: 4, title: 'Druk: Totale Druk & Communicerende Vaten' },
   { id: 'fys4-m01-l07-beginsel-van-pascal', subject: 'physics', year: 4, title: 'Druk: Beginsel van Pascal & Hydraulica' },
   { id: 'fys4-m01-l08-vraagstukken-vloeistofdruk', subject: 'physics', year: 4, title: 'Druk: Vloeistofdruk Vraagstukken & Synthese' },
-  { id: 'fys4-m01-l09-archimedeskracht-vloeistoffen', subject: 'physics', year: 4, title: 'Druk: Archimedeskracht in Vloeistoffen' },
-  { id: 'fys4-m01-l10-archimedeskracht-gassen', subject: 'physics', year: 4, title: 'Druk: Archimedeskracht in Gassen & Synthese' },
 
   // WACO 3 Thema 1 (Optica) lessen 1-13
   { id: 'fys3-m01-l01-lichtbronnen-en-voortplanting', subject: 'physics', year: 3, title: 'Optica: Lichtbronnen & Voortplanting' },

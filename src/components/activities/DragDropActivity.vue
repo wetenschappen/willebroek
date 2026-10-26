@@ -150,7 +150,7 @@ function close() {
   emit('close')
 }
 
-// FULLSCREEN
+// Close the activity with Escape.
 watch(() => props.isOpen, (val) => {
     if (!val) {
         window.removeEventListener('keydown', handleKeydown)

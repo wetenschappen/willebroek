@@ -1,4 +1,4 @@
-import { cross } from '../biology/mendel.js'
+import { cross } from '../../../biology/mendel.js'
 
 const exercises = [
   { id: '1', number: '1', title: 'Monohybride kruising: kans op niet-tongrollen (boekmodel)', page: '73' },

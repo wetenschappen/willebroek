@@ -6,80 +6,30 @@
  * Zichtbaarheid per school staat in src/data/subjects.js - niet hier.
  */
 export const modules = [
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // FYSICA (Actief - Gouden standaard)
-  // ══════════════════════════════════════════════════════════════════════════
-
-  // ── 4de jaar (WACO 4 - Thema 1: Druk) ────────────────────────────────────────
-  // Les 1 volgt de gouden ABC-structuur; les 2 is een plaatsvervanger om de
-  // moduleweergave met meerdere lessen te bekijken.
-  {
-    id: 'fys4-m01-druk-vaste-stoffen',
-    subject: 'physics',
-    year: 4,
-    module: 1,
-    topic: 'Druk',
-    title: 'Hydrostatische druk: druk bij vloeistoffen',
-    date: '24/09/2026'
-  },
-  {
-    id: 'fys4-m01-l02-voorbeeld',
-    subject: 'physics',
-    year: 4,
-    module: 1,
-    topic: 'Druk',
-    title: 'Communicerende vaten',
-    date: '01/10/2026'
-  },
-  {
-    id: 'fys4-m01-l09-archimedeskracht-vloeistoffen',
-    subject: 'physics', year: 4, module: 1, topic: 'Druk',
-    title: 'Archimedes: afleiding en parameteronderzoek'
-  },
-  {
-    id: 'fys4-m01-l10-archimedeskracht-gassen',
-    subject: 'physics', year: 4, module: 1, topic: 'Druk',
-    title: 'Archimedes: drijven, gassen en boekvraagstukken'
-  },
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // BIOLOGIE
-  // ══════════════════════════════════════════════════════════════════════════
-  {
-    id: 'bio6-m03-l01-lymfe-aangeboren',
-    subject: 'biology',
-    year: 6,
-    module: 3,
-    topic: 'Immuniteit',
-    title: 'Lymfe en Aangeboren Afweer',
-    date: '05/10/2026'
-  },
-  {
-    id: 'bio6-m04-l01-celdeling',
-    subject: 'biology',
-    year: 6,
-    module: 4,
-    topic: 'Celdeling',
-    title: 'Celcyclus, mitose en meiose',
-    date: '12/10/2026'
-  },
-  {
-    id: 'bio6-m02-l01-mendel',
-    subject: 'biology',
-    year: 6,
-    module: 2,
-    topic: 'Chromosomale erfelijkheid',
-    title: 'Mendel: mono- en dihybride kruisingen'
-  }
-
+  // Tijdelijk leeg: alle lessen zijn op 2026 gearchiveerd voor de redesign.
+  // Zie docs/LESSON-ARCHIVE.md en src/lessons/_archive/redesign-2026/.
+  // Zet een les hier terug (en verplaats het bestand naar src/lessons/) om ze
+  // opnieuw te publiceren.
 ]
 
 /**
- * Gearchiveerde lessen (ter referentie bewaard in src/lessons/_archive/)
+ * Gearchiveerde lessen (ter referentie bewaard in src/lessons/_archive/).
+ * Deze lijst is documentatie, geen runtime: niets hierin wordt geladen of
+ * getoond. Zie docs/LESSON-ARCHIVE.md voor het terugzetten van een les.
  */
 export const archivedModules = [
-  // WACO 4 Thema 1 (Druk) lessen 2-8. Archimedes 9-10 is opnieuw uitgewerkt en actief.
+  // ── Redesign 2026: de volledige actieve set van vóór de redesign ────────────
+  // Bestanden staan in src/lessons/_archive/redesign-2026/.
+  { id: 'fys4-m01-druk-vaste-stoffen', subject: 'physics', year: 4, module: 1, topic: 'Druk', title: 'Hydrostatische druk: druk bij vloeistoffen', date: '24/09/2026' },
+  { id: 'fys4-m01-l02-voorbeeld', subject: 'physics', year: 4, module: 1, topic: 'Druk', title: 'Communicerende vaten', date: '01/10/2026' },
+  { id: 'fys4-m01-l09-archimedeskracht-vloeistoffen', subject: 'physics', year: 4, module: 1, topic: 'Druk', title: 'Archimedes: afleiding en parameteronderzoek' },
+  { id: 'fys4-m01-l10-archimedeskracht-gassen', subject: 'physics', year: 4, module: 1, topic: 'Druk', title: 'Archimedes: drijven, gassen en boekvraagstukken' },
+  { id: 'bio6-m03-l01-lymfe-aangeboren', subject: 'biology', year: 6, module: 3, topic: 'Immuniteit', title: 'Lymfe en Aangeboren Afweer', date: '05/10/2026' },
+  { id: 'bio6-m04-l01-celdeling', subject: 'biology', year: 6, module: 4, topic: 'Celdeling', title: 'Celcyclus, mitose en meiose', date: '12/10/2026' },
+  { id: 'bio6-m02-l01-mendel', subject: 'biology', year: 6, module: 2, topic: 'Chromosomale erfelijkheid', title: 'Mendel: mono- en dihybride kruisingen' },
+
+  // ── WACO 4 Thema 1 (Druk) lessen 2-8 ──────────────────────────────────────
+  // Oudere versies; Archimedes 9-10 hierboven is de meest recente versie.
   { id: 'fys4-m01-l02-toepassingen-druk-vaste-stoffen', subject: 'physics', year: 4, title: 'Druk: Toepassingen & Vraagstukken' },
   { id: 'fys4-m01-l03-gasdruk-atmosfeer', subject: 'physics', year: 4, title: 'Druk: Gasdruk & Atmosferische Druk' },
   { id: 'fys4-m01-l04-meten-gasdruk-manometer', subject: 'physics', year: 4, title: 'Druk: Meten van Druk, Over- & Onderdruk' },

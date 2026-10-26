@@ -4,8 +4,9 @@ import katex from 'katex'
 import { buoyancy, hydrostaticPressure, heldBody, releasedBody, suspendedWeight, floatingVolume, gasLift } from '../src/physics/archimedes.js'
 import { BOOK_EXERCISES, BOOK_SLIDES, EXAMPLE_SLIDES, EXERCISE_SLIDES } from '../src/physics/archimedes-book.js'
 import { DERIVATION, EXPERIMENTS, VOLUME_CHECKS, BALANCE_CASES } from '../s-activities/archimedes/tasks.js'
-import lesson1 from '../src/lessons/fys4-m01-l09-archimedeskracht-vloeistoffen.js'
-import lesson2 from '../src/lessons/fys4-m01-l10-archimedeskracht-gassen.js'
+// De lessen zijn gearchiveerd voor de redesign; de tests blijven de inhoud bewaken.
+import lesson1 from '../src/lessons/_archive/redesign-2026/fys4-m01-l09-archimedeskracht-vloeistoffen.js'
+import lesson2 from '../src/lessons/_archive/redesign-2026/fys4-m01-l10-archimedeskracht-gassen.js'
 const near = (actual, expected, tolerance = 1e-9) => assert.ok(Math.abs(actual - expected) <= tolerance * Math.max(1, Math.abs(expected)), `${actual} != ${expected}`)
 
 test('verplaatst volume = ondergedompeld volume, niet altijd totaalvolume', () => {

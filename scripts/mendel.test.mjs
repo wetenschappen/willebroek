@@ -2,7 +2,8 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { MODELS, genotypeOptions, normalizeGenotype, gametes, combineGametes, cross, distribution, drawOffspring, percent } from '../src/biology/mendel.js'
 import { MISSIONS, CHECKS } from '../s-activities/mendel/missions.js'
-import lesson from '../src/lessons/bio6-m02-l01-mendel.js'
+// De les is gearchiveerd voor de redesign; de test blijft de inhoud bewaken.
+import lesson from '../src/lessons/_archive/redesign-2026/bio6-m02-l01-mendel.js'
 
 const counts = (result, key = 'phenotype') => Object.fromEntries(distribution(result.cells, key).map(r => [r.label, r.count]))
 

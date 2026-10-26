@@ -60,7 +60,7 @@ function resetActivity() {
   score.value = 0
 }
 
-// Reset on open, Escape to close - no fullscreen API touches
+// Reset on open; the lesson shell owns browser fullscreen state.
 watch(() => props.isOpen, (val) => { if (val) resetActivity() })
 
 function handleKeydown(e) {

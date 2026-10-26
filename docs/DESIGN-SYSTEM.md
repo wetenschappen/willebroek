@@ -434,10 +434,12 @@ hetzelfde:
 Een nieuw scherm dat een kaart opent, voegt dus een `keydown`-listener toe die
 op Escape `emit('close')` doet, net als de X. Is er binnen het scherm een
 tussenstap (zoals het codeveld van de correctiesleutel), dan sluit Escape eerst
-die tussenstap. Alleen `PresentationModal` vraagt daarnaast de
-**Fullscreen API** (`requestFullscreen`); de andere schermen zijn volledig
-beeldvullende overlays zonder de API aan te raken, zodat een browser die de API
-weigert nooit een leeg scherm oplevert.
+die tussenstap. Digitale activiteiten en tickets vragen daarnaast via
+`composables/useBrowserFullscreen.js` de **Fullscreen API**
+(`requestFullscreen`), zodat de browser-URL-balk op kleine schermen verdwijnt.
+De `modal-fullscreen`-overlay blijft de fallback als een browser de API weigert.
+De afsluitroute roept `exitFullscreen` aan; browser-Escape wordt via
+`fullscreenchange` aan dezelfde sluitactie gekoppeld.
 
 ### Module- en lessenoverzicht
 

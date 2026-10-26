@@ -13,6 +13,7 @@ import { subjectById } from '../data/subjects.js'
 import { useProgress } from '../composables/useProgress.js'
 import { useActivitySystem } from '../composables/useActivitySystem.js'
 import { useLesson, normalizeLesson } from '../composables/useLesson.js'
+import { enterBrowserFullscreen, exitBrowserFullscreen } from '../composables/useBrowserFullscreen.js'
 
 const props = defineProps({ lessonData: { type: Object, required: true } })
 
@@ -94,10 +95,12 @@ function handleStartTimer(timeStr) {
 onMounted(() => {
     progress.restoreProgress()
     window.addEventListener('keydown', handleGlobalKeydown)
+    document.addEventListener('fullscreenchange', handleBrowserFullscreenChange)
 })
 
 onUnmounted(() => {
     window.removeEventListener('keydown', handleGlobalKeydown)
+    document.removeEventListener('fullscreenchange', handleBrowserFullscreenChange)
 })
 
 function handleGlobalKeydown(e) {
@@ -108,6 +111,24 @@ function handleGlobalKeydown(e) {
         showNamePicker.value = !showNamePicker.value
     }
     if ((e.key === 'r' || e.key === 'R')) progress.resetProgress(lessonData.id)
+}
+
+function handleBrowserFullscreenChange() {
+    if (document.fullscreenElement) return
+
+    if (showExit.value) showExit.value = false
+    if (showSpotCheck.value) showSpotCheck.value = false
+    if (activitySystem.activeActivity.value) activitySystem.closeActivity()
+}
+
+function closeExitTicket() {
+    showExit.value = false
+    void exitBrowserFullscreen()
+}
+
+function closeSpotCheck() {
+    showSpotCheck.value = false
+    void exitBrowserFullscreen()
 }
 
 // Watchers for Scroll Lock
@@ -147,6 +168,7 @@ function handleCardAction(card) {
         const exitTicket = lessonData.exitTicket
         currentExitTicket.value = exitTicket?.questions || exitTicket
         currentTicketMode.value = 'exit'
+        void enterBrowserFullscreen()
         showExit.value = true
     }
     else if (card.action === 'entry-ticket') {
@@ -154,6 +176,7 @@ function handleCardAction(card) {
         currentExitTicket.value = entryTicket?.questions || entryTicket
         currentTicketMode.value = 'entry'
         currentEntryCardId.value = card.id
+        void enterBrowserFullscreen()
         showExit.value = true
     }
     else if (card.action === 'external-link' && card.url) {
@@ -322,11 +345,11 @@ const isTimelineComplete = computed(() => {
     :mode="currentTicketMode"
     :questions="currentExitTicket"
     :goals="lesson.goals"
-    @close="showExit = false"
+    @close="closeExitTicket"
     @complete="progress.markAsDone(currentTicketMode === 'entry' ? currentEntryCardId : currentCardId)"
   />
 
-  <SpotCheckModal :isOpen="showSpotCheck" :questions="lesson.spotCheck" title="Check-up" @close="showSpotCheck = false" @complete="progress.markAsDone('card-spotcheck')" />
+  <SpotCheckModal :isOpen="showSpotCheck" :questions="lesson.spotCheck" title="Check-up" @close="closeSpotCheck" @complete="progress.markAsDone('card-spotcheck')" />
 
   <!-- DYNAMIC ACTIVITY -->
   <component
@@ -350,4 +373,3 @@ const isTimelineComplete = computed(() => {
 
   </div>
 </template>
-

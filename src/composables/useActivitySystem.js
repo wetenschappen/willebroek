@@ -1,4 +1,5 @@
 import { defineAsyncComponent, shallowRef } from 'vue'
+import { enterBrowserFullscreen, exitBrowserFullscreen } from './useBrowserFullscreen.js'
 
 // Activiteiten die in de fysica- en biologielessen van deze repo gebruikt worden.
 const DragDropActivity = defineAsyncComponent(() => import('../components/activities/DragDropActivity.vue'))
@@ -52,8 +53,12 @@ export function useActivitySystem(lessonData, markAsDoneCallback) {
       component: COMPONENT_MAP[type],
       props: getActivityProps(type, data)
     }
+    void enterBrowserFullscreen()
   }
-  function closeActivity() { activeActivity.value = null }
+  function closeActivity() {
+    activeActivity.value = null
+    void exitBrowserFullscreen()
+  }
   function completeActivity() {
     if (activeActivity.value?.id && markAsDoneCallback) {
       markAsDoneCallback('card-' + activeActivity.value.id)

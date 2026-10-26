@@ -96,7 +96,8 @@ src/
 ├── lessons/
 │   ├── _template.js
 │   ├── fys*.js
-│   └── bio*.js
+│   ├── bio*.js
+│   └── _archive/         # gearchiveerde lessen, buiten de runtime
 ├── views/
 ├── composables/
 ├── components/activities/ # generieke activiteiten
@@ -113,6 +114,11 @@ docs/
 `modules.js` is de bron van waarheid voor lesmetadata. De les wordt op basis
 van zijn unieke id dynamisch geladen door `LessonView.vue`.
 
+**Alle lessen zijn gearchiveerd** voor de redesign. De actieve registry
+`modules` is leeg; de lesbestanden en hun metadata staan in
+`src/lessons/_archive/redesign-2026/` en `archivedModules`. Zie
+`docs/LESSON-ARCHIVE.md` voor de volledige lijst en de terugzetinstructie.
+
 Routes gebruiken hash-routing:
 
 ```text
@@ -128,6 +134,10 @@ zichtbare knop Klassen bovenaan is de enige terugweg; er wordt geen extra actie
 of leerjaarselectie aangeboden.
 
 ## Een les toevoegen
+
+Nieuwe of herwerkte lessen komen in `src/lessons/` en in `modules`; het archief
+is geen wachtrij. Zie `docs/LESSON-ARCHIVE.md` om een gearchiveerde les terug te
+zetten.
 
 Maak eerst het lesbestand vanuit het template:
 
@@ -182,8 +192,10 @@ Bij een nieuwe activiteit:
 
 1. Voeg de lazy import toe in `useActivitySystem.js`.
 2. Voeg de key toe aan `COMPONENT_MAP`.
-3. Gebruik geen `requestFullscreen()` of `exitFullscreen()`; activiteiten
-   zijn modale overlays.
+3. Open digitale activiteiten en tickets via
+   `composables/useBrowserFullscreen.js`, zodat de browser-URL-balk verdwijnt
+   op kleine schermen. De modale overlay blijft de fallback als de browser de
+   Fullscreen API weigert; Escape en de sluitknop sluiten de activiteit.
 4. Zorg dat een actieve les het type gebruikt, zodat `npm run check` het dekt.
 5. Voer `npm run check`, `npm run build` en `npm run smoke` uit.
 

@@ -1,5 +1,5 @@
-import { archimedesLesson, math as m, list, mc, volumeFigure, pressureFigure } from '../physics/archimedes-lesson.js'
-import { BOOK_EXERCISES, EXAMPLE_SLIDES } from '../physics/archimedes-book.js'
+import { archimedesLesson, math as m, list, mc, volumeFigure, pressureFigure } from '../../../physics/archimedes-lesson.js'
+import { BOOK_EXERCISES, EXAMPLE_SLIDES } from '../../../physics/archimedes-book.js'
 
 export default archimedesLesson({
   id: 'fys4-m01-l09-archimedeskracht-vloeistoffen',

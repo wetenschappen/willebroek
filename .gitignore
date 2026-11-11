@@ -27,3 +27,6 @@ dist-ssr
 # Bestanden blijven lokaal staan; ze gaan alleen niet naar GitHub.
 materiaal/
 docs/pi_zed_setup_guide.md
+
+# Bron van de energie-spinoff: uitgevershandleiding blijft uitsluitend lokaal.
+/docs/lesson material/Jaar 4/WACOF4DS2AL_T2_Handleiding.pdf

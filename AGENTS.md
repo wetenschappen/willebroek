@@ -133,6 +133,17 @@ Klassen zonder lessen tonen op de modulepagina een eerlijke lege staat. De
 zichtbare knop Klassen bovenaan is de enige terugweg; er wordt geen extra actie
 of leerjaarselectie aangeboden.
 
+## Begeleide spinoff: Energie
+
+Naast de ABC-planner bestaat `/willebroek/energie/`: een zelfstandige,
+schermgestuurde fysicaroute voor 4NAWE/4SPOWE. Dit is een tweede HTML-ingang
+(`energie/index.html`) in dezelfde Vite-build, geen ABC-les in `modules.js`.
+De planner en zijn lesregels blijven intact. Bron, eerste-lesafbakening,
+oefeningendekking en opslag staan in `docs/ENERGIE-LEERPAD.md`.
+Code: `src/energie/`; tests: `scripts/energie.test.mjs` (onder `npm run check`).
+De gedeelde huisstijl blijft verplicht. De eerste versie behandelt alleen de
+start van T2, niet het hele thema.
+
 ## Een les toevoegen
 
 Nieuwe of herwerkte lessen komen in `src/lessons/` en in `modules`; het archief

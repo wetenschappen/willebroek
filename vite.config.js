@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { fileURLToPath } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -9,6 +10,10 @@ export default defineConfig({
     cssCodeSplit: false,
     chunkSizeWarningLimit: 800,
     rollupOptions: {
+      input: {
+        planner: fileURLToPath(new URL('./index.html', import.meta.url)),
+        energie: fileURLToPath(new URL('./energie/index.html', import.meta.url)),
+      },
       output: {
         manualChunks(id) {
           // Vendor chunk for large dependencies

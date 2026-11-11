@@ -133,18 +133,32 @@ Klassen zonder lessen tonen op de modulepagina een eerlijke lege staat. De
 zichtbare knop Klassen bovenaan is de enige terugweg; er wordt geen extra actie
 of leerjaarselectie aangeboden.
 
-## Begeleide spinoff: Energie
+## Begeleide leerpaden naast ABC
 
-Naast de ABC-planner bestaat `/willebroek/energie/`: een zelfstandige,
-schermgestuurde fysicaroute voor 4NAWE/4SPOWE. Dit is een tweede HTML-ingang
-(`energie/index.html`) in dezelfde Vite-build, geen ABC-les in `modules.js`.
-De planner en zijn lesregels blijven intact. Bron, eerste-lesafbakening,
+Lees **`docs/BEGELEIDE-LEERPADEN.md`** bij een verzoek om een schermgestuurd
+leerpad, extra stapsgewijze begeleiding of een toepassing voor bijvoorbeeld
+6TSO. De afspraak is één concrete opdracht per scherm: het scherm stuurt, het
+boek blijft de hoofdwerkplek. Korte controles ondersteunen het boekwerk;
+voortgang is geen beheersingsscore. De ABC-planner blijft bestaan voor andere
+groepen. Deze aanpak is geen algemene verlaging van het inhoudelijke niveau.
+
+De eerste toepassing is `/willebroek/energie/`: een zelfstandige fysicaroute
+voor 4NAWE/4SPOWE, met een tweede HTML-ingang (`energie/index.html`) in dezelfde
+Vite-build, geen ABC-les in `modules.js`. Bron, eerste-lesafbakening,
 oefeningendekking en opslag staan in `docs/ENERGIE-LEERPAD.md`.
 Code: `src/energie/`; tests: `scripts/energie.test.mjs` (onder `npm run check`).
 De gedeelde huisstijl blijft verplicht. De eerste versie behandelt alleen de
 start van T2, niet het hele thema.
 
-## Een les toevoegen
+De aanpak is herbruikbaar; de huidige energiecode is nog niet volledig
+lesconfigureerbaar. Lees de technische aandachtspunten vóór hergebruik voor
+een tweede les. Voor 6TSO is de wens vastgelegd, maar onderwerp, bron, exacte
+klas en lestijd moeten nog worden bepaald; er is nog geen 6TSO-route gebouwd.
+
+## Een ABC-les toevoegen
+
+Deze sectie geldt voor lessen in de bestaande ABC-planner. Voor zelfstandige
+begeleide leerpaden geldt `docs/BEGELEIDE-LEERPADEN.md`.
 
 Nieuwe of herwerkte lessen komen in `src/lessons/` en in `modules`; het archief
 is geen wachtrij. Zie `docs/LESSON-ARCHIVE.md` om een gearchiveerde les terug te

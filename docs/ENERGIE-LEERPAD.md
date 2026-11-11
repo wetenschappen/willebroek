@@ -1,5 +1,11 @@
 # Energie — begeleide spinoff voor 4NAWE / 4SPOWE
 
+Dit is de eerste toepassing van de aanpak uit
+[BEGELEIDE-LEERPADEN.md](BEGELEIDE-LEERPADEN.md). Dat document beschrijft de
+herbruikbare didactische afspraken en de aandachtspunten bij uitbreiding naar
+andere groepen, waaronder de gewenste toepassing voor 6TSO. Deze pagina
+beschrijft alleen de concrete energieroute.
+
 ## Ingang en publicatie
 
 - Productie: `https://wetenschappen.github.io/willebroek/energie/`
@@ -45,6 +51,8 @@ Er wordt **niet** beweerd dat hiermee alle oefeningen van T2 gemaakt zijn. Het e
 - `scripts/smoke-check.mjs`: controleert beide productie-ingangen en de energie-assets.
 
 ## Opslag en privacy
+
+Afgeronde stappen en ingediende digitale antwoorden worden bewaard. Losse vinkjes binnen een nog niet afgeronde boekopdracht worden bij pauzeren of herladen niet bewaard.
 
 Alleen lokale browseropslag (`willebroek:energie:t2-energie-start-v1`), geen namen, accounts, analytics of online resultatenopslag. De huisstijl laadt, net als de planner, IBM Plex via Google Fonts. Geen synchronisatie tussen apparaten. Bij geblokkeerde opslag blijft het leerpad in het open tabblad werken met een zichtbare waarschuwing. “Opnieuw beginnen” vraagt bevestiging en wist alleen deze lesvoortgang, geen plannergegevens.
 

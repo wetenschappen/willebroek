@@ -37,7 +37,16 @@ De derde toepassing, Energie basis, vertrekt na de klassikaal gemaakte oefeninge
 1–3. Voor 4LAT/4ECWE met één uur fysica per week gedurende één semester wordt de
 selectie expliciet getoetst aan GO! basisvorming. Een beperkter leerplan is iets
 anders dan willekeurig de verwachtingen verlagen: behoud de basisdoelen, geef
-meer reken- en organisatiesteun en laat onnodige verdieping weg.
+gerichte oplossingsstrategieën en laat onnodige verdieping weg.
+
+Bij de eerste basisversie vond de leerkracht het pakket te beperkt (5 en 6a) en
+te veel afchecken. 4LAT/4ECWE doen fysica minder graag, maar zijn wiskundig
+vaardig: dat vraagt géén lesje kwadrateren. De herwerking begeleidt **5–10
+volledig**, met hulp bij situatie → formule → onbekende vrijmaken → resultaat
+beoordelen. Nieuwe schermen alleen als het denkwerk verandert. De lestijd is
+geen harde inhoudsgrens: snellere leerlingen mogen verderwerken; pauzeren en
+hervatten blijft mogelijk. “Eén opdracht per scherm” betekent niet “zo weinig
+mogelijk echte oefeningen per les”.
 
 ## 2. De vaste afspraken
 
@@ -125,8 +134,9 @@ Een instructie als “Bekijk de theorie en maak de oefeningen” is te vaag.
 
 ### Boekwerk en rapportage
 
-Een aangevinkte opdracht betekent “de leerling zegt dat het gemaakt is”, niet
-“automatisch nagekeken en juist”. Maak het klaarcriterium concreet, bijvoorbeeld
+Een aangevinkte opdracht — of de klik op **“Gemaakt, verder”** zonder aparte
+checklist — betekent “de leerling zegt dat het gemaakt is”, niet “automatisch
+nagekeken en juist”. Vermijd dubbele bevestiging en procedurele microchecks. Maak het klaarcriterium concreet, bijvoorbeeld
 alle drie deelvragen of alle acht voorbeelden. Laat uitwerkingen nakijken waar
 nodig. Een afvinkscherm is geen vervanging voor feedback op papier.
 
@@ -216,11 +226,15 @@ Voor een volgende toepassing, bijvoorbeeld 6TSO:
    opslagsleutel. Antwoorden van verschillende lessen mogen niet botsen.
 4. Behoud de staptypen `read`, `work` en `quiz`. `diagnostic` betekent directe
    feedback en daarna doorgang; `final` neemt de vraag mee in de eindcheckscore.
-   `work` krijgt concrete `checks`; de voortgangslogica blokkeert zolang niet alle
-   gevraagde deelopdrachten zijn bevestigd.
-5. Voeg alleen waar nodig `support` (een lijst korte, optionele aanwijzingen) en
-   `links` (benoemde HTTPS-bron- of zoeklinks) toe. Een bronzoeklink is geen vooraf
-   geverifieerde bron. Geef criteria en laat het bronadres op papier noteren.
+   `work` gebruikt standaard concrete `checks`; de voortgangslogica blokkeert dan
+   zolang niet alle gevraagde deelopdrachten zijn bevestigd. Gebruik waar een
+   checklist geen meerwaarde biedt **`completion: 'button'` zonder `checks`**:
+   de vervolgknop bevestigt het werk. Openen is niet afronden. De bestaande
+   checklistmodus en opgeslagen deelvinkjes van andere routes blijven intact.
+5. Voeg waar zinvol `strategy` toe: een zichtbare, korte lijst van denkstappen,
+   geen afvinklijst. `support` geeft optionele, inhoudelijke aanwijzingen zonder
+   een tweede handboek te maken. Voeg alleen waar nodig `links` (benoemde
+   HTTPS-bron- of zoeklinks) toe. Een bronzoeklink is geen vooraf geverifieerde bron. Geef criteria en laat het bronadres op papier noteren.
    `exercise`, `page` en `parts` maken de oefeningendekking testbaar.
 6. Registreer de zelfstandige HTML-ingang in de Vite-build en smoketest. Een
    submap is niet hetzelfde als een route in de ABC-router.
@@ -233,8 +247,9 @@ Voor een volgende toepassing, bijvoorbeeld 6TSO:
 Lokale opslag blijft het uitgangspunt: geen namen of accounts, geen synchronisatie
 of leerkrachtdashboard. Een gedeeld apparaat vraagt een duidelijke herstartmogelijkheid.
 Bij geweigerde opslag blijft het open tabblad werken met een waarschuwing.
-Afgeronde stappen, ingediende digitale antwoorden **en losse deelvinkjes** binnen
-nog niet afgerond boekwerk worden bewaard. Afgeronde boekopdrachten blijven bij
+Afgeronde stappen en ingediende digitale antwoorden worden bewaard. Bij de
+checklistmodus blijven ook **losse deelvinkjes** binnen nog niet afgerond boekwerk
+bewaard; bij button-bevestiging zijn er geen deelvinkjes. Afgeronde boekopdrachten blijven bij
 terugkijken op slot. Oude energiepayloads zonder deelvinkjes worden compatibel
 hersteld. Versieer bij wijzigingen die oude antwoorden onbruikbaar maken.
 

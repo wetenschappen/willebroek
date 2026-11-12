@@ -37,7 +37,7 @@ const quizLocked = computed(() => Boolean(response.value && (step.value?.diagnos
 const progress = computed(() => Math.round(state.value.completed.length / steps.length * 100))
 const entryResult = computed(() => firstTrySummary(state.value, item => item.diagnostic))
 const finalResult = computed(() => firstTrySummary(state.value, item => item.final))
-const workReady = computed(() => step.value?.type !== 'work' || step.value.checks.every((_, index) => checks.value.includes(index)))
+const workReady = computed(() => step.value?.type !== 'work' || step.value.completion === 'button' || step.value.checks.every((_, index) => checks.value.includes(index)))
 const ready = computed(() => step.value && workReady.value && canAdvance(state.value, step.value))
 const bookStep = computed(() => step.value && step.value.type !== 'quiz')
 const feedbackVisible = computed(() => response.value && (submitted.value || quizLocked.value))
@@ -145,6 +145,12 @@ function acceptHelp() {
           <p v-if="step.diagnostic" class="guided-small">Kies eerst uit je hoofd. Dit is een opfrissing, geen toets op punten.</p>
           <template v-if="step.type !== 'quiz'">
             <p v-for="instruction in step.instructions" :key="instruction"><MathText :text="instruction" /></p>
+            <section v-if="step.strategy?.length" class="guided-strategy" aria-label="Oplossingsstrategie">
+              <h2>Zo pak je het aan</h2>
+              <ol>
+                <li v-for="item in step.strategy" :key="item"><MathText :text="item" /></li>
+              </ol>
+            </section>
             <p v-if="step.note" class="guided-notice"><MathText :text="step.note" /></p>
             <p v-if="step.links?.length" class="guided-links">
               <a v-for="link in step.links" :key="link.url" :href="link.url" target="_blank" rel="noopener noreferrer"><MathText :text="link.label" /> (nieuw tabblad)</a>
@@ -153,7 +159,7 @@ function acceptHelp() {
               <summary>Ik heb een aanwijzing nodig</summary>
               <p v-for="hint in step.support" :key="hint"><MathText :text="hint" /></p>
             </details>
-            <fieldset v-if="step.type === 'work'" class="guided-checklist">
+            <fieldset v-if="step.type === 'work' && step.completion !== 'button'" class="guided-checklist">
               <legend>Vink pas aan als je het gemaakt hebt.</legend>
               <label v-for="(check, index) in step.checks" :key="check">
                 <input v-model="checks" type="checkbox" :value="index" :disabled="state.completed.includes(step.id)" />
@@ -196,8 +202,8 @@ function acceptHelp() {
           <h2>Je boekwerk</h2>
           <p><MathText :text="lesson.completion.work" /></p>
           <h2>Je korte controles</h2>
-          <p>Opfrissing: {{ entryResult.correct }} van {{ entryResult.total }} juist bij de eerste poging.</p>
-          <p>Eindcheck: {{ finalResult.correct }} van {{ finalResult.total }} juist bij de eerste poging.</p>
+          <p v-if="entryResult.total">Opfrissing: {{ entryResult.correct }} van {{ entryResult.total }} juist bij de eerste poging.</p>
+          <p v-if="finalResult.total"><MathText :text="lesson.completion.checksLabel || 'Eindcheck'" />: {{ finalResult.correct }} van {{ finalResult.total }} juist bij de eerste poging.</p>
           <p v-if="finalResult.assisted">Bij {{ finalResult.assisted }} eindvraag/vragen ging je met hulp verder. Bespreek die nog eens met je leerkracht.</p>
           <p class="guided-notice">De balk toont afgeronde stappen, geen cijfer of bewijs dat je alles beheerst.</p>
           <h2><MathText :text="lesson.completion.nextTitle" /></h2>
@@ -244,6 +250,10 @@ function acceptHelp() {
 .guided-option { display: flex; gap: 16px; align-items: flex-start; padding: 16px 24px; border-width: 2px; border-style: solid; border-radius: var(--radius-control); margin-bottom: 12px; cursor: pointer; }
 .guided-option input { margin-top: 6px; flex-shrink: 0; }
 .guided-question:disabled .guided-option { cursor: default; }
+.guided-strategy { margin: 24px 0; padding-left: 16px; border-left: 6px solid var(--color-workbook); }
+.guided-strategy h2 { margin: 0 0 12px; font-size: 1.25rem; line-height: 1.4; }
+.guided-strategy ol { margin: 0; padding-left: 24px; list-style: decimal; }
+.guided-strategy li { padding-left: 4px; margin-bottom: 12px; }
 .guided-checklist { margin-top: 32px; }
 .guided-checklist legend { padding: 0 0 16px; font-weight: 600; }
 .guided-checklist label, .guided-help { display: flex; align-items: flex-start; gap: 16px; padding: 12px 0; cursor: pointer; }

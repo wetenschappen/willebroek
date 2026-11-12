@@ -1,157 +1,161 @@
-# Energie basis — boekassistent voor 4LAT / 4ECWE
+# Energie basis — oplossingsstrategieën bij oefeningen 5–10
 
-Zelfstandige fysicaroute volgens [BEGELEIDE-LEERPADEN.md](BEGELEIDE-LEERPADEN.md).
-Dit is **niet** de energieroute van 4NAWE/4SPOWE: die gebruikt een ander boek
-(2u-versie), andere pagina's en een ander startpunt.
+Voor de gecombineerde klas **4LAT / 4ECWE**, één uur fysica per week gedurende
+één semester, uitsluitend **GO! basisvorming**. De leerlingen doen fysica minder
+graag, maar zijn niet zwak in wiskunde. Begeleiding betekent hier hulp bij de
+**aanpak van een fysisch probleem**, geen uitleg van elementaire rekenvaardigheden.
+Zie ook [BEGELEIDE-LEERPADEN.md](BEGELEIDE-LEERPADEN.md).
 
-## Doelgroep, start en ingang
+## Ingang en afbakening
 
-- Gecombineerde groep **4LAT + 4ECWE**, één uur fysica per week gedurende één
-  semester; uitsluitend **GO! basisvorming**, geen verdiept basisleerplan.
-- De introductie van T2 en oefeningen **1–3 zijn al klassikaal gemaakt**.
-- Deze eerste oefenles behandelt **oefening 5 volledig en alleen 6a**, boek p. 77.
-- Leerlingpad: `/willebroek/energie-basis/`.
-- Publicatieadres: `https://wetenschappen.github.io/willebroek/energie-basis/`.
-  De gebruikelijke Pages-workflow publiceert de ingang na een geslaagde deployment.
+- Leerlinglink: `https://wetenschappen.github.io/willebroek/energie-basis/`.
 - Lokaal: `http://localhost:5173/willebroek/energie-basis/` na `npm run dev`.
-- Eigen HTML-ingang `energie-basis/index.html` in dezelfde Vite-build en repo.
-  De ABC-planner, beide bestaande leerpaden en de actieve lesregistry blijven intact.
+- Introductie van T2 en oefeningen **1–3 zijn al klassikaal gemaakt**.
+- De route begeleidt **oefeningen 5–10 volledig**, boek **p. 77–78** van de
+  **1u-versie**. Gebruik niet de pagina's van de 2u-route voor 4NAWE/4SPOWE.
+- Geen kunstmatig eindpunt na één lesuur: leerlingen werken tijdens de les zo
+  ver als ze raken. Snellere leerlingen gaan verder; de rest kan pauzeren en
+  later hervatten. Niet beloven dat iedereen de route in één uur afwerkt.
+- Zeven berekeningen en vijf redeneeropdrachten, verdeeld over acht boekschermen.
+  Daarnaast twee korte digitale controles, geen lange quiz.
+- Eigen HTML-ingang `energie-basis/index.html`, dezelfde Vite-build en Pages-
+  deployment. ABC en de andere twee leerpaden blijven intact.
 
-De opzet is voor één lesuur. De werkelijke benodigde tijd moet nog met deze klas
-blijken; tussentijds pauzeren en hervatten mag. Vier berekeningen op papier zijn
-het hoofdwerk, geen lange digitale quiz. Niet voorstellen als een route voor het
-hele semester of voor het volledige thema.
+Dit is nog **niet heel T2** en evenmin een semesterroute. Vermogen, rendement en
+volwaardige kwantitatieve energiebalansen moeten later nog worden uitgewerkt.
 
-## Bronnen en paginering
+## Waarom versie 2?
+
+De eerste versie (5 en 6a, 16 schermen) was volgens de leerkracht te veel
+**afchecken en te weinig oefenen**. De extra toelichting: voldoende/veel wiskunde
+in deze richtingen; geen basisuitleg nodig over wat een kwadraat betekent.
+De afspraak is daarom: substantieel boekwerk, een oplossingsstrategie bij een
+nieuw soort probleem en minder procedurele bevestigingen. Dit is ontwerpfeedback,
+geen meting van leerwinst of verslag van een afzonderlijke klasevaluatie.
+
+Versie 2 heeft **tien inhoudelijke schermen**. Geen aparte materiaalcheck,
+kwadraatquiz, afgevinkte voorbereidingsregels of verplichte leesbevestigingen.
+De vervolgknop **“Oefening … gemaakt, verder”** is de zelfrapportage; er staat niet
+nog een checklist voor. Het openen van een scherm rondt het niet af.
+
+## Bronnen en gecontroleerde paginering
 
 Lokale map: `docs/lesson material/jaar 4 - 1u/`.
 
-| Bronbestand | Gebruikte PDF-pagina's | Betekenis |
+| Bron | PDF-pagina's | Gebruik |
 | --- | --- | --- |
-| `GO! SO 2de graad doorstroom - leerplan Basisvorming.pdf` | 50–51 | Officiële basisdoelen energie, balans, vermogen en rendement |
-| `WACOF4DS1AL_T2_Handleiding (1).pdf` | 12–13 | **Boek p. 72–73**, groene leerlingkaders en uitgewerkte voorbeelden |
-| Dezelfde handleiding | 17–18 | **Boek p. 77–78**, oefeningen 3–10 en alle deelopgaven |
-| Dezelfde handleiding | 19 | **Boek p. 79**, expliciete leerkrachtnotitie bij §2.1 Arbeid |
-| `OSPLKITWACOF4DS1_02_oefeningen_met_oplossingen.pdf` | Hoofdstuk-1-opgaven, eerder geraadpleegd | Lokale controlebron, niet de leerlingpaginering |
+| `GO! SO 2de graad doorstroom - leerplan Basisvorming.pdf` | 48, 50–51 | Fysische probleemaanpak en basisdoelen energie |
+| `WACOF4DS1AL_T2_Handleiding (1).pdf` | 12–13 | Boek p. 72–73: groene leerlingkaders en uitgewerkte voorbeelden |
+| Dezelfde handleiding | 17–18 | Boek p. 77–78: alle opgaven en deelvragen 5–10 |
+| Dezelfde handleiding | 30 | Boek p. 90: gerichte leesopdracht bij energiebehoud voor oefening 10 en de slotcontrole |
+| Dezelfde handleiding | 19 | Boek p. 79: scope-notitie bij §2.1 Arbeid |
 
-De relevante kaders, voorbeeldopbouw, opgaven en afbakeningsnotitie zijn op de
-bronafbeeldingen gecontroleerd. In deze handleiding is op deze pagina's de
-boekpagina steeds **PDF-pagina + 60**. Dat is geen algemene regel voor andere
-boeken of voor het oplossingenbestand. De route noemt uitsluitend boekpagina's.
-Geen hele-boekverwerking of volledige semesterdekking geclaimd.
+De genoemde kaders en de volledige opgaven zijn op bronafbeeldingen nagekeken.
+De opgaven op PDF p. 17–18 en de naslag op p. 30 zijn bij de herwerking opnieuw
+visueel gecontroleerd. Op deze pagina's geldt boekpagina = PDF-pagina + 60;
+dat is geen algemene regel voor andere bestanden. De route noemt boekpagina's.
+Er is geen hele-boekverwerking geclaimd.
 
-De PDF's zijn lokaal gehouden via `.gitignore`; er zijn geen publieke kopieën,
-PDF-links of overgenomen oplossingenboeken. Ook geen verborgen correctiesleutel
-voor het gemaakte boekwerk in de leerlingcode.
+Het lokale oplossingenbestand is geen leerlingasset. De PDF's blijven genegeerd
+via `.gitignore`; er worden geen uitgevershandleidingen, figuren of volledige
+correctiesleutels gepubliceerd. Formules en symbolische omvormingen zijn hulp,
+geen numerieke antwoordenverzameling voor de boekoefeningen.
 
-## Leerplanfilter: basisdoelen bepalen de selectie
+### Belangrijke broncorrectie bij oefening 10
 
-| GO!-doel | Betekenis voor de planning | Deze versie |
+De opgave zegt dat de **lengte van de hellingen constant** is. De verticale
+hoogteverschillen zijn **niet** gelijk. De oude documentatie en een eerdere
+bespreking namen ten onrechte gelijke hoogte aan. Die aanname is verwijderd.
+De route laat hellinglengte en verticale hoogte vergelijken en vervolgens
+redeneren met de beginenergie. Geen arbeids- of hoekberekening nodig. Vanuit
+rust vertrekken, met hetzelfde blok en verwaarloosbare wrijving, wordt expliciet
+als modelaanname benoemd. Een regressietest bewaakt deze broninterpretatie.
+
+## Leerplanselectie en dekking
+
+| Doel | Plaats in deze route |
+| --- | --- |
+| `BV2_06.40` | Probleem analyseren, formule kiezen, onbekende vrijmaken en resultaat controleren |
+| `BV2_06.45.01` | Energieformules gebruiken, oefenen in 5–7; formularium toegestaan |
+| `BV2_06.44.01` | Behoud toepassen bij 10; naslag p. 90 en slotcontrole |
+| `BV2_06.44.02` | Omzettingsketen bij 9 en thermische energie in de slotcontrole; geen volledige dekking van alle energievormen geclaimd |
+| `BV2_06.45.02` | Voorbereidende redenering bij 10, maar nog geen volledige oefenreeks met kwantitatieve energiebalansen |
+| `BV2_06.46.01–02` | Rendement en vermogen: later, niet geschrapt uit basisvorming |
+
+**Oefeningen 5–10 passen inhoudelijk bij basisvorming**, ook waar de uitgever een
+moeilijkere reeks aanduidt. Ze zijn geen aparte verdiepingsroute voor snelle
+leerlingen. De expliciete notitie op boek p. 79 reserveert **§2.1 Arbeid** voor
+het verdiepte basisleerplan van de 1u-richting en de 2u-richting; §2.2 Vermogen
+is wel basisvorming. “Basis” betekent niet dat onbekenden vrijmaken of wortels
+gebruiken moet worden vermeden.
+
+## Alle opdrachten hebben een concrete plaats
+
+| Boek | Opdracht | Scherm en oplossingsstrategie |
 | --- | --- | --- |
-| `BV2_06.44.01` | Wet van behoud in een geïsoleerd systeem omschrijven | Vervolg; geen nieuwe systemenles in dit oefenuur |
-| `BV2_06.44.02` | Kwalitatieve energiebalansen en schematische voorstelling van omzettingen | Vervolg; niet afgedekt met enkel de drie formules |
-| **`BV2_06.45.01`** | Kinetische, gravitationele en elastische energie berekenen met een formularium | **Focus van deze oefenroute**; groene kaders blijven beschikbaar |
-| `BV2_06.45.02` | Een onbekende berekenen via een energiebalans in eenvoudige situaties | Later expliciet uitwerken; ondersteuning voor omvormen/wortels waar nodig |
-| `BV2_06.46.01` | Rendement, nuttige of totale energie berekenen | Later uitwerken; niet geschrapt uit basisvorming |
-| `BV2_06.46.02` | Gemiddeld vermogen, tijd of energie berekenen | Later uitwerken; niet geschrapt uit basisvorming |
+| 77 | 5, alle drie ongelabelde bullets | Eén scherm: beweging/hoogte/vervorming herkennen → groen kader kiezen → gegevens koppelen → uitwerken en beoordelen |
+| 77 | 6a | Energie berekenen én de gevraagde eenhedencontrole; fietsvoorbeeld p. 73 als model |
+| 77 | 6b | Massa zoeken; eerst symbolisch vrijmaken, daarna invullen en eenheid controleren |
+| 77 | 6c | Snelheid zoeken; onbekende isoleren, positieve grootte gebruiken, eenhedencontrole |
+| 78 | 7 | Maximale lengteverandering; gegevens uit tekst én figuur, aanpak van 6c overdragen naar elastische energie |
+| 78 | 8a–b | Beide uitspraken juist/fout én verklaren; wat verandert, wat blijft gelijk, wat volgt uit de formule? |
+| 78 | 9a–b | Energieomzetting en nut van recuperatief remmen; omzettingsketen, transport tegenover opslag |
+| 78 | 10 | Keuze én verklaring; gelijke hellinglengte onderscheiden van verticale hoogte, energiebehoud gebruiken |
 
-De blauwe leerkrachtnotitie op boek p. 79 zegt expliciet dat **§2.1 Arbeid** voor
-het verdiepte basisleerplan van de 1u-richting en de 2u-richting bestemd is.
-**§2.2 Vermogen is wel basisvorming.** Voeg dus niet automatisch de volledige
-arbeidsleer, hoekformule en bijbehorende oefeningen toe aan deze basisroute.
-Omgekeerd zijn omvormen, een onbekende zoeken en worteltrekken niet automatisch
-“verdieping”: ze kunnen nodig zijn bij de eenvoudige basisopgaven en krijgen dan
-expliciete begeleiding. Een reeks- of moeilijkheidssymbool van de uitgever is
-geen vervanging voor de leerplantoets.
+Oefeningen 1–3 worden niet opnieuw ingepland. Oefening 4 is niet opgenomen; het
+geïsoleerde systeem wordt functioneel teruggenomen bij behoud. De zes volledige
+oefeningen 5–10 bevatten samen zeven berekeningen (3 + 3 + 1) en vijf
+redeneeropdrachten (2 + 2 + 1).
 
-Dit is een beperkte eerste oefenles binnen het leerdoel, **geen verklaring dat
-de hele basisvorming of de beheersing ervan hiermee afgehandeld is**.
+## Begeleiding zonder microstappen
 
-## Oefeningendekking
+Elk boekscherm bevat de exacte opdracht, een zichtbare **“Zo pak je het aan”**-
+strategie en alleen indien nodig een openklapbare aanwijzing. Geen digitale
+uitwerking als vervanging van het boek. De groene kaders op p. 72–73 blijven het
+formularium; p. 90 wordt alleen gericht gelezen bij het nieuwe behoudsprobleem.
 
-| Boekpagina | Onderdeel | In deze route | Bron / steun / vervolg |
-| --- | --- | --- | --- |
-| 77 (en voorafgaande pagina's) | Oefeningen 1–3 | Reeds klassikaal gemaakt, niet opnieuw ingepland | Twee korte opfrisvragen, geen volledige herhaling |
-| 77 | Oefening 4, open/gesloten/geïsoleerd | Niet ingepland | Geïsoleerd systeem terugnemen bij behoud; niet zonder selectie alle classificatie laten maken |
-| **77** | **5, bewegend metalen balletje** | Voorbereiden → kwadraatcheck → uitwerken | Groen kader kinetisch p. 72, fietsvoorbeeld p. 73 |
-| **77** | **5, appel op hoogte** | Gegeven/gevraagd, massa omzetten, formule en berekening | Groen kader gravitationeel en voorbeeld p. 72; optionele gram-naar-kilogramhint |
-| **77** | **5, uitgerekte veer** | Zelf formule kiezen, invullen en uitwerken | Groen kader elastisch en flipperkastvoorbeeld p. 73; symbolencheck vooraf |
-| **77** | **6a** | Zelfstandiger berekening **én de gevraagde eenhedencontrole** | Kader p. 72, eenhedenregel fietsvoorbeeld p. 73; hulp alleen openklapbaar |
-| 77 | 6b–c | Later | Andere onbekenden: massa en snelheid; omvormen en wortels begeleiden |
-| 78 | 7 | Later | Lengteverandering uit elastische energie; formulegebruik met wortel begeleiden |
-| 78 | 8a–b | Mogelijke volgende korte verwerking | Invloed van snelheid en hoogte; verklaar met formules, niet enkel juist/fout aanklikken |
-| 78 | 9a–b | Later bij energieomzettingen beoordelen | Recuperatief remmen, omzetting en nut |
-| 78 | 10 | Later bij behoud/energiebalans beoordelen | Drie gladde hellingen; zelfde hoogte en verantwoording |
+Een nieuw scherm is verantwoord als het **denkwerk verandert**: 6a berekent
+energie, 6b massa, 6c snelheid. Niet elke regel “gegeven / gevraagd / invullen”
+wordt een aparte handeling in de interface. De drie berekeningen van 5 staan
+samen; 8, 9 en 10 vragen telkens de hele schriftelijke redenering.
 
-Oefening 5 heeft in het boek drie **ongelabelde** bullets. De route benoemt de
-situaties, niet fictieve boekletters “5a–c”. De eerste bullet krijgt twee
-werkstappen, de andere elk één. Oefening 6 wordt niet als volledig gemaakt geteld.
+De optionele hulp maakt bijvoorbeeld eerst de onbekende symbolisch vrij, of
+wijst bij een verklaring aan welke grootheden gelijk blijven. Geen lesje
+kwadrateren en geen verplichte herhaling van gram-naar-kilogramrekenen.
 
-## Didactische opbouw en rekenhulp
+Twee digitale vragen ondersteunen het boekwerk:
 
-**16 schermen:** vier lees-/zoekschermen (start + drie groene kaders), vijf
-boekwerkstappen en zeven korte vragen (twee diagnostisch, twee tussentijds,
-drie als eindcheck).
+1. Na 7: de aanpak overdragen naar een nieuwe onbekende (hoogte).
+2. Na 10: energiebehoud toepassen wanneer er wél wrijving en opwarming zijn.
 
-1. Boek, schrift, pen en rekenmachine klaar; duidelijke afbakening.
-2. Twee korte opfrisvragen: bewegingsenergie en joule.
-3. Kinetisch kader zelf zoeken. Eerste berekening splitsen in gegeven/gevraagd/
-   formule, kwadraatcheck en uitwerking. Dit maakt de rekenaanpak zichtbaar.
-4. Gravitationeel kader zoeken, daarna tweede berekening met expliciete aandacht
-   voor gram → kilogram. Gebruik `g = 9,81 N/kg`, zoals het boekvoorbeeld.
-5. Elastisch kader zoeken, betekenis van de symbolen controleren, derde
-   berekening maken. De lengteverandering staat al in meter.
-6. Oefening 6a met minder voorafgaande hulp: leerling kiest zelf het kader en
-   werkt volledig uit. De eenhedencontrole niet overslaan.
-7. Drie kleine eindvragen over formulekeuze, kilogram en een nieuwe kinetische
-   berekening. Geen digitale antwoordenverzameling voor de boekoefeningen.
+Beide tellen mee in **“Strategie en energiebehoud”**, op basis van de eerste
+poging. Geen opfrisscore “0 van 0”. Juiste antwoorden gaan op slot; na twee
+fouten blijft expliciete leerkrachthulp mogelijk. Boekwerk blijft zelfrapportage,
+geen automatische correctie of beheersingsscore.
 
-De vaste papieraanpak is **gegeven → gevraagd → formule → invullen → berekenen
-→ antwoord met eenheid**. Aanwijzingen zijn optioneel en beginnen gesloten bij
-elke nieuwe werkstap. Hulp gebruikt waar mogelijk boekvoorbeelden met andere
-getallen, geen volledige uitwerkingen van oefening 5 of 6a. De grammatica van het
-kwadraat en de eenheden worden kort ondersteund, niet in een tweede online
-hoofdstuk uitgelegd. De leerkracht blijft nodig voor nakijken en bij vastlopen.
+## Techniek, opslag en compatibiliteit
 
-Bij rekenen **mag het formularium gebruikt worden**, ook tijdens de digitale
-eindcheck. Dit sluit aan op het leerplandoel; het is geen geheugentoets van
-formules. Eerste pogingen en hulp worden wel eerlijk bijgehouden. Een gemaakte
-boekopdracht is zelfrapportage, niet een automatisch juiste oplossing.
+- Inhoud: `src/energie-basis/lesson.js`; ingang: `src/energie-basis/main.js`.
+- Gedeelde renderer: `src/guided/GuidedPath.vue`, met optionele `strategy`-lijst.
+- `work` met **`completion: 'button'`** bevestigt met de vervolgknop, zonder
+  `checks`. De bestaande checklistmodus blijft de standaard voor de andere routes.
+- `src/guided/progress.js` ondersteunt beide vormen, inclusief herstel en
+  terugkijken zonder dubbel tellen. Geen verborgen of automatische deelvinkjes.
+- Alle tekstvelden, ook `strategy`, gebruiken `MathText.vue` / `math.js`:
+  strikte KaTeX, MathML, Nederlandse komma's en geladen fonts. Alleen KaTeX-
+  output wordt als HTML geplaatst; gewone tekst niet.
+- Nieuwe inhoudsversie en sleutel:
+  **`willebroek:energie-basis:fys4-basis-t2-oefenen-v2`**.
+  V1-antwoorden passen niet bij deze inhoud/volgorde en worden niet stilzwijgend
+  overgenomen. De oude v1-sleutel blijft onaangeroerd, net als de twee andere
+  leerpaden. Er is geen migratie die eerder boekwerk als nieuw gemaakt meetelt.
+- Alleen lokale opslag, geen accounts, namen, server of synchronisatie.
+  Pauzeren/herladen hervat de lopende boekopdracht; schriftelijke tussenstappen
+  blijven in het boek/schrift, niet in digitale deelvinkjes. Bij geweigerde opslag
+  werkt het open tabblad met een waarschuwing. Reset vraagt bevestiging en raakt
+  alleen v2.
 
-## Formuleweergave en techniek
-
-- Lesdata: `src/energie-basis/lesson.js`; inhoudelijke selectie in `curriculum`.
-- Ingang: `src/energie-basis/main.js`, `energie-basis/index.html`, `vite.config.js`.
-- Gedeelde renderer: `src/guided/GuidedPath.vue`; geen gekopieerde app.
-- `src/guided/MathText.vue` en `math.js` renderen expliciete `\( … \)` en
-  `\[ … \]` met KaTeX, inclusief CSS, fonts en toegankelijke MathML.
-- Dit geldt voor **alle dynamische leerlingtekst**: vragen, keuzes, aanwijzingen,
-  feedback, instructies, afvinkpunten, titels en begin-/slotteksten, ook in de
-  bestaande routes. Geen ruwe tekst door `v-html`; alleen de gegenereerde
-  KaTeX-output wordt als HTML geplaatst (`trust: false`).
-- Gewone tekst blijft IBM Plex; formules gebruiken de bij KaTeX horende
-  wiskundeglyphs. Nederlandse decimalen worden niet naar punten omgezet.
-- Foute LaTeX/delimiters laten de inhoudstests falen; de runtime toont bij een
-  onverwachte fout een foutmelding, geen ongemerkt ongerenderde formule.
-- Dit is een lichte, veilige renderer voor de begeleide routes. De bestaande
-  ABC-mathengine met zijn ruimere HTML/Math.js-gebruik is niet gewijzigd.
-
-## Opslag, privacy en versiebeheer
-
-Eigen sleutel: **`willebroek:energie-basis:fys4-basis-t2-rekenen-v1`**.
-Adapter: `src/energie-basis/progress.js`; gedeelde logica:
-`src/guided/progress.js`. Geen namen, accounts, server of synchronisatie.
-Deelvinkjes, afgeronde stappen en ingediende antwoorden worden lokaal bewaard.
-Een reset betreft uitsluitend deze route, niet Energie of Celmetabolisme.
-Bij ontbrekende browseropslag blijft het open tabblad werken met waarschuwing.
-
-Een voortgangsbalk meet gemaakte stappen. Eerste pogingen worden niet overschreven
-na een herkansing. Na twee fouten kan een leerling bevestigen dat de vraag met de
-leerkracht besproken is; dat blijft **zelfrapportage**, geen beveiligde controle.
-Verhoog `lesson.id` als latere inhoudswijzigingen de opgeslagen antwoorden
-ongeldig maken; hergebruik de sleutel van de twee-uursroute nooit.
-
-## Controleren
+## Verificatie
 
 ```sh
 npm run check
@@ -163,19 +167,16 @@ node scripts/celmetabolisme.browser.mjs
 git diff --check
 ```
 
-- `scripts/energie-basis.test.mjs`: afbakening, exacte deelopgaven/pagina's,
-  eerst voorbereiden en dan rekenen, eigen opslag, partials, doorlopen,
-  herstel, eerlijke hulp en eerste poging.
-- `scripts/guided-math.test.mjs`: strikte formulecompilatie van alle tekstvelden
-  van alle drie routes, decimalen, MathML, foutdetectie en gewone tekstveiligheid.
-- Echte Chrome-test: alle schermen, formules in vragen/keuzes/feedback/open hints,
-  geladen KaTeX-fonts, mobiel 320/390 px, toetsenbord, Escape, deelvinkjes na
-  herladen en reset zonder de andere twee routes te wissen. Screenshots in temp.
-- Beide bestaande browserroutes opnieuw doorlopen vanwege de gedeelde renderer.
-- De smoketest controleert alle vier HTML-ingangen en hun JS/CSS. HTML-fallback
-  wordt op MIME-type en documentstart herkend; de tekst `span<HtmlDomNode>`
-  binnen de KaTeX-bundel is op zichzelf uiteraard geen HTML-document.
+De inhoudstests bewaken alle deelopgaven, paginering, strategie in plaats van
+microchecks, de interpretatie van oefening 10, beide bevestigingsvormen,
+opslagisolatie, v1-versiescheiding en eerste pogingen/hulp. De wiskundetests
+compileren alle tekstvelden van alle routes, inclusief de nieuwe strategieën.
 
-De techniek kan dit controleren; echte schriftelijke uitwerkingen en de haalbare
-lestijd blijven klaswerk. Deze nieuwe route heeft nog geen afzonderlijke
-klasevaluatie zoals de eerste energieroute.
+De Chrome-test doorloopt de tien schermen en controleert het ontbreken van
+boekwerkchecklists, formules in strategie/hulp/vraag/keuzes/feedback, MathML en
+fonts, 320/390 px, toetsenbord, pauze/refresh/Escape, doorkunnen na 8, terugkijken,
+reset en behoud van de andere opslagsleutels. Beide bestaande leerpaden worden
+opnieuw getest vanwege de gedeelde renderer en voortgangslogica.
+
+De daadwerkelijke lestijd en de kwaliteit van de schriftelijke oplossingen blijven
+in de klas te beoordelen; de technische tests bewijzen geen leerlingbeheersing.

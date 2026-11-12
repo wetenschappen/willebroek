@@ -3,7 +3,8 @@ export function createProgressSystem(lesson, steps, storageKey) {
   const freshProgress = () => ({ version: lesson.id, current: 0, completed: [], responses: {}, workChecks: {} })
 
   function canAdvance(state, step) {
-    if (step.type === 'work') return step.checks.every((_, index) => state.workChecks?.[step.id]?.includes(index))
+    // Bij button-bevestiging is de vervolgknop zelf de zelfrapportage.
+    if (step.type === 'work') return step.completion === 'button' || step.checks.every((_, index) => state.workChecks?.[step.id]?.includes(index))
     if (step.type !== 'quiz') return true
     const response = state.responses[step.id]
     return Boolean(response && (step.diagnostic || response.last === step.answer || response.assisted))
@@ -23,7 +24,7 @@ export function createProgressSystem(lesson, steps, storageKey) {
         assisted: response.assisted === true && response.count >= 2,
       }
     }
-    for (const step of steps.filter(item => item.type === 'work')) {
+    for (const step of steps.filter(item => item.type === 'work' && item.completion !== 'button')) {
       const checks = value.workChecks?.[step.id]
       if (Array.isArray(checks)) clean.workChecks[step.id] = [...new Set(checks.filter(index => Number.isInteger(index) && index >= 0 && index < step.checks.length))]
       // Versie 1 van Energie bewaarde alleen afgeronde stappen, niet de deelvinkjes.
@@ -82,7 +83,7 @@ export function createProgressSystem(lesson, steps, storageKey) {
 
   function setWorkChecks(state, checks) {
     const step = steps[state.current]
-    if (step?.type !== 'work' || !Array.isArray(checks)) return state
+    if (step?.type !== 'work' || step.completion === 'button' || !Array.isArray(checks)) return state
     // Een afgeronde stap blijft afgerond bij terugkijken.
     if (state.completed.includes(step.id)) return state
     const valid = [...new Set(checks.filter(index => Number.isInteger(index) && index >= 0 && index < step.checks.length))]

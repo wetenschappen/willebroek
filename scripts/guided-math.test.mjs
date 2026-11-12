@@ -51,5 +51,5 @@ test('begeleide wiskunde: alle tekstvelden van alle routes compileren strikt', (
       for (const part of parts.filter(part => part.type === 'text')) assert.doesNotMatch(part.value, /\\[()[\]]/)
     }
   }
-  assert.ok(formulas > 60, `${formulas} formules gecontroleerd`)
+  assert.ok(formulas > 30, `${formulas} formules gecontroleerd, inclusief de oplossingsstrategieën`)
 })

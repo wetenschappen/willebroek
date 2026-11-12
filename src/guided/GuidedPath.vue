@@ -2,6 +2,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { PhArrowLeft, PhArrowRight, PhCheckCircle, PhPause, PhXCircle } from '@phosphor-icons/vue'
 import { createProgressSystem } from './progress.js'
+import MathText from './MathText.vue'
 
 const props = defineProps({
   lesson: { type: Object, required: true },
@@ -93,15 +94,15 @@ function acceptHelp() {
   <div class="modal-fullscreen guided-shell" @keydown.esc="started && pause()">
     <header class="fullscreen-bar" :class="started && bookStep ? 'fullscreen-bar-paper' : 'fullscreen-bar-digital'">
       <div class="guided-header">
-        <strong class="fullscreen-title">{{ lesson.headerTitle }}</strong>
-        <span class="guided-class">{{ lesson.headerContext }}</span>
+        <strong class="fullscreen-title"><MathText :text="lesson.headerTitle" /></strong>
+        <span class="guided-class"><MathText :text="lesson.headerContext" /></span>
       </div>
       <button v-if="started" class="btn btn-ghost" @click="pause"><PhPause aria-hidden="true" :size="20" /> Pauzeren</button>
     </header>
 
     <div class="guided-progress-copy">
-      <span v-if="started && step">Stap {{ state.current + 1 }} van {{ steps.length }} · {{ step.section }}</span>
-      <span v-else>{{ finished ? 'Deze les is afgerond' : lesson.title }}</span>
+      <span v-if="started && step">Stap {{ state.current + 1 }} van {{ steps.length }} · <MathText :text="step.section" /></span>
+      <span v-else><MathText :text="finished ? 'Deze les is afgerond' : lesson.title" /></span>
       <span>{{ state.completed.length }} / {{ steps.length }} afgerond</span>
     </div>
     <div class="fullscreen-progress guided-progress" role="progressbar" aria-label="Afgeronde stappen in deze les" :aria-valuenow="state.completed.length" :aria-valuemax="steps.length" aria-valuemin="0">
@@ -113,13 +114,13 @@ function acceptHelp() {
         <p v-if="!storageAvailable" class="guided-notice" role="status">Je browser kan je voortgang niet bewaren. Je kunt verder werken, maar houd dit tabblad open.</p>
 
         <template v-if="!started">
-          <p class="eyebrow">{{ lesson.subtitle }}</p>
-          <h1 ref="heading" tabindex="-1">{{ finished ? lesson.finishedTitle || 'Deze les is klaar' : 'Stap voor stap aan de slag' }}</h1>
-          <p class="guided-lead">{{ lesson.title }}</p>
-          <p>{{ lesson.homeDescription }}</p>
-          <p class="guided-reference">{{ lesson.reference }}<br />{{ lesson.duration }}</p>
+          <p class="eyebrow"><MathText :text="lesson.subtitle" /></p>
+          <h1 ref="heading" tabindex="-1"><MathText :text="finished ? lesson.finishedTitle || 'Deze les is klaar' : 'Stap voor stap aan de slag'" /></h1>
+          <p class="guided-lead"><MathText :text="lesson.title" /></p>
+          <p><MathText :text="lesson.homeDescription" /></p>
+          <p class="guided-reference"><MathText :text="lesson.reference" /><br /><MathText :text="lesson.duration" /></p>
           <p v-if="state.completed.length && !finished">Je kunt verder bij stap {{ state.current + 1 }}. Je eerdere antwoorden zijn bewaard{{ storageAvailable ? ' in deze browser' : ' zolang dit tabblad openblijft' }}.</p>
-          <p v-else-if="finished">{{ lesson.homeFinished }}</p>
+          <p v-else-if="finished"><MathText :text="lesson.homeFinished" /></p>
           <p class="guided-small">{{ storageAvailable ? 'Voortgang wordt alleen op dit apparaat en in deze browser bewaard. Gebruik op een gedeeld apparaat “Opnieuw beginnen”.' : 'Er is geen account of online opslag.' }}</p>
           <button class="btn btn-primary guided-primary" @click="start">
             {{ finished ? 'Bekijk mijn afronding' : state.current || Object.keys(state.responses).length ? 'Ga verder waar je gebleven was' : 'Start het leerpad' }}
@@ -138,34 +139,34 @@ function acceptHelp() {
         <template v-else-if="step">
           <div class="guided-source">
             <span class="badge" :class="bookStep ? 'badge-paper' : 'badge-digital'">{{ bookStep ? 'Boek / bundel' : 'Digitaal' }}</span>
-            <span>{{ step.source }}</span>
+            <span><MathText :text="step.source" /></span>
           </div>
-          <h1 ref="heading" tabindex="-1">{{ step.title }}</h1>
+          <h1 ref="heading" tabindex="-1"><MathText :text="step.title" /></h1>
           <p v-if="step.diagnostic" class="guided-small">Kies eerst uit je hoofd. Dit is een opfrissing, geen toets op punten.</p>
           <template v-if="step.type !== 'quiz'">
-            <p v-for="instruction in step.instructions" :key="instruction">{{ instruction }}</p>
-            <p v-if="step.note" class="guided-notice">{{ step.note }}</p>
+            <p v-for="instruction in step.instructions" :key="instruction"><MathText :text="instruction" /></p>
+            <p v-if="step.note" class="guided-notice"><MathText :text="step.note" /></p>
             <p v-if="step.links?.length" class="guided-links">
-              <a v-for="link in step.links" :key="link.url" :href="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }} (nieuw tabblad)</a>
+              <a v-for="link in step.links" :key="link.url" :href="link.url" target="_blank" rel="noopener noreferrer"><MathText :text="link.label" /> (nieuw tabblad)</a>
             </p>
             <details v-if="step.support" :key="step.id" class="guided-support">
               <summary>Ik heb een aanwijzing nodig</summary>
-              <p v-for="hint in step.support" :key="hint">{{ hint }}</p>
+              <p v-for="hint in step.support" :key="hint"><MathText :text="hint" /></p>
             </details>
             <fieldset v-if="step.type === 'work'" class="guided-checklist">
               <legend>Vink pas aan als je het gemaakt hebt.</legend>
               <label v-for="(check, index) in step.checks" :key="check">
                 <input v-model="checks" type="checkbox" :value="index" :disabled="state.completed.includes(step.id)" />
-                <span>{{ check }}</span>
+                <span><MathText :text="check" /></span>
               </label>
             </fieldset>
           </template>
           <form v-else @submit.prevent="checkAnswer">
             <fieldset class="guided-question" :disabled="quizLocked">
-              <legend>{{ step.question }}</legend>
+              <legend><MathText :text="step.question" /></legend>
               <label v-for="(option, index) in step.options" :key="option" class="ticket-option guided-option" :class="{ 'ticket-option-selected': selected === index }">
                 <input v-model="selected" class="ticket-option-radio" type="radio" :name="step.id" :value="index" @change="submitted = false" />
-                <span>{{ option }}</span>
+                <span><MathText :text="option" /></span>
               </label>
             </fieldset>
             <button v-if="!quizLocked" class="btn btn-primary guided-primary" type="submit" :disabled="selected === null">Controleer mijn antwoord</button>
@@ -176,7 +177,7 @@ function acceptHelp() {
                   <PhXCircle v-else :size="24" aria-hidden="true" />
                   {{ response.last === step.answer ? 'Juist' : step.diagnostic ? 'Even opfrissen' : response.assisted ? 'Met hulp verder' : 'Nog niet juist' }}
                 </strong>
-                <p>{{ response.last === step.answer ? step.correct : step.hint }}</p>
+                <p><MathText :text="response.last === step.answer ? step.correct : step.hint" /></p>
                 <p v-if="!step.diagnostic && !quizLocked">Raadpleeg je boek. Kies daarna opnieuw en controleer je antwoord.</p>
               </div>
             </div>
@@ -189,18 +190,18 @@ function acceptHelp() {
         </template>
 
         <template v-else>
-          <p class="eyebrow">{{ lesson.completion.eyebrow }}</p>
-          <h1 ref="heading" tabindex="-1">{{ lesson.completion.title }}</h1>
-          <p>{{ lesson.completion.intro }}</p>
+          <p class="eyebrow"><MathText :text="lesson.completion.eyebrow" /></p>
+          <h1 ref="heading" tabindex="-1"><MathText :text="lesson.completion.title" /></h1>
+          <p><MathText :text="lesson.completion.intro" /></p>
           <h2>Je boekwerk</h2>
-          <p>{{ lesson.completion.work }}</p>
+          <p><MathText :text="lesson.completion.work" /></p>
           <h2>Je korte controles</h2>
           <p>Opfrissing: {{ entryResult.correct }} van {{ entryResult.total }} juist bij de eerste poging.</p>
           <p>Eindcheck: {{ finalResult.correct }} van {{ finalResult.total }} juist bij de eerste poging.</p>
           <p v-if="finalResult.assisted">Bij {{ finalResult.assisted }} eindvraag/vragen ging je met hulp verder. Bespreek die nog eens met je leerkracht.</p>
           <p class="guided-notice">De balk toont afgeronde stappen, geen cijfer of bewijs dat je alles beheerst.</p>
-          <h2>{{ lesson.completion.nextTitle }}</h2>
-          <p v-for="paragraph in lesson.completion.next" :key="paragraph">{{ paragraph }}</p>
+          <h2><MathText :text="lesson.completion.nextTitle" /></h2>
+          <p v-for="paragraph in lesson.completion.next" :key="paragraph"><MathText :text="paragraph" /></p>
         </template>
       </div>
     </main>
@@ -212,7 +213,7 @@ function acceptHelp() {
         <span v-if="step?.type === 'work' && !workReady" class="guided-small">Maak het boekwerk en vink het aan.</span>
         <span v-else-if="step?.type === 'quiz' && !ready" class="guided-small">Beantwoord eerst de vraag.</span>
         <button v-if="step" class="btn btn-primary guided-primary" :disabled="!ready" @click="next">
-          {{ step.next || (state.current === steps.length - 1 ? 'Bekijk mijn afronding' : 'Verder') }}
+          <MathText :text="step.next || (state.current === steps.length - 1 ? 'Bekijk mijn afronding' : 'Verder')" />
           <PhArrowRight aria-hidden="true" :size="22" />
         </button>
         <button v-else class="btn btn-primary guided-primary" @click="pause">Afronding bewaren en stoppen</button>

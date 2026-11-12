@@ -45,10 +45,11 @@ Er wordt **niet** beweerd dat hiermee alle oefeningen van T2 gemaakt zijn. Het e
 - `src/energie/lesson.js`: onafhankelijke lesdata met stabiele stap-id's, boekverwijzingen, feedback, boekopdrachten en start-/slotteksten.
 - `src/energie/EnergyPath.vue`: dunne adapter naar de gedeelde `src/guided/GuidedPath.vue`, met lichte fullscreen-werkbladshell, native radio's, boekwerkbevestiging, pauzeren, teruggaan en hervatten. Dit is een zelfstandige pagina, geen modal die vanuit ABC opent.
 - `src/energie/progress.js`: adapter naar de geteste gedeelde logica in `src/guided/progress.js`, met behoud van de gebruikte energiesleutel en lesversie.
-- `src/energie/main.js` en `energie/index.html`: eigen ingang; deelt alleen huisstijl en Vue met de planner.
+- `src/energie/main.js` en `energie/index.html`: eigen ingang; deelt huisstijl en Vue met de planner, en de renderer/voortgangslogica met de andere begeleide routes.
 - `scripts/energie.test.mjs`: inhoudsstructuur, vraaglogica, eerste poging, hulproute, hervatten en opslagfouten.
 - `scripts/energie.browser.mjs`: optionele echte Chrome-test van de volledige route, mobiel, hulproute, refresh, reset, Escape, opslagweigering en de nog bereikbare planner; screenshots in een tijdelijke map.
-- `scripts/smoke-check.mjs`: controleert de planner, energie, celmetabolisme en de gebouwde assets.
+- `scripts/smoke-check.mjs`: controleert de planner, energie, celmetabolisme, energie-basis en de gebouwde assets.
+- `src/guided/MathText.vue` / `math.js`: veilige KaTeX-weergave in alle dynamische tekstvelden; de bestaande inhoud, volgorde en opslag blijven behouden. Strikte formulechecks: `scripts/guided-math.test.mjs`.
 
 ## Opslag en privacy
 

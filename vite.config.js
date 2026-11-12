@@ -14,6 +14,7 @@ export default defineConfig({
         planner: fileURLToPath(new URL('./index.html', import.meta.url)),
         energie: fileURLToPath(new URL('./energie/index.html', import.meta.url)),
         celmetabolisme: fileURLToPath(new URL('./celmetabolisme/index.html', import.meta.url)),
+        energieBasis: fileURLToPath(new URL('./energie-basis/index.html', import.meta.url)),
       },
       output: {
         manualChunks(id) {

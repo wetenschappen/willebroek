@@ -34,3 +34,6 @@ docs/pi_zed_setup_guide.md
 # Bronnen van de celmetabolisme-route: PDF's en uitgeverspresentatie blijven lokaal.
 /docs/lesson material/jaar 5/*.pdf
 /docs/lesson material/jaar 5/*.pptx
+
+# Lokale bronbestanden voor de 1u-basisroute, geen publieke leerlingassets.
+/docs/lesson material/jaar 4 - 1u/*.pdf

@@ -2,8 +2,9 @@
 
 > Herbruikbare lesaanpak naast de ABC-planner, voor groepen die meer begeleiding
 > nodig hebben bij starten, volgorde houden en hun werk afronden.
-> Toepassingen: [Energie voor 4NAWE / 4SPOWE](ENERGIE-LEERPAD.md) en
-> [Celmetabolisme voor 5SPOWE / 5MOWE](CELMETABOLISME-LEERPAD.md).
+> Toepassingen: [Energie voor 4NAWE / 4SPOWE](ENERGIE-LEERPAD.md),
+> [Celmetabolisme voor 5SPOWE / 5MOWE](CELMETABOLISME-LEERPAD.md) en
+> [Energie basis voor 4LAT / 4ECWE](ENERGIE-BASIS-LEERPAD.md).
 > Ook bedoeld als vertrekpunt voor een komende les van 6TSO.
 
 ## 1. Waarom een tweede aanpak?
@@ -31,6 +32,12 @@ geen afzonderlijke meting van leerwinst of bewijs dat alle antwoorden juist ware
 De tweede toepassing vertrekt van een andere lessituatie: T2H1 Celmetabolisme
 is al volledig uitgelegd met een PowerPoint. Daar dient de route als oefenles,
 met korte terugzoekopdrachten in plaats van een tweede volledige uitleg.
+
+De derde toepassing, Energie basis, vertrekt na de klassikaal gemaakte oefeningen
+1–3. Voor 4LAT/4ECWE met één uur fysica per week gedurende één semester wordt de
+selectie expliciet getoetst aan GO! basisvorming. Een beperkter leerplan is iets
+anders dan willekeurig de verwachtingen verlagen: behoud de basisdoelen, geef
+meer reken- en organisatiesteun en laat onnodige verdieping weg.
 
 ## 2. De vaste afspraken
 
@@ -111,8 +118,10 @@ Een instructie als “Bekijk de theorie en maak de oefeningen” is te vaag.
   hulproute: bespreek de vraag met de leerkracht en bevestig dat dit gebeurd is.
 - Die bevestiging is **zelfrapportage**, geen beveiligde leerkrachtgoedkeuring.
   Toon dat de leerling met hulp doorging; laat niemand eindeloos vastlopen.
-- Een eindcheck probeert de leerling eerst zonder boek. De bronverwijzing blijft
-  bereikbaar als ondersteuning; dit is geen gecontroleerde toetsomgeving.
+- Bij een herinneringsvraag probeert de leerling eerst zonder boek. Bij rekenen
+  met een formularium mag dat formularium beschikbaar blijven, ook bij de
+  eindcheck: volg het leerdoel en benoem de afspraak in de route. De bronverwijzing
+  blijft bereikbaar als ondersteuning; dit is geen gecontroleerde toetsomgeving.
 
 ### Boekwerk en rapportage
 
@@ -135,7 +144,10 @@ Maak per route een klein brondossier met:
 - een lijst van alle oefeningen en deelvragen binnen de afgesproken scope;
 - vereiste voorkennis: een opdracht die formules vraagt komt pas na die formules;
 - geplande correctie, veilige uitvoering en eventuele leerkrachtmomenten;
-- een expliciete lijst met nog niet behandelde onderdelen en hun vervolgplek.
+- een expliciete lijst met nog niet behandelde onderdelen en hun vervolgplek;
+- waar basisvorming en verdieping uiteenlopen: exacte leerplandoelen en een
+  leerplan-naar-oefeningselectie. Moeilijkheidsiconen van een boek zijn geen
+  zelfstandige reden om een basisdoel weg te laten of uitbreiding verplicht te maken.
 
 Gebruik bijvoorbeeld deze dekkingstabel:
 
@@ -165,6 +177,10 @@ schoolvak en niet de enige informatiedrager.
 - Teruggaan levert geen extra afgeronde stappen op en wist geen eerste poging.
 - Pauzeren, Escape en herladen mogen geen afgeronde voortgang wissen.
 - “Opnieuw beginnen” vraagt bevestiging.
+- Formules krijgen echte KaTeX-weergave in **alle** tekstvelden, dus ook keuzes,
+  feedback, hints en afvinkpunten. Gebruik expliciete `\( … \)` / `\[ … \]` in
+  lesdata (`String.raw` of correct geëscapete JavaScript). Gewone tekst wordt niet
+  als HTML geïnterpreteerd. Controleer strikte compilatie, geladen fonts en mobiel.
 
 De huidige zelfstandige pagina gebruikt de gedeelde fullscreen-werkbladshell,
 maar opent niet als modal vanuit ABC. Escape pauzeert deze route. Voor een
@@ -173,8 +189,9 @@ browser-fullscreenafspraken uit het designsysteem.
 
 ## 7. Techniek: gedeelde renderer, afzonderlijke lessen
 
-Er zijn twee werkende ingangen: `/willebroek/energie/` en
-`/willebroek/celmetabolisme/`. Vite bouwt de eigen `index.html` van elke route
+Er zijn drie zelfstandige ingangen: `/willebroek/energie/`,
+`/willebroek/celmetabolisme/` en `/willebroek/energie-basis/`.
+Vite bouwt de eigen `index.html` van elke route
 samen met de planner; GitHub Pages publiceert echte submappen. Er is geen nieuwe
 repo of backend nodig.
 
@@ -184,8 +201,11 @@ De gemeenschappelijke implementatie staat in `src/guided/`:
   toont één vaste lesconfiguratie; er is geen klassenmenu of dynamische leswissel.
 - `progress.js` maakt onafhankelijke logica via
   `createProgressSystem(lesson, steps, storageKey)`.
-- `src/energie/` en `src/celmetabolisme/` bevatten hun eigen inhoud en ingang.
-  De energie-adapter behoudt de bestaande sleutel en versie voor de gebruikte klas.
+- `MathText.vue` en `math.js` verzorgen veilige tekst + KaTeX, inclusief MathML en
+  Nederlandse decimale komma's. Geen Math.js-import nodig voor deze routes.
+- `src/energie/`, `src/celmetabolisme/` en `src/energie-basis/` bevatten hun eigen
+  inhoud en ingang. De energie-adapter behoudt de bestaande sleutel en versie
+  voor de gebruikte klas.
 
 Voor een volgende toepassing, bijvoorbeeld 6TSO:
 
@@ -206,6 +226,9 @@ Voor een volgende toepassing, bijvoorbeeld 6TSO:
    submap is niet hetzelfde als een route in de ABC-router.
 7. Test de nieuwe inhoud én de bestaande routes, inclusief opgeslagen voortgang.
    Laat de ABC-registry en toegestane vakscope (fysica en biologie) ongemoeid.
+8. Voeg de nieuwe lesdata ook toe aan `scripts/guided-math.test.mjs`: alle
+   tekstvelden moeten strikt door KaTeX kunnen compileren. Test op 320/390 px
+   niet alleen de vraag, maar ook opties, fout/juist-feedback en geopende hints.
 
 Lokale opslag blijft het uitgangspunt: geen namen of accounts, geen synchronisatie
 of leerkrachtdashboard. Een gedeeld apparaat vraagt een duidelijke herstartmogelijkheid.

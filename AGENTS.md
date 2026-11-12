@@ -156,9 +156,23 @@ T2H1. Alle oefeningen 1–8 op boek p. 77–78 en het juist/fout-blok zijn ingep
 Bronnen en afbakening: `docs/CELMETABOLISME-LEERPAD.md`; inhoud:
 `src/celmetabolisme/`; tests: `scripts/celmetabolisme.test.mjs`.
 
+De derde toepassing is `/willebroek/energie-basis/`: fysica voor de gecombineerde
+4LAT/4ECWE, één uur per week gedurende één semester, uitsluitend GO! basisvorming.
+Introductie en oefeningen 1–3 zijn al klassikaal gemaakt. De eerste oefenroute
+begeleidt oefening 5 volledig en 6a (inclusief eenhedencontrole), boek p. 77 van
+de **1u-versie**. Gebruik niet de 2u-paginering. Bron, leerplanfilter, dekking en
+vervolg: `docs/ENERGIE-BASIS-LEERPAD.md`; code: `src/energie-basis/`; tests:
+`scripts/energie-basis.test.mjs` en `scripts/energie-basis.browser.mjs`. Arbeid
+§2.1 is hier niet verplicht; behoud, vermogen en rendement blijven basisdoelen
+voor het vervolg. Nog geen route voor het hele thema of semester.
+
 De configureerbare renderer en onafhankelijke voortgangslogica staan in
 `src/guided/`. Gebruik die bij volgende routes; kopieer geen volledige app.
 Elke les krijgt eigen data, begin-/slotteksten, HTML-ingang en opslagsleutel.
+`MathText.vue` / `math.js` renderen alle dynamische leerlingtekst met KaTeX en
+MathML. Gebruik `\\( … \\)` / `\\[ … \\]` in JavaScript-strings (of `String.raw`),
+geen ruwe LaTeX in keuzes, hints of feedback. Voeg nieuwe lesdata toe aan
+`scripts/guided-math.test.mjs` en controleer alle formulevelden op mobiel.
 De bestaande energievoortgang moet compatibel blijven. Deelvinkjes worden nu
 ook bij nog niet afgerond boekwerk bewaard. Lees de technische afspraken in
 `docs/BEGELEIDE-LEERPADEN.md` vóór uitbreiding. Voor 6TSO is de wens vastgelegd,

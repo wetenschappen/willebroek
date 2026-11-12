@@ -19,11 +19,15 @@ const request = url => new Promise((resolve, reject) => {
     let body = ''
     response.setEncoding('utf8')
     response.on('data', chunk => { body += chunk })
-    response.on('end', () => resolve({ status: response.statusCode, body }))
+    response.on('end', () => resolve({ status: response.statusCode, headers: response.headers, body }))
   })
   req.setTimeout(5000, () => req.destroy(new Error('timeout')))
   req.on('error', reject)
 })
+
+// KaTeX bevat o.a. de tekst “span<HtmlDomNode>” in JavaScript. Dat is
+// geen SPA-fallback; beoordeel het MIME-type en de documentstart.
+const isHtml = response => /text\/html/i.test(response.headers['content-type'] || '') || /^\s*(?:<!doctype\s+html|<html(?:\s|>))/i.test(response.body)
 
 const server = spawn(process.execPath, [viteBin, 'preview', '--host', '127.0.0.1', '--port', String(port)], {
   cwd: root,
@@ -62,7 +66,7 @@ try {
   const requiredAssets = ['planner-icon.svg', 'og-image.png']
   for (const asset of requiredAssets) {
     const assetResponse = await request(base + asset)
-    const looksLikeHtml = /<html|<!doctype/i.test(assetResponse.body)
+    const looksLikeHtml = isHtml(assetResponse)
     if (assetResponse.status !== 200 || looksLikeHtml || assetResponse.body.length === 0) {
       throw new Error(`${asset} ontbreekt in de build (HTTP ${assetResponse.status}${looksLikeHtml ? ', kreeg index.html terug' : ''})`)
     }
@@ -72,6 +76,7 @@ try {
   const paths = [
     ['energie/', 'Energie — leerpad 4NAWE / 4SPOWE'],
     ['celmetabolisme/', 'Celmetabolisme — oefenroute 5SPOWE / 5MOWE'],
+    ['energie-basis/', 'Energie basis — leerpad 4LAT / 4ECWE'],
   ]
   for (const [entry, title] of paths) {
     const page = await request(base + entry)
@@ -85,7 +90,7 @@ try {
     for (const asset of assets) {
       if (!asset.startsWith('/willebroek/assets/')) throw new Error(`${entry}-asset heeft verkeerd basispad: ${asset}`)
       const assetResponse = await request(new URL(asset, base))
-      if (assetResponse.status !== 200 || /<html|<!doctype/i.test(assetResponse.body) || !assetResponse.body.length) {
+      if (assetResponse.status !== 200 || isHtml(assetResponse) || !assetResponse.body.length) {
         throw new Error(`${entry}-asset ontbreekt: ${asset}`)
       }
     }
@@ -102,7 +107,7 @@ try {
 
   console.log(`✓ preview smoke test: ${base} → HTTP ${response.status}`)
   console.log(`✓ og-image.png, planner-icon.svg en og:image-metadata aanwezig`)
-  console.log(`✓ energie/ en celmetabolisme/ hebben eigen HTML-ingangen en bereikbare JS/CSS-assets`)
+  console.log(`✓ energie/, celmetabolisme/ en energie-basis/ hebben eigen HTML-ingangen en bereikbare JS/CSS-assets`)
 } catch (error) {
   console.error(error.message)
   if (output) console.error(output)

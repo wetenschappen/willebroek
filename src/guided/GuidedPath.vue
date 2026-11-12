@@ -3,6 +3,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { PhArrowLeft, PhArrowRight, PhCheckCircle, PhPause, PhXCircle } from '@phosphor-icons/vue'
 import { createProgressSystem } from './progress.js'
 import MathText from './MathText.vue'
+import { questionFeedback } from './feedback.js'
 
 const props = defineProps({
   lesson: { type: Object, required: true },
@@ -183,7 +184,7 @@ function acceptHelp() {
                   <PhXCircle v-else :size="24" aria-hidden="true" />
                   {{ response.last === step.answer ? 'Juist' : step.diagnostic ? 'Even opfrissen' : response.assisted ? 'Met hulp verder' : 'Nog niet juist' }}
                 </strong>
-                <p><MathText :text="response.last === step.answer ? step.correct : step.hint" /></p>
+                <p><MathText :text="questionFeedback(step, response)" /></p>
                 <p v-if="!step.diagnostic && !quizLocked">Raadpleeg je boek. Kies daarna opnieuw en controleer je antwoord.</p>
               </div>
             </div>

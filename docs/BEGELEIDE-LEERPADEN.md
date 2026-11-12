@@ -48,6 +48,19 @@ geen harde inhoudsgrens: snellere leerlingen mogen verderwerken; pauzeren en
 hervatten blijft mogelijk. “Eén opdracht per scherm” betekent niet “zo weinig
 mogelijk echte oefeningen per les”.
 
+Ook de bondige 5–10-versie bleek volgens de leerkracht te weinig didactische
+meerwaarde te bieden: vooral een opdrachtenlijst met hints. Verwar daarom
+**lesbegeleiding** niet met louter een oplossingsstrategie of minder tekst.
+De kern is zichtbaar voor iedereen: boekonderzoek → begripsvraag → inhoudelijke
+feedback → toepassing. Alleen aanvullende ondersteuning is optioneel. Wiskundige
+vaardigheid maakt begeleiding bij fysische begrippen en modelkeuzes niet overbodig.
+
+Afspraak voor de verdere herwerking: eerst één inhoudsblok laten beoordelen,
+niet opnieuw de hele route blind omgooien. Het kinetische proefblok op
+`/willebroek/energie-basis/proefblok/` is een afzonderlijke werkende preview met
+eigen opslag. De volledige 5–10-route blijft voorlopig intact; pas na inhoudelijke
+feedback de aanpak doortrekken. Het proefblok is geen volledige lesdekking.
+
 ## 2. De vaste afspraken
 
 1. **Eén scherm, één behapbare opdracht of vraag.** Geen ABC-kolommen,
@@ -121,8 +134,11 @@ Een instructie als “Bekijk de theorie en maak de oefeningen” is te vaag.
 ### Controles tijdens het leren en aan het einde
 
 - Een juist antwoord gaat op slot en geeft doorgang.
-- Een fout antwoord verwijst naar de juiste bronplek én geeft een gerichte hint.
-  Niet alleen “fout” of “probeer opnieuw”.
+- Een fout antwoord verwijst naar de juiste bronplek én geeft inhoudelijke uitleg
+  over de denkfout. Niet alleen “fout” of “probeer opnieuw”. Een optionele
+  `feedbackByOption`-lijst maakt de uitleg specifiek voor de gekozen misvatting;
+  zonder die lijst blijft de algemene `hint` behouden. Feedback staat zichtbaar na
+  antwoorden, niet onder een hulpklepje.
 - Laat opnieuw proberen. Na twee foute pogingen biedt de huidige versie een
   hulproute: bespreek de vraag met de leerkracht en bevestig dat dit gebeurd is.
 - Die bevestiging is **zelfrapportage**, geen beveiligde leerkrachtgoedkeuring.

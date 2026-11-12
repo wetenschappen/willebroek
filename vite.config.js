@@ -15,6 +15,7 @@ export default defineConfig({
         energie: fileURLToPath(new URL('./energie/index.html', import.meta.url)),
         celmetabolisme: fileURLToPath(new URL('./celmetabolisme/index.html', import.meta.url)),
         energieBasis: fileURLToPath(new URL('./energie-basis/index.html', import.meta.url)),
+        energieBasisProefblok: fileURLToPath(new URL('./energie-basis/proefblok/index.html', import.meta.url)),
       },
       output: {
         manualChunks(id) {

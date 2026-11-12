@@ -174,6 +174,22 @@ Gebruik niet de 2u-paginering. Bron, leerplanfilter, dekking en vervolg:
 blijven basisdoelen voor het vervolg. Nog geen route voor het hele thema of
 semester. Versie 2 heeft eigen opslag; neem v1-antwoorden niet blind over.
 
+**Actuele didactische status:** de leerkracht vond ook v2 te bondig, met te weinig
+meerwaarde tegenover zelf lesgeven. De twee-uursroute is het referentiemodel:
+**boekonderzoek → begripsvraag → zichtbare inhoudelijke feedback → toepassing**.
+De kernles mag niet verborgen worden in optionele hints. Minder schermen/tekst
+is geen doel; geen afvinkprocedure, maar ook geen loutere opdrachtenlijst.
+Eerst één proefblok laten beoordelen, niet de hele route opnieuw blind vervangen.
+Dat proefblok staat op `/willebroek/energie-basis/proefblok/` met eigen opslag:
+`src/energie-basis/kinetic-pilot.js`, `pilot-main.js` en
+`energie-basis/proefblok/index.html`. Het omvat boekonderzoek p. 72–73, een
+systeem/massa-vraag met antwoordgerichte feedback, alleen het balletje van 5 op
+p. 77 en een transfervraag. Nog geen volledige nieuwe 5–10-versie. De bestaande
+route en haar voortgang blijven intact. Zie `docs/ENERGIE-BASIS-LEERPAD.md`.
+Tests: `scripts/energie-kinetisch-pilot.test.mjs` en de gelijknamige browsertest.
+`src/guided/feedback.js` ondersteunt `feedbackByOption` met fallback naar `hint`;
+het wijzigt geen scores of bestaande vraaginhoud.
+
 De configureerbare renderer en onafhankelijke voortgangslogica staan in
 `src/guided/`. Gebruik die bij volgende routes; kopieer geen volledige app.
 Elke les krijgt eigen data, begin-/slotteksten, HTML-ingang en opslagsleutel.

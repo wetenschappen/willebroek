@@ -77,6 +77,7 @@ try {
     ['energie/', 'Energie — leerpad 4NAWE / 4SPOWE'],
     ['celmetabolisme/', 'Celmetabolisme — oefenroute 5SPOWE / 5MOWE'],
     ['energie-basis/', 'Energie basis — leerpad 4LAT / 4ECWE'],
+    ['energie-basis/proefblok/', 'Kinetische energie — proefblok 4LAT / 4ECWE'],
   ]
   for (const [entry, title] of paths) {
     const page = await request(base + entry)
@@ -107,7 +108,7 @@ try {
 
   console.log(`✓ preview smoke test: ${base} → HTTP ${response.status}`)
   console.log(`✓ og-image.png, planner-icon.svg en og:image-metadata aanwezig`)
-  console.log(`✓ energie/, celmetabolisme/ en energie-basis/ hebben eigen HTML-ingangen en bereikbare JS/CSS-assets`)
+  console.log(`✓ energie/, celmetabolisme/, energie-basis/ en het proefblok hebben eigen HTML-ingangen en bereikbare JS/CSS-assets`)
 } catch (error) {
   console.error(error.message)
   if (output) console.error(output)

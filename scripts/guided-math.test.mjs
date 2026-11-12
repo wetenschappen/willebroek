@@ -4,6 +4,7 @@ import { parseMathText } from '../src/guided/math.js'
 import { lesson as energy, steps as energySteps } from '../src/energie/lesson.js'
 import { lesson as biology, steps as biologySteps } from '../src/celmetabolisme/lesson.js'
 import { lesson as basic, steps as basicSteps } from '../src/energie-basis/lesson.js'
+import { lesson as pilot, steps as pilotSteps } from '../src/energie-basis/kinetic-pilot.js'
 
 const tex = String.raw
 
@@ -44,7 +45,7 @@ test('begeleide wiskunde: gewone tekst is geen HTML en valuta zijn geen formule'
 
 test('begeleide wiskunde: alle tekstvelden van alle routes compileren strikt', () => {
   let formulas = 0
-  for (const content of [energy, energySteps, biology, biologySteps, basic, basicSteps]) {
+  for (const content of [energy, energySteps, biology, biologySteps, basic, basicSteps, pilot, pilotSteps]) {
     for (const source of strings(content)) {
       const parts = parseMathText(source)
       formulas += parts.filter(part => part.type === 'math').length

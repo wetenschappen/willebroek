@@ -6,7 +6,77 @@ graag, maar zijn niet zwak in wiskunde. Begeleiding betekent hier hulp bij de
 **aanpak van een fysisch probleem**, geen uitleg van elementaire rekenvaardigheden.
 Zie ook [BEGELEIDE-LEERPADEN.md](BEGELEIDE-LEERPADEN.md).
 
-## Ingang en afbakening
+## Actuele ontwerpstatus: eerst één proefblok beoordelen
+
+De leerkracht vond ook versie 2 **te bondig en te weinig meerwaarde bieden**:
+een opdrachtenlijst met hints vervangt nog geen lesbegeleiding. De gewenste
+referentie blijft de twee-uursroute: **boekonderzoek → begripsvraag →
+inhoudelijke feedback → toepassing**, niet zo weinig mogelijk schermen.
+
+Daarom is eerst één werkend proefblok gebouwd, **zonder versie 2 te vervangen**:
+
+**`https://wetenschappen.github.io/willebroek/energie-basis/proefblok/`**
+
+Dit is een afzonderlijke beoordelingsingang binnen hetzelfde energieleerpad,
+geen nieuw vak, nieuwe ABC-les of tweede volledige oefenroute. De volledige
+5–10-herwerking in deze didactische vorm wacht op feedback over dit proefblok.
+De hieronder beschreven versie 2 blijft beschikbaar als bestaande vergelijking;
+ze geldt niet als goedgekeurde eindvorm.
+
+### Proefblok: kinetische energie
+
+| Scherm | Werk in het boek / digitaal | Didactische bedoeling |
+| --- | --- | --- |
+| 1 | Groen kader p. 72 en fietsvoorbeeld p. 73 onderzoeken | De gevraagde energie verbinden met het systeem en de keuze van gegevens |
+| 2 | Kiezen welke massa bij renner–fiets hoort | Begrip controleren; per fout gekozen antwoord uitleg over de specifieke misvatting; juiste feedback legt de systeemkeuze en totale massa uit |
+| 3 | Alleen de eerste bullet van oefening 5 op p. 77 uitwerken | De aanpak overdragen van het fietsvoorbeeld naar het metalen balletje; volledige berekening op papier |
+| 4 | Een tweede balletje met dubbele massa en dezelfde snelheid vergelijken | Het verband fysisch verklaren, niet enkel getallen in een formule invullen |
+
+De feedback is **zichtbare kerninhoud na het antwoorden**, geen verborgen
+hulplaag. Alleen de extra ondersteuning bij het boekwerk is optioneel. Geen
+kwadraatles, verplichte materiaalcheck of boekwerkchecklists. “Berekening gemaakt,
+verder” blijft zelfrapportage, geen automatische correctie. De twee vragen zijn
+onderwijsvragen met gerichte herkansing, geen diagnostische geheugenquiz.
+
+De slottekst zegt expliciet dat alleen het balletje gemaakt is. De appel, veer
+en 6–10 worden niet als afgewerkt geteld. Geen complete-les- of tijdsclaim. Het
+extra transfervraagje gaat over **massa bij gelijke snelheid**, niet over het
+antwoord op de snelheidsvraag van boekoefening 8a.
+
+Bronnen zijn opnieuw visueel gecontroleerd: handleiding PDF p. 12–13 en 17
+(boek p. 72–73 en 77). Het fietsvoorbeeld telt inderdaad renner en fiets samen
+in de gebruikte massa; dat schoolmodel behandelt hun beweging met dezelfde
+snelheid. Geen gekopieerde bronafbeeldingen of numerieke oplossingen in de app.
+De OCR/formulekandidaten op deze scanpagina's zijn op zichzelf niet als verificatie
+gebruikt. Alleen deze gerichte pagina's zijn voor het proefblok herbekeken.
+
+Bestanden en opslag:
+
+- `src/energie-basis/kinetic-pilot.js`: eigen proefles, vier schermen, begrips- en
+  transferfeedback en eerlijke afbakening.
+- `src/energie-basis/pilot-main.js`, `energie-basis/proefblok/index.html`:
+  eigen echte Vite/Pages-ingang, dezelfde `GuidedPath.vue` en huisstijl.
+- Eigen sleutel **`willebroek:energie-basis:proefblok:fys4-basis-kinetisch-proefblok-v1`**.
+  Geen migratie of reset van de volledige 5–10-route, de twee-uursroute of biologie.
+- `src/guided/feedback.js`: optionele `feedbackByOption`-lijst per vraag;
+  correcte antwoorden behouden `correct`, ontbrekende keuze-uitleg valt terug op
+  `hint`. Geen nieuwe score- of opslagstructuur. De bestaande vragen blijven
+  inhoudelijk ongewijzigd.
+- `scripts/energie-kinetisch-pilot.test.mjs` onder `npm run check`:
+  lesvolgorde, afbakening, specifieke én bestaande feedback, eerste poging,
+  hulp, herstel en opslagisolatie. De gedeelde wiskundetest verwerkt ook alle
+  proefblokteksten, inclusief `feedbackByOption`.
+- `node scripts/energie-kinetisch-pilot.browser.mjs` na een build: alle schermen,
+  beide foutkeuzes en juiste uitleg, transfer, boekwerk zonder vinkjes,
+  KaTeX/MathML, 320/390 px, toetsenbord, refresh/Escape, herkansen/hulp en reset.
+  Ook de drie bestaande browserroutes opnieuw testen bij wijzigingen in feedback.
+
+**Beoordelingsvraag voor de leerkracht:** neemt de cyclus gericht iets van de
+uitleg en feedback over, terwijl het boek het leren en oefenen draagt? Pas na
+beoordeling dezelfde didactische opbouw naar de overige energieblokken uitbreiden.
+Niet automatisch de volledige route vervangen omdat de technische tests slagen.
+
+## Versie 2 — ingang en afbakening
 
 - Leerlinglink: `https://wetenschappen.github.io/willebroek/energie-basis/`.
 - Lokaal: `http://localhost:5173/willebroek/energie-basis/` na `npm run dev`.

@@ -158,37 +158,39 @@ Bronnen en afbakening: `docs/CELMETABOLISME-LEERPAD.md`; inhoud:
 
 De derde toepassing is `/willebroek/energie-basis/`: fysica voor de gecombineerde
 4LAT/4ECWE, één uur per week gedurende één semester, uitsluitend GO! basisvorming.
-Introductie en oefeningen 1–3 zijn al klassikaal gemaakt. De herwerkte route
-begeleidt **5–10 volledig**, boek p. 77–78 van de **1u-versie**: zeven berekeningen
-en vijf redeneeropdrachten, met ook de eenhedencontrole bij 6a–c. Tien schermen:
-acht boekopdrachten en twee korte controles, geen boekwerkchecklists. De leerlingen
-zijn wiskundig vaardig; geef **oplossingsstrategieën**, geen uitleg over kwadraten
-of bevestiging van elke rekenstap. `work` met `completion: 'button'` bevestigt via
-“Gemaakt, verder”; een `strategy`-lijst geeft de aanpak. Geen harde lesuurgrens:
-snellere leerlingen gaan gewoon door, anderen pauzeren en hervatten. Let op bij
-10: **gelijke hellinglengte, niet gelijke hoogte**; bron p. 78 en naslag p. 90.
-Gebruik niet de 2u-paginering. Bron, leerplanfilter, dekking en vervolg:
-`docs/ENERGIE-BASIS-LEERPAD.md`; code: `src/energie-basis/`; tests:
-`scripts/energie-basis.test.mjs` en `scripts/energie-basis.browser.mjs`. Arbeid
-§2.1 is hier niet verplicht; kwantitatieve energiebalansen, vermogen en rendement
-blijven basisdoelen voor het vervolg. Nog geen route voor het hele thema of
-semester. Versie 2 heeft eigen opslag; neem v1-antwoorden niet blind over.
+Introductie en oefeningen 1–3 zijn al klassikaal gemaakt. **Het kinetische proefblok
+is goedgekeurd en de leerkracht vroeg de aanpak door te trekken naar de hele les
+van 50 minuten: oefeningen 5–10. Versie 3 is die volledige begeleide les**, niet
+meer de bondige opdrachtenlijst van v2. Boek p. 77–78 van de **1u-versie**, met
+voorbeelden op 72–73, chemische opslag als gerichte naslag p. 70 en behoud p. 90.
+Zeven berekeningen en vijf redeneeropdrachten, inclusief de eenhedencontrole bij
+6a–c. Inhoudelijke cyclus: **boekonderzoek → begripsvraag → zichtbare uitleg bij
+de gekozen misvatting → toepassing**. De les heeft 26 schermen: 7 onderzoeken,
+9 begripsvragen, 10 boekopdrachten. Dat aantal is geen sjabloon voor andere lessen.
 
-**Actuele didactische status:** de leerkracht vond ook v2 te bondig, met te weinig
-meerwaarde tegenover zelf lesgeven. De twee-uursroute is het referentiemodel:
-**boekonderzoek → begripsvraag → zichtbare inhoudelijke feedback → toepassing**.
-De kernles mag niet verborgen worden in optionele hints. Minder schermen/tekst
-is geen doel; geen afvinkprocedure, maar ook geen loutere opdrachtenlijst.
-Eerst één proefblok laten beoordelen, niet de hele route opnieuw blind vervangen.
-Dat proefblok staat op `/willebroek/energie-basis/proefblok/` met eigen opslag:
-`src/energie-basis/kinetic-pilot.js`, `pilot-main.js` en
-`energie-basis/proefblok/index.html`. Het omvat boekonderzoek p. 72–73, een
-systeem/massa-vraag met antwoordgerichte feedback, alleen het balletje van 5 op
-p. 77 en een transfervraag. Nog geen volledige nieuwe 5–10-versie. De bestaande
-route en haar voortgang blijven intact. Zie `docs/ENERGIE-BASIS-LEERPAD.md`.
-Tests: `scripts/energie-kinetisch-pilot.test.mjs` en de gelijknamige browsertest.
+De leerlingen zijn wiskundig vaardig. Leer fysische begrippen en modelkeuzes,
+geen kwadraatles of bevestiging van elke rekenstap. De kerninstructie staat
+zichtbaar, alleen aanvullende formule-/strategiehulp is optioneel. `work` met
+`completion: 'button'` bevestigt via “Gemaakt, verder”, zonder boekwerkchecklists.
+Vijftig minuten is de planning, geen inhoudsslot: wie niet klaar is pauzeert en
+hervat, niemand krijgt een ingekorte 5–10-route. Let bij 10 op **gelijke
+hellinglengte, niet gelijke hoogte**, met beginrust en verwaarloosbare wrijving.
+Gebruik niet de 2u-paginering. Arbeid §2.1 is niet verplicht; kwantitatieve
+energiebalansen, vermogen en rendement blijven voor het vervolg. Geen hele-T2-
+of semesterdekking claimen.
+
+Bron, lesplanning, dekking en compatibiliteit: `docs/ENERGIE-BASIS-LEERPAD.md`.
+Code: `src/energie-basis/`; tests: `scripts/energie-basis.test.mjs` en
+`scripts/energie-basis.browser.mjs`. V3 heeft een nieuwe les-id/opslagsleutel;
+neem v1/v2- of proefblokantwoorden niet blind over. De oude sleutels en de twee
+andere routes blijven bewaard. De aparte referentie
+`/willebroek/energie-basis/proefblok/` blijft bestaan met eigen opslag; **deel voor
+de hele les de hoofdlink**.
+De eerste vier v3-stappen hergebruiken `kinetic-pilot.js`, met alleen een andere
+vervolgknop aan het einde. De proefblokingang wordt getest door
+`scripts/energie-kinetisch-pilot.test.mjs` en de gelijknamige browsertest.
 `src/guided/feedback.js` ondersteunt `feedbackByOption` met fallback naar `hint`;
-het wijzigt geen scores of bestaande vraaginhoud.
+het wijzigt geen scores of bestaande twee-uurs-/biologievraaginhoud.
 
 De configureerbare renderer en onafhankelijke voortgangslogica staan in
 `src/guided/`. Gebruik die bij volgende routes; kopieer geen volledige app.

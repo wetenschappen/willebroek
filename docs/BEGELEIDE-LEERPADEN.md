@@ -55,11 +55,20 @@ De kern is zichtbaar voor iedereen: boekonderzoek → begripsvraag → inhoudeli
 feedback → toepassing. Alleen aanvullende ondersteuning is optioneel. Wiskundige
 vaardigheid maakt begeleiding bij fysische begrippen en modelkeuzes niet overbodig.
 
-Afspraak voor de verdere herwerking: eerst één inhoudsblok laten beoordelen,
-niet opnieuw de hele route blind omgooien. Het kinetische proefblok op
-`/willebroek/energie-basis/proefblok/` is een afzonderlijke werkende preview met
-eigen opslag. De volledige 5–10-route blijft voorlopig intact; pas na inhoudelijke
-feedback de aanpak doortrekken. Het proefblok is geen volledige lesdekking.
+Het eerst uitgewerkte kinetische proefblok is vervolgens **goedgekeurd**. De
+leerkracht vroeg expliciet dezelfde aanpak voor de hele les van **50 minuten,
+oefeningen 5–10**. De actieve basisroute is nu v3 met die opbouw: 26 schermen
+(7 boekonderzoeken, 9 begripsvragen met keuze-afhankelijke feedback en 10
+boekopdrachten). Het aantal schermen is geen doel of sjabloon; het volgt het
+onderwijs. De 50 minuten zijn een ontwerpplanning, geen timer die leerstof
+weglaat. Ondersteuning neemt af bij modeloverdracht, niet door kernuitleg te
+verbergen. Alle deelvragen, eenhedencontroles en verklaringen blijven in scope.
+
+De volledige les staat op `/willebroek/energie-basis/`. Het aparte
+`/willebroek/energie-basis/proefblok/` blijft een kleine referentie met eigen
+opslag en levert de eerste vier v3-stappen. Deel voor de hele les de hoofdlink,
+niet de proeflink. V3 heeft een nieuwe sleutel; oude v1/v2-, proefblok- en andere
+routevoortgang wordt niet gewist of als nieuwe voltooiing overgenomen.
 
 ## 2. De vaste afspraken
 

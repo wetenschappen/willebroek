@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { lesson, steps, STORAGE_KEY } from '../src/energie-basis/kinetic-pilot.js'
 import { createProgressSystem } from '../src/guided/progress.js'
 import { questionFeedback } from '../src/guided/feedback.js'
-import { lesson as basic, steps as basicSteps } from '../src/energie-basis/lesson.js'
+import { lesson as basic } from '../src/energie-basis/lesson.js'
 import { STORAGE_KEY as basicKey } from '../src/energie-basis/progress.js'
 import { steps as energySteps, lesson as energy } from '../src/energie/lesson.js'
 import { STORAGE_KEY as energyKey } from '../src/energie/progress.js'
@@ -61,8 +61,8 @@ test('feedback: elke gekozen misvatting krijgt eigen inhoud, niet alleen een ver
   assert.equal(questionFeedback({ ...quiz, feedbackByOption: [null, null, null] }, { last: 0 }), quiz.hint)
 })
 
-test('feedback: alle bestaande vragen behouden hun algemene hint en juiste uitleg', () => {
-  for (const step of [...basicSteps, ...energySteps, ...biologySteps].filter(step => step.type === 'quiz')) {
+test('feedback: twee-uursenergie en biologie behouden hun algemene hint en juiste uitleg', () => {
+  for (const step of [...energySteps, ...biologySteps].filter(step => step.type === 'quiz')) {
     for (let last = 0; last < step.options.length; last++) {
       assert.equal(questionFeedback(step, { last }), last === step.answer ? step.correct : step.hint)
     }

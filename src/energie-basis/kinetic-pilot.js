@@ -1,4 +1,4 @@
-// Eén beoordeelbaar lesblok, nog geen nieuwe versie van de volledige 5–10-route.
+// Het goedgekeurde proefblok, ook de bron voor het eerste blok van de 5–10-les.
 // Bron: WACO Fysica 4 (1u), boek p. 72–73 en eerste bullet van 5 op p. 77.
 const tex = String.raw
 
@@ -21,7 +21,7 @@ export const lesson = {
     checksLabel: 'Begrip en toepassing',
     nextTitle: 'Hier stopt het proefblok',
     next: [
-      'De appel en de veer van oefening 5, en oefeningen 6–10, zijn hiermee nog niet gemaakt. Dit blok dient om de lesaanpak te beoordelen vóór de verdere herwerking.',
+      'De appel en de veer van oefening 5, en oefeningen 6–10, zijn hiermee nog niet gemaakt. Gebruik voor de hele les de volledige energieroute voor 4LAT / 4ECWE.',
       'Bespreek bij je uitwerking: welk systeem onderzocht je, welke gegevens hoorden daarbij en waarom paste de gekozen formule?',
     ],
   },

@@ -64,7 +64,7 @@ const heading = () => evaluate(`document.querySelector('h1')?.textContent`)
 const saved = () => evaluate(`JSON.parse(localStorage.getItem(${JSON.stringify(STORAGE_KEY)}))`)
 async function reload() {
   await command('Page.reload')
-  await waitFor(() => evaluate(`!!document.querySelector('.energy-sheet h1')`), 'reload')
+  await waitFor(() => evaluate(`!!document.querySelector('.guided-sheet h1')`), 'reload')
 }
 async function noHorizontalOverflow() {
   assert.equal(await evaluate(`document.querySelector('main').scrollWidth <= document.querySelector('main').clientWidth`), true)
@@ -90,7 +90,7 @@ try {
   await command('Page.enable')
   await command('Emulation.setDeviceMetricsOverride', { width: 1366, height: 768, deviceScaleFactor: 1, mobile: false })
   await command('Page.navigate', { url })
-  await waitFor(() => evaluate(`!!document.querySelector('.energy-sheet h1')`), 'home')
+  await waitFor(() => evaluate(`!!document.querySelector('.guided-sheet h1')`), 'home')
   await evaluate('document.fonts.ready')
   assert.equal(await heading(), 'Stap voor stap aan de slag')
   await screenshot('01-start-desktop')
@@ -98,7 +98,7 @@ try {
   await click('Mijn materiaal ligt klaar')
   await choose(0) // Fout diagnostisch antwoord moet doorgang geven en bewaard blijven.
   await click('Controleer mijn antwoord')
-  assert.match(await evaluate(`document.querySelector('.energy-feedback').textContent`), /Even opfrissen/)
+  assert.match(await evaluate(`document.querySelector('.guided-feedback').textContent`), /Even opfrissen/)
   await click('Verder')
   assert.equal((await saved()).responses[steps[1].id].first, 0)
   await reload()
@@ -114,9 +114,9 @@ try {
     if (step.type === 'quiz') {
       if (step.id === 'systeem-check') {
         await choose(0); await click('Controleer mijn antwoord')
-        assert.equal(await evaluate(`document.querySelector('.energy-footer .btn-primary').disabled`), true)
+        assert.equal(await evaluate(`document.querySelector('.guided-footer .btn-primary').disabled`), true)
         await choose(1); await click('Controleer mijn antwoord')
-        await action(`document.querySelector('.energy-help input').click()`)
+        await action(`document.querySelector('.guided-help input').click()`)
         await click('Verder met hulp mogelijk maken')
         assert.equal((await saved()).responses[step.id].assisted, true)
       } else {
@@ -125,15 +125,15 @@ try {
         assert.equal(await evaluate(`document.querySelector('fieldset').disabled`), true)
       }
     } else if (step.type === 'work') {
-      assert.equal(await evaluate(`document.querySelector('.energy-footer .btn-primary').disabled`), true)
+      assert.equal(await evaluate(`document.querySelector('.guided-footer .btn-primary').disabled`), true)
       for (let check = 0; check < step.checks.length; check++) {
-        await action(`document.querySelectorAll('.energy-checklist input')[${check}].click()`)
+        await action(`document.querySelectorAll('.guided-checklist input')[${check}].click()`)
       }
       if (step.id === 'oefening-4') await screenshot('02-boekwerk-mobile')
     }
     if (step.id === 'eenheid-check') await screenshot('03-check-mobile')
     await noHorizontalOverflow()
-    await action(`document.querySelector('.energy-footer .btn-primary').click()`)
+    await action(`document.querySelector('.guided-footer .btn-primary').click()`)
   }
   assert.equal(await heading(), 'Je bent klaar voor vandaag')
   assert.equal((await saved()).completed.length, steps.length)

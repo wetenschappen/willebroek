@@ -68,20 +68,26 @@ try {
     }
   }
 
-  // Tweede HTML-ingang: dit moet een echt gebouwd bestand zijn, geen SPA-fallback.
-  const energyResponse = await request(base + 'energie/')
-  if (energyResponse.status !== 200 || !energyResponse.body.includes('<title>Energie — leerpad 4NAWE / 4SPOWE</title>')) {
-    throw new Error('energie/ ontbreekt of valt terug op de planner-index')
-  }
-  const energyAssets = [...energyResponse.body.matchAll(/(?:src|href)="([^"]+\.(?:js|css))"/g)].map(match => match[1])
-  if (!energyAssets.some(asset => asset.endsWith('.js')) || !energyAssets.some(asset => asset.endsWith('.css'))) {
-    throw new Error('energie/ mist gebouwde JavaScript- of CSS-assets')
-  }
-  for (const asset of energyAssets) {
-    if (!asset.startsWith('/willebroek/assets/')) throw new Error(`energie-asset heeft verkeerd basispad: ${asset}`)
-    const assetResponse = await request(new URL(asset, base))
-    if (assetResponse.status !== 200 || /<html|<!doctype/i.test(assetResponse.body) || !assetResponse.body.length) {
-      throw new Error(`energie-asset ontbreekt: ${asset}`)
+  // Zelfstandige leerpaden: echte HTML-ingangen, geen SPA-fallback naar de planner.
+  const paths = [
+    ['energie/', 'Energie — leerpad 4NAWE / 4SPOWE'],
+    ['celmetabolisme/', 'Celmetabolisme — oefenroute 5SPOWE / 5MOWE'],
+  ]
+  for (const [entry, title] of paths) {
+    const page = await request(base + entry)
+    if (page.status !== 200 || !page.body.includes(`<title>${title}</title>`)) {
+      throw new Error(`${entry} ontbreekt of valt terug op de planner-index`)
+    }
+    const assets = [...page.body.matchAll(/(?:src|href)="([^"]+\.(?:js|css))"/g)].map(match => match[1])
+    if (!assets.some(asset => asset.endsWith('.js')) || !assets.some(asset => asset.endsWith('.css'))) {
+      throw new Error(`${entry} mist gebouwde JavaScript- of CSS-assets`)
+    }
+    for (const asset of assets) {
+      if (!asset.startsWith('/willebroek/assets/')) throw new Error(`${entry}-asset heeft verkeerd basispad: ${asset}`)
+      const assetResponse = await request(new URL(asset, base))
+      if (assetResponse.status !== 200 || /<html|<!doctype/i.test(assetResponse.body) || !assetResponse.body.length) {
+        throw new Error(`${entry}-asset ontbreekt: ${asset}`)
+      }
     }
   }
 
@@ -96,7 +102,7 @@ try {
 
   console.log(`✓ preview smoke test: ${base} → HTTP ${response.status}`)
   console.log(`✓ og-image.png, planner-icon.svg en og:image-metadata aanwezig`)
-  console.log(`✓ energie/ heeft een eigen HTML-ingang en bereikbare JS/CSS-assets`)
+  console.log(`✓ energie/ en celmetabolisme/ hebben eigen HTML-ingangen en bereikbare JS/CSS-assets`)
 } catch (error) {
   console.error(error.message)
   if (output) console.error(output)

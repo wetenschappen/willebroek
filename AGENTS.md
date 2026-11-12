@@ -150,10 +150,24 @@ Code: `src/energie/`; tests: `scripts/energie.test.mjs` (onder `npm run check`).
 De gedeelde huisstijl blijft verplicht. De eerste versie behandelt alleen de
 start van T2, niet het hele thema.
 
-De aanpak is herbruikbaar; de huidige energiecode is nog niet volledig
-lesconfigureerbaar. Lees de technische aandachtspunten vóór hergebruik voor
-een tweede les. Voor 6TSO is de wens vastgelegd, maar onderwerp, bron, exacte
-klas en lestijd moeten nog worden bepaald; er is nog geen 6TSO-route gebouwd.
+De tweede toepassing is `/willebroek/celmetabolisme/`: een biologie-oefenroute
+voor de gecombineerde klas 5SPOWE/5MOWE (jaar 5 DS), na de gegeven uitleg van
+T2H1. Alle oefeningen 1–8 op boek p. 77–78 en het juist/fout-blok zijn ingepland.
+Bronnen en afbakening: `docs/CELMETABOLISME-LEERPAD.md`; inhoud:
+`src/celmetabolisme/`; tests: `scripts/celmetabolisme.test.mjs`.
+
+De configureerbare renderer en onafhankelijke voortgangslogica staan in
+`src/guided/`. Gebruik die bij volgende routes; kopieer geen volledige app.
+Elke les krijgt eigen data, begin-/slotteksten, HTML-ingang en opslagsleutel.
+De bestaande energievoortgang moet compatibel blijven. Deelvinkjes worden nu
+ook bij nog niet afgerond boekwerk bewaard. Lees de technische afspraken in
+`docs/BEGELEIDE-LEERPADEN.md` vóór uitbreiding. Voor 6TSO is de wens vastgelegd,
+maar onderwerp, bron, exacte klas en lestijd moeten nog worden bepaald;
+er is nog geen 6TSO-route gebouwd.
+
+Klasfeedback over Energie: de leerkracht rapporteerde geen verduidelijkingsvragen.
+Behoud daarom de rol van boekassistent en de afwisseling met korte controles;
+maak van deze routes geen tweede informatiebron of digitale theoriebundel.
 
 ## Een ABC-les toevoegen
 

@@ -42,17 +42,17 @@ Er wordt **niet** beweerd dat hiermee alle oefeningen van T2 gemaakt zijn. Het e
 
 ## Bestanden
 
-- `src/energie/lesson.js`: onafhankelijke lesdata met stabiele stap-id's, boekverwijzingen, feedback en boekopdrachten.
-- `src/energie/EnergyPath.vue`: lichte fullscreen-werkbladshell, native radio's, boekwerkbevestiging, pauzeren, teruggaan en hervatten. Dit is een zelfstandige pagina, geen modal die vanuit ABC opent.
-- `src/energie/progress.js`: geteste voortgangslogica, versiecontrole en defensief herstellen.
+- `src/energie/lesson.js`: onafhankelijke lesdata met stabiele stap-id's, boekverwijzingen, feedback, boekopdrachten en start-/slotteksten.
+- `src/energie/EnergyPath.vue`: dunne adapter naar de gedeelde `src/guided/GuidedPath.vue`, met lichte fullscreen-werkbladshell, native radio's, boekwerkbevestiging, pauzeren, teruggaan en hervatten. Dit is een zelfstandige pagina, geen modal die vanuit ABC opent.
+- `src/energie/progress.js`: adapter naar de geteste gedeelde logica in `src/guided/progress.js`, met behoud van de gebruikte energiesleutel en lesversie.
 - `src/energie/main.js` en `energie/index.html`: eigen ingang; deelt alleen huisstijl en Vue met de planner.
 - `scripts/energie.test.mjs`: inhoudsstructuur, vraaglogica, eerste poging, hulproute, hervatten en opslagfouten.
 - `scripts/energie.browser.mjs`: optionele echte Chrome-test van de volledige route, mobiel, hulproute, refresh, reset, Escape, opslagweigering en de nog bereikbare planner; screenshots in een tijdelijke map.
-- `scripts/smoke-check.mjs`: controleert beide productie-ingangen en de energie-assets.
+- `scripts/smoke-check.mjs`: controleert de planner, energie, celmetabolisme en de gebouwde assets.
 
 ## Opslag en privacy
 
-Afgeronde stappen en ingediende digitale antwoorden worden bewaard. Losse vinkjes binnen een nog niet afgeronde boekopdracht worden bij pauzeren of herladen niet bewaard.
+Afgeronde stappen, ingediende digitale antwoorden en losse vinkjes binnen een nog niet afgeronde boekopdracht worden bewaard. Sinds de tweede toepassing (Celmetabolisme) gebruikt Energie dezelfde configureerbare renderer en opslaglogica. De oorspronkelijke energiesleutel en lesversie zijn behouden; oude afgeronde opdrachten zonder opgeslagen deelvinkjes worden compatibel hersteld. De scherminhoud en volgorde van de gebruikte energieles blijven hetzelfde.
 
 Alleen lokale browseropslag (`willebroek:energie:t2-energie-start-v1`), geen namen, accounts, analytics of online resultatenopslag. De huisstijl laadt, net als de planner, IBM Plex via Google Fonts. Geen synchronisatie tussen apparaten. Bij geblokkeerde opslag blijft het leerpad in het open tabblad werken met een zichtbare waarschuwing. “Opnieuw beginnen” vraagt bevestiging en wist alleen deze lesvoortgang, geen plannergegevens.
 

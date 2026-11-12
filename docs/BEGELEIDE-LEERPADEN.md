@@ -2,7 +2,8 @@
 
 > Herbruikbare lesaanpak naast de ABC-planner, voor groepen die meer begeleiding
 > nodig hebben bij starten, volgorde houden en hun werk afronden.
-> Eerste toepassing: [Energie voor 4NAWE / 4SPOWE](ENERGIE-LEERPAD.md).
+> Toepassingen: [Energie voor 4NAWE / 4SPOWE](ENERGIE-LEERPAD.md) en
+> [Celmetabolisme voor 5SPOWE / 5MOWE](CELMETABOLISME-LEERPAD.md).
 > Ook bedoeld als vertrekpunt voor een komende les van 6TSO.
 
 ## 1. Waarom een tweede aanpak?
@@ -17,6 +18,19 @@ leerproces, geen lagere verwachting en geen vervanging van de leerkracht.
 
 Dezelfde leerstof kan een andere begeleiding krijgen per groep. Kies deze aanpak
 op basis van de concrete klas, niet uitsluitend op basis van een studierichting.
+
+### Terugkoppeling uit de klas
+
+Na gebruik van de energieroute rapporteerde de leerkracht dat de les zeer goed
+verliep en dat leerlingen **geen enkele verduidelijkingsvraag** stelden. Vooral
+de combinatie van het boek verkennen/invullen en korte digitale vragen werkte
+goed. Behoud dus expliciet het karakter van **boekassistent**, niet een tweede
+informatiebron. Dit is praktijkfeedback over duidelijkheid en zelfstandigheid,
+geen afzonderlijke meting van leerwinst of bewijs dat alle antwoorden juist waren.
+
+De tweede toepassing vertrekt van een andere lessituatie: T2H1 Celmetabolisme
+is al volledig uitgelegd met een PowerPoint. Daar dient de route als oefenles,
+met korte terugzoekopdrachten in plaats van een tweede volledige uitleg.
 
 ## 2. De vaste afspraken
 
@@ -157,42 +171,49 @@ maar opent niet als modal vanuit ABC. Escape pauzeert deze route. Voor een
 activiteit die wél vanuit een kaart opent gelden de bestaande modal- en
 browser-fullscreenafspraken uit het designsysteem.
 
-## 7. Techniek: wat bestaat al en wat nog niet?
+## 7. Techniek: gedeelde renderer, afzonderlijke lessen
 
-De werkende referentie staat in `src/energie/` en heeft een eigen ingang via
-`energie/index.html`. Vite bouwt die samen met de planner; GitHub Pages publiceert
-`/willebroek/energie/` als echte submap. Er is geen nieuwe repo of backend nodig.
+Er zijn twee werkende ingangen: `/willebroek/energie/` en
+`/willebroek/celmetabolisme/`. Vite bouwt de eigen `index.html` van elke route
+samen met de planner; GitHub Pages publiceert echte submappen. Er is geen nieuwe
+repo of backend nodig.
 
-**De didactische aanpak is herbruikbaar; de code is nog geen algemene
-multi-les-engine.** `EnergyPath.vue` bevat nog energie-specifieke start- en
-slotteksten. `progress.js` importeert rechtstreeks de energieles en gebruikt een
-energie-opslagsleutel. Alleen `lesson.js` vervangen is dus niet voldoende voor
-bijvoorbeeld 6TSO.
+De gemeenschappelijke implementatie staat in `src/guided/`:
 
-Bij een tweede toepassing:
+- `GuidedPath.vue` ontvangt `lesson`, `steps` en `storageKey` als props. De pagina
+  toont één vaste lesconfiguratie; er is geen klassenmenu of dynamische leswissel.
+- `progress.js` maakt onafhankelijke logica via
+  `createProgressSystem(lesson, steps, storageKey)`.
+- `src/energie/` en `src/celmetabolisme/` bevatten hun eigen inhoud en ingang.
+  De energie-adapter behoudt de bestaande sleutel en versie voor de gebruikte klas.
+
+Voor een volgende toepassing, bijvoorbeeld 6TSO:
 
 1. Kies onderwerp, exacte doelgroep, bron en scope; spreek een eigen pad af.
-2. Hergebruik de referentiepatronen en tests. Maak de gedeelde renderer en
-   voortgangslogica zo nodig lesconfigureerbaar, zonder de werkende energieroute
-   te veranderen. Geen volledige app-kopie per klas als blijvende architectuur.
+2. Maak lesdata in een eigen map. Gebruik de gedeelde renderer, geen volledige
+   app-kopie. Start, kopbalk, boekverwijzingen en afronding staan óók in de lesdata.
 3. Geef elke les stabiele stap-id's, een unieke les-id / versie en een eigen
-   opslagsleutel. Antwoorden van verschillende klassen of lessen mogen niet botsen.
-4. Behoud de staptypen `read`, `work` en `quiz` en de betekenis van diagnostische
-   vragen, eindvragen en hulp. Nieuwe typen pas toevoegen als de inhoud die vraagt.
-5. Configureer ook start, afronding, bronverwijzingen en oefeningendekking per les;
-   haal geen energie-specifieke tekst ongemerkt mee naar een andere les.
-6. Registreer de zelfstandige ingang in de Vite-build en controleer die in de
-   smoketest. Een submap is niet hetzelfde als een route in de ABC-router.
-7. Laat de bestaande ABC-registry en toegestane vakscope (fysica en biologie)
-   ongemoeid. Een nieuwe begeleide route is geen ABC-les die aan de drie vaste
-   tijdlijnkolommen moet worden aangepast.
+   opslagsleutel. Antwoorden van verschillende lessen mogen niet botsen.
+4. Behoud de staptypen `read`, `work` en `quiz`. `diagnostic` betekent directe
+   feedback en daarna doorgang; `final` neemt de vraag mee in de eindcheckscore.
+   `work` krijgt concrete `checks`; de voortgangslogica blokkeert zolang niet alle
+   gevraagde deelopdrachten zijn bevestigd.
+5. Voeg alleen waar nodig `support` (een lijst korte, optionele aanwijzingen) en
+   `links` (benoemde HTTPS-bron- of zoeklinks) toe. Een bronzoeklink is geen vooraf
+   geverifieerde bron. Geef criteria en laat het bronadres op papier noteren.
+   `exercise`, `page` en `parts` maken de oefeningendekking testbaar.
+6. Registreer de zelfstandige HTML-ingang in de Vite-build en smoketest. Een
+   submap is niet hetzelfde als een route in de ABC-router.
+7. Test de nieuwe inhoud én de bestaande routes, inclusief opgeslagen voortgang.
+   Laat de ABC-registry en toegestane vakscope (fysica en biologie) ongemoeid.
 
 Lokale opslag blijft het uitgangspunt: geen namen of accounts, geen synchronisatie
 of leerkrachtdashboard. Een gedeeld apparaat vraagt een duidelijke herstartmogelijkheid.
-Bij geweigerde opslag blijft het open tabblad werken met een waarschuwing. In de
-huidige versie worden afgeronde stappen en ingediende digitale antwoorden bewaard;
-losse vinkjes in een nog niet afgeronde boekopdracht worden niet duurzaam bewaard.
-Versieer bij wijzigingen die oude antwoorden onbruikbaar maken.
+Bij geweigerde opslag blijft het open tabblad werken met een waarschuwing.
+Afgeronde stappen, ingediende digitale antwoorden **en losse deelvinkjes** binnen
+nog niet afgerond boekwerk worden bewaard. Afgeronde boekopdrachten blijven bij
+terugkijken op slot. Oude energiepayloads zonder deelvinkjes worden compatibel
+hersteld. Versieer bij wijzigingen die oude antwoorden onbruikbaar maken.
 
 ## 8. Vertrekpunt voor 6TSO
 

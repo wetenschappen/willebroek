@@ -5,6 +5,23 @@ export const lesson = {
   subtitle: 'T2 · Les 1 · 4NAWE / 4SPOWE',
   pages: '73–79',
   duration: 'ongeveer 45–50 minuten',
+  headerTitle: 'Energie',
+  headerContext: '4NAWE / 4SPOWE · Les 1',
+  finishedTitle: 'Je startles is klaar',
+  homeDescription: 'Leg je boek, schrift en pen klaar. Je krijgt telkens één opdracht. Je antwoorden schrijf je in je boek of schrift.',
+  reference: 'Theorie p. 73–79 · oefeningen p. 85–86',
+  homeFinished: 'Je hebt de eerste les doorlopen. De energieformules en de rest van T2 volgen later.',
+  completion: {
+    eyebrow: 'Einde van les 1',
+    title: 'Je bent klaar voor vandaag',
+    intro: 'Je hebt systemen, energie-eenheden en energievormen herhaald.',
+    work: 'Oefeningen 1 en 2 op p. 85 en oefening 4 op p. 86 zijn door jou als gemaakt aangeduid. Je leerkracht kan je uitwerking nakijken.',
+    nextTitle: 'Volgende les',
+    next: [
+      'We gaan verder met de energieformules vanaf p. 80. Oefening 3 en oefeningen 5–10 horen bij het vervolg; die zitten nog niet in dit leerpad.',
+      'Is de les nog niet voorbij? Leg je uitwerkingen klaar en laat je leerkracht weten dat je klaar bent.',
+    ],
+  },
 }
 
 export const steps = [

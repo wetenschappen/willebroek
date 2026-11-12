@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { steps, lesson } from '../src/energie/lesson.js'
-import { advance, answerQuestion, canAdvance, confirmHelp, firstTrySummary, freshProgress, loadProgress, restoreProgress, saveProgress, STORAGE_KEY } from '../src/energie/progress.js'
+import { advance, answerQuestion, canAdvance, confirmHelp, firstTrySummary, freshProgress, loadProgress, restoreProgress, saveProgress, setWorkChecks, STORAGE_KEY } from '../src/energie/progress.js'
 
 const at = id => ({ ...freshProgress(), current: steps.findIndex(step => step.id === id) })
 
@@ -66,6 +66,7 @@ test('energie: hele route afronden, herbekijken en herstellen zonder dubbele sta
   let state = freshProgress()
   for (const step of steps) {
     if (step.type === 'quiz') state = answerQuestion(state, step, step.answer)
+    if (step.type === 'work') state = setWorkChecks(state, step.checks.map((_, index) => index))
     state = advance(state)
   }
   assert.equal(state.current, steps.length)

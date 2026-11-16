@@ -201,9 +201,58 @@ geen ruwe LaTeX in keuzes, hints of feedback. Voeg nieuwe lesdata toe aan
 `scripts/guided-math.test.mjs` en controleer alle formulevelden op mobiel.
 De bestaande energievoortgang moet compatibel blijven. Deelvinkjes worden nu
 ook bij nog niet afgerond boekwerk bewaard. Lees de technische afspraken in
-`docs/BEGELEIDE-LEERPADEN.md` vóór uitbreiding. Voor 6TSO is de wens vastgelegd,
-maar onderwerp, bron, exacte klas en lestijd moeten nog worden bepaald;
-er is nog geen 6TSO-route gebouwd.
+`docs/BEGELEIDE-LEERPADEN.md` vóór uitbreiding.
+
+Voor **tien leerlingen van 6ELTE / 6IICT** is nu een **lokale, niet gepubliceerde
+compressieproef** gebouwd: `/willebroek/gassen/proefblok/`, alleen p. 1–2 van de
+geïllustreerde eigen bundel 6. Voorspellen → zuigermodel → begripsfeedback →
+besluit/voorbeeld → opdracht 1a–c → A+ voor snelle leerlingen. T = 300 K,
+20–80 mL, absolute bar, dezelfde hoeveelheid gas. De volledige bezoekles duurt
+50 minuten zonder starttoets; opwarming/vergelijking/slot en les 2 met pV=nRT
+zitten niet in dit afzonderlijke compressieproefblok. De leerkracht opent nieuwe blokken.
+Bundel 5 en afgeronde toetsen zijn gesloten materiaal en blijven ongewijzigd.
+Bron, fysica, exacte dekking, beperkingen en controles:
+`docs/GASSEN-COMPRESSIE-PROEFBLOK.md`. Code: `src/gassen/`; tests:
+`scripts/gassen-compressie.test.mjs` (onder `npm run check`) en de gelijknamige
+browsertest. Hergebruik van de renderer via een scoped `activity`-slot en eigen
+opslagsleutel; geen app-kopie of verbouwing van `IdealGasLawActivity.vue`.
+Toestelstanden zijn tijdelijk, voortgang is lokaal; papierwerk is niet automatisch
+nagekeken. **Nog geen klas-, schoolwifi-, projector- of tijdstest.** Eerst de
+proef met de leerkracht beoordelen vóór lesgebruik of publicatie.
+
+Op verzoek is de aanpak nu **lokaal doorgetrokken naar les 1**, ingang
+`/willebroek/gassen/`: veertien schermen voor p. 1–5, met compressie,
+opwarming bij vast volume, kelvinfeedback, opdrachten 1a–c en 2a–c,
+V1/V2 en een individuele papieren slotvraag a–c. De eerste vijf stappen
+hergebruiken de compressiedata. A+ en B+ zijn optioneel vervolg tot de
+leerkracht het volgende blok opent, geen softwareklasslot. Het opwarmmodel
+werkt van 273–600 K bij 60 mL, met Celsiusweergave, constante gashoeveelheid,
+absolute bar en een rechte p,T-grafiek. De stippellijn naar 0 K is alleen
+modelverlenging. Opdracht 2 heeft een andere begindruk dan het model.
+Les 1 heeft eigen opslag; proefblokvoortgang wordt niet overgenomen of gewist.
+De slotvraag blijft individueel op papier en wordt niet automatisch beoordeeld.
+Les 2 heeft inmiddels een aparte lokale ingang (zie hieronder); deze les-1-route
+blijft alleen p. 1–5 begeleiden.
+Bron/dekking/controles: `docs/GASSEN-LES1.md`; data: `src/gassen/lesson.js`;
+tests: `scripts/gassen-les1.test.mjs` en `scripts/gassen-les1.browser.mjs`.
+Nog niet gepubliceerd; echte timing en school-/projectorcontrole blijven nodig.
+
+**Les 2** is nu lokaal gebouwd op `/willebroek/gassen/les2/`, met eigen opslag
+`willebroek:gassen:les2:fys6-gastoestanden-les2-v1`. Twaalf schermen: echt
+slotwerk terughalen, pV=nRT heractiveren (samen gedaan op 30 september),
+opdracht 3a–c op p. 6, apart papieren oefenblad M1/M2/M3 en gerichte correctie.
+Eerst de eigen poging, dan feedback op SI-eenheden, kwadratische kracht en
+koppelbalans. Papierbevestiging is geen juistheidscontrole; geen dubbel
+invoerwerk. M2 vraagt de resulterende radiale kracht, niet elke afzonderlijke
+kracht; M3 blijft kwalitatief met vooruit draaien als voorwaarde. De aparte
+leerling-PDF en sleutel staan alleen in de voorstelmap onder 6TSO, niet als
+websiteasset. Alleen `--only Oefenblad_Mechanica_Les2` bouwen; bundel 6 en het
+gesloten materiaal niet hergenereren. Geen les-1- of proefblokmigratie.
+Voor les 2 is 50 minuten nog een planningsaanname, geen bevestigde duur.
+Opdracht 4 blijft verdieping; het examenoverzicht is nog geen vrijgegeven
+afspraak. Zie `docs/GASSEN-LES2.md`, `src/gassen/lesson2.js` en
+`scripts/gassen-les2.test.mjs` / `scripts/gassen-les2.browser.mjs`.
+Nog geen publicatie of echte klas-/projector-/tijdstest.
 
 Klasfeedback over Energie: de leerkracht rapporteerde geen verduidelijkingsvragen.
 Behoud daarom de rol van boekassistent en de afwisseling met korte controles;

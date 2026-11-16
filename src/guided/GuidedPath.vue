@@ -40,7 +40,7 @@ const entryResult = computed(() => firstTrySummary(state.value, item => item.dia
 const finalResult = computed(() => firstTrySummary(state.value, item => item.final))
 const workReady = computed(() => step.value?.type !== 'work' || step.value.completion === 'button' || step.value.checks.every((_, index) => checks.value.includes(index)))
 const ready = computed(() => step.value && workReady.value && canAdvance(state.value, step.value))
-const bookStep = computed(() => step.value && step.value.type !== 'quiz')
+const bookStep = computed(() => step.value && step.value.type !== 'quiz' && !step.value.activity)
 const feedbackVisible = computed(() => response.value && (submitted.value || quizLocked.value))
 
 watch(state, value => { storageAvailable.value = saveProgress(storage, value) }, { deep: true })
@@ -146,6 +146,7 @@ function acceptHelp() {
           <p v-if="step.diagnostic" class="guided-small">Kies eerst uit je hoofd. Dit is een opfrissing, geen toets op punten.</p>
           <template v-if="step.type !== 'quiz'">
             <p v-for="instruction in step.instructions" :key="instruction"><MathText :text="instruction" /></p>
+            <slot name="activity" :step="step" />
             <section v-if="step.strategy?.length" class="guided-strategy" aria-label="Oplossingsstrategie">
               <h2>Zo pak je het aan</h2>
               <ol>

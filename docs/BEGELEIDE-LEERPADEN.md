@@ -5,7 +5,9 @@
 > Toepassingen: [Energie voor 4NAWE / 4SPOWE](ENERGIE-LEERPAD.md),
 > [Celmetabolisme voor 5SPOWE / 5MOWE](CELMETABOLISME-LEERPAD.md) en
 > [Energie basis voor 4LAT / 4ECWE](ENERGIE-BASIS-LEERPAD.md).
-> Ook bedoeld als vertrekpunt voor een komende les van 6TSO.
+> Lokale, nog niet gepubliceerde route voor 6ELTE / 6IICT:
+> [Gassen — les 1](GASSEN-LES1.md) en [les 2](GASSEN-LES2.md), met een aparte
+> [compressiereferentie](GASSEN-COMPRESSIE-PROEFBLOK.md).
 
 ## 1. Waarom een tweede aanpak?
 
@@ -224,8 +226,13 @@ browser-fullscreenafspraken uit het designsysteem.
 
 ## 7. Techniek: gedeelde renderer, afzonderlijke lessen
 
-Er zijn drie zelfstandige ingangen: `/willebroek/energie/`,
-`/willebroek/celmetabolisme/` en `/willebroek/energie-basis/`.
+Er zijn vijf lesingangen: `/willebroek/energie/`,
+`/willebroek/celmetabolisme/`, `/willebroek/energie-basis/` en de lokale,
+nog niet gepubliceerde `/willebroek/gassen/` (les 1, p. 1–5) en
+`/willebroek/gassen/les2/` (p. 6 en het aparte gemengde oefenblad).
+Daarnaast zijn er twee afgebakende proefblokken met eigen opslag:
+`/willebroek/energie-basis/proefblok/` en de lokale, nog niet gepubliceerde
+`/willebroek/gassen/proefblok/`.
 Vite bouwt de eigen `index.html` van elke route
 samen met de planner; GitHub Pages publiceert echte submappen. Er is geen nieuwe
 repo of backend nodig.
@@ -241,6 +248,13 @@ De gemeenschappelijke implementatie staat in `src/guided/`:
 - `src/energie/`, `src/celmetabolisme/` en `src/energie-basis/` bevatten hun eigen
   inhoud en ingang. De energie-adapter behoudt de bestaande sleutel en versie
   voor de gebruikte klas.
+- `src/gassen/` gebruikt een dunne wrapper met het scoped `activity`-slot
+  (`{ step }`) van `GuidedPath.vue`. Een optionele `activity`-marker maakt een
+  niet-quizstap digitaal; de wrapper mount de bedoelde component. Het staptype
+  blijft `read` of `work`, met de bestaande afrondingslogica. Gebruik een
+  `:key="step.id"` voor een nieuwe toestelinstantie per onderzoeksstap en ruim
+  animaties/listeners bij unmount op. Bewaar geen toestelstanden tenzij dit
+  expliciet is ontworpen; benoem wat bij herladen wordt teruggezet.
 
 Voor een volgende toepassing, bijvoorbeeld 6TSO:
 
@@ -280,22 +294,39 @@ hersteld. Versieer bij wijzigingen die oude antwoorden onbruikbaar maken.
 
 ## 8. Vertrekpunt voor 6TSO
 
-De leerkracht wil deze aanpak ook kunnen inzetten voor de komende les van 6TSO.
-Dat is vastgelegd als **volgende mogelijke toepassing**, niet als reeds gebouwde
-les en niet als automatische koppeling aan een bestaande klascode.
+De concrete doelgroep is **tien leerlingen in de gecombineerde 6ELTE / 6IICT**,
+fysica, met de eigen geïllustreerde bundel 6 over gastoestandsveranderingen.
+De bezoekles duurt 50 minuten, zonder toets aan het begin. Een tweede les
+behandelt expliciet de ideale gaswet en gerichte gemengde oefening. De
+leerkracht opent inhoudsblokken en leidt gezamenlijke overgangen.
 
-Voor uitwerking zijn nog nodig:
+Met toestemming is eerst een **kleine lokale compressieproef** gebouwd,
+`/willebroek/gassen/proefblok/`: voorspelling en modeltabel p. 1, specifieke
+begripsfeedback, besluit/voorbeeld, verplichte opdracht 1a–c en vervolg A+ op
+p. 2. Deze proef gebruikt de gedeelde renderer en eigen opslag, maar is nog
+niet gepubliceerd of in de klas beproefd. Zie
+[het brondossier](GASSEN-COMPRESSIE-PROEFBLOK.md).
 
-- het onderwerp en het vak;
-- de exacte klas of klassen;
-- het boek / de bundel en de pagina's;
-- beschikbare lestijd en wat eerder behandeld is;
-- welke oefeningen in die les en in het vervolg volledig gemaakt moeten worden.
+Op verzoek is de aanpak daarna lokaal uitgebreid naar **les 1** op
+`/willebroek/gassen/`: compressie, opwarming/kelvin, opdrachten 1a–c en 2a–c,
+vergelijken en de individuele papieren slotvraag. Veertien schermen, eigen
+opslag, geen overname of wissen van de proefblokantwoorden. Het papieren
+slotwerk krijgt geen automatische beoordeling. Zie
+[Gassen — les 1](GASSEN-LES1.md).
 
-Houd dezelfde begeleiding aan: materiaal klaar → korte opfrissing → bronplek
-zoeken → één taak uitvoeren → begrip controleren → boekwerk maken → afronden.
-Pas woordkeuze, stapgrootte en tijd aan deze groep aan. Verlaag niet automatisch
-het inhoudelijke niveau en voeg geen extra keuzemenu toe “voor differentiatie”.
+**Les 2** is daarna apart gebouwd op `/willebroek/gassen/les2/`: echte
+slotantwoorden bespreken, de eerder samen gebruikte ideale gaswet heractiveren,
+opdracht 3a–c op p. 6 en M1/M2/M3 op een afzonderlijk papieren oefenblad.
+Opdracht 3 blijft verplichte basis, geen vroege-finisherverdieping.
+Twaalf schermen, eigen opslag; SI-, kracht- en koppelbalansfeedback volgen op
+de eigen papieren poging. Geen volledige examenrepetitie of nieuwe afnameafspraak.
+Zie [Gassen — les 2](GASSEN-LES2.md). De vervolgduur van circa 50 minuten blijft
+een planningsaanname, niet hetzelfde bevestigde gegeven als bij de bezoekles.
+
+Samen met de bundel doorlopen en de meerwaarde en werkelijke looptijd beoordelen. Geen keuzedashboard, technische klassloten of nieuwe zelfstandige
+theorie voor snelle leerlingen. Zij krijgen zinvol vervolg binnen het huidige
+onderwerp. Houd de papierfallback bruikbaar en laat gesloten bundel 5 en de
+reeds afgenomen toetsen ongemoeid.
 
 ## 9. Klaar voor gebruik?
 

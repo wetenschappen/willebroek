@@ -3,8 +3,12 @@ import assert from 'node:assert/strict'
 import { parseMathText } from '../src/guided/math.js'
 import { lesson as energy, steps as energySteps } from '../src/energie/lesson.js'
 import { lesson as biology, steps as biologySteps } from '../src/celmetabolisme/lesson.js'
+import { lesson as celdeling, steps as celdelingSteps } from '../src/celdeling/lesson.js'
 import { lesson as basic, steps as basicSteps } from '../src/energie-basis/lesson.js'
 import { lesson as pilot, steps as pilotSteps } from '../src/energie-basis/kinetic-pilot.js'
+import { lesson as gas, steps as gasSteps } from '../src/gassen/compression-pilot.js'
+import { lesson as gasLesson, steps as gasLessonSteps } from '../src/gassen/lesson.js'
+import { lesson as gasLesson2, steps as gasLesson2Steps } from '../src/gassen/lesson2.js'
 
 const tex = String.raw
 
@@ -45,7 +49,7 @@ test('begeleide wiskunde: gewone tekst is geen HTML en valuta zijn geen formule'
 
 test('begeleide wiskunde: alle tekstvelden van alle routes compileren strikt', () => {
   let formulas = 0
-  for (const content of [energy, energySteps, biology, biologySteps, basic, basicSteps, pilot, pilotSteps]) {
+  for (const content of [energy, energySteps, biology, biologySteps, celdeling, celdelingSteps, basic, basicSteps, pilot, pilotSteps, gas, gasSteps, gasLesson, gasLessonSteps, gasLesson2, gasLesson2Steps]) {
     for (const source of strings(content)) {
       const parts = parseMathText(source)
       formulas += parts.filter(part => part.type === 'math').length

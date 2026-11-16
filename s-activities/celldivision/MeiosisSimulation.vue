@@ -6,8 +6,11 @@ import CentriolePair from './CentriolePair.vue'
 import DivisionLegend from './DivisionLegend.vue'
 import { metaphaseRotation, anaphaseRotation, recombinantSisterIndex } from './spindleGeometry.js'
 
+const props = defineProps({
+  initialPhase: { type: Number, default: 0 }
+})
 const emit = defineEmits(['complete'])
-const phase = ref(0)
+const phase = ref(props.initialPhase)
 const crossingOver = ref(true)
 const orientations = ref([true, false])
 const fertilized = ref(false)

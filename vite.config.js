@@ -14,8 +14,12 @@ export default defineConfig({
         planner: fileURLToPath(new URL('./index.html', import.meta.url)),
         energie: fileURLToPath(new URL('./energie/index.html', import.meta.url)),
         celmetabolisme: fileURLToPath(new URL('./celmetabolisme/index.html', import.meta.url)),
+        celdeling: fileURLToPath(new URL('./celdeling/index.html', import.meta.url)),
         energieBasis: fileURLToPath(new URL('./energie-basis/index.html', import.meta.url)),
         energieBasisProefblok: fileURLToPath(new URL('./energie-basis/proefblok/index.html', import.meta.url)),
+        gassen: fileURLToPath(new URL('./gassen/index.html', import.meta.url)),
+        gassenLes2: fileURLToPath(new URL('./gassen/les2/index.html', import.meta.url)),
+        gassenProefblok: fileURLToPath(new URL('./gassen/proefblok/index.html', import.meta.url)),
       },
       output: {
         manualChunks(id) {

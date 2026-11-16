@@ -6,11 +6,15 @@ import ChromosomeGlyph from './ChromosomeGlyph.vue'
 import CellCycleRing from './CellCycleRing.vue'
 import { metaphaseRotation } from './spindleGeometry.js'
 
+const props = defineProps({
+  initialStep: { type: Number, default: 0 },
+  initialDnaDamage: { type: Boolean, default: false }
+})
 const emit = defineEmits(['complete'])
 
-const step = ref(0)
+const step = ref(props.initialStep)
 const cellType = ref('zenuwcel')
-const dnaDamage = ref(false)
+const dnaDamage = ref(props.initialDnaDamage)
 const completed = ref(false)
 
 const phases = [

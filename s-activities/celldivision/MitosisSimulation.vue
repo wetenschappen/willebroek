@@ -6,8 +6,11 @@ import CentriolePair from './CentriolePair.vue'
 import DivisionLegend from './DivisionLegend.vue'
 import { metaphaseRotation, anaphaseRotation } from './spindleGeometry.js'
 
+const props = defineProps({
+  initialPhase: { type: Number, default: 0 }
+})
 const emit = defineEmits(['complete'])
-const phase = ref(0)
+const phase = ref(props.initialPhase)
 const plantCell = ref(false)
 const completed = ref(false)
 

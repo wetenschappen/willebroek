@@ -37,9 +37,10 @@ test('celdeling: alle vijf vragen en deelopdrachten (1a–c, 2a–d, 3a–d, 4a�
   assert.equal(new Set(steps.map(step => step.id)).size, steps.length)
   assert.equal(steps.filter(step => step.diagnostic).length, 1)
   assert.equal(steps.filter(step => step.final).length, 2)
+  assert.equal(steps.filter(step => step.id.startsWith('boek-')).length, 5)
 })
 
-test('celdeling: elk inhoudsblok koppelt een ingebedde simulatie aan de papieren voorbeeldtoets en verwijst aan het einde naar de leerkrachtsleutel', () => {
+test('celdeling: elk inhoudsblok wijst eerst de weg in het leerboek, toont daarna de breedbeeld focus-simulatie en begeleidt de voorbeeldtoets', () => {
   assert.match(lesson.headerContext, /6SPOWE \/ 6MOWE/)
   assert.match(lesson.subtitle, /6SPOWE \/ 6MOWE/)
   assert.match(lesson.completion.nextTitle, /correctiesleutel/i)
@@ -52,6 +53,17 @@ test('celdeling: elk inhoudsblok koppelt een ingebedde simulatie aan de papieren
     'meiosis-divisions',
     'meiosis-variation',
     'cycle-damage',
+  ])
+  for (const simStep of steps.filter(step => step.activity)) {
+    assert.equal(simStep.wide, true, `${simStep.id} gebruikt breedbeeld focus-modus`)
+  }
+  const bookIds = steps.filter(step => step.id.startsWith('boek-')).map(step => step.id)
+  assert.deepEqual(bookIds, [
+    'boek-celcyclus',
+    'boek-mitose',
+    'boek-meiose',
+    'boek-variatie',
+    'boek-controle',
   ])
 
   for (const step of steps) {
@@ -69,6 +81,8 @@ test('celdeling: elk inhoudsblok koppelt een ingebedde simulatie aan de papieren
   assert.match(wrapper, /CycleSimulation/)
   assert.match(wrapper, /MitosisSimulation/)
   assert.match(wrapper, /MeiosisSimulation/)
+  assert.match(wrapper, /focus-mode/)
+  assert.doesNotMatch(wrapper, /celdeling-sim-embed/)
 })
 
 test('celdeling: voortgang is geïsoleerd van andere biologie- en fysicaleerpaden en vereist alle deelvinkjes per vraag', () => {

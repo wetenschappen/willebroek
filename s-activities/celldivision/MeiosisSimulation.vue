@@ -7,7 +7,8 @@ import DivisionLegend from './DivisionLegend.vue'
 import { metaphaseRotation, anaphaseRotation, recombinantSisterIndex } from './spindleGeometry.js'
 
 const props = defineProps({
-  initialPhase: { type: Number, default: 0 }
+  initialPhase: { type: Number, default: 0 },
+  focusMode: { type: Boolean, default: false }
 })
 const emit = defineEmits(['complete'])
 const phase = ref(props.initialPhase)
@@ -190,7 +191,7 @@ function finish() {
 </script>
 
 <template>
-  <div class="fullscreen-body meiosis-body">
+  <div class="fullscreen-body meiosis-body" :class="{ 'meiosis-body-focus': props.focusMode }">
     <section class="meiosis-canvas" aria-label="Meiose-simulatie">
       <svg viewBox="0 0 900 520" role="img" aria-labelledby="meiosis-title meiosis-desc">
         <title id="meiosis-title">Meiose in een cel met 2n = 4</title>
@@ -330,17 +331,22 @@ function finish() {
       </div>
       <div v-if="fertilized" class="meiosis-callout"><strong>Zygote:</strong> 2n is hersteld na versmelting van twee gameten.</div>
 
-      <ol class="meiosis-track" aria-label="Fasen van de meiose">
+      <ol class="meiosis-track" :class="{ 'meiosis-track-focus': props.focusMode }" aria-label="Fasen van de meiose">
         <li v-for="(item, index) in phases" :key="item.label" :class="{ 'meiosis-track-active': index === phase, 'meiosis-track-done': index < phase }">
-          <span><PhCheckCircle v-if="index < phase" weight="bold" aria-label="Doorlopen" /><template v-else>{{ index + 1 }}</template></span>{{ item.label }}
+          <button v-if="props.focusMode" type="button" class="meiosis-track-btn" :aria-current="index === phase ? 'step' : undefined" @click="phase = index; fertilized = false">
+            <span>{{ index + 1 }}</span>{{ item.label }}
+          </button>
+          <template v-else>
+            <span><PhCheckCircle v-if="index < phase" weight="bold" aria-label="Doorlopen" /><template v-else>{{ index + 1 }}</template></span>{{ item.label }}
+          </template>
         </li>
       </ol>
 
       <div class="meiosis-actions">
-        <button type="button" class="btn meiosis-secondary" @click="previous" :disabled="phase === 0 && !fertilized" aria-label="Vorige meiosefase"><PhArrowLeft weight="bold" /> Vorige</button>
-        <button type="button" class="btn btn-primary" @click="phase === phases.length - 1 ? finish() : next()">
-          {{ phase === phases.length - 1 ? (completed ? 'Afgerond' : 'Simulatie afronden') : 'Volgende fase' }}
-          <PhCheckCircle v-if="phase === phases.length - 1 && completed" weight="fill" /><PhArrowRight v-else weight="bold" />
+        <button type="button" class="btn meiosis-secondary" @click="previous" :disabled="phase === 0 && !fertilized" aria-label="Vorige meiosefase"><PhArrowLeft weight="bold" /> Vorige fase</button>
+        <button type="button" class="btn btn-primary" @click="phase === phases.length - 1 ? (props.focusMode ? (phase = 0, fertilized = false) : finish()) : next()">
+          {{ phase === phases.length - 1 ? (props.focusMode ? 'Opnieuw vanaf Start' : (completed ? 'Afgerond' : 'Simulatie afronden')) : 'Volgende fase' }}
+          <PhCheckCircle v-if="phase === phases.length - 1 && completed && !props.focusMode" weight="fill" /><PhArrowRight v-else weight="bold" />
         </button>
       </div>
     </aside>
@@ -374,9 +380,13 @@ function finish() {
 .meiosis-track li.meiosis-track-active { color: var(--color-ink); background: var(--color-digital-soft); border: 2px solid var(--color-digital); }
 .meiosis-track li.meiosis-track-active span { color: #ffffff; background: var(--color-digital); }
 .meiosis-track li.meiosis-track-done span { color: #ffffff; background: var(--color-workbook); }
+.meiosis-track-focus { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 14px; }
+.meiosis-track-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 0; color: inherit; font: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
 .meiosis-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
 .meiosis-actions .btn { min-height: 44px; }
 .meiosis-actions .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.meiosis-body-focus { padding: 0; }
+@media (min-width: 900px) { .meiosis-body-focus { grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr); gap: 24px; } }
 @media (min-width: 1100px) { .meiosis-body { grid-template-columns: minmax(0, 3fr) minmax(340px, 2fr); gap: 28px; } }
 @media (max-width: 520px) { .meiosis-track { grid-template-columns: 1fr; } .meiosis-actions { flex-direction: column; } }
 </style>

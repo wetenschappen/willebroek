@@ -7,7 +7,8 @@ import DivisionLegend from './DivisionLegend.vue'
 import { metaphaseRotation, anaphaseRotation } from './spindleGeometry.js'
 
 const props = defineProps({
-  initialPhase: { type: Number, default: 0 }
+  initialPhase: { type: Number, default: 0 },
+  focusMode: { type: Boolean, default: false }
 })
 const emit = defineEmits(['complete'])
 const phase = ref(props.initialPhase)
@@ -92,7 +93,7 @@ function finish() {
 </script>
 
 <template>
-  <div class="fullscreen-body mitosis-body">
+  <div class="fullscreen-body mitosis-body" :class="{ 'mitosis-body-focus': props.focusMode }">
     <section class="mitosis-canvas" aria-label="Mitose-simulatie">
       <svg viewBox="0 0 800 490" role="img" aria-labelledby="mitosis-title mitosis-desc">
         <title id="mitosis-title">{{ current.label }} bij mitose, 2n = 4</title>
@@ -174,7 +175,7 @@ function finish() {
       <div class="mitosis-readouts" aria-live="polite">
         <span><strong>Moedercel:</strong> 2n = 4</span>
         <span><strong>Nu:</strong> {{ counterText }}</span>
-        <span><strong>Celtype:</strong> {{ plantCell ? 'plantcel' : 'diercel' }}</span>
+        <span v-if="!props.focusMode"><strong>Celtype:</strong> {{ plantCell ? 'plantcel' : 'diercel' }}</span>
       </div>
     </section>
 
@@ -194,30 +195,43 @@ function finish() {
         <span v-else>De dochtercellen zijn genetisch identiek en blijven diploïd (2n).</span>
       </div>
 
-      <div class="mitosis-cell-toggle" role="group" aria-label="Kies het celtype">
-        <span class="toggle-label">Celtype:</span>
-        <button type="button" class="btn mitosis-toggle" :class="!plantCell ? 'mitosis-toggle-active' : ''" :aria-pressed="!plantCell" @click="plantCell = false">Diercel</button>
-        <button type="button" class="btn mitosis-toggle" :class="plantCell ? 'mitosis-toggle-active' : ''" :aria-pressed="plantCell" @click="plantCell = true">Plantcel</button>
-      </div>
-      <p class="mitosis-small-note">{{ plantCell ? 'Golgi-blaasjes versmelten tot een celplaat. Cellulose verstevigt die tot een nieuwe celwand. Plantencellen hebben geen centriolen.' : 'De diercel snoert in; centriolen helpen de spoelfiguur organiseren.' }}</p>
+      <template v-if="!props.focusMode">
+        <div class="mitosis-cell-toggle" role="group" aria-label="Kies het celtype">
+          <span class="toggle-label">Celtype:</span>
+          <button type="button" class="btn mitosis-toggle" :class="!plantCell ? 'mitosis-toggle-active' : ''" :aria-pressed="!plantCell" @click="plantCell = false">Diercel</button>
+          <button type="button" class="btn mitosis-toggle" :class="plantCell ? 'mitosis-toggle-active' : ''" :aria-pressed="plantCell" @click="plantCell = true">Plantcel</button>
+        </div>
+        <p class="mitosis-small-note">{{ plantCell ? 'Golgi-blaasjes versmelten tot een celplaat. Cellulose verstevigt die tot een nieuwe celwand. Plantencellen hebben geen centriolen.' : 'De diercel snoert in; centriolen helpen de spoelfiguur organiseren.' }}</p>
 
-      <div class="mitosis-phase-groups" aria-label="Interfase, vier mitosefasen en resultaat">
-        <section v-for="group in phaseGroups" :key="group.kind" class="mitosis-phase-group" :class="`mitosis-phase-group-${group.kind}`">
-          <h4>{{ group.title }}</h4>
-          <ol class="mitosis-track" :class="{ 'mitosis-track-single': group.indices.length === 1 }">
-            <li v-for="index in group.indices" :key="phases[index].label" :class="{ 'mitosis-track-active': index === phase, 'mitosis-track-done': index < phase }" :aria-current="index === phase ? 'step' : undefined">
-              <span><PhCheckCircle v-if="index < phase || index === 5" weight="bold" /><template v-else>{{ index === 0 ? 'G₂' : pmat[index - 1] }}</template></span>{{ phases[index].label }}
-            </li>
-          </ol>
-          <p v-if="group.kind === 'division'" class="mitosis-cytokinesis-note">Cytokinese deelt het cytoplasma en kan tijdens de mitose beginnen.</p>
-        </section>
-      </div>
+        <div class="mitosis-phase-groups" aria-label="Interfase, vier mitosefasen en resultaat">
+          <section v-for="group in phaseGroups" :key="group.kind" class="mitosis-phase-group" :class="`mitosis-phase-group-${group.kind}`">
+            <h4>{{ group.title }}</h4>
+            <ol class="mitosis-track" :class="{ 'mitosis-track-single': group.indices.length === 1 }">
+              <li v-for="index in group.indices" :key="phases[index].label" :class="{ 'mitosis-track-active': index === phase, 'mitosis-track-done': index < phase }" :aria-current="index === phase ? 'step' : undefined">
+                <span><PhCheckCircle v-if="index < phase || index === 5" weight="bold" /><template v-else>{{ index === 0 ? 'G₂' : pmat[index - 1] }}</template></span>{{ phases[index].label }}
+              </li>
+            </ol>
+            <p v-if="group.kind === 'division'" class="mitosis-cytokinesis-note">Cytokinese deelt het cytoplasma en kan tijdens de mitose beginnen.</p>
+          </section>
+        </div>
+      </template>
+      <ol v-else class="mitosis-track mitosis-track-focus" aria-label="Kies een mitosefase (PMAT)">
+        <li
+          v-for="index in [1, 2, 3, 4]"
+          :key="phases[index].label"
+          :class="{ 'mitosis-track-active': index === phase, 'mitosis-track-done': index < phase }"
+        >
+          <button type="button" class="mitosis-track-btn" :aria-current="index === phase ? 'step' : undefined" @click="phase = index">
+            <span>{{ pmat[index - 1] }}</span>{{ phases[index].label }}
+          </button>
+        </li>
+      </ol>
 
       <div class="mitosis-actions">
-        <button type="button" class="btn mitosis-secondary" @click="previous" :disabled="phase === 0" aria-label="Vorige mitosefase"><PhArrowLeft weight="bold" /> Vorige</button>
-        <button type="button" class="btn btn-primary" @click="phase === phases.length - 1 ? finish() : next()">
-          {{ phase === phases.length - 1 ? (completed ? 'Afgerond' : 'Simulatie afronden') : 'Volgende fase' }}
-          <PhCheckCircle v-if="phase === phases.length - 1 && completed" weight="fill" /><PhArrowRight v-else weight="bold" />
+        <button type="button" class="btn mitosis-secondary" @click="previous" :disabled="phase === 0" aria-label="Vorige mitosefase"><PhArrowLeft weight="bold" /> Vorige fase</button>
+        <button type="button" class="btn btn-primary" @click="phase === phases.length - 1 ? (props.focusMode ? (phase = 1) : finish()) : next()">
+          {{ phase === phases.length - 1 ? (props.focusMode ? 'Terug naar Profase' : (completed ? 'Afgerond' : 'Simulatie afronden')) : 'Volgende fase' }}
+          <PhCheckCircle v-if="phase === phases.length - 1 && completed && !props.focusMode" weight="fill" /><PhArrowRight v-else weight="bold" />
         </button>
       </div>
     </aside>
@@ -258,10 +272,14 @@ function finish() {
 .mitosis-phase-group-result { border-left-color: var(--color-line); }
 .mitosis-phase-group h4 { margin: 0; color: var(--color-ink); font-size: 0.95rem; font-weight: 700; }
 .mitosis-track-single { grid-template-columns: 1fr; }
+.mitosis-track-focus { margin-top: 16px; }
+.mitosis-track-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 0; color: inherit; font: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
 .mitosis-cytokinesis-note { margin: 8px 0 0; color: var(--color-ink-soft); font-size: 0.9rem; line-height: 1.4; }
 .mitosis-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
 .mitosis-actions .btn { min-height: 44px; }
 .mitosis-actions .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.mitosis-body-focus { padding: 0; }
+@media (min-width: 900px) { .mitosis-body-focus { grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr); gap: 24px; } }
 @media (min-width: 1024px) { .mitosis-body { grid-template-columns: minmax(0, 3fr) minmax(320px, 2fr); gap: 28px; } }
 @media (max-width: 520px) { .mitosis-track { grid-template-columns: 1fr; } .mitosis-actions { flex-direction: column; } }
 </style>

@@ -1,6 +1,7 @@
 <script setup>
-import { computed, nextTick, ref, watch } from 'vue'
-import { PhArrowLeft, PhArrowRight, PhCheckCircle, PhPause, PhXCircle } from '@phosphor-icons/vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { PhArrowLeft, PhArrowRight, PhArrowsIn, PhArrowsOut, PhCheckCircle, PhPause, PhXCircle } from '@phosphor-icons/vue'
+import { enterBrowserFullscreen, exitBrowserFullscreen } from '../composables/useBrowserFullscreen.js'
 import { createProgressSystem } from './progress.js'
 import MathText from './MathText.vue'
 import { questionFeedback } from './feedback.js'
@@ -27,7 +28,10 @@ const submitted = ref(false)
 const heading = ref(null)
 const body = ref(null)
 const feedback = ref(null)
+const isFullscreen = ref(false)
+const canFullscreen = ref(false)
 const step = computed(() => steps[state.value.current])
+const wideStep = computed(() => Boolean(started.value && step.value?.wide))
 const checks = computed({
   get: () => state.value.workChecks[step.value?.id] ?? [],
   set: value => { state.value = setWorkChecks(state.value, value) },
@@ -57,14 +61,32 @@ function prepareScreen() {
   focusScreen()
 }
 watch(() => state.value.current, prepareScreen)
+function syncFullscreen() {
+  isFullscreen.value = Boolean(document.fullscreenElement)
+}
+onMounted(() => {
+  canFullscreen.value = Boolean(document.documentElement?.requestFullscreen)
+  syncFullscreen()
+  document.addEventListener('fullscreenchange', syncFullscreen)
+})
+onUnmounted(() => {
+  document.removeEventListener('fullscreenchange', syncFullscreen)
+})
+async function toggleFullscreen() {
+  if (document.fullscreenElement) await exitBrowserFullscreen()
+  else await enterBrowserFullscreen()
+  syncFullscreen()
+}
 function start() {
   if (finished.value) state.value = { ...state.value, current: steps.length }
   started.value = true
+  enterBrowserFullscreen()
   prepareScreen()
 }
 function pause() {
   started.value = false
   resetConfirm.value = false
+  exitBrowserFullscreen()
   focusScreen()
 }
 async function checkAnswer() {
@@ -98,7 +120,14 @@ function acceptHelp() {
         <strong class="fullscreen-title"><MathText :text="lesson.headerTitle" /></strong>
         <span class="guided-class"><MathText :text="lesson.headerContext" /></span>
       </div>
-      <button v-if="started" class="btn btn-ghost" @click="pause"><PhPause aria-hidden="true" :size="20" /> Pauzeren</button>
+      <div class="guided-header-actions">
+        <button v-if="started && canFullscreen" type="button" class="btn btn-ghost guided-fs-btn" :aria-pressed="isFullscreen" @click="toggleFullscreen">
+          <PhArrowsIn v-if="isFullscreen" aria-hidden="true" :size="20" />
+          <PhArrowsOut v-else aria-hidden="true" :size="20" />
+          <span>{{ isFullscreen ? 'Normaal scherm' : 'Volledig scherm' }}</span>
+        </button>
+        <button v-if="started" class="btn btn-ghost" @click="pause"><PhPause aria-hidden="true" :size="20" /> Pauzeren</button>
+      </div>
     </header>
 
     <div class="guided-progress-copy">
@@ -110,8 +139,8 @@ function acceptHelp() {
       <span :style="{ width: progress + '%' }"></span>
     </div>
 
-    <main ref="body" class="fullscreen-body">
-      <div class="guided-sheet">
+    <main ref="body" class="fullscreen-body" :class="{ 'guided-body-wide': wideStep }">
+      <div class="guided-sheet" :class="{ 'guided-sheet-wide': wideStep }">
         <p v-if="!storageAvailable" class="guided-notice" role="status">Je browser kan je voortgang niet bewaren. Je kunt verder werken, maar houd dit tabblad open.</p>
 
         <template v-if="!started">
@@ -138,14 +167,18 @@ function acceptHelp() {
         </template>
 
         <template v-else-if="step">
-          <div class="guided-source">
-            <span class="badge" :class="bookStep ? 'badge-paper' : 'badge-digital'">{{ bookStep ? 'Boek / bundel' : 'Digitaal' }}</span>
-            <span><MathText :text="step.source" /></span>
+          <div class="guided-step-intro" :class="{ 'guided-step-intro-wide': wideStep }">
+            <div class="guided-source">
+              <span class="badge" :class="bookStep ? 'badge-paper' : 'badge-digital'">{{ bookStep ? 'Boek / bundel' : 'Digitaal' }}</span>
+              <span><MathText :text="step.source" /></span>
+            </div>
+            <h1 ref="heading" tabindex="-1"><MathText :text="step.title" /></h1>
+            <p v-if="step.diagnostic" class="guided-small">Kies eerst uit je hoofd. Dit is een opfrissing, geen toets op punten.</p>
+            <template v-if="step.type !== 'quiz'">
+              <p v-for="instruction in step.instructions" :key="instruction"><MathText :text="instruction" /></p>
+            </template>
           </div>
-          <h1 ref="heading" tabindex="-1"><MathText :text="step.title" /></h1>
-          <p v-if="step.diagnostic" class="guided-small">Kies eerst uit je hoofd. Dit is een opfrissing, geen toets op punten.</p>
           <template v-if="step.type !== 'quiz'">
-            <p v-for="instruction in step.instructions" :key="instruction"><MathText :text="instruction" /></p>
             <slot name="activity" :step="step" />
             <section v-if="step.strategy?.length" class="guided-strategy" aria-label="Oplossingsstrategie">
               <h2>Zo pak je het aan</h2>
@@ -233,10 +266,17 @@ function acceptHelp() {
 <style scoped>
 .guided-shell { height: 100dvh; }
 .guided-header { display: flex; flex: 1; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
+.guided-header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .guided-class, .guided-small { color: var(--color-ink-soft); font-size: 1rem; line-height: 1.5; }
 .guided-progress-copy { display: flex; flex-shrink: 0; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 16px 32px; font-size: 1rem; font-weight: 600; background: var(--color-panel); }
 .guided-progress { height: 8px; flex-shrink: 0; border-bottom: 2px solid var(--color-line); }
+.guided-body-wide { padding-top: 12px; padding-bottom: 12px; }
 .guided-sheet { max-width: 760px; margin: 0 auto; padding: 16px 0 32px; font-size: 1.25rem; line-height: 1.65; }
+.guided-sheet-wide { max-width: 1240px; padding: 0; font-size: 1rem; line-height: 1.45; }
+.guided-step-intro-wide { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--color-line); }
+.guided-sheet-wide h1 { margin: 4px 0 6px; font-size: clamp(1.25rem, 2vw, 1.55rem); }
+.guided-sheet-wide p { margin-bottom: 6px; }
+.guided-step-intro-wide p:last-child { margin-bottom: 0; }
 .guided-sheet h1 { margin: 16px 0 24px; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.15; font-weight: 600; letter-spacing: -0.025em; }
 .guided-sheet h1:focus { outline: none; box-shadow: none; }
 .guided-sheet h2 { margin: 32px 0 8px; font-size: 1.5rem; font-weight: 600; }
@@ -278,6 +318,7 @@ button:disabled { cursor: not-allowed; background: var(--color-panel-muted); col
   .guided-progress-copy { padding: 12px 24px; }
   .guided-sheet { font-size: 1.125rem; padding-top: 0; }
   .guided-header { flex-direction: column; gap: 4px; }
+  .guided-fs-btn span { display: none; }
   .guided-class { font-size: 0.875rem; }
   .guided-option { padding: 16px; }
   .guided-footer { align-items: stretch; }

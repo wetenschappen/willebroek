@@ -8,7 +8,8 @@ import { metaphaseRotation } from './spindleGeometry.js'
 
 const props = defineProps({
   initialStep: { type: Number, default: 0 },
-  initialDnaDamage: { type: Boolean, default: false }
+  initialDnaDamage: { type: Boolean, default: false },
+  focusMode: { type: Boolean, default: false }
 })
 const emit = defineEmits(['complete'])
 
@@ -103,7 +104,7 @@ const mitosisStages = [
 </script>
 
 <template>
-  <div class="fullscreen-body cycle-body">
+  <div class="fullscreen-body cycle-body" :class="{ 'cycle-body-focus': props.focusMode }">
     <section class="cycle-canvas" aria-label="Interactief schema van de celcyclus">
       <svg viewBox="0 0 800 450" role="img" aria-labelledby="cycle-svg-title cycle-svg-desc">
         <title id="cycle-svg-title">Celcyclus: interfase en celdeling</title>
@@ -245,7 +246,7 @@ const mitosisStages = [
         <span>DNA-schade (bijvoorbeeld door uv-straling, alcohol of teer) of een erfelijke afwijking kan de controle verstoren. Kankercellen kunnen omliggend weefsel verdringen, hun specialisatie verliezen, veel zuurstof en voedingsstoffen verbruiken en uitzaaien via bloed of lymfe.</span>
       </div>
 
-      <div class="cycle-hierarchy" aria-label="Indeling van de celcyclus zoals in het boek">
+      <div v-if="!props.focusMode" class="cycle-hierarchy" aria-label="Indeling van de celcyclus zoals in het boek">
         <section class="cycle-group" :class="{ 'cycle-group-current': ['g1', 's', 'g2'].includes(ringStage) && !isG0 && !isApoptosis && !isCancer }">
           <h4>Interfase</h4>
           <ol class="cycle-track">
@@ -262,19 +263,22 @@ const mitosisStages = [
         </section>
         <p class="cycle-small-note">Controlepunten bewaken de cyclus; ze zijn geen extra fasen.</p>
       </div>
+      <ol v-else class="cycle-track cycle-track-focus" aria-label="Interfase: G1, S en G2">
+        <li v-for="stage in interphaseStages" :key="stage.key" :class="{ 'cycle-track-active': ringStage === stage.key && !isG0 && !isApoptosis && !isCancer }">{{ stage.label }}</li>
+      </ol>
 
       <div class="cycle-actions">
         <button type="button" class="btn cycle-secondary" @click="previous" :disabled="step === 0" aria-label="Vorige fase">
-          <PhArrowLeft weight="bold" /> Vorige
+          <PhArrowLeft weight="bold" /> Vorige fase
         </button>
         <button
           type="button"
           class="btn btn-primary"
-          @click="step === 6 ? markComplete() : next()"
+          @click="step === 6 ? (props.focusMode ? (step = 0) : markComplete()) : next()"
           :disabled="isDecision || isG0 || isApoptosis || isCancer"
         >
-          {{ step === 6 ? (completed ? 'Afgerond' : 'Simulatie afronden') : 'Volgende' }}
-          <PhCheckCircle v-if="step === 6 && completed" weight="fill" />
+          {{ step === 6 ? (props.focusMode ? 'Opnieuw vanaf G₁' : (completed ? 'Afgerond' : 'Simulatie afronden')) : 'Volgende fase' }}
+          <PhCheckCircle v-if="step === 6 && completed && !props.focusMode" weight="fill" />
           <PhArrowRight v-else weight="bold" />
         </button>
       </div>
@@ -319,10 +323,13 @@ const mitosisStages = [
 .cycle-group p { margin: 4px 0 0; color: var(--color-ink-soft); font-size: 0.9rem; }
 .cycle-group-current h4 { text-decoration: underline; text-underline-offset: 4px; }
 .cycle-pmat { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cycle-track-focus { margin-top: 16px; }
 .cycle-group .cycle-cytokinesis { margin-top: 8px; }
 .cycle-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
 .cycle-actions .btn { min-height: 44px; }
 .cycle-actions .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.cycle-body-focus { padding: 0; }
+@media (min-width: 900px) { .cycle-body-focus { grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr); gap: 24px; } }
 @media (min-width: 1024px) { .cycle-body { grid-template-columns: minmax(0, 3fr) minmax(320px, 2fr); gap: 28px; } }
 @media (max-width: 520px) { .cycle-track { grid-template-columns: 1fr; } .cycle-actions { flex-direction: column; } }
 </style>

@@ -28,10 +28,11 @@ toestand; de curve gebruikt dezelfde rekenfunctie.
 | Charles | 120–600 K | p, n | 300 → 600 K: 15 → 30 L |
 | Avogadro | 0,40–2,00 mol | p, T | 1 → 2 mol: 15 → 30 L |
 
-De zuigerhoogte is lineair met het volume in deze doorsnede. Bij Gay-Lussac
-staat een hangslot op de zuiger. Bij Avogadro laat de schets de geleiders boven
-de zuiger weg; de gaspomp toont kort met een pijl of er gas bijkomt of weggaat.
-Dat is terugkoppeling bij een nieuwe schuifstand, geen doorlopende stroming.
+De zuigerhoogte is lineair met het volume in deze doorsnede. De cilinderwanden
+staan op hun volledige hoogte getekend en bewegen niet met de zuiger mee.
+Bij Gay-Lussac staat een hangslot op de zuiger. Bij Avogadro toont de gaspomp
+kort met een pijl of er gas bijkomt of weggaat. Dat is terugkoppeling bij een
+nieuwe schuifstand, geen doorlopende stroming.
 Stippen houden
 hun grootte en stellen geen echte moleculen voor. Bij gelijke hoeveelheid
 blijft het aantal stippen gelijk; bij variabele n wordt het illustratieve

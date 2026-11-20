@@ -49,9 +49,20 @@ await runBrowser('gassen-simulatie', async ({ origin, command, evaluate, action,
   assert.deepEqual(await quantities(), ['166,2 kPa', '30,00 L', '600 K', '1,00 mol'])
   await click('Avogadro')
   const pumpFlow = () => evaluate(`document.querySelector('.gas-pump')?.dataset.flow`)
-  assert.equal(await evaluate(`!!document.querySelector('.gas-guides,.gas-lock')`), false)
+  const cylinderGeometry = () => evaluate(`(() => {
+    const walls = document.querySelector('.gas-walls').getAttribute('d');
+    const pistonY = document.querySelector('.gas-piston').transform.baseVal.getItem(0).matrix.f;
+    const gasTop = document.querySelector('.gas-fill').y.baseVal.value;
+    return { walls, pistonY, gasTop };
+  })()`)
+  assert.equal(await evaluate(`!!document.querySelector('.gas-lock')`), false)
   assert.equal(await pumpFlow(), 'idle')
+  const reference = await cylinderGeometry()
   await select(2)
+  const expanded = await cylinderGeometry()
+  assert.equal(expanded.walls, reference.walls)
+  assert.ok(expanded.pistonY < reference.pistonY)
+  assert.ok(expanded.gasTop < reference.gasTop)
   assert.equal(await pumpFlow(), 'in')
   assert.deepEqual(await quantities(), ['166,2 kPa', '30,00 L', '300 K', '2,00 mol'])
   assert.equal(await evaluate(`document.querySelectorAll('.gas-particle').length`), 32)
@@ -63,6 +74,10 @@ await runBrowser('gassen-simulatie', async ({ origin, command, evaluate, action,
   assert.ok(end < 0.02, 'het live punt ligt ook op de grens op de lijn')
   await screenshot('03-avogadro-gas-in')
   await select(0.4)
+  const contracted = await cylinderGeometry()
+  assert.equal(contracted.walls, reference.walls)
+  assert.ok(contracted.pistonY > reference.pistonY)
+  assert.ok(contracted.gasTop > reference.gasTop)
   assert.equal(await pumpFlow(), 'out')
   assert.deepEqual(await quantities(), ['166,2 kPa', '6,00 L', '300 K', '0,40 mol'])
   await screenshot('04-avogadro-gas-uit')

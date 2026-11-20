@@ -167,8 +167,7 @@ onUnmounted(() => {
         <svg ref="cylinder" class="gas-cylinder" viewBox="0 0 390 332" role="img" :aria-label="cylinderLabel"
           @pointermove="dragPiston" @pointerup="endDrag" @pointercancel="endDrag" @lostpointercapture="endDrag">
           <rect :x="left" :y="top" :width="right - left" :height="floor - top" class="gas-fill" />
-          <path :d="`M${left} ${top}V${floor}H${right}V${top}`" class="gas-walls" />
-          <path v-if="mode !== 'avogadro'" :d="`M${left} 46V${top}M${right} 46V${top}`" class="gas-walls gas-guides" />
+          <path :d="`M${left} 46V${floor}H${right}V46`" class="gas-walls" />
           <circle v-for="p in particles" :key="p.id" :cx="p.x" :cy="p.y" :r="radius" class="gas-particle" />
           <g v-if="mode === 'avogadro'" class="gas-pump" :data-flow="pumpFlow || 'idle'">
             <path d="M45 272h5q8 0 8 8v3q0 8 8 8h36" class="gas-tube" />

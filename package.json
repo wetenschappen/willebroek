@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "check": "node scripts/health-check.mjs && node --test scripts/mendel.test.mjs scripts/archimedes.test.mjs scripts/energie.test.mjs scripts/celmetabolisme.test.mjs scripts/celdeling.test.mjs scripts/energie-basis.test.mjs scripts/energie-kinetisch-pilot.test.mjs scripts/gassen-compressie.test.mjs scripts/gassen-les1.test.mjs scripts/gassen-les2.test.mjs scripts/guided-math.test.mjs",
+    "check": "node scripts/health-check.mjs && node --test scripts/mendel.test.mjs scripts/archimedes.test.mjs scripts/energie.test.mjs scripts/celmetabolisme.test.mjs scripts/celdeling.test.mjs scripts/energie-basis.test.mjs scripts/energie-kinetisch-pilot.test.mjs scripts/gassen-compressie.test.mjs scripts/gassen-les1.test.mjs scripts/gassen-les2.test.mjs scripts/gassen-simulatie.test.mjs scripts/guided-math.test.mjs",
     "smoke": "node scripts/smoke-check.mjs",
     "build": "vite build",
     "preview": "vite preview"

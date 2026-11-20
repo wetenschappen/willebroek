@@ -19,6 +19,7 @@ export default defineConfig({
         energieBasisProefblok: fileURLToPath(new URL('./energie-basis/proefblok/index.html', import.meta.url)),
         gassen: fileURLToPath(new URL('./gassen/index.html', import.meta.url)),
         gassenLes2: fileURLToPath(new URL('./gassen/les2/index.html', import.meta.url)),
+        gassenSimulatie: fileURLToPath(new URL('./gassen/simulatie/index.html', import.meta.url)),
         gassenProefblok: fileURLToPath(new URL('./gassen/proefblok/index.html', import.meta.url)),
       },
       output: {

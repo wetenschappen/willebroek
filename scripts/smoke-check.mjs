@@ -83,6 +83,7 @@ try {
     ['gassen/les2/', 'Gaswet en gemengde oefening — les 2 · 6ELTE / 6IICT'],
     ['gassen/simulatie/', 'Gaswetten — cilinder met zuiger'],
     ['gassen/proefblok/', 'Gassen — compressieproefblok 6ELTE / 6IICT'],
+    ['6df/', 'Gas onder druk · ABC-lesbord'],
   ]
   for (const [entry, title] of paths) {
     const page = await request(base + entry)
@@ -113,7 +114,7 @@ try {
 
   console.log(`✓ preview smoke test: ${base} → HTTP ${response.status}`)
   console.log(`✓ og-image.png, planner-icon.svg en og:image-metadata aanwezig`)
-  console.log(`✓ energie/, celmetabolisme/, celdeling/, energie-basis/, gassen/, gassen/les2/, gassen/simulatie/ en beide proefblokken hebben eigen HTML-ingangen en bereikbare JS/CSS-assets`)
+  console.log(`✓ energie/, celmetabolisme/, celdeling/, energie-basis/, gassen/, gassen/les2/, gassen/simulatie/, 6df/ en beide proefblokken hebben eigen HTML-ingangen en bereikbare JS/CSS-assets`)
 } catch (error) {
   console.error(error.message)
   if (output) console.error(output)

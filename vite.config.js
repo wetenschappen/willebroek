@@ -11,6 +11,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 800,
     rollupOptions: {
       input: {
+        les6df: fileURLToPath(new URL('./6df/index.html', import.meta.url)),
         planner: fileURLToPath(new URL('./index.html', import.meta.url)),
         energie: fileURLToPath(new URL('./energie/index.html', import.meta.url)),
         celmetabolisme: fileURLToPath(new URL('./celmetabolisme/index.html', import.meta.url)),

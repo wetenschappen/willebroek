@@ -1,12 +1,47 @@
-# Klassikaal ABC-lesbord · 6ELTE / 6IICT
+# Klassikaal ABC-lesbord · 6ELTE / 6IICT (`/willebroek/6df/`)
 
-Lokale ingang: `npm run dev`, open `/willebroek/6df/`. Afzonderlijke Vite-ingang, geen registry-entry of begeleid leerlingpad. Papier: bestaande blz. 4 + goedgekeurd recto-verso **Eén vergelijking**, blz. 5–6. Richtduur A/B/C: 15/30/5. Geen timers die automatisch verdergaan.
+- **Live URL:** `https://wetenschappen.github.io/willebroek/6df/`
+- **Lokale ingang:** `npm run dev` → `http://127.0.0.1:5173/willebroek/6df/`
+- **Technische opzet:** afzonderlijke Vite-ingang ([`6df/index.html`](../6df/index.html) → [`src/laatste-les/`](../src/laatste-les/)), los van de leerpad-registry en zonder leerlingaccounts, scores of opslag.
+- **Aansluiting op papier:** bestaande bundel blz. 4 (*Proef van Charles*) + recto-verso **Eén vergelijking** blz. 5–6 + één stapeltje papieren verdiepingsbonnen (*Werkbon · Kwaliteitscontrole*, te printen via `?print=werkbon`, twee per A4).
+- **Richtduur A / B / C:** 15 / 30 / 5 min. Timers gaan nooit automatisch door naar een volgende stap.
 
-Voor het projecteren: gebruik **Voorbereiding** (schuifregelaars) voor de losse werkbon, twee per A4, en eventueel de voornamen van de aanwezigen. Er wordt niets bewaard. Bij herladen start je opnieuw. Namen worden pas na ‘Hoor een uitleg’ getrokken, zonder herhaling tot de voorraad op is. Zonder lijst kies je zelf iemand. Geen leerlingenaccounts, antwoorden, scores of leerlingvolgsysteem.
+## Vóór de projectie
 
-- A: drie doelen en drie instapvragen. Bij Charles opent de bestaande simulatie in een apart tabblad. **Selecteer Charles**, verander 300 naar 600 K. Sluit de simtab om precies terug te keren. Indien techniek hapert: toon de twee modelstanden op het bord.
-- B1: modelleer alleen Boyle, bekijk alle tien vaste-zuigerrijen. Bied twee ingangen naar Charles: getallen met leerkracht of symboolcontrole in duo. Individuele transfercheck: autoband.
-- B2: bescherm 15 minuten eigen werktijd. De hulp en verwijzing naar de papieren verdiepingsbon blijven zichtbaar. De verdachte 150 kPa en juiste 180 kPa verschijnen niet op dit scherm. Correctie voor de leerkracht: Boyle alleen zou 150 kPa geven bij 300 K. Door opwarming komt er nog een factor 360/300 bij. De einddruk is 180 kPa.
-- C: drie korte exitkeuzes met gezamenlijke signalen. Verdiep mondeling vooral de derde. De slotkaart koppelt terug naar het eigen blad; verwijzing naar pV=nRT uitsluitend na gesprek. Blijf bij tijdsdruk bij ‘wijs de controle aan’.
+Open rechtsboven **Voorbereiding** (schuifregelaars-icoon):
+1. Druk de papieren werkbonnen af (`?print=werkbon`) en leg ze op één vast stapeltje op de lessenaar.
+2. Pas eventueel de aanwezige voornamen aan voor de naamkiezer (standaard staan 10 voorbeeldnamen in `src/laatste-les/inhoud.js`, permanent aanpasbaar in `defaultNames`). Namen worden zonder herhaling getrokken tot de lijst op is.
 
-Bouw en controle: `npm run check`, `npm run build`, `npm run smoke`, `node scripts/laatste-les.browser.mjs` (lokale Chrome). Schriftgrootte en leesbaarheid nog met de klasprojector beoordelen. Geen autonome navigatie per leerling. Geen publicatie zonder akkoord.
+## Ontwerpkeuzes (Variant B · rustige bordtaal)
+
+- Drie verticale kolommen **A (Instap)**, **B (Verwerken)**, **C (Afsluiting)** van links naar rechts en van boven naar beneden.
+- Witte kaarten op `#f5f7f6` met 5 px kleurmarkering links (blauw = digitaal, groen = bundel op papier) en vaste iconen (`KaartIcoon.vue`).
+- Geen visuele ruis (geen schreeuwerige labels, geen dubbele nummering, geen kaders in kaders), zodat leerlingen met leerstoornissen het bord moeiteloos kunnen scannen.
+- Alle gedrukte bladzijden (blz. 4, 5 en 6) zijn 1-op-1 nagebouwd als bordkopie met stapsgewijze groene invulling via `←` / `→` of directe klik.
+
+## Chronologische opbouw
+
+- **A1 · Wat weet je nog?**
+  Drie open begripsvragen (*Boyle*, *Gay-Lussac + kelvin*, *Charles-voorspelling blz. 4*) met eigen cilinderschets (`VoorkennisSchets.vue`), 40 s denktimer (kiest automatisch een naam op `0:00`, ook handmatig te trekken) en uitklapbaar tweeledig richtantwoord (**Macroscopisch** / **Microscopisch**).
+- **A2 · Bekijk de vrije zuiger (blz. 4)** (`Blz4Werkblad.vue`)
+  Directe linkknop naar de online simulatie (`https://wetenschappen.github.io/willebroek/gassen/simulatie/`) in een nieuw tabblad + exacte bordkopie van blz. 4 met 10 groene invulstappen (`0/10` → `10/10`).
+- **B1 · Streep door wat gelijk blijft (blz. 5)** (`Blz5Werkblad.vue`)
+  Drie afzonderlijke, rustige knoppen boven de exacte bordkopie van blz. 5 (`0/5` → `5/5`):
+  1. `1. Van 3 regels naar 1` — visuele brug van $p \cdot V$, $p/T$ en $V/T$ naar $\frac{p \cdot V}{T}$.
+  2. `2. Klascheck` — 30 s vingercheck voor Gay-Lussac (`1 vinger · p`, `2 vingers · V`, `3 vingers · T`) als live `Output = Input`.
+  3. `3. Sporen` — convergente differentiatie zonder fysieke hulpkaarten: *Samen starten* (3 min verlengde instructie vooraan), *Zelfstandig verder* (`blz. 5 → blz. 6` met de 4 B’s: Brein · Bundel · Buur · Leerkracht) en *Klaar met blz. 6?* (verdieping via de Werkbon).
+- **B2 · Bereken de einddruk (blz. 6)** (`Blz6Werkblad.vue`)
+  Twee standen:
+  1. `1. Werkbord` (standaard open, zonder spoilers): `1 · Vóór` / `2 · Na` cilinderkaarten (`ZuigerStand.vue`), rustige 15:00-werktimer, 4 B’s + tip (*bedek de kolom ‘na’*) en verwijzing naar de Werkbon.
+  2. `2. Nakijken blz. 6`: exacte bordkopie van punt 1 t/m 7 met 7 groene invulstappen (`0/7` → `7/7`), einddruk `180 kPa` en dubbele controle (`4 = 4`, *ja / ja*).
+- **C1 · Exitticket** (`ExitSchets.vue`)
+  Drie korte vingerstem-vragen (*vaste vs. vrije zuiger*, *factor 1,2*, *open ventiel*) met sobere cilinderschetsen, naamkiezer (`Kies leerling` / `Andere naam`), en `Toon antwoord` (markeert de juiste optie groen + korte KaTeX-verklaring).
+- **C2 · Terug naar de doelen**
+  Alle drie de lesdoelen rechtstreeks zichtbaar naast hun bundelbewijs (`blz. 4`, `blz. 5`, `blz. 6`), korte duimcheck (*Duim omhoog / opzij / omlaag*) en uitklapbare `Vooruitblik: open ventiel` naar $pV = nRT$.
+
+## Bouw en controle
+
+- `npm run check` (health-check + 86 unit-tests, 0 nieuwe design-overtredingen)
+- `npm run build`
+- `npm run smoke` (controleert o.a. `6df/` en de gebouwde JS/CSS-assets)
+- `node scripts/laatste-les.browser.mjs` (end-to-end browsertest van A1 t/m C2, werkbon-printweergave en smalle viewports tot 320/360 px)

@@ -38,8 +38,8 @@ export const goals = [
   {
     title: 'Voorspellen en verklaren',
     page: 'blz. 4',
-    goal: 'Ik kan bij Boyle, Gay-Lussac en Charles voorspellen en verklaren wat er met de druk en het volume gebeurt.',
-    check: 'Per proef benoem ik wat verandert en wat gelijk blijft. Bij alle drie leg ik met het deeltjesmodel uit waarom.',
+    goal: 'Ik kan voorspellen en uitleggen hoe druk, volume en temperatuur samenhangen als één van de drie gelijk blijft.',
+    check: 'Bij elke proef benoem ik wat we veranderen, wat we gelijk houden en wat daardoor verandert. Ik leg het telkens uit met het deeltjesmodel.',
   },
   {
     title: 'Vergelijken',

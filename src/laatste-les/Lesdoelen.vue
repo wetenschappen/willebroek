@@ -38,8 +38,8 @@ import { goals } from './inhoud.js'
   padding: clamp(12px, 1.25vw, 20px) clamp(14px, 1.6vw, 24px);
   color: var(--color-ink);
 }
-.goal-list-recap { gap:8px; margin-block:10px }
-.goal-list-recap .goal-card { padding-block:10px }
+.goal-list-recap { gap:6px; margin-block:8px }
+.goal-list-recap .goal-card { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-block:8px }
 .goal-heading {
   display: flex;
   flex-wrap: wrap;
@@ -74,7 +74,7 @@ import { goals } from './inhoud.js'
   margin-bottom: 5px;
 }
 @media (max-width: 700px) {
-  .goal-card { grid-template-columns: 1fr; gap: 11px }
+  .goal-card, .goal-list-recap .goal-card { grid-template-columns: 1fr; gap: 11px }
   .board-goal-proof { border-left: 0; border-top: 1px solid var(--color-line); padding: 9px 0 0 }
 }
 </style>

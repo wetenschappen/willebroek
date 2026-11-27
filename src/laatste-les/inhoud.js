@@ -36,10 +36,10 @@ export const entryQuestions = [
 ]
 export const goals = [
   {
-    title: 'Voorspellen',
+    title: 'Voorspellen en verklaren',
     page: 'blz. 4',
-    goal: 'Ik kan voorspellen en uitleggen wat er bij opwarming met de druk en het volume gebeurt bij een vaste en bij een vrije zuiger.',
-    check: 'Ik benoem per zuiger wat verandert en wat gelijk blijft. Ik verklaar met het deeltjesmodel wat er bij de vrije zuiger gebeurt.',
+    goal: 'Ik kan bij Boyle, Gay-Lussac en Charles voorspellen en verklaren wat er met de druk en het volume gebeurt.',
+    check: 'Per proef benoem ik wat verandert en wat gelijk blijft. Bij alle drie leg ik met het deeltjesmodel uit waarom.',
   },
   {
     title: 'Vergelijken',

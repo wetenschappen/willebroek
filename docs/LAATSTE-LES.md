@@ -41,7 +41,7 @@ Op een andere pc laadt een persoonlijke klaslink de namen meteen, zonder ze te p
 - **C1 · Exitticket** (`ExitSchets.vue`)
   Drie korte vingerstem-vragen (*vaste vs. vrije zuiger*, *factor 1,2*, *open ventiel*) met sobere cilinderschetsen, naamkiezer (`Kies leerling` / `Andere naam`), en `Toon antwoord` (markeert de juiste optie groen + korte KaTeX-verklaring).
 - **C2 · Terug naar de doelen**
-  Alle drie de lesdoelen rechtstreeks zichtbaar naast hun bundelbewijs (`blz. 4`, `blz. 5`, `blz. 6`), korte duimcheck (*Duim omhoog / opzij / omlaag*) en uitklapbare `Vooruitblik: open ventiel` naar $pV = nRT$.
+  Dezelfde drie lesdoelen en succescriteria als in het venster **Doelen** bij de start. Bij elk doel staat onder **Zo toon ik het** wat de leerling kan aanwijzen of uitleggen (blz. 4, 5 en 6). Eerst in de bundel laten aanwijzen, daarna de duimcheck. De vooruitblik op het open ventiel naar $pV = nRT$ blijft uitklapbaar.
 
 ## Bouw en controle
 

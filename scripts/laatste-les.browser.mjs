@@ -19,6 +19,7 @@ await runBrowser('laatste-les', async ({ origin, command, evaluate, action, clic
     await click('Gebruik deze lijst')
   }
   const drawn = sel => evaluate(`document.querySelector(${JSON.stringify(sel)}).innerText.trim()`)
+  const goalContents = sel => evaluate(`Array.from(document.querySelectorAll(${JSON.stringify(`${sel} .goal-card`)}), card => card.innerText)`)
   await command('Emulation.setDeviceMetricsOverride', { width: 1280, height: 720, deviceScaleFactor: 1, mobile: false })
   await nav(); assert.equal(await evaluate('document.querySelectorAll(".phase button").length'), 6)
   // CSS-viewports (geen aannames op basis van fysieke schermdiagonaal).
@@ -44,7 +45,18 @@ await runBrowser('laatste-les', async ({ origin, command, evaluate, action, clic
     if(width>=768) assert.ok(layout.aligned && layout.identity,`Klas zichtbaar en bediening uitgelijnd bij ${width}`)
   }
   await command('Emulation.setDeviceMetricsOverride',{width:1280,height:720,deviceScaleFactor:1,mobile:false})
-  await screenshot('01-ABC'); await click('Doelen'); assert.match(await body(), /Ik kan voorspellen|Ik kan uitleggen/); await click('Sluit doelen')
+  await screenshot('01-ABC'); await click('Doelen'); assert.match(await body(), /Onze drie lesdoelen/)
+  const startingGoals = await goalContents('.board-goals-dialog'); assert.equal(startingGoals.length, 3)
+  startingGoals.forEach((goal, index) => { assert.match(goal, new RegExp(`blz\\. ${index + 4}`)); assert.match(goal, /Ik kan.*\nZo toon ik het/s) })
+  for (const [width, height] of [[1280,720], [1024,768]]) {
+    await command('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor:1, mobile:false })
+    assert.ok(await evaluate(`(() => {const d=document.querySelector('.board-goals-dialog');return d.scrollHeight<=d.clientHeight+2 && d.scrollWidth<=d.clientWidth+2})()`), `Drie doelen zichtbaar zonder scrollen bij ${width}`)
+    await screenshot(`01-Doelen-${width}`)
+  }
+  await command('Emulation.setDeviceMetricsOverride', { width:320, height:640, deviceScaleFactor:1, mobile:false })
+  assert.ok(await evaluate(`(() => {const d=document.querySelector('.board-goals-dialog');return d.scrollWidth<=d.clientWidth+2})()`), 'Geen horizontaal schuiven in het doelenvenster')
+  await click('Sluit doelen')
+  await command('Emulation.setDeviceMetricsOverride', { width:1280, height:720, deviceScaleFactor:1, mobile:false })
   await draw(); assert.match(await body(), /nog geen voornamen/)
   await click('Naar voorbereiding'); assert.doesNotMatch(await body(), /werkbon|afdrukken/i); await setNames('Test A, Test B; Test C\nTest D\nTest A')
   await nav(); await hit('[aria-label="Voorbereiding"]'); assert.equal(await evaluate('document.querySelector("#ll-names").value'), 'Test A\nTest B\nTest C\nTest D'); await click('Sluiten')
@@ -65,7 +77,7 @@ await runBrowser('laatste-les', async ({ origin, command, evaluate, action, clic
   await action('window.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }))'); await click('Sluiten'); assert.match(await body(), /Stap 3 \/ 10/)
   await click('Streep door wat gelijk blijft'); assert.equal(await evaluate('!!document.querySelector(".katex math")'),true); assert.match(await body(), /Geen vierde formule/); await click('2. Klascheck'); assert.match(await body(), /2 vingers/); await click('3. Sporen'); assert.match(await body(), /Samen starten/); await click('Volgende →'); await screenshot('02-B1')
   await click('Bereken de einddruk'); assert.doesNotMatch(await body(), /150 kPa|180 kPa/); assert.match(await body(), /15:00/); assert.match(await body(), /Bedek de kolom/); await click('Start werktijd'); await click('Pauzeer'); await screenshot('03-B2'); await click('2. Nakijken blz. 6'); assert.doesNotMatch(await body(), /180 kPa/); await click('Alles'); assert.match(await body(), /180 kPa/); await click('Doelen'); await click('Sluit doelen')
-  await click('Exitticket'); await hit('.surface .choices + .actions button:nth-child(2)'); assert.match(await body(), /Aan het woord/); await click('Volgende vraag'); await click('Volgende vraag'); await click('Toon antwoord'); assert.equal(await evaluate('!!document.querySelector(".choice-correct")'), true); assert.match(await body(), /Minder deeltjes/); await screenshot('04-exit'); await click('Terug naar de doelen'); assert.match(await body(), /Duim omhoog/); await click('Vooruitblik: open ventiel'); assert.match(await body(), /nRT/); await click('Naar overzicht')
+  await click('Exitticket'); await hit('.surface .choices + .actions button:nth-child(2)'); assert.match(await body(), /Aan het woord/); await click('Volgende vraag'); await click('Volgende vraag'); await click('Toon antwoord'); assert.equal(await evaluate('!!document.querySelector(".choice-correct")'), true); assert.match(await body(), /Minder deeltjes/); await screenshot('04-exit'); await click('Terug naar de doelen'); assert.deepEqual(await goalContents('.surface'), startingGoals); assert.match(await body(), /Duim omhoog/); assert.ok(await evaluate(`document.querySelector('.thumb-strip').getBoundingClientRect().bottom <= innerHeight + 1`), 'Doelen en duimcheck samen zichtbaar op 1280×720'); await screenshot('05-Doelen-afsluiting'); await click('Vooruitblik: open ventiel'); assert.match(await body(), /nRT/); await click('Naar overzicht')
   await command('Emulation.setDeviceMetricsOverride',{width:360,height:740,deviceScaleFactor:1,mobile:false}); await hit('.phase:nth-child(2) button'); assert.ok(await evaluate('document.documentElement.scrollWidth <= innerWidth'))
   await hit('[aria-label="Voorbereiding"]'); await setNames(''); await nav(); await draw(); assert.match(await body(), /nog geen voornamen/); await click('Sluiten')
   const linked = ['Één Test', 'O’Test']

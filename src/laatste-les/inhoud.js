@@ -35,9 +35,24 @@ export const entryQuestions = [
   },
 ]
 export const goals = [
-  ['Voorspellen', 'blz. 4', 'Ik kan uitleggen wat bij opwarming verandert bij een vaste en bij een vrije zuiger.'],
-  ['Vergelijken', 'blz. 5', 'Ik kan bij twee momentopnames kiezen welke gelijke factor ik mag doorstrepen.'],
-  ['Controleren', 'blz. 6', 'Ik kan de einddruk berekenen en controleren of mijn uitkomst klopt.'],
+  {
+    title: 'Voorspellen',
+    page: 'blz. 4',
+    goal: 'Ik kan voorspellen en uitleggen wat er bij opwarming met de druk en het volume gebeurt bij een vaste en bij een vrije zuiger.',
+    check: 'Ik benoem per zuiger wat verandert en wat gelijk blijft. Bij de vrije zuiger ga ik uit van dezelfde belasting vóór en na.',
+  },
+  {
+    title: 'Vergelijken',
+    page: 'blz. 5',
+    goal: 'Ik kan druk, volume en temperatuur vóór en na vergelijken en uitleggen wat ik mag doorstrepen.',
+    check: 'Ik streep een factor alleen door als die links en rechts dezelfde waarde heeft. Blijft niets gelijk, dan streep ik niets door.',
+  },
+  {
+    title: 'Berekenen en controleren',
+    page: 'blz. 6',
+    goal: 'Ik kan de vergelijking omvormen om de einddruk te berekenen en te controleren.',
+    check: 'Ik noteer de einddruk met eenheid. Ik krijg links en rechts dezelfde waarde en mijn einddruk past bij mijn voorspelling.',
+  },
 ]
 export const exitQuestions = [
   {

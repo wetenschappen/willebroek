@@ -9,7 +9,8 @@ import ExitSchets from './ExitSchets.vue'
 import Blz4Werkblad from './Blz4Werkblad.vue'
 import Blz5Werkblad from './Blz5Werkblad.vue'
 import Blz6Werkblad from './Blz6Werkblad.vue'
-import { entryQuestions, exitQuestions, goals, phases, screens } from './inhoud.js'
+import Lesdoelen from './Lesdoelen.vue'
+import { entryQuestions, exitQuestions, phases, screens } from './inhoud.js'
 
 const THINK_SECONDS = 40
 const NAMES_KEY = 'willebroek:6df:voornamen'
@@ -238,20 +239,9 @@ onUnmounted(()=>{
   <Blz6Werkblad/>
 </template>
 <template v-else>
-  <h1 ref="heading" tabindex="-1">Terug naar onze drie doelen</h1>
-  <p class="lead">Kijk naar je eigen bundel (blz. 4, 5 en 6) en duid met je duim aan waar je nu staat.</p>
-  <ol class="goal-grid">
-    <li v-for="([title, page, text], i) in goals" :key="title" class="goal-card">
-      <div class="goal-head">
-        <span class="goal-num">{{i+1}}</span>
-        <div>
-          <h2>{{title}}</h2>
-          <span class="goal-page">{{page}}</span>
-        </div>
-      </div>
-      <p>{{text}}</p>
-    </li>
-  </ol>
+  <h1 ref="heading" class="recap-title" tabindex="-1">Terug naar de lesdoelen</h1>
+  <p class="lead goal-reflection">Wijs op je blad aan waar je laat zien dat het lukt. Toon daarna je duim.</p>
+  <Lesdoelen class="goal-list-recap"/>
   <div class="thumb-strip" aria-label="Betekenis van de duimcheck">
     <span><strong>Duim omhoog:</strong> lukt zelfstandig</span>
     <span><strong>Duim opzij:</strong> lukt met voorbeeld</span>
@@ -263,7 +253,13 @@ onUnmounted(()=>{
   <div v-if="demo" class="feedback"><MathText :text="ventielPreview"/></div>
 </template>
 <nav class="stepnav" aria-label="Lesbediening"><button class="btn btn-ghost" @click="questionCount && q>0 ? changeQ(q-1) : prev()"><PhArrowLeft/> Terug</button><button class="btn btn-primary" @click="questionCount && q<questionCount-1 ? changeQ(q+1) : next()">{{questionCount&&q<questionCount-1?'Volgende vraag':stage==='slot'?'Naar overzicht':screens[order[order.indexOf(stage)+1]][0]}} <PhArrowRight/></button></nav></section>
-<dialog ref="goalDialog"><div class="dialoghead"><h2>Onze leerdoelen</h2><button class="btn btn-ghost" @click="goalDialog.close()">Sluit doelen</button></div><ol class="goalrows"><li v-for="([title, page, text], i) in goals" :key="title"><b>{{i+1}} · {{title}} ({{page}})</b><p>{{text}}</p></li></ol></dialog>
+<dialog ref="goalDialog" class="board-goals-dialog" aria-labelledby="goals-title">
+  <div class="dialoghead">
+    <h2 id="goals-title">Onze drie lesdoelen</h2>
+    <button class="btn btn-ghost" @click="goalDialog.close()">Sluit doelen</button>
+  </div>
+  <Lesdoelen/>
+</dialog>
 <dialog ref="drawDialog" class="draw-dialog" aria-labelledby="draw-title">
   <div class="dialoghead"><h2 id="draw-title">Naamkiezer</h2><button class="btn btn-ghost" autofocus @click="drawDialog.close()">Sluiten</button></div>
   <p v-if="drawnName" class="draw-name" aria-live="polite"><strong>{{drawnName}}</strong></p>

@@ -368,7 +368,7 @@ onUnmounted(() => {
 .table-scroll { max-width: 100%; overflow-x: auto }
 
 .blz6-bar {
-  position: sticky; top: 0; z-index: 5;
+  position: sticky; top: var(--ll-toolbar-height, 0px); z-index: 5;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px;
   padding: 12px 16px;
   background: var(--color-panel);
@@ -461,7 +461,7 @@ onUnmounted(() => {
 .step-block {
   margin: 14px -12px; padding: 10px 12px;
   cursor: pointer; border: 1px solid transparent;
-  scroll-margin-top: 120px;
+  scroll-margin-top: calc(120px + var(--ll-toolbar-height, 0px));
   transition: background-color 140ms ease;
 }
 .step-block:hover { background: color-mix(in srgb, var(--color-paper) 75%, var(--color-panel)) }

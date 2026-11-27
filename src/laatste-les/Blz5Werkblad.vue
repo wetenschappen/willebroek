@@ -258,7 +258,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 .blz5-wrap > * { min-width: 0 }
 .table-scroll { max-width: 100%; overflow-x: auto }
 .blz5-bar {
-  position: sticky; top: 0; z-index: 5;
+  position: sticky; top: var(--ll-toolbar-height, 0px); z-index: 5;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px;
   padding: 12px 16px;
   background: var(--color-panel);
@@ -364,7 +364,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 
 .proof-line { display: flex; justify-content: center; max-width: 100%; margin: 10px 0 12px; padding: 6px 0; font-size: 1.08em; overflow-x: auto; overflow-y: hidden }
 
-[data-step] { scroll-margin-top: 120px }
+[data-step] { scroll-margin-top: calc(120px + var(--ll-toolbar-height, 0px)) }
 .fill-cell { cursor: pointer; min-width: 8em; transition: background-color 140ms ease }
 .fill-line {
   min-height: 3.4em; padding: 8px 12px; margin: 6px 0 14px;

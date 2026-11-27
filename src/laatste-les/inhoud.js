@@ -1,9 +1,3 @@
-// Vervang deze 10 voorbeelden gerust door de echte voornamen van 6ELTE / 6IICT.
-export const defaultNames = [
-  'Youssef', 'Lukas', 'Amine', 'Noah', 'Sander',
-  'Ilias', 'Milan', 'Daan', 'Rayan', 'Bram',
-]
-
 export const phases = [
   { id: 'A', title: 'Instap', time: '15 min', cue: 'Voorkennis en vrije zuiger.', items: ['entry', 'charles'] },
   { id: 'B', title: 'Verwerken', time: '30 min', cue: 'Vergelijk en bereken.', items: ['b1', 'b2'] },

@@ -2,7 +2,7 @@
 
 - **Live URL:** `https://wetenschappen.github.io/willebroek/6df/`
 - **Lokale ingang:** `npm run dev` → `http://127.0.0.1:5173/willebroek/6df/`
-- **Technische opzet:** afzonderlijke Vite-ingang ([`6df/index.html`](../6df/index.html) → [`src/laatste-les/`](../src/laatste-les/)), los van de leerpad-registry en zonder leerlingaccounts, scores of opslag.
+- **Technische opzet:** afzonderlijke Vite-ingang ([`6df/index.html`](../6df/index.html) → [`src/laatste-les/`](../src/laatste-les/)), los van de leerpad-registry en zonder leerlingaccounts of scores. Alleen de namenlijst wordt lokaal in de browser bewaard.
 - **Aansluiting op papier:** bestaande bundel blz. 4 (*Proef van Charles*) + recto-verso **Eén vergelijking** blz. 5–6 + één stapeltje papieren verdiepingsbonnen (*Werkbon · Kwaliteitscontrole*, te printen via `?print=werkbon`, twee per A4).
 - **Richtduur A / B / C:** 15 / 30 / 5 min. Timers gaan nooit automatisch door naar een volgende stap.
 
@@ -10,7 +10,11 @@
 
 Open rechtsboven **Voorbereiding** (schuifregelaars-icoon):
 1. Druk de papieren werkbonnen af (`?print=werkbon`) en leg ze op één vast stapeltje op de lessenaar.
-2. Pas eventueel de aanwezige voornamen aan voor de naamkiezer (standaard staan 10 voorbeeldnamen in `src/laatste-les/inhoud.js`, permanent aanpasbaar in `defaultNames`). Namen worden zonder herhaling getrokken tot de lijst op is.
+2. Plak de aanwezige voornamen, één per regel, en klik op **Gebruik deze lijst**. De namen blijven na herladen beschikbaar in dezelfde browser op dezelfde site. Op een andere computer vul je de lijst één keer opnieuw in. Sla een lege lijst op om de namen te wissen. Er staan geen leerlingnamen in de broncode en er worden geen namen verstuurd.
+
+Met **Kies leerling** in de vaste bovenbalk kun je tijdens elke stap een naam trekken, ook bij een gescrold werkblad. Deze knop, de denktimer en het exitticket gebruiken dezelfde lijst en trekken zonder herhaling tot iedereen aan bod is geweest. Herladen of een lijst opslaan start een nieuwe ronde.
+
+Op een andere pc laadt een persoonlijke klaslink de namen meteen, zonder ze te plakken. De namen zitten in het fragment `#klas=` van die link. Het lesbord leest ze in de browser en haalt het fragment daarna uit de adresbalk. De link is niet versleuteld: bewaar hem privé en deel met leerlingen alleen de gewone leslink.
 
 ## Ontwerpkeuzes (Variant B · rustige bordtaal)
 

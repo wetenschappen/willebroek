@@ -1,6 +1,6 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { PhTarget, PhCornersOut, PhSquaresFour, PhArrowRight, PhArrowLeft, PhSlidersHorizontal } from '@phosphor-icons/vue'
+import { PhTarget, PhCornersOut, PhSquaresFour, PhArrowRight, PhArrowLeft, PhSlidersHorizontal, PhUserSwitch } from '@phosphor-icons/vue'
 import { enterBrowserFullscreen, exitBrowserFullscreen } from '../composables/useBrowserFullscreen.js'
 import MathText from '../guided/MathText.vue'
 import KaartIcoon from './KaartIcoon.vue'
@@ -9,9 +9,32 @@ import ExitSchets from './ExitSchets.vue'
 import Blz4Werkblad from './Blz4Werkblad.vue'
 import Blz5Werkblad from './Blz5Werkblad.vue'
 import Blz6Werkblad from './Blz6Werkblad.vue'
-import { defaultNames, entryQuestions, exitQuestions, goals, phases, screens } from './inhoud.js'
+import { entryQuestions, exitQuestions, goals, phases, screens } from './inhoud.js'
 
 const THINK_SECONDS = 40
+const NAMES_KEY = 'willebroek:6df:voornamen'
+const cleanNames = text => [...new Set(text.split(/[,;\n]/).map(name => name.trim()).filter(Boolean))]
+function loadNames(){
+  try { return cleanNames(localStorage.getItem(NAMES_KEY) ?? '') }
+  catch { return [] }
+}
+function storeNames(names){
+  try {
+    if(names.length) localStorage.setItem(NAMES_KEY, names.join('\n'))
+    else localStorage.removeItem(NAMES_KEY)
+    return true
+  } catch { return false }
+}
+function namesFromLink(){
+  const match = location.hash.match(/^#klas=([A-Za-z0-9_-]{1,3500})$/)
+  if(!match) return null
+  try {
+    const decoded = atob(match[1].replace(/-/g, '+').replace(/_/g, '/'))
+    const names = cleanNames(new TextDecoder('utf-8', { fatal: true }).decode(Uint8Array.from(decoded, c => c.charCodeAt(0))))
+    if(!names.length || names.length > 60 || names.some(name => !/^[\p{L}\p{M} .’'-]{1,60}$/u.test(name))) return null
+    return names
+  } catch { return null }
+}
 const ventielPreview = String.raw`Verandert de hoeveelheid gas \(n\) (zoals bij het open ventiel), dan geldt \(\frac{p_1 V_1}{T_1} = \frac{p_2 V_2}{T_2}\) niet meer. In de volgende stap beschrijf je elke toestand apart met \(pV = nRT\).`
 const order = phases.flatMap(p => p.items), icons = {entry: 'voorspelling', charles: 'zuiger', b1: 'penblad', b2: 'rekenmachine', exit: 'ticket', slot: 'controle'}
 const tileText = { entry: ['Wat weet je nog?', 'Digitaal'], charles: ['Bekijk de vrije zuiger', 'Digitaal · blz. 4'], b1: ['Streep door wat gelijk blijft', 'Bundel · blz. 5'], b2: ['Bereken de einddruk', 'Bundel · blz. 6'], exit: ['Beantwoord het exitticket', 'Digitaal'], slot: ['Terug naar de doelen', 'Bundel · blz. 4–6'] }
@@ -22,8 +45,9 @@ const isExit = computed(() => stage.value === 'exit')
 const exitQ = computed(() => exitQuestions[q.value])
 const questionCount = computed(() => isEntry.value ? entryQuestions.length : isExit.value ? exitQuestions.length : 0)
 const q = ref(0), revealed = ref(false), speaker = ref(''), demo = ref(false)
-const goalDialog = ref(null), prepDialog = ref(null), heading = ref(null)
-const list = ref(defaultNames.join('\n')), names = ref([...defaultNames]), unused = ref([...defaultNames])
+const goalDialog = ref(null), prepDialog = ref(null), drawDialog = ref(null), heading = ref(null)
+const names = ref(loadNames()), unused = ref([...names.value]), list = ref(names.value.join('\n'))
+const storageNotice = ref(false), drawnName = ref('')
 const secondsLeft = ref(THINK_SECONDS), timerRunning = ref(false)
 let timerId = null
 const workbon = new URLSearchParams(location.search).get('print') === 'werkbon'
@@ -55,19 +79,65 @@ function clearQuestion(){ revealed.value=false; speaker.value=''; resetTimer() }
 function changeQ(i){ q.value=i; clearQuestion(); nextTick(()=>heading.value?.focus()) }
 function next(){ const n=order[order.indexOf(stage.value)+1]; go(n || 'home') }
 function prev(){ go(order[order.indexOf(stage.value)-1] || 'home') }
-function saveNames(){ const clean=[...new Set(list.value.split(/[,;\n]/).map(n=>n.trim()).filter(Boolean))]; names.value=clean;unused.value=[...clean];prepDialog.value.close() }
-function hear(){ if(speaker.value) return; const n = drawName(); speaker.value = n ? `Aan het woord: ${n}` : 'Nodig zelf een aanwezige leerling uit.' }
+function openPreparation(){
+  list.value = names.value.join('\n')
+  prepDialog.value.showModal()
+}
+function useNames(clean){
+  names.value = clean
+  unused.value = [...clean]
+  list.value = clean.join('\n')
+  storageNotice.value = !storeNames(clean)
+}
+function saveNames(){
+  useNames(cleanNames(list.value))
+  if(!storageNotice.value) prepDialog.value.close()
+}
+function applyClassLink(){
+  if(workbon) return
+  const linkedNames = namesFromLink()
+  if(!linkedNames) return
+  useNames(linkedNames)
+  speaker.value = ''
+  if(drawDialog.value?.open) drawDialog.value.close()
+  history.replaceState(history.state, '', location.pathname + location.search)
+}
+function openDraw(){
+  drawnName.value = drawName()
+  drawDialog.value.showModal()
+}
+function prepareFromDraw(){
+  drawDialog.value.close()
+  openPreparation()
+}
 function syncFull(){full.value=!!document.fullscreenElement}
 async function toggleFull(){ if(full.value){await exitBrowserFullscreen();focusView.value=false}else if(focusView.value){focusView.value=false}else {await enterBrowserFullscreen();focusView.value=!document.fullscreenElement} }
 function esc(e){if(e.key==='Escape')focusView.value=false}
-onMounted(()=>{document.addEventListener('fullscreenchange',syncFull);window.addEventListener('keydown',esc)})
-onUnmounted(()=>{stopTimer();document.removeEventListener('fullscreenchange',syncFull);window.removeEventListener('keydown',esc)})
+onMounted(()=>{
+  applyClassLink()
+  window.addEventListener('hashchange', applyClassLink)
+  window.addEventListener('keydown', esc)
+  document.addEventListener('fullscreenchange', syncFull)
+})
+onUnmounted(()=>{
+  stopTimer()
+  window.removeEventListener('hashchange', applyClassLink)
+  window.removeEventListener('keydown', esc)
+  document.removeEventListener('fullscreenchange', syncFull)
+})
 function printBon(){window.print()}
 </script>
 <template>
 <main v-if="workbon" class="ll-bonnen"><button class="btn btn-primary" @click="printBon">Druk de werkbonnen af</button><article v-for="i in 2" :key="i"><span class="badge badge-paper">WERKBON · KWALITEITSCONTROLE</span><h1>Geef je deze berekening vrij?</h1><p>Begintoestand: 100 kPa, 12 L en 300 K. Eindtoestand: 8 L en 360 K. De cilinder bleef afgesloten.</p><blockquote>‘Ik noteer 150 kPa. Het volume werd kleiner, dus ik heb Boyle gebruikt.’</blockquote><p>Vrijgeven / Terugsturen (omcirkel)</p><p>Onder welke voorwaarde zou de redenering van je collega kloppen? Controleer die voorwaarde aan de hand van de gegevens.</p><div class="lines"></div><p>Mijn advies aan de collega: …</p></article></main>
 <main v-else class="ll-board" :class="{'ll-focus':focusView}">
-<header class="toolbar"><button class="btn btn-ghost" aria-label="ABC-overzicht" @click="go('home')"><PhSquaresFour/><span>ABC<span class="overview-extra">-overzicht</span></span></button><span class="identity">6ELTE / 6IICT · Gaswetten</span><button class="btn btn-ghost" @click="goalDialog.showModal()"><PhTarget/> Doelen</button><button class="btn btn-ghost icon" title="Voorbereiding vóór projectie" aria-label="Voorbereiding" @click="prepDialog.showModal()"><PhSlidersHorizontal/></button><button class="btn btn-ghost icon" title="Schermvullend aan of uit" aria-label="Schermvullend" @click="toggleFull"><PhCornersOut/></button></header>
+<header class="toolbar">
+  <button class="btn btn-ghost" aria-label="ABC-overzicht" @click="go('home')"><PhSquaresFour/><span>ABC<span class="overview-extra">-overzicht</span></span></button>
+  <span class="identity">6ELTE / 6IICT · Gaswetten</span>
+  <button class="btn btn-ghost" @click="goalDialog.showModal()"><PhTarget/> Doelen</button>
+  <button class="btn btn-ghost draw-button" aria-label="Kies leerling" title="Kies leerling" @click="openDraw"><PhUserSwitch/><span>Kies leerling</span></button>
+  <button class="btn btn-ghost icon" title="Voorbereiding vóór projectie" aria-label="Voorbereiding" @click="openPreparation"><PhSlidersHorizontal/></button>
+  <button class="btn btn-ghost icon" title="Schermvullend aan of uit" aria-label="Schermvullend" @click="toggleFull"><PhCornersOut/></button>
+</header>
 <section v-if="stage==='home'" class="surface agenda">
   <h1 tabindex="-1" ref="heading">Wat gebeurt er met de druk in een afgesloten cilinder?</h1>
   <div class="phases">
@@ -198,6 +268,22 @@ function printBon(){window.print()}
 </template>
 <nav class="stepnav" aria-label="Lesbediening"><button class="btn btn-ghost" @click="questionCount && q>0 ? changeQ(q-1) : prev()"><PhArrowLeft/> Terug</button><button class="btn btn-primary" @click="questionCount && q<questionCount-1 ? changeQ(q+1) : next()">{{questionCount&&q<questionCount-1?'Volgende vraag':stage==='slot'?'Naar overzicht':screens[order[order.indexOf(stage)+1]][0]}} <PhArrowRight/></button></nav></section>
 <dialog ref="goalDialog"><div class="dialoghead"><h2>Onze leerdoelen</h2><button class="btn btn-ghost" @click="goalDialog.close()">Sluit doelen</button></div><ol class="goalrows"><li v-for="([title, page, text], i) in goals" :key="title"><b>{{i+1}} · {{title}} ({{page}})</b><p>{{text}}</p></li></ol></dialog>
-<dialog ref="prepDialog"><div class="dialoghead"><h2>Vóór de les</h2><button class="btn btn-ghost" @click="prepDialog.close()">Sluiten</button></div><p>Leg de bundels en losse werkbonnen klaar. Open deze voorbereiding vóór de projectie.</p><a class="btn btn-ghost" href="?print=werkbon" target="_blank" rel="noopener">Print twee werkbonnen op A4</a><label for="ll-names">Aanwezige voornamen (naamkiezer)</label><p>Standaard staan hier 10 voorbeeldnamen (permanent aan te passen in <code>inhoud.js</code>, of tijdelijk hier). Eén naam per regel of gescheiden door komma’s.</p><textarea id="ll-names" rows="5" v-model="list" autocomplete="off"></textarea><button class="btn btn-primary" @click="saveNames">Gebruik deze lijst</button></dialog>
+<dialog ref="drawDialog" class="draw-dialog" aria-labelledby="draw-title">
+  <div class="dialoghead"><h2 id="draw-title">Naamkiezer</h2><button class="btn btn-ghost" autofocus @click="drawDialog.close()">Sluiten</button></div>
+  <p v-if="drawnName" class="draw-name" aria-live="polite"><strong>{{drawnName}}</strong></p>
+  <p v-else>Er staan nog geen voornamen in de lijst.</p>
+  <button v-if="drawnName" class="btn btn-ghost" @click="drawnName = drawName()">Andere naam</button>
+  <button v-else class="btn btn-primary" @click="prepareFromDraw">Naar voorbereiding</button>
+</dialog>
+<dialog ref="prepDialog" aria-labelledby="prep-title">
+  <div class="dialoghead"><h2 id="prep-title">Vóór de les</h2><button class="btn btn-ghost" @click="prepDialog.close()">Sluiten</button></div>
+  <p>Leg de bundels en losse werkbonnen klaar. Open deze voorbereiding vóór de projectie.</p>
+  <a class="btn btn-ghost" href="?print=werkbon" target="_blank" rel="noopener">Print twee werkbonnen op A4</a>
+  <label for="ll-names">Aanwezige voornamen (naamkiezer)</label>
+  <p id="ll-names-hint">Eén voornaam per regel of gescheiden door komma’s. De lijst blijft in deze browser staan. Sla een lege lijst op om de namen te wissen.</p>
+  <textarea id="ll-names" aria-describedby="ll-names-hint" rows="5" v-model="list" autocomplete="off"></textarea>
+  <button class="btn btn-primary" @click="saveNames">Gebruik deze lijst</button>
+  <p v-if="storageNotice" role="status">Deze browser laat geen opslag toe. De lijst werkt tot je dit tabblad sluit of herlaadt.</p>
+</dialog>
 </main></template>
 <style scoped src="./bord.css"></style>

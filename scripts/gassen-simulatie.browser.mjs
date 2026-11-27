@@ -13,7 +13,7 @@ await runBrowser('gassen-simulatie', async ({ origin, command, evaluate, action,
   await resize(1366, 768)
   await command('Page.navigate', { url: origin + 'gassen/simulatie/' })
   await waitFor(() => evaluate(`!!document.querySelector('.gas-cylinder circle')`), 'cilinder geladen')
-  assert.equal(await evaluate('document.title'), 'Gaswetten — cilinder met zuiger')
+  assert.equal(await evaluate('document.title'), 'Gaswetten: cilinder met zuiger')
   assert.equal(await evaluate('localStorage.length'), 0)
   assert.equal(await evaluate(`document.querySelectorAll('header, footer').length`), 1)
   assert.equal(await evaluate(`document.querySelector('header').getBoundingClientRect().height < 66`), true)

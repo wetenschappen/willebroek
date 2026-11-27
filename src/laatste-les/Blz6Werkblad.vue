@@ -119,7 +119,7 @@ onUnmounted(() => {
         <button v-if="step > 0" class="btn btn-ghost" type="button" @click="resetSteps">Wis</button>
         <button v-else class="btn btn-ghost" type="button" @click="showAll">Alles</button>
       </div>
-      <span v-else class="blz6-mode-note">Uitkomsten blijven verborgen tijdens het zelfstandig werk</span>
+      <span v-else class="blz6-mode-note">Vouw de antwoordstrook weg. Open ze pas na stap 7.</span>
 
       <span v-if="mode === 'nakijk'" class="blz6-hint">
         Pijltjestoetsen ← / → vullen blz. 6 punt per punt in (stap 1 t/m 7)

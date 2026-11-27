@@ -31,12 +31,12 @@ Op een andere pc laadt een persoonlijke klaslink de namen meteen, zonder ze te p
   Directe linkknop naar de online simulatie (`https://wetenschappen.github.io/willebroek/gassen/simulatie/`) in een nieuw tabblad + exacte bordkopie van blz. 4 met 10 groene invulstappen (`0/10` → `10/10`).
 - **B1 · Streep door wat gelijk blijft (blz. 5)** (`Blz5Werkblad.vue`)
   Drie afzonderlijke, rustige knoppen boven de exacte bordkopie van blz. 5 (`0/5` → `5/5`):
-  1. `1. Van 3 regels naar 1`: visuele brug van $p \cdot V$, $p/T$ en $V/T$ naar $\frac{p \cdot V}{T}$.
+  1. `1. Van 3 regels naar 1`: drie bekende gaswetten als bijzondere gevallen van de gecombineerde gaswet. Bij evenveel ideaal gas is $\frac{pV}{T}$ vóór en na gelijk. Een factor met dezelfde waarde aan beide kanten valt weg.
   2. `2. Klascheck`: 30 s vingercheck voor Gay-Lussac (`1 vinger · p`, `2 vingers · V`, `3 vingers · T`) als live `Output = Input`.
   3. `3. Sporen`: convergente differentiatie zonder fysieke hulpkaarten: *Samen starten* (3 min verlengde instructie vooraan), *Zelfstandig verder* (`blz. 5 → blz. 6` met de 4 B’s: Brein · Bundel · Buur · Leerkracht) en *Klaar met blz. 6?* (verdieping via de werkbon).
 - **B2 · Bereken de einddruk (blz. 6)** (`Blz6Werkblad.vue`)
   Twee standen:
-  1. `1. Werkbord` (standaard open, zonder spoilers): `1 · Vóór` / `2 · Na` cilinderkaarten (`ZuigerStand.vue`), rustige 15:00-werktimer, 4 B’s + tip (*bedek de kolom ‘na’*) en verwijzing naar de Werkbon.
+  1. `1. Werkbord` (standaard open, zonder spoilers): twee cilinderkaarten, 15:00-werktimer, de 4 B’s en de papieren werkbon. De zelfcheck op de antwoordstrook van de gedrukte blz. 6 blijft weggevouwen tot na stap 7.
   2. `2. Nakijken blz. 6`: exacte bordkopie van punt 1 t/m 7 met 7 groene invulstappen (`0/7` → `7/7`), einddruk `180 kPa` en dubbele controle (`4 = 4`, *ja / ja*).
 - **C1 · Exitticket** (`ExitSchets.vue`)
   Drie korte vingerstem-vragen (*vaste vs. vrije zuiger*, *factor 1,2*, *open ventiel*) met sobere cilinderschetsen, naamkiezer (`Kies leerling` / `Andere naam`), en `Toon antwoord` (markeert de juiste optie groen + korte KaTeX-verklaring).

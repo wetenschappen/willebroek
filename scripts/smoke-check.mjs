@@ -81,7 +81,7 @@ try {
     ['energie-basis/proefblok/', 'Kinetische energie — proefblok 4LAT / 4ECWE'],
     ['gassen/', 'Gastoestandsveranderingen — les 1 · 6ELTE / 6IICT'],
     ['gassen/les2/', 'Gaswet en gemengde oefening — les 2 · 6ELTE / 6IICT'],
-    ['gassen/simulatie/', 'Gaswetten — cilinder met zuiger'],
+    ['gassen/simulatie/', 'Gaswetten: cilinder met zuiger'],
     ['gassen/proefblok/', 'Gassen — compressieproefblok 6ELTE / 6IICT'],
     ['6df/', 'Gas onder druk · ABC-lesbord'],
   ]

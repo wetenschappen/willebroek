@@ -16,10 +16,9 @@ const glRes = String.raw`\(\dfrac{p_1}{T_1}=\dfrac{p_2}{T_2}\)`
 const chCancel = String.raw`\(\dfrac{\textcolor{#237a4b}{\cancel{p_1}} V_1}{T_1}=\dfrac{\textcolor{#237a4b}{\cancel{p_2}} V_2}{T_2}\)`
 const chRes = String.raw`\(\dfrac{V_1}{T_1}=\dfrac{V_2}{T_2}\)`
 const charlesProof = String.raw`\(\dfrac{\cancel{166,2}\times 15}{300}=\dfrac{\cancel{166,2}\times 30}{600}\qquad\Longrightarrow\qquad\dfrac{15}{300}=\dfrac{30}{600}.\)`
-const brugBoyle = String.raw`\(p \cdot V\)`
-const brugGl = String.raw`\(\dfrac{p}{T}\)`
-const brugCh = String.raw`\(\dfrac{V}{T}\)`
-const brugEen = String.raw`\(\dfrac{p \cdot V}{T}\)`
+const brugBoyle = String.raw`\(pV = \mathrm{cste}\)`
+const brugGl = String.raw`\(\dfrac{p}{T} = \mathrm{cste}\)`
+const brugCh = String.raw`\(\dfrac{V}{T} = \mathrm{cste}\)`
 const bandRes = String.raw`\(p_1/T_1 = p_2/T_2\)`
 
 function togglePanel(name) { panel.value = panel.value === name ? '' : name }
@@ -91,8 +90,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         </div>
         <span class="brug-arrow" aria-hidden="true">→</span>
         <div class="brug-result">
-          <MathText class="brug-math-big" :text="brugEen" />
-          <p><strong>Geen vierde formule:</strong> <em>p</em> en <em>V</em> staan telkens <strong>boven</strong>, <em>T</em> staat telkens <strong>onder</strong>. Ze zitten alle drie in één vergelijking.</p>
+          <h2>Gecombineerde gaswet</h2>
+          <MathText class="brug-math-big" :text="baseEq" />
+          <p>Bij <strong>evenveel ideaal gas</strong> heeft <em>pV</em>/<em>T</em> vóór en na dezelfde waarde. Valt een gelijke factor weg uit beide kanten? Dan krijg je één van de drie regels terug.</p>
         </div>
       </div>
     </section>
@@ -292,11 +292,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 }
 .brug-name { font-size: max(13px, .62em); font-weight: 600; color: var(--color-ink-soft); line-height: 1.25 }
 .brug-name em { font-style: normal; display: block; font-weight: 500 }
-.brug-math { font-size: 1.05em; color: var(--color-ink) }
+.brug-math { font-size: clamp(16px, 1.47vw, 22px); color: var(--color-ink) }
 .brug-arrow { font-size: 1.4em; font-weight: 600; color: var(--color-workbook) }
-.brug-result { display: flex; align-items: center; gap: 16px; padding: 10px 14px; background: var(--color-workbook-soft); border: 1px solid color-mix(in srgb, var(--color-workbook) 35%, transparent) }
-.brug-math-big { font-size: 1.28em; flex-shrink: 0; color: var(--color-ink) }
-.brug-result p { margin: 0; font-size: clamp(15px, .95vw, 17px); line-height: 1.4; color: var(--color-ink) }
+.brug-result { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 10px 14px; background: var(--color-workbook-soft); border: 1px solid color-mix(in srgb, var(--color-workbook) 35%, transparent) }
+.brug-result h2 { color: var(--color-ink); font-size: clamp(17px, 1.3vw, 21px); font-weight: 650 }
+.brug-math-big { font-size: 1.18em; color: var(--color-ink) }
+.brug-result p { flex-basis: 100%; margin: 0; font-size: clamp(16px, 1.2vw, 20px); line-height: 1.38; color: var(--color-ink) }
 
 .check-panel {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;

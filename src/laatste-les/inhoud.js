@@ -39,7 +39,7 @@ export const goals = [
     title: 'Voorspellen',
     page: 'blz. 4',
     goal: 'Ik kan voorspellen en uitleggen wat er bij opwarming met de druk en het volume gebeurt bij een vaste en bij een vrije zuiger.',
-    check: 'Ik benoem per zuiger wat verandert en wat gelijk blijft. Bij de vrije zuiger ga ik uit van dezelfde belasting vóór en na.',
+    check: 'Ik benoem per zuiger wat verandert en wat gelijk blijft. Ik verklaar met het deeltjesmodel wat er bij de vrije zuiger gebeurt.',
   },
   {
     title: 'Vergelijken',

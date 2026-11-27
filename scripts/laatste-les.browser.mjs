@@ -47,6 +47,7 @@ await runBrowser('laatste-les', async ({ origin, command, evaluate, action, clic
   await command('Emulation.setDeviceMetricsOverride',{width:1280,height:720,deviceScaleFactor:1,mobile:false})
   await screenshot('01-ABC'); await click('Doelen'); assert.match(await body(), /Onze drie lesdoelen/)
   const startingGoals = await goalContents('.board-goals-dialog'); assert.equal(startingGoals.length, 3)
+  assert.match(startingGoals[0], /Ik verklaar met het deeltjesmodel wat er bij de vrije zuiger gebeurt\./)
   startingGoals.forEach((goal, index) => { assert.match(goal, new RegExp(`blz\\. ${index + 4}`)); assert.match(goal, /Ik kan.*\nZo toon ik het/s) })
   for (const [width, height] of [[1280,720], [1024,768]]) {
     await command('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor:1, mobile:false })

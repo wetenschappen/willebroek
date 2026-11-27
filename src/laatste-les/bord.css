@@ -1,5 +1,5 @@
 /* Beamerbord: rechthoekige bediening; kleur benoemt het medium, geen niveau. */
-.ll-board,.ll-bonnen { --radius-card:0px; --radius-control:0px; color:var(--color-ink); font-size:clamp(19px,1.65vw,26px); line-height:1.4 }
+.ll-board { --radius-card:0px; --radius-control:0px; color:var(--color-ink); font-size:clamp(19px,1.65vw,26px); line-height:1.4 }
 .ll-board { --ll-toolbar-height:61px; min-height:100vh; background:var(--color-paper) }
 .surface { max-width:1440px; margin:auto; padding:20px clamp(16px,3.5vw,52px) 32px }
 .toolbar,.dialoghead,.actions,.stepnav,.equation,.location,.duo h2 { display:flex; align-items:center; gap:12px }
@@ -18,7 +18,6 @@
 .toolbar .btn { white-space:nowrap; flex:none; height:44px; font-size:clamp(16px,1.1vw,19px) }
 .toolbar .icon { min-width:44px; padding:10px }.toolbar svg,.stepnav svg { width:1.2em; height:1.2em; flex-shrink:0 }
 .surface h1 { font-size:clamp(25px,2.25vw,35px); line-height:1.2; font-weight:600; letter-spacing:-.018em; margin:14px 0 clamp(18px,2vw,26px); color:var(--color-ink) }
-.ll-bonnen h1 { font-size:clamp(25px,2.35vw,36px); line-height:1.2; font-weight:650; margin:12px 0 22px; padding-bottom:14px; border-bottom:2px solid var(--color-line-strong) }
 .surface h1:focus { box-shadow:none }.surface h1.question { max-width:44em }
 .agenda h1 { margin:clamp(18px,2.2vw,32px) 0 clamp(26px,3vw,40px); padding:0; border:0; font-size:clamp(25px,2.25vw,35px); font-weight:600; line-height:1.2; letter-spacing:-.018em; color:var(--color-ink) }
 .phases { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:clamp(20px,2.5vw,38px); align-items:stretch }
@@ -109,10 +108,8 @@ dialog::backdrop { background:rgb(23 37 43 /.42) }
 .goalrows,dialog>p,dialog textarea,dialog label { margin:12px 0 }dialog label { display:block; font-weight:600 }dialog textarea { width:100%; padding:10px 12px; border:1px solid var(--color-line) }
 .draw-dialog { width:min(480px,92vw) }
 .draw-name { font-size:clamp(26px,3.2vw,48px); overflow-wrap:anywhere }
-.ll-bonnen { max-width:850px; margin:auto; padding:20px }.ll-bonnen article { background:var(--color-panel); padding:16px 0; border-bottom:2px dashed var(--color-line) }.ll-bonnen blockquote { margin:10px 0; font-weight:600 }.lines { height:2em; border-bottom:2px dotted var(--color-line) }
 @media(max-width:680px){.identity{display:none}.toolbar button:first-child{margin-right:auto}.toolbar{padding-inline:16px}}
 @media(max-width:480px){.toolbar .draw-button{min-width:44px}.toolbar .draw-button span{display:none}}
 @media(max-width:400px){:global(body:has(.ll-board)){min-width:0}.toolbar .overview-extra{display:none}.toolbar{padding-inline:6px;gap:4px}.toolbar .btn{padding-inline:5px;gap:4px;font-size:15px}}
 @media(max-width:760px){.phases,.recall-card,.think-bar,.goal-grid{grid-template-columns:1fr}.phases{row-gap:28px}.phase{gap:12px}.tile{min-height:92px}}
 @media(max-width:700px){.duo{grid-template-columns:1fr}.states{gap:6px}.states figure{flex-direction:column;align-items:flex-start;gap:4px;padding:10px}.location{flex-wrap:wrap}.stepnav{gap:8px}.surface{padding-inline:16px}}
-@media print{.ll-bonnen{max-width:none;background:white;font-size:12pt;padding:0}.ll-bonnen>.btn{display:none}.ll-bonnen article{min-height:119mm;break-inside:avoid;padding:8mm 0}.ll-bonnen .lines{height:16mm}}

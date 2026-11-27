@@ -6,7 +6,12 @@ await runBrowser('laatste-les', async ({ origin, command, evaluate, action, clic
     await command('Page.navigate', { url: origin + '6df/' + suffix })
     await waitFor(() => evaluate('!!document.querySelector("main h1")'), 'lesbord')
   }
-  const body = () => evaluate('document.body.innerText')
+  const body = async () => {
+    const text = await evaluate('document.body.innerText')
+    assert.doesNotMatch(text, /\u2014/u)
+    assert.equal(await evaluate(`Array.from(document.querySelectorAll('[aria-label],[title]')).some(el => ['aria-label','title'].some(attr => el.getAttribute(attr)?.includes(String.fromCodePoint(0x2014))))`), false)
+    return text
+  }
   const hit = sel => action(`document.querySelector(${JSON.stringify(sel)}).click()`)
   const draw = () => hit('.toolbar [aria-label="Kies leerling"]')
   const setNames = async text => {
@@ -41,7 +46,7 @@ await runBrowser('laatste-les', async ({ origin, command, evaluate, action, clic
   await command('Emulation.setDeviceMetricsOverride',{width:1280,height:720,deviceScaleFactor:1,mobile:false})
   await screenshot('01-ABC'); await click('Doelen'); assert.match(await body(), /Ik kan voorspellen|Ik kan uitleggen/); await click('Sluit doelen')
   await draw(); assert.match(await body(), /nog geen voornamen/)
-  await click('Naar voorbereiding'); await setNames('Test A, Test B; Test C\nTest D\nTest A')
+  await click('Naar voorbereiding'); assert.doesNotMatch(await body(), /werkbon|afdrukken/i); await setNames('Test A, Test B; Test C\nTest D\nTest A')
   await nav(); await hit('[aria-label="Voorbereiding"]'); assert.equal(await evaluate('document.querySelector("#ll-names").value'), 'Test A\nTest B\nTest C\nTest D'); await click('Sluiten')
   await draw(); const drawnNames = [await drawn('.draw-name')]; await click('Sluiten')
   await hit('.phase button'); assert.match(await body(), /Wet van Boyle/); assert.match(await body(), /0:40/); assert.equal(await evaluate('!!document.querySelector(".sketch-svg")'), true)
@@ -69,5 +74,5 @@ await runBrowser('laatste-les', async ({ origin, command, evaluate, action, clic
   await waitFor(() => evaluate('location.hash === "" && !!localStorage.getItem("willebroek:6df:voornamen")'), 'namenladen via klaslink')
   await draw(); const linkedFirst = await drawn('.draw-name'); await click('Andere naam'); assert.deepEqual([linkedFirst, await drawn('.draw-name')].sort(), linked.sort()); await click('Sluiten')
   await nav(); await draw(); assert.ok(linked.includes(await drawn('.draw-name')), 'Klaslink blijft bruikbaar na herladen'); await click('Sluiten')
-  await nav('?print=werkbon'); assert.equal(await evaluate('document.querySelectorAll(".ll-bonnen article").length'),2); assert.match(await body(),/150 kPa/); assert.doesNotMatch(await body(),/180 kPa/); assert.deepEqual(exceptions,[])
+  assert.deepEqual(exceptions,[])
 })

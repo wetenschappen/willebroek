@@ -47,7 +47,7 @@ defineProps({ kind: { type: String, required: true } })
       <text x="264" y="142" text-anchor="middle" class="sk-sub">zelfde gas</text>
     </template>
 
-    <!-- Vraag 3: Ventiel open — gas ontsnapt -->
+    <!-- Vraag 3: ventiel open, gas ontsnapt -->
     <template v-else>
       <rect x="74" y="44" width="96" height="78" fill="var(--color-digital-soft)" />
       <path d="M74 26 V122 H170 V92 M170 72 V26" fill="none" stroke="currentColor" stroke-width="2.5" />

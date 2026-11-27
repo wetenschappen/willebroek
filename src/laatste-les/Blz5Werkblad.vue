@@ -125,12 +125,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       <div class="track track-plus">
         <h3>Klaar met blz. 6?</h3>
         <span class="track-meta">Verdieping</span>
-        <p>Haal vooraan de Werkbon.</p>
+        <p>Haal vooraan de werkbon Controleer de einddruk.</p>
       </div>
     </section>
 
     <!-- Exacte bordkopie van Bundel 6 · blz. 5 -->
-    <article ref="sheetRef" class="sheet" aria-label="Werkblad bladzijde 5 — Drie gasproeven, één vergelijking">
+    <article ref="sheetRef" class="sheet" aria-label="Werkblad bladzijde 5: drie gasproeven, één vergelijking">
       <h2 class="sheet-h2"><span>5</span> Drie gasproeven, één vergelijking</h2>
 
       <p class="sheet-p">

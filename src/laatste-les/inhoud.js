@@ -11,7 +11,7 @@ export const screens = {
 export const entryQuestions = [
   {
     kind: 'boyle',
-    title: 'Wet van Boyle — samendrukken bij constante temperatuur',
+    title: 'Wet van Boyle: samendrukken bij constante temperatuur',
     prompt: 'In een afgesloten cilinder drukken we een gas samen van 15 L naar 7,5 L, terwijl de temperatuur gelijk blijft op 300 K. Wat gebeurt er met de absolute druk, en waarom?',
     cue: 'Verklaar je antwoord zowel macroscopisch (met grootheden) als microscopisch (met de gasdeeltjes).',
     macro: 'Bij constante temperatuur T en dezelfde hoeveelheid gas blijft het product p · V constant (p₁V₁ = p₂V₂). Halveert het volume, dan verdubbelt de absolute druk (bv. van 166,2 kPa naar 332,4 kPa).',
@@ -19,7 +19,7 @@ export const entryQuestions = [
   },
   {
     kind: 'gaylussac',
-    title: 'Wet van Gay-Lussac — opwarmen met een vaste zuiger',
+    title: 'Wet van Gay-Lussac: opwarmen met een vaste zuiger',
     prompt: 'We warmen hetzelfde afgesloten gas op van 300 K naar 600 K, terwijl de zuiger vergrendeld zit (het volume blijft 15 L). Wat gebeurt er met de absolute druk, en waarom moeten we hier in kelvin rekenen?',
     cue: 'Verklaar je antwoord zowel macroscopisch (met grootheden en schaal) als microscopisch (met de gasdeeltjes).',
     macro: 'Bij constant volume V en evenveel gas blijft p / T constant (p₁ / T₁ = p₂ / T₂). Verdubbelt de temperatuur in kelvin (300 K → 600 K; in °C is 27 °C → 327 °C geen verdubbeling), dan verdubbelt de absolute druk.',
@@ -27,7 +27,7 @@ export const entryQuestions = [
   },
   {
     kind: 'charles',
-    title: 'Wet van Charles — opwarmen met een vrije zuiger (blz. 4)',
+    title: 'Wet van Charles: opwarmen met een vrije zuiger (blz. 4)',
     prompt: 'Vorige les startten we met dezelfde opwarming (300 K → 600 K), maar nu met een vrije zuiger onder gelijke belasting. Wat voorspel je voor de beweging van de zuiger, het volume én de gasdruk in het nieuwe evenwicht?',
     cue: 'Verklaar je voorspelling zowel macroscopisch (zuiger, V en p) als microscopisch (wat de deeltjes doen).',
     macro: 'De zuiger schuift omhoog en het volume neemt toe (verdubbelt bij verdubbeling van T in kelvin, zodat V / T gelijk blijft). Omdat de buitenlucht en belasting op de zuiger gelijk blijven, blijft de evenwichtsdruk p gelijk (166,2 kPa).',

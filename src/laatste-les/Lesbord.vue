@@ -50,7 +50,6 @@ const names = ref(loadNames()), unused = ref([...names.value]), list = ref(names
 const storageNotice = ref(false), drawnName = ref('')
 const secondsLeft = ref(THINK_SECONDS), timerRunning = ref(false)
 let timerId = null
-const workbon = new URLSearchParams(location.search).get('print') === 'werkbon'
 const full = ref(false), focusView = ref(false)
 function stopTimer(){ if(timerId){ clearInterval(timerId); timerId = null } timerRunning.value = false }
 function resetTimer(){ stopTimer(); secondsLeft.value = THINK_SECONDS }
@@ -94,7 +93,6 @@ function saveNames(){
   if(!storageNotice.value) prepDialog.value.close()
 }
 function applyClassLink(){
-  if(workbon) return
   const linkedNames = namesFromLink()
   if(!linkedNames) return
   useNames(linkedNames)
@@ -125,11 +123,9 @@ onUnmounted(()=>{
   window.removeEventListener('keydown', esc)
   document.removeEventListener('fullscreenchange', syncFull)
 })
-function printBon(){window.print()}
 </script>
 <template>
-<main v-if="workbon" class="ll-bonnen"><button class="btn btn-primary" @click="printBon">Druk de werkbonnen af</button><article v-for="i in 2" :key="i"><span class="badge badge-paper">WERKBON · KWALITEITSCONTROLE</span><h1>Geef je deze berekening vrij?</h1><p>Begintoestand: 100 kPa, 12 L en 300 K. Eindtoestand: 8 L en 360 K. De cilinder bleef afgesloten.</p><blockquote>‘Ik noteer 150 kPa. Het volume werd kleiner, dus ik heb Boyle gebruikt.’</blockquote><p>Vrijgeven / Terugsturen (omcirkel)</p><p>Onder welke voorwaarde zou de redenering van je collega kloppen? Controleer die voorwaarde aan de hand van de gegevens.</p><div class="lines"></div><p>Mijn advies aan de collega: …</p></article></main>
-<main v-else class="ll-board" :class="{'ll-focus':focusView}">
+<main class="ll-board" :class="{'ll-focus':focusView}">
 <header class="toolbar">
   <button class="btn btn-ghost" aria-label="ABC-overzicht" @click="go('home')"><PhSquaresFour/><span>ABC<span class="overview-extra">-overzicht</span></span></button>
   <span class="identity">6ELTE / 6IICT · Gaswetten</span>
@@ -277,8 +273,6 @@ function printBon(){window.print()}
 </dialog>
 <dialog ref="prepDialog" aria-labelledby="prep-title">
   <div class="dialoghead"><h2 id="prep-title">Vóór de les</h2><button class="btn btn-ghost" @click="prepDialog.close()">Sluiten</button></div>
-  <p>Leg de bundels en losse werkbonnen klaar. Open deze voorbereiding vóór de projectie.</p>
-  <a class="btn btn-ghost" href="?print=werkbon" target="_blank" rel="noopener">Print twee werkbonnen op A4</a>
   <label for="ll-names">Aanwezige voornamen (naamkiezer)</label>
   <p id="ll-names-hint">Eén voornaam per regel of gescheiden door komma’s. De lijst blijft in deze browser staan. Sla een lege lijst op om de namen te wissen.</p>
   <textarea id="ll-names" aria-describedby="ll-names-hint" rows="5" v-model="list" autocomplete="off"></textarea>

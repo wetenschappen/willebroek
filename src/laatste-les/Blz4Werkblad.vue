@@ -53,7 +53,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       <span class="blz4-hint">Pijltjestoetsen ← / → vullen blz. 4 stap voor stap in</span>
     </div>
 
-    <article ref="sheetRef" class="sheet" aria-label="Werkblad bladzijde 4 — Opwarmen met een vrije zuiger: Charles">
+    <article ref="sheetRef" class="sheet" aria-label="Werkblad bladzijde 4: opwarmen met een vrije zuiger (Charles)">
       <h2 class="sheet-h2"><span>4</span> Opwarmen met een vrije zuiger: Charles</h2>
 
       <p class="sheet-p">

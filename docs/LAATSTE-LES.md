@@ -3,13 +3,13 @@
 - **Live URL:** `https://wetenschappen.github.io/willebroek/6df/`
 - **Lokale ingang:** `npm run dev` → `http://127.0.0.1:5173/willebroek/6df/`
 - **Technische opzet:** afzonderlijke Vite-ingang ([`6df/index.html`](../6df/index.html) → [`src/laatste-les/`](../src/laatste-les/)), los van de leerpad-registry en zonder leerlingaccounts of scores. Alleen de namenlijst wordt lokaal in de browser bewaard.
-- **Aansluiting op papier:** bestaande bundel blz. 4 (*Proef van Charles*) + recto-verso **Eén vergelijking** blz. 5–6 + één stapeltje papieren verdiepingsbonnen (*Werkbon · Kwaliteitscontrole*, te printen via `?print=werkbon`, twee per A4).
+- **Aansluiting op papier:** bestaande bundel blz. 4 (*Proef van Charles*), recto-verso **Eén vergelijking** (blz. 5–6) en de losse werkbon **Controleer de einddruk** (twee per A4, aparte PDF in de lokale map `Leerlingen`).
 - **Richtduur A / B / C:** 15 / 30 / 5 min. Timers gaan nooit automatisch door naar een volgende stap.
 
 ## Vóór de projectie
 
 Open rechtsboven **Voorbereiding** (schuifregelaars-icoon):
-1. Druk de papieren werkbonnen af (`?print=werkbon`) en leg ze op één vast stapeltje op de lessenaar.
+1. Druk `Werkbon_Controleer_de_einddruk.pdf` vooraf af en leg de bonnen op één vast stapeltje op de lessenaar. De werkbon staat niet meer in de naamkiezer.
 2. Plak de aanwezige voornamen, één per regel, en klik op **Gebruik deze lijst**. De namen blijven na herladen beschikbaar in dezelfde browser op dezelfde site. Op een andere computer vul je de lijst één keer opnieuw in. Sla een lege lijst op om de namen te wissen. Er staan geen leerlingnamen in de broncode en er worden geen namen verstuurd.
 
 Met **Kies leerling** in de vaste bovenbalk kun je tijdens elke stap een naam trekken, ook bij een gescrold werkblad. Deze knop, de denktimer en het exitticket gebruiken dezelfde lijst en trekken zonder herhaling tot iedereen aan bod is geweest. Herladen of een lijst opslaan start een nieuwe ronde.
@@ -31,9 +31,9 @@ Op een andere pc laadt een persoonlijke klaslink de namen meteen, zonder ze te p
   Directe linkknop naar de online simulatie (`https://wetenschappen.github.io/willebroek/gassen/simulatie/`) in een nieuw tabblad + exacte bordkopie van blz. 4 met 10 groene invulstappen (`0/10` → `10/10`).
 - **B1 · Streep door wat gelijk blijft (blz. 5)** (`Blz5Werkblad.vue`)
   Drie afzonderlijke, rustige knoppen boven de exacte bordkopie van blz. 5 (`0/5` → `5/5`):
-  1. `1. Van 3 regels naar 1` — visuele brug van $p \cdot V$, $p/T$ en $V/T$ naar $\frac{p \cdot V}{T}$.
-  2. `2. Klascheck` — 30 s vingercheck voor Gay-Lussac (`1 vinger · p`, `2 vingers · V`, `3 vingers · T`) als live `Output = Input`.
-  3. `3. Sporen` — convergente differentiatie zonder fysieke hulpkaarten: *Samen starten* (3 min verlengde instructie vooraan), *Zelfstandig verder* (`blz. 5 → blz. 6` met de 4 B’s: Brein · Bundel · Buur · Leerkracht) en *Klaar met blz. 6?* (verdieping via de Werkbon).
+  1. `1. Van 3 regels naar 1`: visuele brug van $p \cdot V$, $p/T$ en $V/T$ naar $\frac{p \cdot V}{T}$.
+  2. `2. Klascheck`: 30 s vingercheck voor Gay-Lussac (`1 vinger · p`, `2 vingers · V`, `3 vingers · T`) als live `Output = Input`.
+  3. `3. Sporen`: convergente differentiatie zonder fysieke hulpkaarten: *Samen starten* (3 min verlengde instructie vooraan), *Zelfstandig verder* (`blz. 5 → blz. 6` met de 4 B’s: Brein · Bundel · Buur · Leerkracht) en *Klaar met blz. 6?* (verdieping via de werkbon).
 - **B2 · Bereken de einddruk (blz. 6)** (`Blz6Werkblad.vue`)
   Twee standen:
   1. `1. Werkbord` (standaard open, zonder spoilers): `1 · Vóór` / `2 · Na` cilinderkaarten (`ZuigerStand.vue`), rustige 15:00-werktimer, 4 B’s + tip (*bedek de kolom ‘na’*) en verwijzing naar de Werkbon.
@@ -48,4 +48,4 @@ Op een andere pc laadt een persoonlijke klaslink de namen meteen, zonder ze te p
 - `npm run check` (health-check + 86 unit-tests, 0 nieuwe design-overtredingen)
 - `npm run build`
 - `npm run smoke` (controleert o.a. `6df/` en de gebouwde JS/CSS-assets)
-- `node scripts/laatste-les.browser.mjs` (end-to-end browsertest van A1 t/m C2, werkbon-printweergave en smalle viewports tot 320/360 px)
+- `node scripts/laatste-les.browser.mjs` (browsertest van A1 t/m C2, naamkiezer, persoonlijke klaslink en smalle viewports tot 320/360 px)

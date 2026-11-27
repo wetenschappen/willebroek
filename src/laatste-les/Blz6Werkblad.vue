@@ -153,7 +153,7 @@ onUnmounted(() => {
           <div class="timer-readout">
             <span class="timer-digits" :aria-label="`Resterende werktijd ${formatTime(secondsLeft)}`">{{ formatTime(secondsLeft) }}</span>
             <span class="timer-status">
-              {{ timerRunning ? 'Zelfstandig werken loopt' : secondsLeft === 0 ? 'Werktijd voorbij — klaar om na te kijken' : 'Zelfstandig werken op blz. 6 (15 min)' }}
+              {{ timerRunning ? 'Zelfstandig werken loopt' : secondsLeft === 0 ? 'Werktijd voorbij. We kijken na.' : 'Zelfstandig werken op blz. 6 (15 min)' }}
             </span>
           </div>
           <div class="timer-controls">
@@ -179,18 +179,17 @@ onUnmounted(() => {
           </p>
         </article>
         <article class="guide-card guide-plus">
-          <h2><KaartIcoon name="controle" /> Klaar &amp; gecontroleerd?</h2>
+          <h2><KaartIcoon name="controle" /> Klaar met blz. 6?</h2>
           <p>
-            Klopt je einddruk én je controle op blz. 6? Neem vooraan op de lessenaar een
-            <strong>Werkbon · Kwaliteitscontrole</strong>. Keur je de berekening goed of stuur je ze terug? Leg uit
-            waarom.
+            Heb je je einddruk gecontroleerd? Neem vooraan de werkbon <strong>Controleer de einddruk</strong>.
+            Je kijkt een berekening na en bepaalt hoeveel je het gas maximaal mag opwarmen.
           </p>
         </article>
       </section>
     </template>
 
     <!-- Stand 2: Exacte bordkopie van Bundel 6 · blz. 6 -->
-    <article v-else ref="sheetRef" class="sheet" aria-label="Werkblad bladzijde 6 — Welke druk heeft het gas na de verandering?">
+    <article v-else ref="sheetRef" class="sheet" aria-label="Werkblad bladzijde 6: welke druk heeft het gas na de verandering?">
       <h2 class="sheet-h2"><span>6</span> Welke druk heeft het gas na de verandering?</h2>
 
       <p class="sheet-p">
